@@ -30,11 +30,11 @@ Optionally you can modify the API configuration file depending on your needs:
 
 ## Privileges
 
-ADMIN_ALL: Full admin, can create ctf, tasks, edit users and the config. 
-EDIT_CTF: Allow to create and modify ctf information, you should give this right to you team leader.
-CTF_ALL: Allow the user to join every CTF, you should give this right to your team members.
+* ADMIN_ALL: Full admin, can create ctf, tasks, edit users and the config. 
+* EDIT_CTF: Allow to create and modify ctf information, you should give this right to you team leader.
+* CTF_ALL: Allow the user to join every CTF, you should give this right to your team members.
 
-no privileges: can only view ctf when invited
+* no privileges: can only view ctf when invited
 
 CTF guests are allowed to create and edit tasks but not the ctf informations. 
 
