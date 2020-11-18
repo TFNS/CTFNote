@@ -1,0 +1,54 @@
+version: "3.7"
+services:
+  api:
+    build:
+      context: "./api"
+    networks:
+      - ctfnote
+    environment:
+      MD_CREATE_URL: "http://front/pad/new"
+      MD_SHOW_URL: "/"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ctfnote
+      POSTGRES_USER: ctfnote
+    volumes:
+      - ctfnote:/data
+    networks:
+      - ctfnote
+  front:
+    networks:
+      - ctfnote
+    build:
+      context: "./front"
+      args:
+        API_HOST: api
+        PAD_HOST: codimd
+    depends_on:
+      - api
+      - codimd
+    ports:
+      - 80:80
+  codimd:
+    image: quay.io/codimd/server:1.6.0
+    environment:
+      - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/ctfnote
+      - CMD_URL_PATH=pad
+    depends_on:
+      - db
+    restart: always
+    volumes:
+      - pad-uploads:/home/hackmd/app/public/uploads
+    networks:
+      - ctfnote
+volumes:
+  ctfnote:
+    name: ctfnote
+  pad-uploads:
+    name: pad-uploads
+networks:
+  ctfnote:
