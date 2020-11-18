@@ -59,3 +59,11 @@ $ cd api/
 $ yarn install
 $ yarn start
 ```
+
+
+## Authors
+
+
+[BitK](https://twitter.com/bitk_)
+[SakiiR](https://twitter.com/sakiirsecurity/)
+
