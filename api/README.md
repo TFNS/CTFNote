@@ -6,5 +6,5 @@ Start the local server
 
 ```
 $ yarn install
-$ MD_PROVIDER=https://ur-favorite-md-provider yarn start
+$ MD_PROVIDER=https://ur-codimd-instance-full-url yarn start
 ```

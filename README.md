@@ -58,6 +58,7 @@ $ yarn start
 $ cd api/
 $ yarn install
 $ yarn start
+$ MD_PROVIDER=https://ur-codimd-instance-full-url yarn start
 ```
 
 
