@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Middleware } from "express-validator/src/base";
 
 import { validationResult } from "express-validator";
 

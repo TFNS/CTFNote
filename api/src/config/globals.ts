@@ -1,9 +1,6 @@
 import PersistentConfiguration from "./persitent";
 import Rights from "./rights";
 
-import fs from "fs/promises";
-import path from "path";
-
 export default class Globals {
   static port = 31337;
   static version = "v1.0.0";
