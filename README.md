@@ -39,7 +39,7 @@ Optionally you can modify the API configuration file depending on your needs:
 CTF guests are allowed to create and edit tasks but not the ctf informations. 
 
 
-## Developpement
+## Development
 
 The developpement servers include a simple HTTP proxy helping the front to access the local API (cf [quasar.conf.js](front/quasar.conf.js)).
 Hot reloading if configured on both components as well.
