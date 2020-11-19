@@ -12,7 +12,6 @@ COPY ormconfig.docker.json /usr/src/app/ormconfig.json
 COPY src /usr/src/app/src
 
 RUN yarn build && \
-    cp -rf /usr/src/app/src/logo /usr/src/app/dist/logo && \
     rm -rf /usr/src/app/src
 
 EXPOSE 31337

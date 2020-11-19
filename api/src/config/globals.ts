@@ -32,16 +32,6 @@ export default class Globals {
     ctf: ["ctfUrl", "start", "finish", "logo", "ctfTimeUrl", "format", "url", "description"],
   };
 
-  static logo = "";
-
-  static async getLogo() {
-    const location = path.join(__dirname, "../logo/logo.png");
-    const data = await fs.readFile(location, "base64");
-    const url = `data:image/png;base64,${data}`;
-
-    return url;
-  }
-
   static async init() {
     Globals.mdCreateUrl = await PersistentConfiguration.setIfNotSet("md-create-url", Globals.mdCreateUrl);
     Globals.mdShowUrl = await PersistentConfiguration.setIfNotSet("md-show-url", Globals.mdShowUrl);
