@@ -8,7 +8,6 @@ class App {
   public app: express.Application;
   public routePrv: Routes = new Routes();
   public http: Server;
-  public io: any;
 
   constructor() {
     (this.app as any) = express();
