@@ -1,5 +1,3 @@
-
-
 {
   "name": "ctfnote-api",
   "version": "1.0.0",
@@ -38,7 +36,6 @@
     "sha256": "^0.2.0",
     "signale": "^1.4.0",
     "slugify": "^1.4.5",
-    "socket.io": "^2.3.0",
     "sqlite3": "^5.0.0",
     "typeorm": "0.2.29",
     "uuid": "^8.3.1"
@@ -51,7 +48,6 @@
     "@types/node": "^14.14.6",
     "@types/sequelize": "^4.28.9",
     "@types/signale": "^1.4.1",
-    "@types/socket.io": "^2.1.11",
     "@types/validator": "^13.1.0",
     "nodemon": "^2.0.6",
     "sequelize-cli": "^6.2.0",

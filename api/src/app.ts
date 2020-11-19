@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { Routes } from "./config/routes";
 import http, { Server } from "http";
-import SocketIO from "socket.io";
 
 class App {
   public app: express.Application;
@@ -17,7 +16,6 @@ class App {
     this.http = http.createServer(this.app);
     this.config();
     this.routePrv.routes(this.app);
-    this.io = SocketIO(this.http);
   }
 
   /**
