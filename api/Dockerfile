@@ -1,7 +1,7 @@
 FROM node:14.5.0-alpine3.10
 
 RUN mkdir -p /usr/src/app && \
-    apk add openssh-client
+    apk add openssh-client g++ make python
 
 WORKDIR /usr/src/app
 
