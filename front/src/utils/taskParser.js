@@ -4,15 +4,14 @@ const RawParser = {
     hint: "name | category",
     parse(s) {
         const tasks = []
-        for (let line of s.trim().split("\n")) {
-            line = line.trim()
-            const [title, category] = line.split("|")
-            if (!title) continue
-            const task = { title: title.trim() }
-            if (category) {
-                task.category = category
-            }
-            tasks.push(task)
+        for (let line of s.split("\n")) {
+            let [title, category] = line.split("|")
+
+            title = title.trim()
+            category = category.trim()
+
+            if (!title || !category) continue
+            tasks.push({ title, category })
         }
         return tasks
     }
