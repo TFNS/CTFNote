@@ -7,8 +7,8 @@ const RawParser = {
         for (let line of s.split("\n")) {
             let [title, category] = line.split("|")
 
-            title = title.trim()
-            category = category.trim()
+            title = title?.trim()
+            category = category?.trim()
 
             if (!title || !category) continue
             tasks.push({ title, category })
