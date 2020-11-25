@@ -10,6 +10,7 @@
     >
       <q-tab name="incoming" style="min-width: 200px" label="Incoming" icon="query_builder"> </q-tab>
       <q-tab name="past" style="min-width: 200px" label="Past" icon="archive"> </q-tab>
+      <q-tab name="calendar" style="min-width: 200px" label="Calendar" icon="calendar_today"> </q-tab>
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="incoming">
@@ -17,6 +18,9 @@
       </q-tab-panel>
       <q-tab-panel name="past">
         <CtfList :ctfs="ctfs" />
+      </q-tab-panel>
+      <q-tab-panel name="calendar">
+        <Calendar :ctfs="ctfs" />
       </q-tab-panel>
     </q-tab-panels>
 
@@ -37,14 +41,7 @@
       </q-card>
     </q-dialog>
 
-    <q-fab
-      class="ctfs-action-btn shadow-2"
-      color="positive"
-      v-if="isCtfAdmin"
-      icon="add"
-      direction="down"
-      push
-    >
+    <q-fab class="ctfs-action-btn shadow-2" color="positive" v-if="isCtfAdmin" icon="add" direction="down" push>
       <q-fab-action color="secondary" push @click="showImport = true" icon="flag" label="Import " />
       <q-fab-action color="positive" push @click="showEditCtf = true" icon="add" label="Create" />
     </q-fab>
@@ -64,8 +61,10 @@ import CtfInfo from "src/components/CtfInfo.vue";
 import EditCtf from "src/components/EditCtf.vue";
 import PastCTFs from "src/components/PastCTFs.vue";
 import CtfList from "src/components/CtfList.vue";
+import Calendar from "src/components/Calendar.vue";
+
 export default {
-  components: { CtfInfo, EditCtf, PastCTFs, CtfList },
+  components: { CtfInfo, EditCtf, PastCTFs, CtfList, Calendar },
   computed: {
     ...mapGetters(["ctfs", "isCtfAdmin"]),
     loading() {
@@ -82,18 +81,34 @@ export default {
     };
   },
   created() {
-    if (this.$route.name == "past"){
-      this.fetchTab("past")
-      this.tab = "past"
+    if (this.$route.name == "past") {
+      this.fetchTab("past");
+      this.tab = "past";
+    } else if (this.$route.name == "calendar") {
+      this.fetchTab("calendar");
+      this.tab = "calendar";
     } else {
-      this.fetchTab("incoming")
+      this.fetchTab("incoming");
     }
     document.title = `CTFNote`;
   },
   methods: {
     async onTabChange(param) {
-      const name = param == "past" ? param : "ctfs"
-      this.$router.replace({name})
+      let name = "ctfs";
+
+      switch (param) {
+        case "past":
+          name = "past";
+          break;
+        case "calendar":
+          name = "calendar";
+          break;
+        default:
+          name = "ctfs";
+          break;
+      }
+
+      this.$router.replace({ name });
       await this.fetchTab(param);
     },
     async fetchTab(tab) {
