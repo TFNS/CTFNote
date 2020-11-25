@@ -38,7 +38,11 @@ export default {
         description: ctf.description,
         start: { dateTime: ctf.start, timezone: DEFAULT_TIMEZONE },
         end: { dateTime: ctf.finish, timezone: DEFAULT_TIMEZONE },
-        color: ctf.running ? "positive" : "primary"
+        color: (() => {
+          if (ctf.running) return "positive";
+          if (ctf.past) return "negative";
+          return "primary";
+        })()
       }));
     }
   },

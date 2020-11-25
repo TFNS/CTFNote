@@ -28,6 +28,14 @@ const ListCTFAction: IRoute = {
           order: { finish: "DESC" },
         });
         break;
+      case "calendar":
+        ctfs = await ctfRepo.find({
+          relations: ["guests"],
+          skip: Globals.maxCtfPerPage * page,
+          take: Globals.maxCtfPerPage,
+          order: { finish: "DESC" },
+        });
+        break;
       case "incoming": // Get running and incoming
       default:
         ctfs = await ctfRepo.find({

@@ -1,12 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  JoinTable,
-  OneToMany,
-  AfterLoad,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany, AfterLoad } from "typeorm";
 import User from "./User";
 import Task from "./Task";
 import RightsManager from "../utils/rights";
@@ -58,6 +50,7 @@ export default class CTF {
   tasks: Task[];
 
   running: boolean = false;
+  past: boolean = false;
   granted: boolean = false;
 
   addGranted(user) {
@@ -71,5 +64,11 @@ export default class CTF {
   setRunning() {
     const now = new Date();
     this.running = this.start < now && this.finish > now;
+  }
+
+  @AfterLoad()
+  setPast() {
+    const now = new Date();
+    this.past = this.finish < now;
   }
 }
