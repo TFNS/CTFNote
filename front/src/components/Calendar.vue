@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     ctfClicked(event, ctf) {
-      this.$router.push({ path: `/ctf/${ctf.slug}/` }).catch(() => {});
+      this.$router.push({ name: "ctf", params: { ctfSlug: ctf.slug } }).catch(() => {});
     }
   },
   created() {

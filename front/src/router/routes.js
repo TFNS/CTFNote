@@ -55,7 +55,6 @@ function routes(store) {
         },
         {
           path: "ctf/:ctfSlug",
-          name: "ctfInfo",
           props: true,
           component: () => import("pages/CTF/Container.vue"),
           children: [
