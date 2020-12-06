@@ -10,8 +10,6 @@ export default class PadService {
     const createUrl = await PersistentConfiguration.get("md-create-url");
     let showUrl = await PersistentConfiguration.get("md-show-url");
 
-    showUrl = showUrl.replace(/^\/+/g, "");
-
     try {
       const res = await Axios.get(createUrl, {
         maxRedirects: 0,
@@ -20,7 +18,7 @@ export default class PadService {
 
       if (showUrl === "/") return res.headers.location;
 
-      return showUrl + res.headers.location;
+      return showUrl.replace(/\/+$/g, "") + res.headers.location;
     } catch (e) {
       logger.warn(`Could not generate new pad from '${createUrl}': `);
       logger.fatal(e);
