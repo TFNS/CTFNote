@@ -8,6 +8,8 @@ services:
     environment:
       MD_CREATE_URL: "http://front/pad/new"
       MD_SHOW_URL: "/"
+      TYPEORM_HOST: "db"
+
     depends_on:
       - db
   db:

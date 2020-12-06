@@ -1,6 +1,6 @@
-{
+module.exports = {
    "type": "postgres",
-   "host": "localhost",
+   "host": process.env.TYPEORM_HOST || "127.0.0.1",
    "port": 5432,
    "username": "ctfnote",
    "password": "ctfnote",
