@@ -56,7 +56,7 @@ export default {
   },
   created() {
     const $this = this;
-    this.$root.$on("click-event-MYCALENDAR", eventDetailObject => {
+    this.$root.$on(`click-event-${CALENDAR_NAME}`, eventDetailObject => {
       const ctf = this.ctfs.find(ctf => ctf.id == eventDetailObject.id);
       if (!ctf) return;
 
