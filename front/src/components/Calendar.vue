@@ -19,7 +19,7 @@
 import { DaykeepCalendarMonth } from "@daykeep/calendar-quasar";
 
 const DEFAULT_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const CALENDAR_NAME = "MYCALENDAR";
+const CALENDAR_NAME = "CTFNote";
 
 export default {
   name: "Calendar",
