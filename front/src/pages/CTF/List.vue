@@ -41,7 +41,7 @@
       </q-card>
     </q-dialog>
 
-    <q-fab class="ctfs-action-btn shadow-2" color="positive" v-if="isCtfAdmin" icon="add" direction="down" push>
+    <q-fab class="ctfs-action-btn shadow-2" color="positive" v-if="isCtfAdmin" icon="add" direction="left" push>
       <q-fab-action color="secondary" push @click="showImport = true" icon="flag" label="Import " />
       <q-fab-action color="positive" push @click="showEditCtf = true" icon="add" label="Create" />
     </q-fab>
