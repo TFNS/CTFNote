@@ -11,12 +11,11 @@ function debugRoutes() {
   for (const layer of app.app._router.stack) {
     if (layer.route)
       routes.push({
-        methods: Object.keys(layer.route.methods).join(", ").toUpperCase(), path: layer.route.path
-      })
+        methods: Object.keys(layer.route.methods).join(", ").toUpperCase(),
+        path: layer.route.path,
+      });
   }
-  console.table(
-    routes
-  );
+  console.table(routes);
 }
 
 function debugGlobals() {
@@ -24,19 +23,14 @@ function debugGlobals() {
   console.table(Globals);
 }
 
-
 async function main() {
   debugRoutes();
   debugGlobals();
-  await createConnection()
+
+  await createConnection();
 
   await Globals.init();
   app.http.listen(Globals.port, () => logger.success(`App listening on port ${Globals.port}!`));
 }
 
 main();
-
-
-
-
-
