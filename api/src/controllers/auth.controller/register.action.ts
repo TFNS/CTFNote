@@ -42,7 +42,7 @@ const RegisterAction: IRoute = {
     const hash = await PasswordUtil.hash(password);
 
     const firstAccount = (await userRepo.count()) === 0;
-    let user = userRepo.create({ username, slug, password: hash, rights: firstAccount ? [Rights.ADMIN_ALL] : [] });
+    let user = userRepo.create({ username, slug, password: hash, rights: firstAccount ? Globals.adminRights : Globals.defaultRights });
 
     try {
       user = await userRepo.save(user);
