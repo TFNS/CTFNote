@@ -58,6 +58,7 @@ export default async function (/* { ssrContext } */) {
       currentUser: currentUser,
       currentCtf: null,
       currentTask: null,
+      recentTasks: [],
       loading: false
     },
     getters: {
@@ -67,6 +68,7 @@ export default async function (/* { ssrContext } */) {
       currentUser: state => state.currentUser,
       currentCtf: state => state.currentCtf,
       currentTask: state => state.currentTask,
+      recentTasks: state => state.recentTasks,
       isAdmin: (state, getters) => getters.isUserGranted(Rights.ADMIN_ALL),
       isCtfAdmin: (state, getters) => getters.isUserGranted(Rights.EDIT_CTF),
       isUserGranted: state => right => {
@@ -111,9 +113,16 @@ export default async function (/* { ssrContext } */) {
       clearCtf(state) {
         state.currentCtf = null;
         state.currentTask = null;
+        state.recentTasks = [];
       },
       setCurrentTask(state, task) {
         state.currentTask = task;
+      },
+      setRecentTask(state, task) {
+        let filtered = state.recentTasks.filter((t) => t.id != task.id)
+        filtered.unshift(task);
+        filtered.splice(3);
+        state.recentTasks = filtered;
       },
       deleteTask(state, taskSlug) {
         const idx = state.currentCtf.tasks.findIndex(t => t.slug == taskSlug);
@@ -130,6 +139,7 @@ export default async function (/* { ssrContext } */) {
           if (state.currentCtf.slug == ctfSlug) {
             state.currentCtf = null;
             state.currentTask = null;
+            state.recentTasks = [];
           }
         }
         state.ctfs.splice(idx, 1);
@@ -214,6 +224,7 @@ export default async function (/* { ssrContext } */) {
       },
       async setCurrentTask({ commit }, task) {
         commit("setCurrentTask", task);
+        commit("setRecentTask", task);
       },
       async importCtf({ commit }, ctfID) {
         return handleApiCall(commit, async () => {

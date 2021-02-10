@@ -28,6 +28,19 @@
               :label="currentTask.title"
               v-if="currentTask"
             />
+            <div
+            v-for="(task) in recentTasks" :key="task.id">              
+            <q-btn
+                :to="{
+                  name: 'task',
+                  params: { ctfSlug: currentCtf.slug, taskSlug: task.slug }
+                }"
+                stretch
+                flat
+                :label="task.title"
+                v-if="task != null && task != currentTask"
+              />
+            </div>
           </div>
         </q-toolbar-title>
         <q-btn-dropdown stretch flat :label="currentUser.username" v-if="currentUser">
@@ -117,7 +130,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["currentCtf", "ctfs", "currentUser", "currentTask", "isAdmin", "loading"]),
+    ...mapGetters(["currentCtf", "ctfs", "currentUser", "currentTask", "recentTasks", "isAdmin", "loading"]),
     menu() {
       if (!this.currentCtf || !this.currentCtf.tasks) return null;
       const categories = {};
