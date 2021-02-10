@@ -121,7 +121,7 @@ export default {
 }
 .blur:hover {
   filter: blur(0px);
-  transition-delay:0.2s;
+  transition-delay: 0.2s;
 }
 
 .head {
