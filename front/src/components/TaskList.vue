@@ -4,7 +4,7 @@
       <div class="col-12 col-md">
         <q-btn icon="add" color="positive" label="import" @click="showImportDialog = true" />
       </div>
-      <q-space/>
+      <q-space />
 
       <div class="col col-md-auto">
         <q-checkbox v-model="hideSolved" label="Hide solved"></q-checkbox>
@@ -63,6 +63,8 @@ export default {
       const f = this.filter.toLowerCase();
 
       function deepFilter(obj) {
+        if (!obj) return false;
+
         for (const v of Object.values(obj)) {
           if (typeof v == "object") {
             if (deepFilter(v)) {
