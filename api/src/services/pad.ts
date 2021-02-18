@@ -8,14 +8,17 @@ export default class PadService {
    */
   static async create(): Promise<string> {
     const createUrl = await PersistentConfiguration.get("md-create-url");
-    const showUrl = await PersistentConfiguration.get("md-show-url");
+    let showUrl = await PersistentConfiguration.get("md-show-url");
+
     try {
       const res = await Axios.get(createUrl, {
         maxRedirects: 0,
         validateStatus: (status) => status === 302,
       });
 
-      return `${showUrl === "/" ? "" : showUrl}${res.headers.location}`;
+      if (showUrl === "/") return res.headers.location;
+
+      return showUrl.replace(/\/+$/g, "") + res.headers.location;
     } catch (e) {
       logger.warn(`Could not generate new pad from '${createUrl}': `);
       logger.fatal(e);
