@@ -23,8 +23,8 @@ const CreateTaskAction: IRoute = {
     const { slug: ctfSlug } = req.params;
     const { tasks } = req.body;
 
-    const ctfRepo = getConnection().getRepository(CTF);
     const taskRepo = getConnection().getRepository(Task);
+    const ctfRepo = getConnection().getRepository(CTF);
     const user = SessionManager.getUser(req);
 
     const ctf = await ctfRepo.findOne({ slug: ctfSlug }, { relations: ["tasks", "guests"] });
@@ -36,24 +36,22 @@ const CreateTaskAction: IRoute = {
         errors: [{ msg: `You don't have the right to create task on this CTF` }],
       });
 
-    for (const task of tasks) {
-      const taskSlug = makeSlug(task.title);
+    const newTasks = [];
 
-      if (ctf.tasks.find((t) => t.slug === taskSlug)) continue;
-
-      const padUrl = await PadService.create();
-      const newTask = taskRepo.create({
-        title: task.title,
-        description: task.description,
-        category: task.category,
-        padUrl,
-        slug: taskSlug,
-        ctf,
+    for (const t of tasks) {
+      newTasks.push({
+        title: t.title,
+        description: t.description,
+        category: t.category,
+        padUrl: await PadService.create(),
+        slug: makeSlug(t.title),
       });
+    }
 
-      await taskRepo.save(newTask);
-
-      ctf.tasks.push(newTask);
+    const { identifiers } = await getConnection().createQueryBuilder().insert().into(Task).values(newTasks).execute();
+    const ids = identifiers.map((i) => i.id);
+    for (const id of ids) {
+      ctf.tasks.push(await taskRepo.findOne({ id }));
     }
 
     await ctfRepo.save(ctf);
