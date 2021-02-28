@@ -8,6 +8,15 @@ services:
     environment:
       MD_CREATE_URL: "http://front/pad/new"
       MD_SHOW_URL: "/"
+      EXTERNAL_AUTHENTICATION_MODULES: ""
+      EXTERNAL_AUTHENTICATION_KEYCLOAK_CLIENT_ID: ""
+      EXTERNAL_AUTHENTICATION_KEYCLOAK_CLIENT_SECRET: ""
+      EXTERNAL_AUTHENTICATION_KEYCLOAK_AUTH_URL: ""
+      EXTERNAL_AUTHENTICATION_KEYCLOAK_REALM: ""
+      EXTERNAL_AUTHENTICATION_OAUTH2_CLIENT_ID: ""
+      EXTERNAL_AUTHENTICATION_OAUTH2_CLIENT_SECRET: ""
+      EXTERNAL_AUTHENTICATION_OAUTH2_AUTHORIZATION_URL: ""
+      EXTERNAL_AUTHENTICATION_OAUTH2_TOKEN_SERVER_URL: ""
     depends_on:
       - db
   db:
@@ -36,8 +45,8 @@ services:
   codimd:
     image: quay.io/hedgedoc/hedgedoc:1.7.2-alpine
     environment:
-      - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/ctfnote
-      - CMD_URL_PATH=pad
+      CMD_DB_URL: "postgres://ctfnote:ctfnote@db:5432/ctfnote"
+      CMD_URL_PATH: pad
     depends_on:
       - db
     restart: always

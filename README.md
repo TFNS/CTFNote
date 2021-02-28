@@ -28,6 +28,10 @@ You can optionally edit the API configuration file depending on your needs:
 
 [API Configuration File](./api/src/config/globals.ts)
 
+## External Authentication
+
+TODO
+
 ## Privileges
 
 * ADMIN_ALL: can create CTFs, tasks, edit users/the config. 

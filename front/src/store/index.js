@@ -42,6 +42,7 @@ export default async function (/* { ssrContext } */) {
   let users = null;
   let ctfs = null;
   let currentUser = users;
+  let externalAuthenticationModules = null;
   try {
     currentUser = await api.me();
   } catch (e) {
@@ -51,6 +52,13 @@ export default async function (/* { ssrContext } */) {
     ctfs = await api.getCtfs();
     users = await api.getUsers();
   }
+  
+  try{
+    externalAuthenticationModules = await api.listExternalAuthenticationModules();
+  } catch (e) {
+    externalAuthenticationModules = [];
+  }
+
   const Store = new Vuex.Store({
     state: {
       ctfs: ctfs,
@@ -59,7 +67,8 @@ export default async function (/* { ssrContext } */) {
       currentCtf: null,
       currentTask: null,
       recentTasks: [],
-      loading: false
+      loading: false,
+      externalAuthenticationModules:externalAuthenticationModules,
     },
     getters: {
       loading: state => state.loading,
@@ -86,7 +95,8 @@ export default async function (/* { ssrContext } */) {
           return false;
         }
         return new Boolean(ctf.guests.find(g => g.slug == state.currentUser.slug));
-      }
+      },
+      externalAuthenticationModules: state => state.externalAuthenticationModules,
     },
     mutations: {
       initCtfs(state, ctfs) {
@@ -167,13 +177,17 @@ export default async function (/* { ssrContext } */) {
       deleteUser(state, userSlug) {
         const idx = state.users.findIndex(u => u.slug == userSlug);
         state.users.splice(idx, 1);
+      },
+      setExternalAuthenticationModules(state,externalAuthenticationModules){
+        state.externalAuthenticationModules = externalAuthenticationModules;
       }
     },
     actions: {
       async initState({ commit }) {
-        const [ctfs, users] = await Promise.all([api.getCtfs(), api.getUsers()]);
+        const [ctfs, users, externalAuthenticationModules] = await Promise.all([api.getCtfs(), api.getUsers(), api.listExternalAuthenticationModules()]);
         commit("initCtfs", ctfs);
         commit("initUsers", users);
+        commit("setExternalAuthenticationModules",externalAuthenticationModules)
       },
       clearCtf({ commit }) {
         commit("clearCtf");
@@ -207,6 +221,17 @@ export default async function (/* { ssrContext } */) {
           const user = await api.login(username, password);
           commit("setCurrentUser", user.user);
           await dispatch("initState");
+        });
+      },
+      async listExternalAuthenticationModules({commit}){ 
+        return handleApiCall(commit, async () => {
+          const externalAuthenticationModules = await api.listExternalAuthenticationModules();
+          commit("setExternalAuthenticationModules", externalAuthenticationModules);
+         });
+      },
+      async externalAuth({ commit },module) {
+        return handleApiCall(commit, async () => {
+          await api.externalAuth(module);
         });
       },
       async register({ dispatch, commit }, [username, password]) {

@@ -18,4 +18,7 @@ export default class User {
 
     @Column("text", { array: true })
     rights: string[];
+
+    @Column()
+    externalAuth: boolean;
 }

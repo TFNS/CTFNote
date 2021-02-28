@@ -15,7 +15,7 @@ export function sleep(t) {
 
 export function showErrors(vm, errors) {
     if (errors) {
-        console.log(errors)
+        console.log(errors);
         for (const error of errors) {
             vm.$q.notify({
                 type: "negative",

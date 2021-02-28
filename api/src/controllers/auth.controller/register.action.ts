@@ -26,7 +26,7 @@ const RegisterAction: IRoute = {
   ],
   async action(req: Request, res: Response, next) {
     if (!(await PersistentConfiguration.get("allow-registration")))
-      return res.status(402 /* Payment required */).json({
+      return res.status(402).json({
         errors: [
           {
             msg: "The registration process is disabled, contact the administrator",
@@ -42,7 +42,7 @@ const RegisterAction: IRoute = {
     const hash = await PasswordUtil.hash(password);
 
     const firstAccount = (await userRepo.count()) === 0;
-    let user = userRepo.create({ username, slug, password: hash, rights: firstAccount ? Globals.adminRights : Globals.defaultRights });
+    let user = userRepo.create({ username, slug, password: hash, rights: firstAccount ? Globals.adminRights : Globals.defaultRights, externalAuth:false });
 
     try {
       user = await userRepo.save(user);

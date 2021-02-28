@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { Routes } from "./config/routes";
 import http, { Server } from "http";
+import passport from "passport";
 
 class App {
   public app: express.Application;
@@ -21,6 +22,7 @@ class App {
    * Middlewares configuration
    */
   private config(): void {
+    this.app.use(passport.initialize());
     this.app.use(bodyParser.json());
     this.app.use(cookieParser());
   }

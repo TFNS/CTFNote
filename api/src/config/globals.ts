@@ -19,9 +19,25 @@ export default class Globals {
   static defaultRights = [];
 
   static allowRegistration = true;
+  static allowExternalRegistration = false;
+  static allowExternalAuthentication = false;
 
   static mdCreateUrl = process.env.MD_CREATE_URL || "http://front/pad/new";
   static mdShowUrl = process.env.MD_SHOW_URL || "/pad";
+
+  static externalAuthenticationModuleAuthorized = ['oauth2','keycloak'];
+
+  static externalAuthenticationModules = (process.env.EXTERNAL_AUTHENTICATION_MODULES || "").split(',').filter(value => Globals.externalAuthenticationModuleAuthorized.includes(value));
+  
+  static externalAuthenticationOauth2ClientID = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_CLIENT_ID || "";
+  static externalAuthenticationOauth2ClientSecret = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_CLIENT_SECRET || "";
+  static externalAuthenticationOauth2AuthorizationUrl = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_AUTHORIZATION_URL || "";
+  static externalAuthenticationOauth2TokenServerUrl = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_TOKEN_SERVER_URL || "";
+
+  static externalAuthenticationKeycloakClientID = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_CLIENT_ID || "";
+  static externalAuthenticationKeycloakClientSecret = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_CLIENT_SECRET || "";
+  static externalAuthenticationKeycloakAuthUrl = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_AUTH_URL || "";
+  static externalAuthenticationKeycloakRealm = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_REALM || "";
 
   static maxCtfPerPage = 20;
 
@@ -35,6 +51,14 @@ export default class Globals {
     Globals.allowRegistration = await PersistentConfiguration.setIfNotSet(
       "allow-registration",
       Globals.allowRegistration
+    );
+    Globals.allowExternalRegistration = await PersistentConfiguration.setIfNotSet(
+      "allow-external-registration",
+      Globals.allowExternalRegistration
+    );
+    Globals.allowExternalAuthentication = await PersistentConfiguration.setIfNotSet(
+      "allow-external-authentication",
+      Globals.allowExternalAuthentication
     );
   }
 }

@@ -28,6 +28,15 @@
 
           <q-separator />
           <q-card-actions class="row">
+            <q-btn-dropdown v-if="externalAuthenticationModules.length > 0" color="primary" label="External Auth">
+              <div class="">
+                <q-item clickable v-close-popup v-for="module in externalAuthenticationModules" @click="externalAuth(module)" :key="module">
+                  <q-item-section>
+                    <q-item-label>{{module}}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </div>
+            </q-btn-dropdown>
             <q-space />
             <q-btn type="submit" class="q-px-md" color="primary">{{this.title}}</q-btn>
           </q-card-actions>
@@ -49,7 +58,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["currentUser"]),
+    ...mapGetters(["currentUser","externalAuthenticationModules"]),
     title() {
       return this.register ? "Register" : "Login";
     }
@@ -68,10 +77,18 @@ export default {
       } else {
         this.$router.push({ name: "ctfs" });
       }
+    },
+    async externalAuth(module){
+      let errors;
+      errors = await this.$store.dispatch("externalAuth",module);
+      
+      if (errors) {
+        showErrors(this, errors);
+      }
     }
   },
   mounted() {
-    console.log(this.currentUser);
+    this.$store.dispatch("listExternalAuthenticationModules");
     if (this.currentUser) {
       this.$router.push({ name: "ctfs" });
     }
