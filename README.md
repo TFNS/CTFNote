@@ -36,7 +36,7 @@ You can set an external authentication like Keycloak or OAuth with CTFNote.
 
 You have to set environment variables throught docker-compose.yml.
 
-List of current modules : OAuth2, Keycloak 
+As admin, you can allow or block the external authentication and/or registration if the user doesn't exist in the db.
 
 #### Oauth2 :
 
