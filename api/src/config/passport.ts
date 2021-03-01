@@ -19,7 +19,7 @@ if (Globals.externalAuthenticationModules.indexOf('keycloak') != -1){
       clientID: Globals.externalAuthenticationKeycloakClientID,
       clientSecret: Globals.externalAuthenticationKeycloakClientSecret,
       authServerURL: Globals.externalAuthenticationKeycloakAuthUrl,
-      callbackURL: '/api/auth/keycloak/callback',
+      callbackURL: Globals.externalAuthenticationKeycloakCallbackUrl,
       realm: Globals.externalAuthenticationKeycloakRealm,
       publicClient: 'false',
       sslRequired: 'external',
@@ -36,7 +36,7 @@ if (Globals.externalAuthenticationModules.indexOf('oauth2') != -1){
   		clientSecret: Globals.externalAuthenticationOauth2ClientSecret,
   		authorizationURL: Globals.externalAuthenticationOauth2AuthorizationUrl,
   		tokenURL: Globals.externalAuthenticationOauth2TokenServerUrl,
-  		callbackURL: '/api/auth/oauth2/callback',
+  		callbackURL: Globals.externalAuthenticationOauth2CallbackUrl,
   	},
     	function(accessToken, refreshToken, profile, done) {
   		  findOrCreateExternalUser(profile,done); // Not sure about that because profile maybe empty :/

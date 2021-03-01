@@ -33,11 +33,13 @@ export default class Globals {
   static externalAuthenticationOauth2ClientSecret = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_CLIENT_SECRET || "";
   static externalAuthenticationOauth2AuthorizationUrl = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_AUTHORIZATION_URL || "";
   static externalAuthenticationOauth2TokenServerUrl = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_TOKEN_SERVER_URL || "";
+  static externalAuthenticationOauth2CallbackUrl = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_CALLBACK_URL || "";
 
   static externalAuthenticationKeycloakClientID = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_CLIENT_ID || "";
   static externalAuthenticationKeycloakClientSecret = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_CLIENT_SECRET || "";
   static externalAuthenticationKeycloakAuthUrl = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_AUTH_URL || "";
   static externalAuthenticationKeycloakRealm = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_REALM || "";
+  static externalAuthenticationKeycloakCallbackUrl = process.env.EXTERNAL_AUTHENTICATION_KEYCLOAK_CALLBACK_URL || "";
 
   static maxCtfPerPage = 20;
 
