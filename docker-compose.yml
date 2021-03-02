@@ -49,6 +49,7 @@ services:
     environment:
       CMD_DB_URL: "postgres://ctfnote:ctfnote@db:5432/ctfnote"
       CMD_URL_PATH: pad
+      CMD_IMAGE_UPLOAD_TYPE: imgur
     depends_on:
       - db
     restart: always
