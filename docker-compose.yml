@@ -3,6 +3,9 @@ services:
   api:
     build:
       context: "./api"
+    deploy:
+      restart_policy:
+        condition: on-failure
     networks:
       - ctfnote
     environment:
@@ -28,6 +31,9 @@ services:
       args:
         API_HOST: api
         PAD_HOST: codimd
+    deploy:
+      restart_policy:
+        condition: on-failure
     depends_on:
       - api
       - codimd
