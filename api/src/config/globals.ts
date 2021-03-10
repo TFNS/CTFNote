@@ -23,6 +23,8 @@ export default class Globals {
   static mdCreateUrl = process.env.MD_CREATE_URL || "http://front/pad/new";
   static mdShowUrl = process.env.MD_SHOW_URL || "/pad";
 
+  static storeFlag = process.env.CTFNOTE_STORE_FLAG || true;
+
   static maxCtfPerPage = 20;
 
   static updatableFields = {
@@ -36,5 +38,6 @@ export default class Globals {
       "allow-registration",
       Globals.allowRegistration
     );
+    Globals.storeFlag = await PersistentConfiguration.setIfNotSet("store-flag", Globals.storeFlag);
   }
 }

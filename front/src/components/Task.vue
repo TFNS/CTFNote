@@ -30,6 +30,15 @@
                 <q-item-label class="q-px-md">Solved</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item tag="label" v-ripple v-close-popup @click="showFlag" v-if="this.settings['store-flag']">
+              <q-item-section side top>
+                <q-avatar icon="flag" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label class="q-px-md">Show flag</q-item-label>
+              </q-item-section>
+            </q-item>
             <q-item tag="label" v-ripple v-close-popup @click="editTask = !editTask">
               <q-item-section side>
                 <q-avatar icon="edit" />
@@ -127,7 +136,7 @@ export default {
     ctf: Object
   },
   computed: {
-    ...mapGetters(["currentUser"]),
+    ...mapGetters(["currentUser", "settings"]),
 
     linkEvent() {
       return this.editTask ? "none" : "click";
@@ -143,7 +152,8 @@ export default {
       editTask: false,
       title: this.task.title,
       category: this.task.category,
-      description: this.task.description
+      description: this.task.description,
+      flag: this.task.flag
     };
   },
   mounted() {},
@@ -172,7 +182,38 @@ export default {
       this.$store.dispatch("onIt", [this.task.slug, v]);
     },
     async updateSolved(v) {
-      this.$store.dispatch("solved", [this.task.slug, v]);
+      let args = [this.task.slug, v];
+
+      if (v && this.settings["store-flag"]) {
+        this.$q
+          .dialog({
+            title: "Enter flag",
+            message: "Please enter the flag",
+            cancel: true,
+            prompt: {
+              model: '',
+              type: 'text'
+            },
+            color: "blue"
+          })
+          .onOk(data => {
+            if (data.length > 0) {
+              args.push(data);
+            }
+
+            this.$store.dispatch("solved", args);
+          }).onCancel(data => {
+            this.solved = false;
+          });
+      } else {
+        this.$store.dispatch("solved", args);
+      }
+    },
+    async showFlag() {
+      this.$q.dialog({
+        title: 'Flag for ' + this.task.title,
+        message: this.task.flag
+      })
     }
   },
   watch: {

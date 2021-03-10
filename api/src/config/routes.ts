@@ -18,6 +18,7 @@ import UpdateCTFAction from "../controllers/ctf.controller/update.action";
 import CreateCtfAction from "../controllers/ctf.controller/create.action";
 
 import GetConfigAction from "../controllers/config.controller/get.action";
+import GetSettingsAction from "../controllers/settings.controller/get.action";
 import UpdateConfigAction from "../controllers/config.controller/update.action";
 import LogoutAction from "../controllers/auth.controller/logout.action";
 import RemoveCTFAction from "../controllers/ctf.controller/remove.action";
@@ -49,6 +50,8 @@ export class Routes {
 
     app.get("/admin/config", [...GetConfigAction.middlewares], GetConfigAction.action);
     app.put("/admin/config", [...UpdateConfigAction.middlewares, UpdateConfigAction.action]);
+
+    app.get("/settings", [...GetConfigAction.middlewares], GetSettingsAction.action);
 
     // 404 Handling
     app.use((_: any, res: Response) => {

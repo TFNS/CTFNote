@@ -85,8 +85,8 @@ class API {
   async onIt(ctfSlug, taskSlug, onIt) {
     return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}/onit`, { onIt });
   }
-  async solveTask(ctfSlug, taskSlug, solved) {
-    return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}`, { solved });
+  async solveTask(ctfSlug, taskSlug, solved, flag) {
+    return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}`, { solved, flag });
   }
 
   async updateCtfPlayer(ctfSlug, playerSlug, playing) {
@@ -140,6 +140,10 @@ class API {
 
   async setConfiguration(config) {
     return this.putJson("/admin/config", config);
+  }
+
+  async getSettings() {
+    return this.get("/settings");
   }
 }
 

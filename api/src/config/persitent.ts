@@ -9,14 +9,20 @@ export default class PersistentConfiguration {
     return value;
   }
 
-  static async list(): Promise<any> {
+  static async list(priv = true): Promise<any> {
     const configRepo = getConnection().getRepository(Config);
     const items = await configRepo.find({ order: { id: "ASC" } });
 
     const obj = {};
 
     for (const [_, config] of Object.entries(items)) {
-      obj[config.key] = config.value;
+      if (priv) {
+        obj[config.key] = config.value;
+      } else {
+        if (!config.private) {
+          obj[config.key] = config.value;
+        }
+      }
     }
 
     return obj;
