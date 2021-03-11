@@ -32,12 +32,13 @@ export default class Globals {
   };
 
   static async init() {
-    Globals.mdCreateUrl = await PersistentConfiguration.setIfNotSet("md-create-url", Globals.mdCreateUrl);
-    Globals.mdShowUrl = await PersistentConfiguration.setIfNotSet("md-show-url", Globals.mdShowUrl);
+    Globals.mdCreateUrl = await PersistentConfiguration.setIfNotSet("md-create-url", Globals.mdCreateUrl, true);
+    Globals.mdShowUrl = await PersistentConfiguration.setIfNotSet("md-show-url", Globals.mdShowUrl, true);
     Globals.allowRegistration = await PersistentConfiguration.setIfNotSet(
       "allow-registration",
-      Globals.allowRegistration
+      Globals.allowRegistration,
+      true
     );
-    Globals.storeFlag = await PersistentConfiguration.setIfNotSet("store-flag", Globals.storeFlag);
+    Globals.storeFlag = await PersistentConfiguration.setIfNotSet("store-flag", Globals.storeFlag, false);
   }
 }

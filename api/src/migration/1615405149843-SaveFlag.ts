@@ -7,7 +7,6 @@ export class SaveFlag1615405149843 implements MigrationInterface {
     await queryRunner.query(`UPDATE config SET private=true WHERE key='md-create-url'`);
     await queryRunner.query(`UPDATE config SET private=true WHERE key='md-show-url'`);
     await queryRunner.query(`UPDATE config SET private=true WHERE key='allow-registration'`);
-    await queryRunner.query(`INSERT INTO config (key, value, private) VALUES ('store-flag', 'true', false)`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

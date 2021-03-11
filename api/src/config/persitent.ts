@@ -28,16 +28,21 @@ export default class PersistentConfiguration {
     return obj;
   }
 
-  static async set(key: string, value: any): Promise<any | null> {
+  static async set(key: string, value: any, priv: boolean): Promise<any | null> {
     const connection = getConnection();
 
     if (await PersistentConfiguration.configExists(key)) {
-      return await connection.createQueryBuilder().update(Config).set({ value }).where("key = :key", { key }).execute();
+      return await connection
+        .createQueryBuilder()
+        .update(Config)
+        .set({ value, private: priv })
+        .where("key = :key", { key })
+        .execute();
     }
 
     const configRepo = connection.getRepository(Config);
 
-    const config = configRepo.create({ key, value });
+    const config = configRepo.create({ key, value, private: priv });
 
     return await configRepo.save(config);
   }
@@ -47,9 +52,9 @@ export default class PersistentConfiguration {
     return !!found;
   }
 
-  static async setIfNotSet(key: string, value: any) {
+  static async setIfNotSet(key: string, value: any, priv: boolean) {
     if (!(await PersistentConfiguration.configExists(key))) {
-      await PersistentConfiguration.set(key, value);
+      await PersistentConfiguration.set(key, value, priv);
       return value;
     }
 
