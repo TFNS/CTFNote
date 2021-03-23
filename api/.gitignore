@@ -6,3 +6,4 @@ tmp/
 temp/
 dist/
 populate.py
+ormconfig.js
