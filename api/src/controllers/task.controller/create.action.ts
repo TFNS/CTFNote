@@ -39,12 +39,16 @@ const CreateTaskAction: IRoute = {
     const newTasks = [];
 
     for (const t of tasks) {
+      const slug = makeSlug(t.title);
+
+      if (await taskRepo.findOne({ slug })) continue; // Do not create the task if it already exists
+
       newTasks.push({
         title: t.title,
         description: t.description,
         category: t.category,
         padUrl: await PadService.create(),
-        slug: makeSlug(t.title),
+        slug,
       });
     }
 
