@@ -30,7 +30,13 @@
                 <q-item-label class="q-px-md">Solved</q-item-label>
               </q-item-section>
             </q-item>
-            <q-item tag="label" v-ripple v-close-popup @click="showFlag" v-if="this.settings['store-flag'] && this.task.flag != null && this.task.flag.length > 0">
+            <q-item
+              tag="label"
+              v-ripple
+              v-close-popup
+              @click="showFlag"
+              v-if="this.settings['store-flag'] && this.task.flag != null && this.task.flag.length > 0"
+            >
               <q-item-section side top>
                 <q-avatar icon="flag" />
               </q-item-section>
@@ -90,7 +96,8 @@
 
         <q-card-section>
           <div class="text editable">
-            {{ task.description || "..." }}
+            <p v-if="!task.solved" class="task-description">{{ task.description || "..." }}</p>
+            <p v-if="task.solved" class="task-flag">{{ task.flag || "Missing flag" }}</p>
             <q-popup-edit v-model="description" @save="updateDescription" buttons>
               <q-input v-model="description" dense autofocus />
             </q-popup-edit>
@@ -191,8 +198,8 @@ export default {
             message: "Please enter the flag",
             cancel: true,
             prompt: {
-              model: '',
-              type: 'text'
+              model: "",
+              type: "text"
             },
             color: "blue"
           })
@@ -202,7 +209,8 @@ export default {
             }
 
             this.$store.dispatch("solved", args);
-          }).onCancel(data => {
+          })
+          .onCancel(data => {
             this.solved = false;
           });
       } else {
@@ -211,10 +219,10 @@ export default {
     },
     async showFlag() {
       this.$q.dialog({
-        title: 'Flag for ' + this.task.title,
+        title: "Flag for " + this.task.title,
         message: this.task.flag,
-        color: 'blue'
-      })
+        color: "blue"
+      });
     }
   },
   watch: {
@@ -236,6 +244,10 @@ export default {
 <style>
 .solved {
   border-color: var(--q-color-positive);
+}
+
+.task-flag {
+  font-weight: bold;
 }
 </style>
 <style lang="scss" scoped>
