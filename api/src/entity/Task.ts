@@ -25,6 +25,9 @@ export default class Task {
     @Column("boolean", { default: false })
     solved: boolean;
 
+    @Column("text", { default: null })
+    flag: string;
+
     @Column("text")
     padUrl: string;
 

@@ -40,7 +40,7 @@ const UpdateTaskAction: IRoute = {
     let task = ctf.tasks.find((t) => t.slug === taskSlug);
     if (!task) return res.status(404).json({ errors: [{ msg: "Invalid Task slug" }] });
 
-    for (const field of ["solved", "title", "category", "description"]) {
+    for (const field of ["solved", "title", "category", "description", "flag"]) {
       if (field in req.body) {
         task[field] = req.body[field];
       }

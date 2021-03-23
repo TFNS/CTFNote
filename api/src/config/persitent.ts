@@ -9,29 +9,40 @@ export default class PersistentConfiguration {
     return value;
   }
 
-  static async list(): Promise<any> {
+  static async list(priv = true): Promise<any> {
     const configRepo = getConnection().getRepository(Config);
     const items = await configRepo.find({ order: { id: "ASC" } });
 
     const obj = {};
 
     for (const [_, config] of Object.entries(items)) {
-      obj[config.key] = config.value;
+      if (priv) {
+        obj[config.key] = config.value;
+      } else {
+        if (!config.private) {
+          obj[config.key] = config.value;
+        }
+      }
     }
 
     return obj;
   }
 
-  static async set(key: string, value: any): Promise<any | null> {
+  static async set(key: string, value: any, priv: boolean): Promise<any | null> {
     const connection = getConnection();
 
     if (await PersistentConfiguration.configExists(key)) {
-      return await connection.createQueryBuilder().update(Config).set({ value }).where("key = :key", { key }).execute();
+      return await connection
+        .createQueryBuilder()
+        .update(Config)
+        .set({ value, private: priv })
+        .where("key = :key", { key })
+        .execute();
     }
 
     const configRepo = connection.getRepository(Config);
 
-    const config = configRepo.create({ key, value });
+    const config = configRepo.create({ key, value, private: priv });
 
     return await configRepo.save(config);
   }
@@ -41,9 +52,9 @@ export default class PersistentConfiguration {
     return !!found;
   }
 
-  static async setIfNotSet(key: string, value: any) {
+  static async setIfNotSet(key: string, value: any, priv: boolean) {
     if (!(await PersistentConfiguration.configExists(key))) {
-      await PersistentConfiguration.set(key, value);
+      await PersistentConfiguration.set(key, value, priv);
       return value;
     }
 
