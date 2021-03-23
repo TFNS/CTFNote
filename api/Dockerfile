@@ -8,7 +8,10 @@ WORKDIR /usr/src/app
 COPY tsconfig.json package.json yarn.lock /usr/src/app/
 RUN yarn install
 
-COPY ormconfig.js /usr/src/app/ormconfig.js
+COPY ormconfig.ts /usr/src/app/ormconfig.ts
+
+RUN npx tsc --esModuleInterop ormconfig.ts && rm -f ormconfig.ts && ls -lA
+
 COPY src /usr/src/app/src
 
 RUN yarn build && \
@@ -16,5 +19,9 @@ RUN yarn build && \
 
 EXPOSE 31337
 
-CMD yarn sync && NODE_ENV=prod node /usr/src/app/dist/index.js
+RUN ls -la /usr/src/app/dist/entity
+
+#CMD yarn sync 
+#&& 
+CMD npx typeorm schema:sync && NODE_ENV=prod node dist/index.js
 

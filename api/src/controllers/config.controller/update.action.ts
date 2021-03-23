@@ -23,10 +23,10 @@ const UpdateConfigAction: IRoute = {
       "store-flag": storeFlag,
     } = req.body;
 
-    if (mdCreateUrl != null) await PersistentConfiguration.set("md-create-url", mdCreateUrl);
-    if (mdShowUrl != null) await PersistentConfiguration.set("md-show-url", mdShowUrl);
-    if (allowRegistration != null) await PersistentConfiguration.set("allow-registration", allowRegistration);
-    if (storeFlag != null) await PersistentConfiguration.set("store-flag", storeFlag);
+    if (mdCreateUrl != null) await PersistentConfiguration.set("md-create-url", mdCreateUrl, true);
+    if (mdShowUrl != null) await PersistentConfiguration.set("md-show-url", mdShowUrl, true);
+    if (allowRegistration != null) await PersistentConfiguration.set("allow-registration", allowRegistration, true);
+    if (storeFlag != null) await PersistentConfiguration.set("store-flag", storeFlag, false);
 
     return res.status(200).json(await PersistentConfiguration.list());
   },

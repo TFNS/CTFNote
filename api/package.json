@@ -16,7 +16,7 @@
     "build": "npx tsc --build tsconfig.json",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "lint": "npx ts-unused-exports ./tsconfig.json --ignoreFiles='migration' && npx tslint --project .",
-    "sync": "npx typeorm schema:sync"
+    "sync": "yarn typeorm schema:sync"
   },
   "dependencies": {
     "@types/uuid": "^8.3.0",
@@ -37,7 +37,7 @@
     "signale": "^1.4.0",
     "slugify": "^1.4.5",
     "sqlite3": "^5.0.0",
-    "typeorm": "0.2.29",
+    "typeorm": "0.2.31",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
