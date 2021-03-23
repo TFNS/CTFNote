@@ -39,6 +39,8 @@ const CreateTaskAction: IRoute = {
     const newTasks = [];
 
     for (const t of tasks) {
+      if (await taskRepo.findOne({ title: t.title })) continue; // Do not create the task if it already exists
+
       newTasks.push({
         title: t.title,
         description: t.description,
