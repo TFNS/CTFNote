@@ -18,7 +18,7 @@ services:
       POSTGRES_PASSWORD: ctfnote
       POSTGRES_USER: ctfnote
     volumes:
-      - ctfnote:/data
+      - ctfnote:/var/lib/postgresql/data
     networks:
       - ctfnote
   front:
@@ -35,10 +35,11 @@ services:
     ports:
       - 80:80
   codimd:
-    image: quay.io/codimd/server:1.6.0
+    image: quay.io/hedgedoc/hedgedoc:1.7.2-alpine
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/ctfnote
       - CMD_URL_PATH=pad
+      - CMD_IMAGE_UPLOAD_TYPE=imgur
     depends_on:
       - db
     restart: always
