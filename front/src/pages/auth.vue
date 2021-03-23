@@ -29,7 +29,7 @@
           <q-separator />
           <q-card-actions class="row">
             <q-space />
-            <q-btn type="submit" class="q-px-md" color="primary">{{this.title}}</q-btn>
+            <q-btn type="submit" class="q-px-md" color="primary">{{ this.title }}</q-btn>
           </q-card-actions>
         </q-card>
       </q-form>
@@ -71,7 +71,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.currentUser);
     if (this.currentUser) {
       this.$router.push({ name: "ctfs" });
     }

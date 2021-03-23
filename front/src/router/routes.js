@@ -1,5 +1,3 @@
-
-
 function deleteAllCookies() {
   const cookies = document.cookie.split(";");
 
@@ -11,73 +9,77 @@ function deleteAllCookies() {
 }
 
 function routes(store) {
-
   const routes = [
     {
-      path: '/',
+      path: "/",
       name: "index",
       redirect: { name: "ctfs" },
-      component: () => import('layouts/MainLayout.vue'),
+      component: () => import("layouts/MainLayout.vue"),
       children: [
         {
-          path: 'auth',
-          name: 'auth',
-          component: () => import('pages/auth.vue')
+          path: "auth",
+          name: "auth",
+          component: () => import("pages/auth.vue")
         },
         {
-          path: 'logout',
-          name: 'logout',
+          path: "logout",
+          name: "logout",
           beforeEnter: (to, from, next) => {
-            deleteAllCookies()
-            store.dispatch("logout")
-            next({ name: "auth" })
+            deleteAllCookies();
+            store.dispatch("logout");
+            next({ name: "auth" });
           }
         },
         {
-          path: 'settings',
-          name: "settings",
+          path: "settings",
+          name: "settings"
         },
         {
-          path: 'me',
-          name: "me",
+          path: "me",
+          name: "me"
         },
         {
-          path: 'ctf',
+          path: "ctf",
           name: "ctfs",
-          component: () => import('pages/CTF/List.vue')
+          component: () => import("pages/CTF/List.vue")
         },
         {
-          path: 'ctf/past',
+          path: "ctf/past",
           name: "past",
-          component: () => import('pages/CTF/List.vue')
+          component: () => import("pages/CTF/List.vue")
         },
         {
-          path: 'ctf/:ctfSlug',
+          path: "ctf/calendar",
+          name: "calendar",
+          component: () => import("pages/CTF/List.vue")
+        },
+        {
+          path: "ctf/:ctfSlug",
           props: true,
-          component: () => import('pages/CTF/Container.vue'),
+          component: () => import("pages/CTF/Container.vue"),
           children: [
-            { path: '', name: "ctf", props: true, component: () => import('pages/CTF/CTF.vue') },
-            { path: 'tasks/:taskSlug', name: "task", props: true, component: () => import('pages/CTF/Task.vue') }
+            { path: "", name: "ctf", props: true, component: () => import("pages/CTF/CTF.vue") },
+            { path: "tasks/:taskSlug", name: "task", props: true, component: () => import("pages/CTF/Task.vue") }
           ]
         },
         {
-          path: 'admin/users',
+          path: "admin/users",
           name: "adminUsers",
-          component: () => import('pages/Admin/Users.vue'),
+          component: () => import("pages/Admin/Users.vue")
         },
         {
-          path: 'admin/config',
+          path: "admin/config",
           name: "adminConfig",
-          component: () => import('pages/Admin/Settings.vue'),
+          component: () => import("pages/Admin/Settings.vue")
         }
       ]
     },
     {
-      path: '/*',
-      component: () => import('pages/Error404.vue')
+      path: "/*",
+      component: () => import("pages/Error404.vue")
     }
-  ]
-  return routes
+  ];
+  return routes;
 }
 
-export default routes
+export default routes;

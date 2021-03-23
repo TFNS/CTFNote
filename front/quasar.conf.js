@@ -83,7 +83,7 @@ module.exports = function(/* ctx */) {
         }
       },
       https: false,
-      port: 8080,
+      port: process.env.PORT || 8080,
       open: true // opens browser window automatically
     },
 

@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY tsconfig.json package.json yarn.lock /usr/src/app/
 RUN yarn install
 
-COPY ormconfig.docker.json /usr/src/app/ormconfig.json
+COPY ormconfig.js /usr/src/app/ormconfig.js
 COPY src /usr/src/app/src
 
 RUN yarn build && \
