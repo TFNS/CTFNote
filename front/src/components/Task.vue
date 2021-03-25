@@ -96,8 +96,10 @@
 
         <q-card-section>
           <div class="text editable">
+            <p v-if="this.settings['store-flag'] && task.solved" class="task-flag blur">
+              {{ task.flag || "Missing flag" }}
+            </p>
             <p v-if="!task.solved" class="task-description">{{ task.description || "..." }}</p>
-            <p v-if="task.solved" class="task-flag">{{ task.flag || "Missing flag" }}</p>
             <q-popup-edit v-model="description" @save="updateDescription" buttons>
               <q-input v-model="description" dense autofocus />
             </q-popup-edit>
@@ -246,6 +248,15 @@ export default {
   border-color: var(--q-color-positive);
 }
 
+.blur {
+  filter: blur(5px);
+  transition: filter 0.2s;
+}
+.blur:hover {
+  filter: blur(0px);
+  transition-delay: 0.2s;
+}
+
 .task-flag {
   font-weight: bold;
 }
@@ -257,6 +268,7 @@ export default {
   right: 0;
   transform: translate(25%, -40%);
 }
+
 .tasklink {
   color: inherit;
   text-decoration: none;
