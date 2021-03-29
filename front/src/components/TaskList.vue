@@ -9,6 +9,9 @@
       <div class="col col-md-auto">
         <q-checkbox v-model="hideSolved" label="Hide solved"></q-checkbox>
       </div>
+      <div class="col col-md">
+        <q-select filled v-model="categoryFilter" :options="categories" multiple label="By Category" emit-value />
+      </div>
       <div class="col col-md-auto">
         <q-input v-model="filter" label="search">
           <template v-slot:append> <q-icon name="search" /> </template>
@@ -83,12 +86,21 @@ export default {
         if (this.hideSolved && task.solved) {
           return false;
         }
+
+        if (!this.categoryFilter.includes(task.category)) {
+          return false;
+        }
+
         return deepFilter(task);
       });
     }
   },
   data() {
     const hideSolved = JSON.parse(localStorage.getItem("hideSolved") || "false");
+
+    const categories = Array.from(new Set([...this.ctf.tasks.map(t => t.category)]));
+    const categoryFilter = [...categories]; // by default, everything is selected
+
     const parserOptions = [];
     for (const parser of parsers) {
       parserOptions.push({
@@ -100,6 +112,8 @@ export default {
       parserOptions,
       importData: "",
       parsedTasks: [],
+      categories,
+      categoryFilter,
       currentParser: parserOptions[0],
       showImportDialog: false,
       hideSolved,
