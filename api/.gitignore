@@ -6,3 +6,6 @@ tmp/
 temp/
 dist/
 populate.py
+package-lock.json
+yarn-error.log
+.env

@@ -9,6 +9,7 @@
     "target": "es2016",
     "outDir": "./dist"
   },
+  "require":"dotenv/config",
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

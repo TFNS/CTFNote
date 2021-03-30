@@ -47,6 +47,13 @@
               :options="Object.values(Rights)"
             />
           </q-td>
+          <q-td key="externalAuth" auto-width :props="props">
+            <q-toggle
+              v-model="props.row.externalAuth"
+              color="primary"
+              disable
+            />
+          </q-td>
           <q-td key="actions" auto-width :props="props">
             <q-btn
               title="Delete user"
@@ -133,6 +140,12 @@ export default {
         name: "rights",
         label: "Rights",
         field: row => `${row.rights}`
+      },
+      {
+        name: "externalAuth",
+        label: "External Registered",
+        field: "externalAuth",
+        sortable: true,
       },
       {
         name: "actions",

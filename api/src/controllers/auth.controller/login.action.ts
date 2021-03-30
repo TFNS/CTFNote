@@ -34,7 +34,7 @@ const LoginAction: IRoute = {
 
     const user = await userRepo.findOne({ slug }, { select: ["password", "username", "slug", "rights"] });
 
-    if (!user) return deny(res);
+    if (!user || ((typeof user.password === 'undefined' || user.password === null) && user.externalAuth)) return deny(res);
 
     const granted = await PasswordUtil.compare(password, user.password);
 

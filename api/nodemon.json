@@ -1,8 +1,10 @@
 {
   "watch": [
     "src/",
-    "./package.json"
+    "./package.json",
+    ".env"
   ],
+  "require": "dotenv/config",
   "ext": "ts",
-  "exec": "ts-node ./src/index.ts"
+  "exec": "ts-node -r dotenv/config ./src/index.ts"
 }

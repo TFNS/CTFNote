@@ -112,8 +112,17 @@ class API {
   async register(username, password) {
     return this.postJson("/auth/register", { username, password });
   }
+
   async login(username, password) {
     return this.postJson("/auth/login", { username, password });
+  }
+
+  async listExternalAuthenticationModules(username, password) {
+    return this.get("/auth/list");
+  }
+
+  async externalAuth(module){
+    window.open(`${this.host}/auth/${module}`, "_self")
   }
 
   async logout() {

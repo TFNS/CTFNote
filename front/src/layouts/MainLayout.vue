@@ -93,13 +93,19 @@
 <script>
 import MenuTaskList from "components/MenuTaskList.vue";
 import { mapGetters } from "vuex";
-import { colorHash } from "../utils";
+import { colorHash,showErrors } from "../utils";
 import { Rights } from "../enums";
 
 export default {
   name: "MainLayout",
   components: { MenuTaskList },
   created() {
+    const params = new URLSearchParams(window.location.href.split('?')[1]);
+    const error = params.get("error");
+    if(error){
+      showErrors(this,[{msg:error}]);
+    }
+    
     this.$q.dark.set(this.darkMode);
     if (!this.checkLogin(this.$route)) {
       return;

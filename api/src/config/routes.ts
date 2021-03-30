@@ -1,6 +1,12 @@
 import { Response } from "express";
+
+import Globals from "./globals";
+
 import AuthAction from "../controllers/auth.controller/login.action";
 import RegisterAction from "../controllers/auth.controller/register.action";
+import ListExternalAuthenticationModulesAction from "../controllers/auth.controller/list.action";
+import ExternalAction from "../controllers/auth.controller/external.controller/external.action";
+import CallbackAction from "../controllers/auth.controller/external.controller/callback.action";
 import IndexAction from "../controllers/index.controller/index.action";
 import ListUserAction from "../controllers/user.controller/list.action";
 import MeAction from "../controllers/user.controller/me.action";
@@ -28,6 +34,12 @@ export class Routes {
     app.post("/auth/login", [...AuthAction.middlewares], AuthAction.action);
     app.post("/auth/register", [...RegisterAction.middlewares], RegisterAction.action);
     app.post("/auth/logout", [...LogoutAction.middlewares], LogoutAction.action);
+
+    app.get("/auth/list",[...ListExternalAuthenticationModulesAction.middlewares],ListExternalAuthenticationModulesAction.action)
+    Globals.externalAuthenticationModules.forEach(val => {
+        app.get(`/auth/${val}`, [...ExternalAction.middlewares], ExternalAction.action);
+        app.get(`/auth/${val}/callback`, [...CallbackAction.middlewares], CallbackAction.action);
+    })
 
     app.get("/users", [...ListUserAction.middlewares], ListUserAction.action);
     app.get("/me", [...MeAction.middlewares], MeAction.action);

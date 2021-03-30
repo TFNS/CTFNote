@@ -28,6 +28,90 @@ You can optionally edit the API configuration file depending on your needs:
 
 [API Configuration File](./api/src/config/globals.ts)
 
+## External Authentication
+
+CTFNote supports external authentication like Keycloak or OAuth with CTFNote.
+
+### Usage
+
+You have to set environment variables throught docker-compose.yml.
+
+As admin, you can allow or block the external authentication and/or registration if the user doesn't exist in the db.
+
+For the callback URL, the url path is `/api/auth/<MODULE>/callaback`.
+
+#### Oauth2 :
+
+Routes from frontend:
+- https://127.0.0.1/api/auth/oauth/
+- https://127.0.0.1/api/auth/oauth/callback
+
+Env vars:
+```
+EXTERNAL_AUTHENTICATION_MODULES: "oauth2"
+EXTERNAL_AUTHENTICATION_OAUTH2_CLIENT_ID: "client_id"
+EXTERNAL_AUTHENTICATION_OAUTH2_CLIENT_SECRET: "client_secret"
+EXTERNAL_AUTHENTICATION_OAUTH2_AUTHORIZATION_URL: "https://example.com/auth/"
+EXTERNAL_AUTHENTICATION_OAUTH2_TOKEN_SERVER_URL: "https://example.com/token/"
+EXTERNAL_AUTHENTICATION_OAUTH2_CALLBACK_URL: "https://ctfnote.example.com/api/auth/oauth2/callback"
+```
+
+Notes: Maybe not functional because the user's profile does not seem to be retrieved by Passport. 
+
+#### Keycloak
+
+Routes from frontend:
+- https://127.0.0.1/api/auth/keycloak/
+- https://127.0.0.1/api/auth/keycloak/callback
+
+Env vars:
+```
+EXTERNAL_AUTHENTICATION_MODULES: "keycloak"
+EXTERNAL_AUTHENTICATION_KEYCLOAK_CLIENT_ID: "client_id"
+EXTERNAL_AUTHENTICATION_KEYCLOAK_CLIENT_SECRET: "client_secret"
+EXTERNAL_AUTHENTICATION_KEYCLOAK_AUTH_URL: "https://example.com/auth"
+EXTERNAL_AUTHENTICATION_KEYCLOAK_REALM: "Realm"
+EXTERNAL_AUTHENTICATION_KEYCLOAK_CALLBACK_URL: "https://ctfnote.example.com/api/auth/keycloak/callback"
+```
+
+### Implement new methods
+
+If you want more methods, you have to implement them with [Passport](http://www.passportjs.org/).
+Don't hesitate to PR it :D
+
+1. Add your module name inside the array `externalAuthenticationModuleAuthorized` (`api/src/config/globals.ts`). It's very important as the route will be generated from it. 
+
+```javascript
+static externalAuthenticationModuleAuthorized = ['oauth2','keycloak','<your_module>'];
+```
+
+2. Add the environment variables that you need. Example for oauth2:
+
+```javascript
+static externalAuthenticationOauthClientID = process.env.EXTERNAL_AUTHENTICATION_OAUTH_CLIENT_ID || "";
+static externalAuthenticationOauthClientSecret = process.env.EXTERNAL_AUTHENTICATION_OAUTH_CLIENT_SECRET || "";
+static externalAuthenticationOauthAuthorizationUrl = process.env.EXTERNAL_AUTHENTICATION_OAUTH_AUTHORIZATION_URL || "";
+static externalAuthenticationOauthTokenServerUrl = process.env.EXTERNAL_AUTHENTICATION_OAUTH_TOKEN_SERVER_URL || "";
+static externalAuthenticationOauth2CallbackUrl = process.env.EXTERNAL_AUTHENTICATION_OAUTH2_CALLBACK_URL || "";
+```
+
+3. Add your passport method inside `api/src/config/passport.ts`. Example for oauth2:
+```javascript
+if (Globals.externalAuthenticationModules.indexOf('oauth2') != -1){
+  passport.use('oauth2',new Oauth2Strategy({
+  		clientID: Globals.externalAuthenticationOauth2ClientID,
+  		clientSecret: Globals.externalAuthenticationOauth2ClientSecret,
+  		authorizationURL: Globals.externalAuthenticationOauth2AuthorizationUrl,
+  		tokenURL: Globals.externalAuthenticationOauth2TokenServerUrl,
+  		callbackURL: Globals.externalAuthenticationOauth2CallbackUrl,
+  	},
+    	function(accessToken, refreshToken, profile, done) {
+  		  findOrCreateExternalUser(profile,done); // Not sure about that because profile maybe empty :/
+    	})
+  );
+}
+```
+
 ## Privileges
 
 * ADMIN_ALL: can create CTFs, tasks, edit users/the config. 
