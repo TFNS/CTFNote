@@ -82,17 +82,24 @@ export default {
         return false;
       }
       const tasks = [...this.ctf.tasks].sort((a, b) => a.id < b.id);
-      return tasks.filter(task => {
-        if (this.hideSolved && task.solved) {
-          return false;
-        }
+      return tasks
+        .filter(task => {
+          if (this.hideSolved && task.solved) {
+            return false;
+          }
 
-        if (!this.categoryFilter.includes(task.category)) {
-          return false;
-        }
+          if (!this.categoryFilter.includes(task.category)) {
+            return false;
+          }
 
-        return deepFilter(task);
-      });
+          return deepFilter(task);
+        })
+        .sort((a, b) => {
+          if (a.category == b.category) {
+            return (a.title == b.title) ? 0 : ((a.title < b.title) ? -1 : 1)
+          }
+          return (a.category < b.category) ? -1 : 1;
+        });
     }
   },
   data() {
