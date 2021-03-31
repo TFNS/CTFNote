@@ -143,7 +143,7 @@ class API {
   }
 
   async getSettings() {
-    return this.get("/settings");
+    return this.get("/admin/config");
   }
 }
 

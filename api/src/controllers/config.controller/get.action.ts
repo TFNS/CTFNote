@@ -6,9 +6,13 @@ import SessionManager from "../../utils/session";
 import IRoute from "../route";
 
 const GetConfigAction: IRoute = {
-  middlewares: [SessionManager.authMiddleware, RightsManager.grantMiddleware([Rights.ADMIN_ALL])],
+  middlewares: [SessionManager.authMiddleware],
   async action(req: Request, res: Response, next) {
-    const config = await PersistentConfiguration.list();
+    const user = SessionManager.getUser(req);
+    const isAdmin = RightsManager.isGranted(user, Rights.ADMIN_ALL)
+
+    const config = await PersistentConfiguration.list(isAdmin);
+
     return res.json(config);
   },
 };

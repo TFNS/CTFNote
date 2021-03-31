@@ -23,7 +23,8 @@ export default class Globals {
   static mdCreateUrl = process.env.MD_CREATE_URL || "http://front/pad/new";
   static mdShowUrl = process.env.MD_SHOW_URL || "/pad";
 
-  static storeFlag = process.env.CTFNOTE_STORE_FLAG || true;
+  static storeFlag = (process.env.CTFNOTE_STORE_FLAG == "true") || false
+;
 
   static maxCtfPerPage = 20;
 
