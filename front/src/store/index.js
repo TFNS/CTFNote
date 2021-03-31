@@ -272,6 +272,13 @@ export default async function (/* { ssrContext } */) {
         });
       },
 
+      async updateTask({ commit, state }, [taskSlug, task]) {
+        return handleApiCall(commit, async () => {
+          const r = await api.updateTask(state.currentCtf.slug, taskSlug, task);
+          commit("updateTask", r);
+        });
+      },
+
       async updateTaskCategory({ commit, state }, [taskSlug, category]) {
         return handleApiCall(commit, async () => {
           const task = await api.updateTaskCategory(state.currentCtf.slug, taskSlug, category);

@@ -105,6 +105,9 @@ class API {
   async updateTaskDescription(ctfSlug, taskSlug, description) {
     return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}`, { description });
   }
+  async updateTask(ctfSlug, taskSlug, task) {
+    return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}`, task);
+  }
   async deleteTask(ctfSlug, taskSlug) {
     return this.delete(`/ctf/${ctfSlug}/tasks/${taskSlug}`);
   }
