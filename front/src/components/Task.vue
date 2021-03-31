@@ -97,9 +97,9 @@
         <q-card-section>
           <div class="text editable">
             <p v-if="this.settings['store-flag'] && task.solved" class="task-flag blur">
-              {{ task.flag || "Missing flag" }}
+              {{ task.flag || "..." }}
             </p>
-            <p v-if="!task.solved" class="task-description">{{ task.description || "..." }}</p>
+            <p v-if="!task.solved || !this.settings['store-flag']" class="task-description">{{ task.description || "..." }}</p>
             <q-popup-edit v-model="description" @save="updateDescription" buttons>
               <q-input v-model="description" dense autofocus />
             </q-popup-edit>
