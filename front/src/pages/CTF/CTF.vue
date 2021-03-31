@@ -17,9 +17,7 @@
         </div>
         <q-space />
         <div class="col q-pr-sm col-auto">
-          <q-btn size="md" round @click="refresh" color="primary" :icon="loading ? undefined : 'refresh'">
-            <q-spinner size="sm" v-if="loading" />
-          </q-btn>
+          <q-btn size="md" :loading="loading" round @click="refresh" color="primary" icon="refresh" />
         </div>
       </div>
       <div class="row justify-between q-px-sm">
