@@ -1,7 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated class="ctfnote-header">
-      <q-linear-progress v-show="loading" indeterminate color="warning" track-color="transparent" class="loading-bar" />
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" v-if="menu" @click="leftDrawerOpen = !leftDrawerOpen"  />
 
@@ -73,7 +72,7 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" bordered v-if="menu">
-      <q-list :key="category" v-for="[category, tasks] of Object.entries(menu)">
+      <q-list :key="category" v-for="[category, tasks] of menu">
         <q-item-label header class="text-white text-bold" :style="colorHash(category)">
           {{ category }}
         </q-item-label>
@@ -147,7 +146,7 @@ export default {
           }
         });
       }
-      return categories;
+      return Object.entries(categories).sort();
     }
   },
   data() {
