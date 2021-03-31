@@ -41,7 +41,7 @@ const CreateTaskAction: IRoute = {
     for (const t of tasks) {
       const slug = makeSlug(t.title);
 
-      if (await taskRepo.findOne({ slug })) continue; // Do not create the task if it already exists
+      if (ctf.tasks.find(t => t.slug === slug)) continue; // Do not create the task if it already exists within the CTF
 
       newTasks.push({
         title: t.title,
