@@ -64,7 +64,7 @@
         </q-menu>
         <q-card-section>
           <q-badge class="solved-badge" floating color="positive" v-if="task.solved">
-            <q-icon name="check" />
+            <q-icon name="flag" />
           </q-badge>
           <q-badge class="solved-badge" floating color="warning" v-if="editTask">
             <q-icon name="edit" />
@@ -221,7 +221,7 @@ export default {
     },
     async showFlag() {
       this.$q.dialog({
-        title: "Flag for " + this.task.title,
+        title: `Flag for ${this.task.title}` ,
         message: this.task.flag,
         color: "blue"
       });
