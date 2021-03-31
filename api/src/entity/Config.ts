@@ -10,7 +10,4 @@ export default class Config {
 
   @Column("json")
   value: any;
-
-  @Column("boolean")
-  private: boolean;
 }

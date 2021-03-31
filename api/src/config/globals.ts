@@ -23,9 +23,6 @@ export default class Globals {
   static mdCreateUrl = process.env.MD_CREATE_URL || "http://front/pad/new";
   static mdShowUrl = process.env.MD_SHOW_URL || "/pad";
 
-  static storeFlag = (process.env.CTFNOTE_STORE_FLAG == "true") || false
-;
-
   static maxCtfPerPage = 20;
 
   static updatableFields = {
@@ -33,13 +30,11 @@ export default class Globals {
   };
 
   static async init() {
-    Globals.mdCreateUrl = await PersistentConfiguration.setIfNotSet("md-create-url", Globals.mdCreateUrl, true);
-    Globals.mdShowUrl = await PersistentConfiguration.setIfNotSet("md-show-url", Globals.mdShowUrl, true);
+    Globals.mdCreateUrl = await PersistentConfiguration.setIfNotSet("md-create-url", Globals.mdCreateUrl);
+    Globals.mdShowUrl = await PersistentConfiguration.setIfNotSet("md-show-url", Globals.mdShowUrl);
     Globals.allowRegistration = await PersistentConfiguration.setIfNotSet(
       "allow-registration",
       Globals.allowRegistration,
-      true
     );
-    Globals.storeFlag = await PersistentConfiguration.setIfNotSet("store-flag", Globals.storeFlag, false);
   }
 }
