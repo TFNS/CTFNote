@@ -243,25 +243,22 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
 .solved {
   border-color: var(--q-color-positive);
 }
 
 .blur {
   filter: blur(5px);
-  transition: filter 0.2s;
+  &:hover {
+    filter: blur(0px);
+    transition: filter 0.2s;
+    transition-delay: 0.2s;
+  }
 }
-.blur:hover {
-  filter: blur(0px);
-  transition-delay: 0.2s;
-}
-
 .task-flag {
   font-weight: bold;
 }
-</style>
-<style lang="scss" scoped>
 .solved-badge {
   top: 0;
   font-size: 1.2em;
