@@ -1,10 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Unique, Index, ManyToOne, ManyToMany, JoinTable } from "typeorm";
 import CTF from "./CTF";
 import User from "./User";
 
 
 @Entity()
-@Unique(["ctf", "slug"])
+// @Unique(["ctf", "slug"])
+@Index(["ctf", "slug"], { unique: true })
 export default class Task {
 
     @PrimaryGeneratedColumn()
