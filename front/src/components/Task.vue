@@ -1,6 +1,6 @@
 <template>
-  <div class="col-auto col-grow  tasklink">
-    <q-card @click="onClick" @auxclick="onClick" bordered class="task cursor-pointer" :class="{ solved: task.solved }">
+  <div class="col-auto col-grow tasklink">
+    <q-card bordered class="task" :class="{ solved: task.solved }">
       <q-menu touch-position context-menu>
         <q-list dense class="bg-dark">
           <q-item tag="label" v-ripple v-close-popup>
@@ -73,12 +73,18 @@
             </q-card>
           </q-tooltip>
         </q-badge>
-        <div class="row">
-          <div class="text-h6">
+        <div class="row justify-between">
+          <router-link
+            class="text-h6 col cursor-pointer"
+            tag="div"
+            :to="{
+              name: 'task',
+              params: { ctfSlug: ctf.slug, taskSlug: task.slug },
+            }"
+          >
             {{ task.title }}
-          </div>
-          <q-space />
-          <div>
+          </router-link>
+          <div class="col col-auto">
             <q-chip class="text-white" :style="colorHash(task.category)">
               {{ task.category }}
             </q-chip>
@@ -88,7 +94,17 @@
 
       <q-separator inset v-if="!denseMode" />
       <q-card-section>
-        <p class="task-description">{{ task.description || "..." }}</p>
+
+          <router-link
+            class="col cursor-pointer task-description"
+            tag="p"
+            :to="{
+              name: 'task',
+              params: { ctfSlug: ctf.slug, taskSlug: task.slug },
+            }"
+          >
+            {{ task.description || "..." }}
+          </router-link>
         <p v-if="task.solved && !denseMode" class="task-flag blur">
           {{ task.flag || "Missing flag" }}
         </p>
@@ -97,7 +113,7 @@
         <q-btn round size="sm" @click="updateOnIt(!onIt)" :title="playersName" :icon="onItIcon" :color="onItColor">
         </q-btn>
         <q-btn round size="sm" @click="updateSolved" icon="flag" color="positive" />
-        <q-btn round size="sm" @click="$emit('edit-task')" icon="edit" style="background-color: #e70; color:white" />
+        <q-btn round size="sm" @click="$emit('edit-task')" icon="edit" style="background-color: #e70; color: white" />
         <q-btn round size="sm" @click="$emit('delete-task')" icon="delete" color="negative" />
       </q-card-actions>
     </q-card>
@@ -112,7 +128,7 @@ export default {
     task: Object,
     ctf: Object,
     categories: Array,
-    denseMode: { type: Boolean, default: false }
+    denseMode: { type: Boolean, default: false },
   },
   computed: {
     ...mapGetters(["currentUser", "settings"]),
@@ -135,7 +151,7 @@ export default {
       return this.onIt ? "secondary" : "primary";
     },
     onIt() {
-      return this.task.players.some(p => p.slug == this.currentUser.slug);
+      return this.task.players.some((p) => p.slug == this.currentUser.slug);
     },
     onItIcon() {
       return this.onIt ? "person_remove" : "person_add_alt_1";
@@ -155,30 +171,14 @@ export default {
     },
 
     playersName() {
-      return this.task.players.map(p => p.username).join(", ");
-    }
+      return this.task.players.map((p) => p.username).join(", ");
+    },
   },
   data() {
     return {};
   },
   mounted() {},
   methods: {
-    onClick({ target, which }) {
-      if (target.classList.contains("q-icon") || target.classList.contains("q-card__actions")) {
-        return;
-      }
-      const destination = {
-        name: "task",
-        params: { ctfSlug: this.ctf.slug, taskSlug: this.task.slug }
-      };
-      if (which == 2) {
-        //handle middle click
-        const route = this.$router.resolve(destination);
-        window.open(route.href, '_blank');
-      } else {
-        this.$router.push(destination);
-      }
-    },
     colorHash(s) {
       return { backgroundColor: colorHash(s) };
     },
@@ -196,11 +196,11 @@ export default {
             cancel: true,
             prompt: {
               model: "",
-              type: "text"
+              type: "text",
             },
-            color: "primary"
+            color: "primary",
           })
-          .onOk(data => {
+          .onOk((data) => {
             if (data.length > 0) {
               args.push(data);
             }
@@ -212,12 +212,12 @@ export default {
     },
     async showFlag() {
       this.$q.dialog({
-        title: `Flag for ${this.task.title}` ,
+        title: `Flag for ${this.task.title}`,
         message: this.task.flag,
-        color: "primary"
+        color: "primary",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
