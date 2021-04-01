@@ -85,35 +85,30 @@
             {{ task.title }}
           </router-link>
           <div class="col col-auto">
-            <q-chip class="text-white" :style="colorHash(task.category)">
+            <q-chip
+              class="text-white"
+              clickable
+              @click="$emit('filter-category', task.category)"
+              :style="colorHash(task.category)"
+            >
               {{ task.category }}
             </q-chip>
           </div>
         </div>
       </q-card-section>
-
       <q-separator inset v-if="!denseMode" />
       <q-card-section>
-
-          <router-link
-            class="col cursor-pointer task-description"
-            tag="p"
-            :to="{
-              name: 'task',
-              params: { ctfSlug: ctf.slug, taskSlug: task.slug },
-            }"
-          >
-            {{ task.description || "..." }}
-          </router-link>
+        <p class="task-description">
+          {{ task.description || "..." }}
+        </p>
         <p v-if="task.solved && !denseMode" class="task-flag blur">
           {{ task.flag || "Missing flag" }}
         </p>
       </q-card-section>
       <q-card-actions v-if="!denseMode" class="action-btn" align="right">
-        <q-btn round size="sm" @click="updateOnIt(!onIt)" :title="playersName" :icon="onItIcon" :color="onItColor">
-        </q-btn>
+        <q-btn round size="sm" @click="updateOnIt(!onIt)" :icon="onItIcon" :color="onItColor" />
         <q-btn round size="sm" @click="updateSolved" icon="flag" color="positive" />
-        <q-btn round size="sm" @click="$emit('edit-task')" icon="edit" style="background-color: #e70; color: white" />
+        <q-btn round size="sm" @click="$emit('edit-task')" icon="edit" color="warning" />
         <q-btn round size="sm" @click="$emit('delete-task')" icon="delete" color="negative" />
       </q-card-actions>
     </q-card>
@@ -255,12 +250,24 @@ export default {
   min-width: calc(100% / 6);
 }
 
-.task {
-  transition: transform 0.15s, box-shadow 0.15s;
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.8);
+.body--dark {
+  .task {
+    transition: transform 0.15s, box-shadow 0.15s;
+    &:hover {
+      box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.3);
+    }
   }
+}
+
+.body--light {
+
+  .task {
+    transition: transform 0.15s, box-shadow 0.15s;
+    &:hover {
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+    }
+  }
+
 }
 .tooltip-section,
 .tooltip-section label {

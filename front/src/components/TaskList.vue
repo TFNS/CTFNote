@@ -26,6 +26,7 @@
       <Task
         v-on:delete-task="askForDelete(task)"
         v-on:edit-task="editTask(task)"
+        v-on:filter-category="c => filterCategory(c)"
         :denseMode="denseMode"
         :categories="categories"
         :ctf="ctf"
@@ -178,6 +179,10 @@ export default {
     }
   },
   methods: {
+    filterCategory(cat){
+      console.log(cat)
+      this.categoryFilter = [cat]
+    },
     processCategoryShadow() {},
     editTask(task) {
       this.editForm = {
