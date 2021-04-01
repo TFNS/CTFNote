@@ -107,10 +107,10 @@
               </q-tabs>
               <q-tab-panels v-model="descPanel" animated class="shadow-2 rounded-borders">
                 <q-tab-panel name="description" class="q-pa-sm">
-                  <q-input v-model="form.description" type="textarea" label="Description" />
+                  <q-input v-model="form.description" type="textarea" label="Description" hint="markdown" />
                 </q-tab-panel>
                 <q-tab-panel name="credentials" class="q-pa-sm">
-                  <q-input v-model="form.credentials" type="textarea" label="Credentials" />
+                  <q-input v-model="form.credentials" type="textarea" label="Credentials" hint="markdown" />
                 </q-tab-panel>
               </q-tab-panels>
             </div>
@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { showErrors, getDate, getDateTime } from "../utils";
+import { showErrors,  getDateTime } from "../utils";
 export default {
   props: {
     ctf: Object

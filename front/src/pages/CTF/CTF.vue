@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import { colorHash } from "src/utils";
 import { Rights } from "src/enums";
 import { mapGetters } from "vuex";
 import TaskList from "src/components/TaskList.vue";

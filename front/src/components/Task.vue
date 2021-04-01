@@ -57,7 +57,6 @@
       <q-card-section>
         <q-badge v-if="showBadge" class="solved-badge" floating :color="badgeColor">
           <q-icon :name="badgeIcon" />
-
           <q-tooltip anchor="top right" self="top left" :offset="[0, 0]" content-class="transparent">
             <q-card dense bordered>
               <q-card-section class="tooltip-section">
@@ -213,7 +212,7 @@ export default {
     },
     async showFlag() {
       this.$q.dialog({
-        title: "Flag for " + this.task.title,
+        title: `Flag for ${this.task.title}` ,
         message: this.task.flag,
         color: "primary"
       });
