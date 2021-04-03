@@ -11,8 +11,8 @@ import authLimiter from "../../ratelimits/auth";
 
 import makeSlug from "../../utils/slugify";
 import SessionManager from "../../utils/session";
-import Rights from "../../config/rights";
 import PersistentConfiguration from "../../config/persitent";
+import PadService from "../../services/pad";
 
 const RegisterAction: IRoute = {
   middlewares: [
@@ -42,12 +42,24 @@ const RegisterAction: IRoute = {
     const hash = await PasswordUtil.hash(password);
 
     const firstAccount = (await userRepo.count()) === 0;
-    let user = userRepo.create({ username, slug, password: hash, rights: firstAccount ? Globals.adminRights : Globals.defaultRights });
+    let user = userRepo.create({
+      username,
+      slug,
+      password: hash,
+      rights: firstAccount ? Globals.adminRights : Globals.defaultRights,
+    });
 
     try {
       user = await userRepo.save(user);
     } catch (e) {
       return res.status(409).json({ errors: [{ msg: "A user with that username already exists" }] });
+    }
+
+    //try to authenticate with HedgeDoc
+    let padCookie = await PadService.register(username, req.body.password);
+    if (padCookie != null) {
+      padCookie = await PadService.login(username, req.body.password);
+      res.setHeader("Set-Cookie", padCookie);
     }
 
     const session = await SessionManager.generateSession(user.slug);

@@ -15,6 +15,9 @@ export default class Globals {
   static cookieName = "ctfnote-auth";
   static userAgent = "CTFNote";
 
+  static hedgedocCookieName = "connect.sid";
+  static hedgedocAuth = process.env.MD_AUTH == "true" || true;
+
   static adminRights = [Rights.ADMIN_ALL];
   static defaultRights = [];
 
@@ -36,5 +39,6 @@ export default class Globals {
       "allow-registration",
       Globals.allowRegistration
     );
+    Globals.hedgedocAuth = await PersistentConfiguration.setIfNotSet("hedgedoc-auth", Globals.hedgedocAuth);
   }
 }

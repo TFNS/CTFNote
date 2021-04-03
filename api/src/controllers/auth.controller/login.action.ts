@@ -11,6 +11,7 @@ import PasswordUtil from "../../utils/password";
 import authLimiter from "../../ratelimits/auth";
 import { getConnection } from "typeorm";
 import SessionManager from "../../utils/session";
+import PadService from "../../services/pad";
 
 function deny(res: Response) {
   return res.status(403).json({ errors: [{ msg: `Invalid username/password` }] });
@@ -43,6 +44,12 @@ const LoginAction: IRoute = {
     const session = await SessionManager.generateSession(slug);
 
     if (!session) return deny(res);
+
+    //try to authenticate with HedgeDoc
+    let padCookie = await PadService.login(username, password);
+    if (padCookie != null) {
+      res.setHeader("Set-Cookie", padCookie);
+    }
 
     res.cookie(Globals.cookieName, session.uuid, {
       expires: session.expiresAt,

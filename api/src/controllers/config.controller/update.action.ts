@@ -19,11 +19,13 @@ const UpdateConfigAction: IRoute = {
       "md-create-url": mdCreateUrl,
       "md-show-url": mdShowUrl,
       "allow-registration": allowRegistration,
+      "hedgedoc-auth": hedgedocAuth,
     } = req.body;
 
     if (mdCreateUrl != null) await PersistentConfiguration.set("md-create-url", mdCreateUrl);
     if (mdShowUrl != null) await PersistentConfiguration.set("md-show-url", mdShowUrl);
     if (allowRegistration != null) await PersistentConfiguration.set("allow-registration", allowRegistration);
+    if (hedgedocAuth != null) await PersistentConfiguration.set("hedgedoc-auth", hedgedocAuth);
 
     return res.status(200).json(await PersistentConfiguration.list());
   },

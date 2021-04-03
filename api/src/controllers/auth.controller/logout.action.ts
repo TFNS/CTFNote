@@ -12,6 +12,7 @@ const LogoutAction: IRoute = {
 
     if (logout) await SessionManager.invalidateSession(req.cookies[Globals.cookieName]);
 
+    res.clearCookie(Globals.hedgedocCookieName);
     return res.status(204).send();
   },
 };
