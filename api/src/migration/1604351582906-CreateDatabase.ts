@@ -4,7 +4,13 @@ export class CreateDatabase1604351582906 implements MigrationInterface {
     name = 'CreateDatabase1604351582906'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "slug" text NOT NULL, "username" text NOT NULL, "password" text NOT NULL, "rights" text array NOT NULL, CONSTRAINT "UQ_ac08b39ccb744ea6682c0db1c2d" UNIQUE ("slug"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
+        const table = await queryRunner.getTable("user");
+        if (table != null) {
+          return;
+        }
+        await queryRunner.query(
+          `CREATE TABLE "user" ("id" SERIAL NOT NULL, "slug" text NOT NULL, "username" text NOT NULL, "password" text NOT NULL, "rights" text array NOT NULL, CONSTRAINT "UQ_ac08b39ccb744ea6682c0db1c2d" UNIQUE ("slug"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`
+        );
         await queryRunner.query(
           `CREATE TABLE "task" ("id" SERIAL NOT NULL, "slug" text NOT NULL, "title" text NOT NULL, "description" text, "category" text, "solved" boolean NOT NULL DEFAULT false, "padUrl" text NOT NULL, "ctfId" integer, CONSTRAINT "PK_fb213f79ee45060ba925ecd576e" PRIMARY KEY ("id"))`
         );
