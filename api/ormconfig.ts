@@ -13,11 +13,12 @@ const subscribersDir = path.join(baseSrcDir, "subscriber", `*.${ext}`);
 const config: ConnectionOptions = {
   type: "postgres",
   url,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [entitiesDir],
   migrations: [migrationsDir],
   subscribers: [subscribersDir],
+  migrationsRun: true,
   cli: {
     entitiesDir: `${baseSrcDir}/entity`,
     migrationsDir: `${baseSrcDir}/migration`,
