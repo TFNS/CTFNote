@@ -41,7 +41,6 @@ async function handleApiCall(commit, f) {
 export default async function (/* { ssrContext } */) {
   let users = null;
   let ctfs = null;
-  let settings = null;
   let currentUser = users;
   try {
     currentUser = await api.me();
@@ -51,13 +50,11 @@ export default async function (/* { ssrContext } */) {
   if (currentUser) {
     ctfs = await api.getCtfs();
     users = await api.getUsers();
-    settings = await api.getSettings();
   }
   const Store = new Vuex.Store({
     state: {
       ctfs: ctfs,
       users: users,
-      settings: settings,
       currentUser: currentUser,
       currentCtf: null,
       currentTask: null,
@@ -68,7 +65,6 @@ export default async function (/* { ssrContext } */) {
       loading: state => state.loading,
       ctfs: state => state.ctfs,
       users: state => state.users,
-      settings: state => state.settings,
       currentUser: state => state.currentUser,
       currentCtf: state => state.currentCtf,
       currentTask: state => state.currentTask,

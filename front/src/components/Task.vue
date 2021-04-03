@@ -26,7 +26,7 @@
             v-ripple
             v-close-popup
             @click="showFlag"
-            v-if="this.settings['store-flag'] && this.task.flag != null && this.task.flag.length > 0"
+            v-if="this.task.flag != null && this.task.flag.length > 0"
           >
             <q-item-section side top>
               <q-avatar icon="flag" />
