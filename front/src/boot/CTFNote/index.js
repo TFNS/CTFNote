@@ -1,6 +1,6 @@
 import gql from "graphql-tag"
 import slugify from "slugify"
-import db from "src/gql" 
+import db from "src/gql"
 
 
 function waitUntil(f) {
@@ -33,9 +33,9 @@ class CTFNote {
     this.apollo = apollo
     let me = null;
     try {
-       const response = await this.apollo.query({ query: db.auth.ME })
-       me = response.data.me
-    } catch(e){
+      const response = await this.apollo.query({ query: db.auth.ME })
+      me = response.data.me
+    } catch (e) {
       console.log("ERROR", e)
     }
     if (me == null) {
@@ -68,7 +68,17 @@ class CTFNote {
     this.apollo.addResolvers(r)
   }
   get me() {
-    return this._me ? this._me : this.anonymous
+
+
+    if (this._me) {
+      const debugRoleId = localStorage.getItem(`ctfnote.debugRoleId`);
+      if (debugRoleId) {
+        return { ...this._me, roleId: parseInt(debugRoleId) }
+      }
+      return this._me
+    }
+
+    return this.anonymous;
   }
 
   get isGuest() {
