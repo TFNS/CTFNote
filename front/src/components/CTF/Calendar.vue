@@ -39,7 +39,10 @@ export default {
   },
   created() {
     this.$root.$on(`click-event-${CALENDAR_NAME}`, ({ ctf }) => {
-      this.$router.push(ctf.link);
+      if (ctf.granted) {
+        return this.$router.push(this.$ctfnote.ctfLink(ctf));
+      }
+      this.$q.notify({message: 'You are not allowed to browse this CTF', type: 'negative'});
     });
   },
   computed: {

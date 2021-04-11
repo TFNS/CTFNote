@@ -8,6 +8,7 @@
               flat
               :to="{ name: 'ctfinfo', params: { ctfId: props.row.id, ctfSlug: props.row.slug } }"
               :label="props.value"
+              :disable="!props.row.granted"
             />
           </q-td>
         </template>
