@@ -1,0 +1,7 @@
+#import "./TaskInfo.gql"
+
+query taskById ($id: Int!) {
+	task(id: $id) {
+		...TaskInfo
+	}
+}

@@ -1,0 +1,39 @@
+{
+  "name": "prompt",
+  "version": "1.1.0",
+  "description": "A beautiful command-line prompt for node.js",
+  "author": "Nodejitsu Inc. <info@nodejitsu.com>",
+  "maintainers": [
+    "indexzero <charlie@nodejitsu.com>",
+    "jesusabdullah <josh@nodejitsu.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/flatiron/prompt.git"
+  },
+  "keywords": [
+    "prompt",
+    "command-line",
+    "customize",
+    "validation"
+  ],
+  "dependencies": {
+    "colors": "^1.1.2",
+    "read": "1.0.x",
+    "revalidator": "0.1.x",
+    "utile": "0.3.x",
+    "winston": "2.x"
+  },
+  "devDependencies": {
+    "vows": "0.7.0"
+  },
+  "main": "./lib/prompt",
+  "scripts": {
+    "test": "vows test/prompt-test.js --spec",
+    "test-all": "vows --spec"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.6.6"
+  }
+}

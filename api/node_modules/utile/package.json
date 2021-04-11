@@ -1,0 +1,32 @@
+{
+  "name": "utile",
+  "description": "A drop-in replacement for `util` with some additional advantageous functions",
+  "version": "0.3.0",
+  "author": "Nodejitsu Inc. <info@nodejitsu.com>",
+  "maintainers": [
+    "indexzero <charlie@nodejitsu.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/flatiron/utile.git"
+  },
+  "dependencies": {
+    "async": "~0.9.0",
+    "deep-equal": "~0.2.1",
+    "i": "0.3.x",
+    "mkdirp": "0.x.x",
+    "ncp": "1.0.x",
+    "rimraf": "2.x.x"
+  },
+  "devDependencies": {
+    "vows": "0.8.x"
+  },
+  "scripts": {
+    "test": "vows --spec"
+  },
+  "main": "./lib/index",
+  "engines": {
+    "node": ">= 0.8.0"
+  }
+}
+

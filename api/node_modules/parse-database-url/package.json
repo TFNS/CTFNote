@@ -1,0 +1,34 @@
+{
+  "name": "parse-database-url",
+  "version": "0.3.0",
+  "description": "Database configuration URL parser for node.js",
+  "keywords": ["database", "configuration", "url", "heroku", "database_url"],
+  "homepage": "https://github.com/pwnall/node-parse-database-url",
+  "author": "Victor Costan <victor@costan.us> (http://www.costan.us)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pwnall/node-parse-database-url.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pwnall/node-parse-database-url/issues"
+  },
+  "engines": {
+    "node": ">= 0.6"
+  },
+  "dependencies": {
+    "mongodb-uri": ">= 0.9.7"
+  },
+  "devDependencies": {
+    "chai": ">= 3.4.1",
+    "mocha": ">= 2.3.4"
+  },
+  "main": "lib/parse-database-url.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha --ui bdd --require test/helpers/setup.js --recursive test/"
+  }
+}

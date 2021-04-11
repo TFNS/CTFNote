@@ -1,0 +1,43 @@
+{
+  "name": "db-migrate-pg",
+  "version": "1.2.2",
+  "description": "A postgresql driver for db-migrate",
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/.bin/vows"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/db-migrate/pg.git"
+  },
+  "keywords": [
+    "db-migrate",
+    "migrate",
+    "migration",
+    "pg",
+    "postgres",
+    "postgresql",
+    "sql",
+    "database",
+    "db",
+    "migrator",
+    "driver"
+  ],
+  "author": "Tobias Gurtzick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/db-migrate/pg/issues"
+  },
+  "homepage": "https://github.com/db-migrate/pg",
+  "dependencies": {
+    "bluebird": "^3.1.1",
+    "db-migrate-base": "^2.3.0",
+    "pg": "^8.0.3",
+    "semver": "^5.0.3"
+  },
+  "devDependencies": {
+    "db-meta": "^0.4.1",
+    "db-migrate-shared": "^1.1.2",
+    "vows": "0.8.0"
+  }
+}

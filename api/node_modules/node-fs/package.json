@@ -1,0 +1,36 @@
+{
+  "name": "node-fs",
+  "description": "node-fs is an extension to the original nodejs fs library, offering new functionalities.",
+  "version": "0.1.7",
+  "author": "Bruno Pedro <bpedro@tarpipe.com>",
+
+  "repository": {
+    "type" : "git",
+    "url": "git://github.com/bpedro/node-fs.git"
+  },
+
+  "os": [ "linux", "darwin", "freebsd", "win32", "smartos", "sunos" ],
+
+  "devDependencies": {
+    "expresso": "*"
+  },
+
+  "scripts": {
+    "test": "expresso -q"
+  },
+
+  "directories": {
+    "lib": "./lib/"
+  },
+
+  "main": "./lib/fs",
+
+  "engines": { 
+    "node": ">=0.1.97"
+  },
+
+  "licenses": [{
+    "type" : "MIT",
+    "url" : "https://github.com/bpedro/node-fs/raw/master/LICENSE"
+  }]
+}

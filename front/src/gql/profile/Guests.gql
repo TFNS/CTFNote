@@ -1,0 +1,10 @@
+query guests {
+	profiles(  condition: {role: USER_GUEST}) {
+		nodes {
+			username
+			id
+			role
+			nodeId
+		}
+	}
+}

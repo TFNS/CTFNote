@@ -1,36 +1,50 @@
-import "reflect-metadata";
-import app from "./app";
-import Globals from "./config/globals";
-import { createConnection } from "typeorm";
+import dotenv from "dotenv"
+import express from "express"
+import crypto from "crypto"
+import { postgraphile } from "postgraphile"
+import simplifyPlugin from "@graphile-contrib/pg-simplify-inflector"
+import importCtfPlugin from "./plugins/importCtf"
+import createTasKPlugin from "./plugins/createTask"
 
-import logger from "./config/logger";
+dotenv.config()
 
-function debugRoutes() {
-  logger.debug("Routes: ");
-  const routes = [];
-  for (const layer of app.app._router.stack) {
-    if (layer.route)
-      routes.push({
-        methods: Object.keys(layer.route.methods).join(", ").toUpperCase(),
-        path: layer.route.path,
-      });
-  }
-  console.table(routes);
-}
+const app = express();
 
-function debugGlobals() {
-  logger.info("Configuration: ");
-  console.table(Globals);
-}
 
-async function main() {
-  debugRoutes();
-  debugGlobals();
+const postgraphileOptions = {
+    subscriptions: true,
+    dynamicJson: true,
+    setofFunctionsContainNulls: false,
+    ignoreRBAC: false,
+    ownerConnectionString: process.env.DATABASE_URL || "postgres://ctfnote:ctfnote@localhost:5432/ctfnote",
+    ignoreIndexes: false,
+    pgDefaultRole: "user_guest",
+    jwtPgTypeIdentifier: "ctfnote.jwt",
+    jwtSecret: crypto.randomBytes(32).toString("hex"),
+    showErrorStack: "json" as const,
+    extendedErrors: ["hint", "detail", "errcode"],
+    appendPlugins: [
+        simplifyPlugin,
+        importCtfPlugin,
+        createTasKPlugin,
+        // require("./plugins/settings.js")
+    ],
+    exportGqlSchemaPath: "schema.graphql",
+    graphiql: true,
+    enhanceGraphiql: true,
+    allowExplain: true,
+    enableQueryBatching: true,
+    legacyRelations: "omit" as const,
+};
 
-  await createConnection();
+app.use(
+    postgraphile(
+        "postgres://user_postgraphile:secret_password@localhost:5432/ctfnote",
+        "ctfnote",
+        postgraphileOptions
+    )
+);
 
-  await Globals.init();
-  app.http.listen(Globals.port, () => logger.success(`App listening on port ${Globals.port}!`));
-}
 
-main();
+
+app.listen(3000);

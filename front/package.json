@@ -11,21 +11,28 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "start": "npx quasar dev",
-    "build": "npx quasar build"
+    "start": "quasar dev",
+    "build": "quasar build"
   },
   "dependencies": {
     "@daykeep/calendar-quasar": "^1.0.0-beta.3",
     "@quasar/extras": "^1.0.0",
+    "apollo": "^2.32.5",
+    "apollo-client": "^2.6.10",
+    "apollo-link": "^1.2.14",
+    "apollo-link-context": "^1.0.20",
     "babel-runtime": "^6.26.0",
     "color-hash": "^1.0.3",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
+    "slugify": "^1.5.0",
     "socket.io": "^2.4.0",
+    "vue-localstorage": "^0.6.2",
     "vue-markdown": "^2.2.4"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
+    "@quasar/quasar-app-extension-apollo": "^1.0.0-beta.8",
     "babel-eslint": "^10.0.1",
     "eslint": "^7.12.1",
     "eslint-config-standard": "^14.1.0",

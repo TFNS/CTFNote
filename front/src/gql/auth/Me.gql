@@ -1,0 +1,10 @@
+query Me {
+  me {
+    jwt
+    profile {
+        username
+        role
+        id
+    }
+  }
+}

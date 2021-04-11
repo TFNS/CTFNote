@@ -1,0 +1,10 @@
+#import "./CtfInfo.gql"
+
+query PastCtfs {
+	pastCtf {
+		nodes {
+			...CtfInfo
+      
+		}
+	}
+}

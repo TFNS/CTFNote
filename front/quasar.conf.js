@@ -7,7 +7,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 
-module.exports = function(/* ctx */) {
+module.exports = function (/* ctx */) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -18,7 +18,7 @@ module.exports = function(/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
-    boot: [],
+    boot: ["CTFNote", "localstorage", "notify-defaults"],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ["app.scss"],
@@ -59,23 +59,27 @@ module.exports = function(/* ctx */) {
 
       // https://quasar.dev/quasar-cli/handling-webpack
       extendWebpack(cfg) {
-        /* cfg.module.rules.push({
-           enforce: 'pre',
-           test: /\.(js|vue)$/,
-           loader: 'eslint-loader',
-           exclude: /node_modules/
-         })*/
+        cfg.module.rules.push({
+          test: /\.(graphql|gql)$/,
+          exclude: /node_modules/,
+          loader: 'graphql-tag/loader',
+        })
       }
+
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       proxy: {
-        "/api": {
-          target: "http://127.0.0.1:31337/",
+        "/graphql": {
+          target: "http://127.0.0.1:3000/",
+        },
+        "/pad": {
+          target: "http://127.0.0.1:3020/",
           pathRewrite: {
-            "^/api": ""
-          }
+            '^/pad': ''
+          },
+          ws: true
         },
         "/ws": {
           target: "ws://127.0.0.1:31337/socket.io",
@@ -83,7 +87,7 @@ module.exports = function(/* ctx */) {
         }
       },
       https: false,
-      port: process.env.PORT || 8080,
+      port: process.env.PORT || 5000,
       open: true // opens browser window automatically
     },
 
@@ -111,7 +115,7 @@ module.exports = function(/* ctx */) {
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: [],
+    animations: 'all',
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {

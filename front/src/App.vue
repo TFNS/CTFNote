@@ -8,3 +8,8 @@ export default {
   name: 'App'
 }
 </script>
+<style>
+ html {
+   overflow-x: hidden;
+ }
+</style>

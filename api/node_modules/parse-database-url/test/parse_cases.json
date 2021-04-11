@@ -1,0 +1,150 @@
+[
+  {
+    "desc": "PostgreSQL URL with username/password",
+    "url": "postgres://pwnall:sekret@localhost/pwnbase",
+    "config": {
+      "driver": "postgres",
+      "user": "pwnall",
+      "password": "sekret",
+      "host": "localhost",
+      "database": "pwnbase"
+    }
+  },
+  {
+    "desc": "MySQL URL with username/password and host/port",
+    "url": "mysql://someuser@server.heroku.com:1337/herokudb",
+    "config": {
+      "driver": "mysql",
+      "user": "someuser",
+      "host": "server.heroku.com",
+      "port": "1337",
+      "database": "herokudb"
+    }
+  },
+  {
+    "desc": "SQLite URL with file name",
+    "url": "sqlite3://development.sqlite",
+    "config": {
+      "driver": "sqlite3",
+      "filename": "development.sqlite"
+    }
+  },
+  {
+    "desc": "SQLite URL with relative path",
+    "url": "sqlite3://path/to/test.sqlite",
+    "config": {
+      "driver": "sqlite3",
+      "filename": "path/to/test.sqlite"
+    }
+  },
+  {
+    "desc": "SQLite URL with absolute path",
+    "url": "sqlite3:///path/to/test.sqlite",
+    "config": {
+      "driver": "sqlite3",
+      "filename": "/path/to/test.sqlite"
+    }
+  },
+  {
+    "desc": "URL with query parameters (Issue #3)",
+    "url": "postgres://user:pass@localhost/database?native=true",
+    "config": {
+      "driver": "postgres",
+      "user": "user",
+      "password": "pass",
+      "host": "localhost",
+      "database": "database",
+      "native": "true"
+    }
+  },
+  {
+    "desc": "Heroku ClearDB connection string (Issue #1)",
+    "url": "mysql://user:pass@host/database?reconnect=true",
+    "config": {
+      "driver": "mysql",
+      "user": "user",
+      "password": "pass",
+      "host": "host",
+      "database": "database",
+      "reconnect": "true"
+    }
+  },
+  {
+    "desc": "Cloud Foundry ClearDB connection string with mysql2 scheme",
+    "url": "mysql2://user:pass@host/database?reconnect=true",
+    "config": {
+      "driver": "mysql",
+      "user": "user",
+      "password": "pass",
+      "host": "host",
+      "database": "database",
+      "reconnect": "true"
+    }
+  },
+  {
+      "desc": "Redis URL, which doesn't have a path (Issue #4)",
+      "url": "redis://localhost:6379",
+      "config": {
+        "driver": "redis",
+        "host": "localhost",
+        "port": "6379"
+      }
+  },
+  {
+    "desc": "MongoDB URL with username and host",
+    "url": "mongodb://someuser@server.heroku.com/herokudb",
+    "config": {
+      "driver": "mongodb",
+      "user": "someuser",
+      "host": "server.heroku.com",
+      "hosts": [
+        {
+          "host": "server.heroku.com"
+        }
+      ],
+      "database": "herokudb"
+    }
+  },
+  {
+    "desc": "MongoDB URL with username/password and host/port",
+    "url": "mongodb://user:pass@server.heroku.com:1337/herokudb",
+    "config": {
+      "driver": "mongodb",
+      "user": "user",
+      "password": "pass",
+      "host": "server.heroku.com",
+      "port": "1337",
+      "hosts": [
+        {
+          "host": "server.heroku.com",
+          "port": "1337"
+        }
+      ],
+      "database": "herokudb"
+    }
+  },
+  {
+    "desc": "MongoDB URL with username/password and multiple hosts/ports (Issue #6)",
+    "url": "mongodb://user:pass@server1.heroku.com:1337,server2.heroku.com:1338,server3.heroku.com:1339/herokudb",
+    "config": {
+      "driver": "mongodb",
+      "user": "user",
+      "password": "pass",
+      "hosts": [
+        {
+          "host": "server1.heroku.com",
+          "port": "1337"
+        },
+        {
+          "host": "server2.heroku.com",
+          "port": "1338"
+        },
+        {
+          "host": "server3.heroku.com",
+          "port": "1339"
+        }
+      ],
+      "database": "herokudb"
+    }
+  }
+]

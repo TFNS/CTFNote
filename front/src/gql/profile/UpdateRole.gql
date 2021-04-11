@@ -1,0 +1,9 @@
+#import "./ProfileInfo.gql"
+
+mutation updateRole ($userId: Int!, $role: Role!){
+  updateProfile(input: {id: $userId, patch: {role: $role}}) {
+    profile {
+      ...ProfileInfo
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# npm
+/node_modules
+parse-database-url-*.tgz
+
+# Vim.
+*.sw*

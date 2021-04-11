@@ -14,10 +14,10 @@ Vue.use(VueRouter)
  * with the Router instance.
  */
 
-export default function ({ store }) {
+export default function ({ Vue }) {
   const Router = new VueRouter({
     scrollBehavior: () => ({ x: 0, y: 0 }),
-    routes: routes(store),
+    routes: routes(Vue),
 
     // Leave these as they are and change in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
@@ -27,6 +27,21 @@ export default function ({ store }) {
     // eslint-disable-next-line no-undef
     base: process.env.VUE_ROUTER_BASE
   })
+  Router.beforeEach(async (to, from, next) => {
+    await Vue.ctfnote.waitUntilReady()
+    if (to.name == "auth"){
+      if (Vue.ctfnote.isGuest){
+        return next({name: "ctfs"})
+      }
+      return next()
+    }
 
+
+    if (!Vue.ctfnote.isGuest){
+      return next({name: "auth"})
+    }
+    next()
+
+  })
   return Router
 }

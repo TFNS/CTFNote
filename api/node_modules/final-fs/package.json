@@ -1,0 +1,40 @@
+{
+  "name": "final-fs",
+  "version": "1.6.1",
+  "description": "Promised wrapper for node fs module with usefull additional set of functions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine-node spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:finalclass/final-fs.git"
+  },
+  "keywords": [
+    "fs",
+    "filesystem",
+    "files",
+    "promise",
+    "when",
+    "recursive"
+  ],
+  "author": {
+    "name": "Szymon Wygnański",
+    "email": "s@finalclass.net"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "node-fs": "~0.1.5",
+    "when": "~2.0.1"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.7.0"
+  },
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/finalclass/final-fs/issues"
+  },
+  "_id": "final-fs@1.4.4",
+  "_from": "final-fs@",
+  "homepage": "https://github.com/finalclass/final-fs"
+}

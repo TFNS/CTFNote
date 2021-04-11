@@ -2,61 +2,52 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated class="ctfnote-header">
       <q-toolbar>
-        <q-btn flat dense round icon="menu" aria-label="Menu" v-if="menu" @click="leftDrawerOpen = !leftDrawerOpen"  />
-
+        <q-btn flat dense round icon="menu" aria-label="Menu" v-if="ctf" @click="leftDrawerOpen = !leftDrawerOpen" />
         <q-toolbar-title>
-          <div class="row">
-            <q-btn :to="{ name: 'ctfs' }" stretch flat label="CTFNote" />
-            <q-separator vertical inset v-if="currentCtf" />
-            <q-btn
-              :to="{ name: 'ctf', params: { ctfSlug: currentCtf.slug } }"
-              stretch
-              flat
-              :label="currentCtf.title"
-              v-if="currentCtf"
-            />
-            <q-separator vertical inset v-if="currentTask" />
-
-            <q-btn
-              :to="{
-                name: 'task',
-                params: { ctfSlug: currentCtf.slug, taskSlug: currentTask.slug }
-              }"
-              stretch
-              flat
-              :label="currentTask.title"
-              v-if="currentTask"
-            />
-            <div
-            v-for="(task) in recentTasks" :key="task.id">              
-            <q-btn
-                :to="{
-                  name: 'task',
-                  params: { ctfSlug: currentCtf.slug, taskSlug: task.slug }
-                }"
-                stretch
-                flat
-                :label="task.title"
-                v-if="task != null && task != currentTask"
-              />
-            </div>
+          <div class="row q-gutter-md items-center">
+            <router-link class="text-white" exact :to="{ name: 'incoming' }">CTFNote</router-link>
+            <template v-if="ctf && ctf.id">
+              <q-separator vertical />
+              <q-btn type="a" target="_blank" :href="ctf.ctfUrl" flat icon="language" size="sm" round />
+              <router-link class="text-white" exact :to="$ctfnote.ctfLink(ctf)">
+                {{ ctf.title }}
+              </router-link>
+            </template>
+            <template v-if="task">
+              <q-separator vertical />
+              <router-link class="text-white" exact :to="$ctfnote.taskLink(ctf, task)">
+                {{ task.title }}
+              </router-link>
+            </template>
           </div>
         </q-toolbar-title>
-        <q-btn-dropdown stretch flat :label="currentUser.username" v-if="currentUser">
+        <q-btn-dropdown stretch flat :label="$ctfnote.me.username" v-if="$ctfnote.me">
           <q-list class="text-center">
-            <q-item v-if="isAdmin" clickable v-close-popup :to="{ name: 'adminConfig' }">
+            <q-item v-if="$ctfnote.isAdmin" clickable v-close-popup :to="{ name: 'admin' }">
               <q-item-section>
-                <q-item-label>Settings</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item v-if="isAdmin" clickable v-close-popup :to="{ name: 'adminUsers' }">
-              <q-item-section>
-                <q-item-label>Users</q-item-label>
+                <q-item-label>Admin</q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
               <div>
-                <q-toggle v-model="darkMode" size="lg" checked-icon="brightness_3" unchecked-icon="brightness_7" />
+                <q-toggle
+                  v-model="$localStorage.darkMode"
+                  title="Switch theme"
+                  size="lg"
+                  checked-icon="brightness_3"
+                  unchecked-icon="brightness_7"
+                />
+              </div>
+            </q-item>
+            <q-item>
+              <div>
+                <q-toggle
+                  v-model="$localStorage.liveMode"
+                  title="Show secrets"
+                  size="lg"
+                  checked-icon="visibility"
+                  unchecked-icon="visibility_off"
+                />
               </div>
             </q-item>
             <q-separator inset spaced />
@@ -70,105 +61,129 @@
         </q-btn-dropdown>
       </q-toolbar>
     </q-header>
-
-    <q-drawer v-model="leftDrawerOpen" bordered v-if="menu">
-      <q-list :key="category" v-for="[category, tasks] of menu">
-        <q-item-label header class="text-white text-bold" :style="colorHash(category)">
-          {{ category }}
-        </q-item-label>
-        <MenuTaskList v-for="task in tasks" :key="task.name" :task="task" />
-      </q-list>
-      <q-list v-if="Object.keys(menu).length == 0">
-        <q-item-label header> No tasks yet </q-item-label>
-      </q-list>
+    <q-drawer v-model="leftDrawerOpen" bordered v-if="ctf">
+      <LeftMenu :ctf="ctf" />
     </q-drawer>
 
     <q-page-container>
-      <router-view></router-view>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import MenuTaskList from "components/MenuTaskList.vue";
-import { mapGetters } from "vuex";
 import { colorHash } from "../utils";
-import { Rights } from "../enums";
+import db from "src/gql";
+import LeftMenu from "components/LeftMenu.vue";
 
 export default {
   name: "MainLayout",
-  components: { MenuTaskList },
+  components: { LeftMenu },
   created() {
     this.$q.dark.set(this.darkMode);
-    if (!this.checkLogin(this.$route)) {
-      return;
-    }
   },
-  watch: {
-    $route(to) {
-      if (to.name == "index") {
-        this.$router.push({ name: "ctfs" });
-      }
-      this.checkLogin(to);
+  apollo: {
+    ctf() {
+      return {
+        query: db.ctf.GET,
+        skip: true,
+        variables: {},
+      };
     },
-    darkMode(value) {
-      localStorage.setItem("darkMode", value);
-      this.$q.dark.set(value);
-    }
+    task() {
+      return {
+        query: db.task.GET,
+        skip: true,
+        variables: {},
+      };
+    },
   },
-  methods: {
-    checkLogin(to) {
-      if (to.name != "auth" && !this.currentUser) {
-        this.$router.push({ name: "auth" });
-        return false;
-      }
-      return true;
+  localStorage: {
+    darkMode: {
+      type: Boolean,
+      default: false,
     },
-    colorHash(s) {
-      return { backgroundColor: colorHash(s) };
-    }
+    liveMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
-    ...mapGetters(["currentCtf", "ctfs", "currentUser", "currentTask", "recentTasks", "isAdmin", "loading"]),
     menu() {
-      if (!this.currentCtf || !this.currentCtf.tasks) return null;
+      if (!this.ctf?.tasks) return null;
       const categories = {};
-      for (const task of this.currentCtf.tasks) {
+      for (const task of this.ctf.tasks.nodes) {
         if (!(task.category in categories)) {
           categories[task.category] = [];
         }
         categories[task.category].push({
           title: task.title,
           solved: task.solved,
-          to: {
-            name: "task",
-            params: { ctfSlug: this.currentCtf.slug, taskSlug: task.slug }
-          }
+          to: this.getTaskLink(this.ctf, task),
         });
       }
       return Object.entries(categories).sort();
-    }
+    },
+    darkMode() {
+      return this.$localStorage.darkMode;
+    },
+    liveMode() {
+      return this.$localStorage.liveMode;
+    },
+  },
+  mounted() {
+    this.updateNavLink(this.$route);
+  },
+  watch: {
+    $route(to) {
+      this.updateNavLink(to);
+    },
+    darkMode(value) {
+      this.$q.dark.set(value);
+    },
+    liveMode: {
+      immediate: true,
+      handler(value) {
+        if (!value) {
+          document.body.classList.add("live-mode");
+        } else {
+          document.body.classList.remove("live-mode");
+        }
+      },
+    },
+  },
+  methods: {
+    updateNavLink(route) {
+      const ctfId = route.params.ctfId;
+      if (!ctfId) {
+        this.$apollo.queries.ctf.skip = true;
+        return;
+      }
+      this.$apollo.queries.ctf.setVariables({ id: parseInt(ctfId) });
+      this.$apollo.queries.ctf.skip = false;
+
+      const taskId = route.params.taskId;
+      if (!taskId) {
+        this.$apollo.queries.task.skip = true;
+        return;
+      }
+      this.$apollo.queries.task.setVariables({ id: parseInt(taskId) });
+      this.$apollo.queries.task.skip = false;
+    },
+    colorHash(s) {
+      return { backgroundColor: colorHash(s) };
+    },
   },
   data() {
-    const darkMode = localStorage.getItem("darkMode") == "true";
     return {
       leftDrawerOpen: false,
-      Rights,
-      darkMode
     };
-  }
+  },
 };
 </script>
 
-<style>
-.ctfnote-header {
-  height: 50px;
-}
-
-.loading-bar {
-  height: 1px;
-  z-index: 2001;
-  position: fixed;
-  top: 0;
+<style lang="scss" >
+.ctfnote-header a {
+  text-decoration: none;
 }
 </style>

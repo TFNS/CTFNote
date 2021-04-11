@@ -1,14 +1,60 @@
-function deleteAllCookies() {
-  const cookies = document.cookie.split(";");
 
-  for (const cookie of cookies) {
-    const eqPos = cookie.indexOf("=");
-    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-    document.cookie = `${name}=;expires=${new Date().toUTCString()}`;
-  }
-}
 
-function routes(store) {
+
+
+function routes() {
+
+  const ctfsRoutes = [
+    {
+      path: "incoming",
+      name: "incoming",
+      component: () => import("components/CTF/Incoming.vue")
+    },
+    {
+      path: "past",
+      name: "past",
+      component: () => import("components/CTF/Past.vue")
+    },
+    {
+      path: "calendar",
+      name: "calendar",
+      component: () => import("components/CTF/Calendar.vue")
+    },
+  ]
+
+
+  const ctfRoutes = [
+    {
+      path: "task/:taskId(\\d+)-:taskSlug",
+      name: "task",
+      props: route => ({ taskId: parseInt(route.params.taskId) }),
+      component: () => import("pages/Task.vue")
+    },
+    {
+      path: "",
+      component: () => import("pages/CTF.vue"),
+      children: [
+        {
+          path: "info",
+          name: "ctfinfo",
+          component: () => import("components/CTF/Info.vue")
+        },
+        {
+          path: "tasks",
+          props: route => ({ tasks: route.meta.tasks }),
+          name: "ctftasks",
+          component: () => import("components/CTF/TaskList.vue")
+        },
+        {
+          path: "guests",
+          name: "ctfinvitations",
+          component: () => import("components/CTF/Guests.vue")
+        }
+      ]
+    }
+  ]
+
+
   const routes = [
     {
       path: "/",
@@ -19,66 +65,54 @@ function routes(store) {
         {
           path: "auth",
           name: "auth",
-          component: () => import("pages/auth.vue")
+          component: () => import("pages/Auth.vue")
         },
         {
           path: "logout",
           name: "logout",
-          beforeEnter: (to, from, next) => {
-            deleteAllCookies();
-            store.dispatch("logout");
-            next({ name: "auth" });
-          }
+          component: () => import("pages/Logout.vue")
         },
         {
-          path: "settings",
-          name: "settings"
-        },
-        {
-          path: "me",
-          name: "me"
-        },
-        {
-          path: "ctf",
+          path: "ctfs",
           name: "ctfs",
-          component: () => import("pages/CTF/List.vue")
+          component: () => import("pages/Index.vue"),
+          redirect: { name: "incoming" },
+          children: ctfsRoutes
         },
         {
-          path: "ctf/past",
-          name: "past",
-          component: () => import("pages/CTF/List.vue")
+          path: "ctf/:ctfId(\\d+)-:ctfSlug",
+          redirect: 'ctfinfo',
+          props: route => ({ ctfId: parseInt(route.params.ctfId) }),
+          component: () => import(`components/Loader/CTF.vue`),
+          children: ctfRoutes
         },
         {
-          path: "ctf/calendar",
-          name: "calendar",
-          component: () => import("pages/CTF/List.vue")
-        },
-        {
-          path: "ctf/:ctfSlug",
-          props: true,
-          component: () => import("pages/CTF/Container.vue"),
+          path: "admin",
+          name: "admin",
+          component: () => import("pages/Admin.vue"),
+          redirect: { name: "adminsettings" },
           children: [
-            { path: "", name: "ctf", props: true, component: () => import("pages/CTF/CTF.vue") },
-            { path: "tasks/:taskSlug", name: "task", props: true, component: () => import("pages/CTF/Task.vue") }
+            {
+              path: "users",
+              name: "adminusers",
+              component: () => import("components/Admin/Users.vue")
+            },
+            {
+              path: "settings",
+              name: "adminsettings",
+              component: () => import("components/Admin/Settings.vue")
+            }
           ]
-        },
-        {
-          path: "admin/users",
-          name: "adminUsers",
-          component: () => import("pages/Admin/Users.vue")
-        },
-        {
-          path: "admin/config",
-          name: "adminConfig",
-          component: () => import("pages/Admin/Settings.vue")
         }
       ]
     },
     {
       path: "/*",
+      name: "404",
       component: () => import("pages/Error404.vue")
     }
   ];
+
   return routes;
 }
 

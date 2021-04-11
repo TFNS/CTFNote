@@ -6,19 +6,21 @@ services:
     networks:
       - ctfnote
     environment:
-      MD_CREATE_URL: "http://front/pad/new"
-      MD_SHOW_URL: "/"
-      DB_URL: "postgres://ctfnote:ctfnote@db:5432/ctfnote"
+      CREATE_PAD_URL: "http://hedgedoc:3000/new"
+      SHOW_PAD_URL: "/"
+      DATABASE_URL: "postgres://ctfnote:ctfnote@db:5432/ctfnote"
     depends_on:
       - db
   db:
-    image: postgres
+    build:
+      context: "./db"
     restart: always
     environment:
       POSTGRES_PASSWORD: ctfnote
       POSTGRES_USER: ctfnote
+      POSTGRES_MULTIPLE_DATABASES: hedgedoc
     volumes:
-      - ctfnote:/var/lib/postgresql/data
+      - ctfnote-db:/var/lib/postgresql/data
     networks:
       - ctfnote
   front:
@@ -26,20 +28,16 @@ services:
       - ctfnote
     build:
       context: "./front"
-      args:
-        API_HOST: api
-        PAD_HOST: codimd
     depends_on:
-      - api
-      - codimd
+      - hedgedoc
     ports:
       - 80:80
-  codimd:
-    image: quay.io/hedgedoc/hedgedoc:1.7.2-alpine
+  hedgedoc:
+    image: quay.io/hedgedoc/hedgedoc:1.7.2-debian
     environment:
-      - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/ctfnote
+      - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad
-      - CMD_IMAGE_UPLOAD_TYPE=imgur
+      - CMD_IMAGE_UPLOAD_TYPE=filesystem
     depends_on:
       - db
     restart: always
@@ -48,9 +46,7 @@ services:
     networks:
       - ctfnote
 volumes:
-  ctfnote:
-    name: ctfnote
+  ctfnote-db:
   pad-uploads:
-    name: pad-uploads
 networks:
   ctfnote:
