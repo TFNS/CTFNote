@@ -30,7 +30,7 @@
 import db from "src/gql";
 
 export default {
-  props: { task: Object },
+  props: { task: Object, ctfId: Number },
   data() {
     const form = {
       title: this.task?.title,
@@ -57,7 +57,20 @@ export default {
       });
     },
     async createTask(task) {
-      //TOODO
+      await this.$apollo.mutate({
+        mutation: db.task.CREATE,
+        variables: { ...task, ctfId: this.ctfId },
+        update: (store, { data: { createTask } }) => {
+          const task = createTask.task;
+          const query = {
+            query: db.task.ALL,
+            variables: { ctfId: this.ctfId },
+          };
+          const data = store.readQuery(query);
+          data.tasks.nodes.push(task);
+          store.writeQuery({ ...query, data });
+        },
+      });
     },
     async submit() {
       if (this.task) {

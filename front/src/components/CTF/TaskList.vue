@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-fab class="ctfs-action-btn shadow-2" padding="10px" color="positive" icon="add" direction="down" push>
-      <q-fab-action color="positive" push @click="openImportDialog" icon="add" label="Create" />
+      <q-fab-action color="positive" push @click="openCreateDialog" icon="add" label="Create" />
       <q-fab-action color="secondary" push @click="openImportDialog" icon="flag" label="Import " />
     </q-fab>
     <div class="row col-12 q-mb-md q-gutter-md items-end">
@@ -45,8 +45,9 @@
 <script>
 import ImportTasksDialog from "../Dialogs/ImportTasksDialog.vue";
 import db from "src/gql";
-import EditTaskDialog from "../Dialogs/EditTaskDialog.vue";
 import TaskCard from "../TaskCard.vue";
+import EditTaskDialog from "../Dialogs/EditTaskDialog.vue";
+
 export default {
   components: { TaskCard },
   props: {
@@ -111,6 +112,13 @@ export default {
         component: ImportTasksDialog,
         ctfId: this.ctf.id,
         tasks: this.tasks,
+        parent: this,
+      });
+    },
+    openCreateDialog() {
+      this.$q.dialog({
+        component: EditTaskDialog,
+        ctfId: this.ctf.id,
         parent: this,
       });
     },
