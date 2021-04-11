@@ -14,8 +14,6 @@ CREATE TABLE ctfnote_private.user (
 );
 
 GRANT SELECT ON ctfnote_private.user TO user_postgraphile;
-GRANT SELECT ON ctfnote.profile TO user_admin;
-GRANT UPDATE(login) ON ctfnote.profile TO user_admin;
 
 
 -- Public profile
