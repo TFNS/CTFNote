@@ -20,19 +20,21 @@
     <div class="q-pa-md">
       <router-view />
     </div>
-    <q-fab
-      class="ctfs-action-btn shadow-2"
-      vertical-actions-align="right"
-      padding="10px"
-      color="positive"
-      icon="add"
-      direction="down"
-      push
-      v-if="$ctfnote.isManager"
-    >
-      <q-fab-action color="positive" push @click="createCtf" icon="add" label="Create" />
-      <q-fab-action color="secondary" push @click="importCtf" icon="flag" label="Import " />
-    </q-fab>
+    <q-page-sticky position="top-right" :offset="[18, 8]">
+      <q-fab
+        class="ctfs-action-btn shadow-2"
+        padding="10px"
+        color="positive"
+        icon="add"
+        vertical-actions-align="right"
+        direction="down"
+        push
+        v-if="$ctfnote.isManager"
+      >
+        <q-fab-action color="positive" push @click="createCtf" icon="add" label="Create" />
+        <q-fab-action color="secondary" push @click="importCtf" icon="flag" label="Import " />
+      </q-fab>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -99,10 +101,5 @@ export default {
 .q-tab {
   min-width: 200px;
   padding-top: 5px;
-}
-.ctfs-action-btn {
-  position: fixed;
-  top: 58px;
-  right: 16px;
 }
 </style>

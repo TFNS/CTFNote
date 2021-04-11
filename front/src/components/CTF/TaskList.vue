@@ -1,9 +1,5 @@
 <template>
   <div>
-    <q-fab class="ctfs-action-btn shadow-2" padding="10px" color="positive" icon="add" direction="down" push>
-      <q-fab-action color="positive" push @click="openCreateDialog" icon="add" label="Create" />
-      <q-fab-action color="secondary" push @click="openImportDialog" icon="flag" label="Import " />
-    </q-fab>
     <div class="row col-12 q-mb-md q-gutter-md items-end">
       <div class="col col-3">
         <q-input v-model="filter" label="search">
@@ -39,6 +35,21 @@
         v-for="[idx, task] in filteredTasks.entries()"
       />
     </div>
+
+    <q-page-sticky position="top-right" :offset="[18, 8]">
+      <q-fab
+        class="ctfs-action-btn shadow-2"
+        padding="10px"
+        color="positive"
+        icon="add"
+        direction="down"
+        vertical-actions-align="right"
+        push
+      >
+        <q-fab-action color="positive" push @click="openCreateDialog" icon="add" label="Create" />
+        <q-fab-action color="secondary" push @click="openImportDialog" icon="flag" label="Import " />
+      </q-fab>
+    </q-page-sticky>
   </div>
 </template>
 
@@ -227,11 +238,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.ctfs-action-btn {
-  position: fixed;
-  top: 58px;
-  right: 33px;
-}
-</style>
