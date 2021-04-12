@@ -34,7 +34,7 @@
             />
           </q-td>
         </template>
-        <template #body-cell-btns>
+        <template #body-cell-btns="{ row }">
           <q-td auto-width>
             <q-btn color="negative" size="sm" round icon="delete" @click="removeUser(row.id)" />
             <q-btn color="positive" size="sm" round icon="lock_clock" @click="resetPassword" />
@@ -107,11 +107,11 @@ export default {
       performUpdate();
     },
     resetPassword() {
-      this.$q.dialog({
-        component: ResetPasswordLinkDialog,
-        parent: this,
-        ctf: this.ctf,
-      });
+      // this.$q.dialog({
+      //   component: ResetPasswordLinkDialog,
+      //   parent: this,
+      //   ctf: this.ctf,
+      // });
     },
   },
 };
