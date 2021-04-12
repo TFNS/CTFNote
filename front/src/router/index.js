@@ -29,16 +29,16 @@ export default function ({ Vue }) {
   })
   Router.beforeEach(async (to, from, next) => {
     await Vue.ctfnote.waitUntilReady()
-    if (to.name == "auth"){
-      if (Vue.ctfnote.isGuest){
-        return next({name: "ctfs"})
+    if (to.name == "auth" || to.name == "resetPassword") {
+      if (Vue.ctfnote.isGuest) {
+        return next({ name: "ctfs" })
       }
       return next()
     }
 
 
-    if (!Vue.ctfnote.isGuest){
-      return next({name: "auth"})
+    if (!Vue.ctfnote.isGuest) {
+      return next({ name: "auth" })
     }
     next()
 

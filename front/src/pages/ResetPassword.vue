@@ -7,15 +7,7 @@
             <div class="text-h6">Reset password</div>
           </q-card-section>
           <q-card-section>
-            <q-input filled v-model="password1" label="New Password" lazy-rules :rules="requiredRule" />
-            <q-input
-              filled
-              type="password"
-              v-model="password2"
-              label="Repeat New Password"
-              lazy-rules
-              :rules="requiredAndEqualRule"
-            />
+            <q-input filled v-model="password" label="New Password" lazy-rules :rules="requiredRule" />
           </q-card-section>
 
           <q-separator />
@@ -31,12 +23,12 @@
 
 
 <script>
+import db from "src/gql";
 export default {
   props: { token: String },
   data() {
     return {
-      password1: "",
-      password2: "",
+      password: "",
     };
   },
   computed: {
@@ -51,10 +43,25 @@ export default {
     },
   },
   methods: {
-    resetPassword() {
+    async resetPassword() {
       // TODO: Actually send a graphql mutation to reset the password
 
-      console.log(this.password1, this.password2, this.token);
+      console.log(this.password, this.token);
+
+      const response = await this.$apollo.mutate({
+        mutation: db.auth.RESET_PASSWORD,
+        variables: { password: this.password, token: this.token },
+      });
+
+      const { jwt } = response.data.resetPassword;
+
+      if (!jwt) {
+        return this.$q.notify({ message: "Invalid token", type: "negative", position: "top" });
+      }
+
+      localStorage.setItem("JWT", jwt);
+
+      document.location.reload();
     },
   },
 };

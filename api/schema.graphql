@@ -1623,7 +1623,7 @@ type CreateResetPasswordLinkPayload {
   unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
-  uuid: UUID
+  resetPasswordLinkResponse: ResetPasswordLinkResponse
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
@@ -1631,10 +1631,9 @@ type CreateResetPasswordLinkPayload {
   query: Query
 }
 
-"""
-A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
-"""
-scalar UUID
+type ResetPasswordLinkResponse {
+  token: String
+}
 
 """All input for the `createResetPasswordLink` mutation."""
 input CreateResetPasswordLinkInput {

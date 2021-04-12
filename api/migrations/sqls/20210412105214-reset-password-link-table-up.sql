@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE ctfnote_private.reset_password_link (
     "id" serial PRIMARY KEY,
     "user_id" int REFERENCES ctfnote_private.user (id),
@@ -7,30 +5,36 @@ CREATE TABLE ctfnote_private.reset_password_link (
     "expiration" timestamptz DEFAULT (now() + interval '1 hour')
 );
 
+CREATE TYPE ctfnote.reset_password_link_response AS (
+    "token" text
+);
+
 CREATE FUNCTION ctfnote.create_reset_password_link (user_id int)
-    RETURNS uuid
+    RETURNS ctfnote.reset_password_link_response
     AS $$
 DECLARE
     reset_link ctfnote_private.reset_password_link;
 BEGIN
     INSERT INTO ctfnote_private.reset_password_link (user_id, token)
-        VALUES (user_id, token)
+        VALUES (create_reset_password_link.user_id, gen_random_uuid ())
     RETURNING
         * INTO reset_link;
-    RETURN reset_link.token;
-END
+    RETURN ROW (reset_link.token::text)::ctfnote.reset_password_link_response;
+END;
 $$
 LANGUAGE plpgsql
 SECURITY DEFINER;
+
+GRANT EXECUTE ON FUNCTION ctfnote.create_reset_password_link (int) TO user_admin;
 
 CREATE FUNCTION ctfnote_private.delete_expired_reset_password_link ()
     RETURNS TRIGGER
     AS $$
 BEGIN
     DELETE FROM ctfnote_private.reset_password_link
-    WHERE expiration > now()
-    RETURNING
-        *;
+    WHERE expiration < now()
+        OR reset_password_link.user_id = NEW.user_id;
+    RETURN NEW;
 END
 $$
 LANGUAGE plpgsql
@@ -42,29 +46,27 @@ CREATE TRIGGER delete_expirated_reset_links
     FOR EACH ROW
     EXECUTE PROCEDURE ctfnote_private.delete_expired_reset_password_link ();
 
-GRANT EXECUTE ON FUNCTION ctfnote.create_reset_password_link (int) TO user_admin;
-
 CREATE FUNCTION ctfnote.reset_password ("token" text, "password" text)
     RETURNS ctfnote.jwt
     AS $$
 DECLARE
-    user_id int;
+    reset_id int;
 BEGIN
     SELECT
-        user_id INTO user_id
+        user_id INTO reset_id
     FROM
         ctfnote_private.reset_password_link
     WHERE
-        reset_password_link.token = reset_password.token::uuid
-        AND expiration < now();
-    IF user_id <> NULL THEN
+        reset_password_link.token::text = reset_password.token
+        AND expiration > now();
+    IF reset_id IS NOT NULL THEN
         UPDATE
-            ctfnote_private.user
+            ctfnote_private."user"
         SET
-            "user".password = crypt(reset_password.password, gen_salt('bf'))
+            PASSWORD = crypt(reset_password."password", gen_salt('bf'))
         WHERE
-            "user".id = user_id;
-        RETURN ctfnote_private.new_token (user_id);
+            "user".id = reset_id;
+        RETURN ctfnote_private.new_token (reset_id);
     ELSE
         RETURN NULL;
     END IF;
