@@ -1,9 +1,9 @@
 query Me {
   me {
     jwt
+    role
     profile {
         username
-        role
         id
     }
   }

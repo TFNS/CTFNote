@@ -68,6 +68,12 @@ function routes() {
           component: () => import("pages/Auth.vue")
         },
         {
+          path: "auth/resetPassword/:token",
+          name: "resetPassword",
+          props: route => ({ token: route.params.token }),
+          component: () => import("pages/ResetPassword.vue")
+        },
+        {
           path: "logout",
           name: "logout",
           component: () => import("pages/Logout.vue")

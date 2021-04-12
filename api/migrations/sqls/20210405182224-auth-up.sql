@@ -12,20 +12,20 @@ BEGIN
     (count(id) = 0) INTO is_first_user
   FROM
     ctfnote_private.user;
-  INSERT INTO ctfnote_private.user (login, PASSWORD)
-    VALUES (login, crypt(PASSWORD, gen_salt('bf')))
-  RETURNING
-    * INTO new_user;
-  INSERT INTO ctfnote.profile ("id", "username", "role")
-    VALUES (new_user.id, login, (
+  INSERT INTO ctfnote_private.user ("login", "password", "role")
+    VALUES (login, crypt("password", gen_salt('bf')), (
         CASE WHEN (is_first_user) THEN
           'user_admin'::ctfnote.role
         ELSE
           'user_guest'::ctfnote.role
         END))
   RETURNING
+    * INTO new_user;
+  INSERT INTO ctfnote.profile ("id", "username")
+    VALUES (new_user.id, login)
+  RETURNING
     * INTO new_profile;
-  RETURN ctfnote_private.new_token (new_profile.id, new_profile.role);
+  RETURN ctfnote_private.new_token (new_user.id);
 END;
 $$
 LANGUAGE plpgsql
@@ -39,7 +39,6 @@ CREATE FUNCTION ctfnote.login ("login" text, "password" text)
   AS $$
 DECLARE
   log_user ctfnote_private.user;
-  log_role ctfnote.role;
 BEGIN
   SELECT
     * INTO log_user
@@ -48,8 +47,7 @@ BEGIN
   WHERE
     "user"."login" = "login"."login";
   IF log_user."password" = crypt("password", log_user."password") THEN
-    SELECT role INTO log_role FROM ctfnote.profile WHERE "profile".id = log_user.id;
-    RETURN ctfnote_private.new_token (log_user.id, log_role);
+    RETURN ctfnote_private.new_token (log_user.id);
   ELSE
     RETURN NULL;
   END IF;
@@ -75,6 +73,7 @@ GRANT EXECUTE ON FUNCTION ctfnote_private.user_id () TO user_guest;
 
 CREATE TYPE ctfnote.me_response AS (
   "profile" ctfnote.profile,
+  "role" ctfnote.role,
   "jwt" ctfnote.jwt
 );
 
@@ -93,7 +92,8 @@ BEGIN
   LIMIT 1;
   IF me IS NOT NULL THEN
     RETURN (me,
-      ctfnote_private.new_token (me.id, me.role))::ctfnote.me_response;
+      ctfnote.profile_role (me),
+      ctfnote_private.new_token (me.id))::ctfnote.me_response;
   ELSE
     RETURN NULL;
   END IF;

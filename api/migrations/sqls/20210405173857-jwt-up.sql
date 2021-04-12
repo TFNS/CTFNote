@@ -88,15 +88,16 @@ STABLE;
 GRANT EXECUTE ON FUNCTION ctfnote_private.is_guest () TO user_anonymous;
 
 --Generate JWT
-CREATE FUNCTION ctfnote_private.new_token ("user_id" int, "role" ctfnote.role)
+CREATE FUNCTION ctfnote_private.new_token ("user_id" int)
   RETURNS ctfnote.jwt
   AS $$
   SELECT
     ("user_id",
-      "role",
+      (SELECT role FROM ctfnote_private.user WHERE "user".id = user_id),
       extract(epoch FROM (now() + interval '30 days')))::ctfnote.jwt
 $$
-LANGUAGE SQL;
+LANGUAGE SQL
+SECURITY DEFINER;
 
-GRANT EXECUTE ON FUNCTION ctfnote_private.new_token (int, ctfnote.role) TO user_anonymous;
+GRANT EXECUTE ON FUNCTION ctfnote_private.new_token (int) TO user_anonymous;
 
