@@ -7,12 +7,13 @@
   "scripts": {
     "start": "db-migrate up && node dist/index.js",
     "build": "tsc",
-    "dev": "nodemon src/index.ts",
+    "dev": "NODE_ENV=development nodemon src/index.ts",
     "test": "mocha"
   },
   "dependencies": {
     "@graphile-contrib/pg-many-to-many": "^1.0.0",
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
+    "@graphile/pg-pubsub": "^4.11.0",
     "axios": "^0.21.1",
     "db-migrate": "^0.11.12",
     "db-migrate-pg": "^1.2.2",
