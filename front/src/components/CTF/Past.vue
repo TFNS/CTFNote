@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section>
-      <q-table flat :pagination="pagination" :data="ctfs" :loading="$apollo.queries.ctfs.loading" :columns="columns">
+      <q-table no-data-label="No CTF available." flat :pagination="pagination" :data="ctfs" :loading="$apollo.queries.ctfs.loading" :columns="columns">
         <template #body-cell-title="props">
           <q-td :props="props">
             <q-btn

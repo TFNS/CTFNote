@@ -34,6 +34,7 @@
         :key="idx"
         v-for="[idx, task] in filteredTasks.entries()"
       />
+      <div class="text-center col" v-if="filteredTasks.length ==0">No tasks :(</div>
     </div>
 
     <q-page-sticky position="top-right" :offset="[18, 8]">
