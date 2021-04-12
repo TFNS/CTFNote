@@ -1,10 +1,10 @@
 query Me {
-  me {
-    jwt
-    role
-    profile {
-        username
-        id
-    }
-  }
+	me {
+		jwt
+		profile {
+			username
+			role
+			id
+		}
+	}
 }

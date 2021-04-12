@@ -141,6 +141,29 @@ export default {
     darkMode(value) {
       this.$q.dark.set(value);
     },
+    ctf(ctf) {
+      this.clearSubscribers()
+      this.registerSubscriber(
+        {
+          query: db.task.SUBSCRIBE,
+          variables: { topic: `taskSolved:${ctf.id}` },
+        },
+        (data) => {
+          const task = data.listen.relatedNode;
+          this.$q.notify({ message: `Task ${task.title} solved!` });
+        }
+      );
+      this.registerSubscriber(
+        {
+          query: db.task.SUBSCRIBE,
+          variables: { topic: `taskCreated:${ctf.id}` },
+        },
+        (data) => {
+          const task = data.listen.relatedNode;
+          this.$q.notify({ message: `Task ${task.title} created!` });
+        }
+      );
+    },
     liveMode: {
       immediate: true,
       handler(value) {
@@ -153,6 +176,17 @@ export default {
     },
   },
   methods: {
+    registerSubscriber(query, next) {
+      const observer = this.$apollo.subscribe(query);
+      const subscriber =  observer.subscribe({ next: ({ data }) => next(data) });
+      this.subscribers.push(subscriber)
+    },
+    clearSubscribers(){
+      while (this.subscribers.length) {
+        this.subscribers.pop().unsubscribe();
+      }
+
+    },
     updateNavLink(route) {
       const ctfId = route.params.ctfId;
       if (!ctfId) {
@@ -177,6 +211,7 @@ export default {
   data() {
     return {
       leftDrawerOpen: false,
+      subscribers: [],
     };
   },
 };

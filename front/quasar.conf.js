@@ -73,6 +73,7 @@ module.exports = function (/* ctx */) {
       proxy: {
         "/graphql": {
           target: "http://127.0.0.1:3000/",
+          ws: true
         },
         "/pad": {
           target: "http://127.0.0.1:3020/",

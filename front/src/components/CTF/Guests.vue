@@ -13,6 +13,7 @@
           <q-toggle :value="Boolean(user.invitation)" checked-icon="check" @input="(v) => setInvitation(v, user)" />
         </q-chip>
       </div>
+      <div class="col" v-if="guestUsersWithInvitation.length == 0">No guests :(</div>
     </div>
   </div>
 </template>

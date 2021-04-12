@@ -16,27 +16,29 @@
         </q-item>
       </q-list>
     </q-menu>
-    <q-card-section class="row q-col-gutter-md">
-      <div class="col-auto">
-        <a :href="ctf.ctfUrl" target="_blank" v-if="ctf.logoUrl">
-          <img height="30px" :src="ctf.logoUrl" />
-        </a>
-        <q-btn v-else color="primary" type="a" :href="ctf.ctfUrl" icon="language" />
-      </div>
-      <div class="text-h6 col-auto">
-        <q-btn :to="$ctfnote.ctfLink(ctf)" flat :label="ctf.title" :disable="!ctf.granted" size="md" />
-      </div>
-      <div>
-        <q-badge v-if="ctf.running === true" color="positive" class="running"> LIVE </q-badge>
-      </div>
-      <q-space class="col-12 col-md-auto col-md-grow" />
-      <div class="col-md-auto col-grow">
-        <q-chip icon="fitness_center" color="grey-4" text-color="grey-10" :label="ctf.weight || '-'" />
-      </div>
-      <div class="col-auto">
-        <a :href="ctf.ctftimeUrl" target="_blank">
-          <img height="30px" src="../assets/ctftime-logo.svg" />
-        </a>
+    <q-card-section>
+      <div class="row progress-row q-gutter-md" :style="style">
+        <div class="col-auto">
+          <a :href="ctf.ctfUrl" target="_blank" v-if="ctf.logoUrl">
+            <img height="30px" :src="ctf.logoUrl" />
+          </a>
+          <q-btn v-else color="primary" type="a" :href="ctf.ctfUrl" icon="language" />
+        </div>
+        <div class="text-h6 col-auto">
+          <q-btn :to="$ctfnote.ctfLink(ctf)" flat :label="ctf.title" :disable="!ctf.granted" size="md" />
+        </div>
+        <div class="text-h6 col-auto">
+          <q-badge v-if="running" color="positive" class="running"> LIVE </q-badge>
+        </div>
+        <q-space class="col-12 col-md-auto col-md-grow" />
+        <div class="col-md-auto col-grow">
+          <q-chip icon="fitness_center" color="grey-4" text-color="grey-10" :label="ctf.weight || '-'" />
+        </div>
+        <div class="col-auto">
+          <a :href="ctf.ctftimeUrl" target="_blank">
+            <img height="30px" src="../assets/ctftime-logo.svg" />
+          </a>
+        </div>
       </div>
     </q-card-section>
 
@@ -55,7 +57,14 @@
         </div>
         <div class="ctfcard-cal col-auto col-grow">
           <div class="column items-center q-gutter-sm">
-            <q-date mask="YYYY-MM-DDTHH:mm:ssZ" today-btn :subtitle="shortStartTime" :value="dateRange" range />
+            <q-date
+              mask="YYYY-MM-DDTHH:mm:ssZ"
+              today-btn
+              :title="shortDate(ctf.startTime)"
+              :subtitle="shortTime(ctf.startTime)"
+              :value="dateRange"
+              range
+            />
           </div>
         </div>
       </div>
@@ -69,17 +78,20 @@ import VueMarkdown from "vue-markdown";
 import EditCtfDialog from "./Dialogs/EditCtfDialog.vue";
 import db from "src/gql";
 export default {
-  components: { VueMarkdown,  },
+  components: { VueMarkdown },
   props: {
     ctf: Object,
   },
   data() {
-    return { showEditCtf: false };
+    return { showEditCtf: false, now: Date.now() };
+  },
+  created() {
+    window.setInterval(this.updateTime, 1000);
+  },
+  destroyed() {
+    window.clearInterval(this.updateTime);
   },
   computed: {
-    shortStartTime() {
-      return getTime(new Date(this.ctf.startTime));
-    },
     dateRange() {
       const startDate = this.ctf.startTime;
       const endDate = this.ctf.endTime;
@@ -93,8 +105,33 @@ export default {
         };
       }
     },
+    running() {
+      return new Date(this.ctf.startTime) < this.now && new Date(this.ctf.endTime) > this.now;
+    },
+    style() {
+      const start = new Date(this.ctf.startTime);
+      const end = new Date(this.ctf.endTime);
+      const duration = end - start;
+      const elapsed = this.now - start;
+      const progress = (elapsed / duration) * 100;
+      return { "--progress-percent": `${progress.toFixed(2)}%` };
+    },
   },
   methods: {
+    shortTime(t) {
+      return new Date(t).toLocaleTimeString({}, { hour12: false, hour: "2-digit", minute: "2-digit" });
+    },
+    shortDate(t) {
+      const date = new Date(t);
+      const y = date.getFullYear();
+      const m = date.getMonth() + 1;
+      const d = date.getDate();
+      const fmt = (i) => `00${i}`.slice(-2);
+      return `${y}/${fmt(m)}/${fmt(d)}`;
+    },
+    updateTime() {
+      this.now = Date.now();
+    },
     editCtf() {
       this.$q.dialog({
         component: EditCtfDialog,
@@ -133,7 +170,22 @@ export default {
 .task-desc {
   height: 100%;
 }
+.progress-row {
+  --progress-percent: 0%;
 
+  &::before {
+    position: absolute;
+    content: "";
+    transition: max-width linear 1s;
+    top: 1px;
+    left: 4px;
+    height: 2px;
+    width: calc(var(--progress-percent) - 8px);
+    border-radius: 5px;
+    background: $positive;
+    box-shadow: 0 1px 3px 0px lighten($positive, 5%), 0 0.2px 1px 0px rgba(255, 255, 255, 0.8) inset;
+  }
+}
 @keyframes blinker {
   from {
     opacity: 1;

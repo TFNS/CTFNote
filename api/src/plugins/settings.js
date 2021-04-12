@@ -4,7 +4,6 @@ const { makeExtendSchemaPlugin, gql } = require("graphile-utils");
 
 const settings = {
     allowRegistration: true,
-    createPadUrl: 'http://bi.tk'
 }
 
 function convertType(obj){

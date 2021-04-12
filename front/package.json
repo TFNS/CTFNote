@@ -21,14 +21,18 @@
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
     "apollo-link-context": "^1.0.20",
+    "apollo-link-ws": "^1.0.20",
+    "apollo-utilities": "^1.3.4",
     "babel-runtime": "^6.26.0",
     "color-hash": "^1.0.3",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
     "slugify": "^1.5.0",
     "socket.io": "^2.4.0",
+    "subscriptions-transport-ws": "^0.9.18",
     "vue-localstorage": "^0.6.2",
-    "vue-markdown": "^2.2.4"
+    "vue-markdown": "^2.2.4",
+    "websocket": "^1.0.33"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

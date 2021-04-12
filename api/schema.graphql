@@ -897,7 +897,6 @@ input ProfileCondition {
 
 type MeResponse {
   profile: Profile
-  role: Role
   jwt: Jwt
 }
 

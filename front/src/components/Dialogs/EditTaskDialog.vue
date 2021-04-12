@@ -2,7 +2,7 @@
   <q-dialog ref="dialog" @hide="$emit('hide')">
     <q-card class="import-task-dialog">
       <q-card-section class="row">
-        <div class="text-h6">Edit {{ form.originalTitle }}</div>
+        <div class="text-h6">{{ title }}</div>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
@@ -20,7 +20,7 @@
       </q-card-section>
       <q-card-actions class="row justify-end">
         <q-btn color="warning" label="Cancel" v-close-popup />
-        <q-btn color="positive" label="Edit" @click="submit" />
+        <q-btn color="positive" type="submit" :label="editText" @click="submit" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -32,6 +32,7 @@ import db from "src/gql";
 export default {
   props: { task: Object, ctfId: Number },
   data() {
+    const originalTitle = this.task?.title || 'Task'
     const form = {
       title: this.task?.title,
       description: this.task?.description,
@@ -41,7 +42,16 @@ export default {
     };
     return {
       form,
+      originalTitle
     };
+  },
+  computed: {
+    editText() {
+      return this.task ? "Edit" : "Create";
+    },
+    title() {
+      return this.task ? `Edit task ${this.originalTitle}` : "Create task";
+    },
   },
   methods: {
     show() {
@@ -60,16 +70,6 @@ export default {
       await this.$apollo.mutate({
         mutation: db.task.CREATE,
         variables: { ...task, ctfId: this.ctfId },
-        update: (store, { data: { createTask } }) => {
-          const task = createTask.task;
-          const query = {
-            query: db.task.ALL,
-            variables: { ctfId: this.ctfId },
-          };
-          const data = store.readQuery(query);
-          data.tasks.nodes.push(task);
-          store.writeQuery({ ...query, data });
-        },
       });
     },
     async submit() {
@@ -79,7 +79,7 @@ export default {
         await this.createTask(this.form);
       }
       this.$emit("ok", this.form);
-      this.hide()
+      this.hide();
     },
   },
 };
@@ -87,6 +87,7 @@ export default {
 
 <style>
 .import-task-dialog {
-  min-width: calc(min(600px, 90vw));
+  min-width: 50%;
+  max-width: 100%;
 }
 </style>

@@ -5,6 +5,7 @@ import ALL from "./All.gql"
 import GET from "./Get.gql"
 import START_WORKING from "./StartWorking.gql"
 import STOP_WORKING from "./StopWorking.gql"
+import SUBSCRIBE from "./Subscribe.gql"
 
 
 export default {
@@ -14,5 +15,6 @@ export default {
   UPDATE,
   START_WORKING,
   STOP_WORKING,
-  ALL
+  ALL,
+  SUBSCRIBE
 }

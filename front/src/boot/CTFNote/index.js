@@ -41,7 +41,8 @@ class CTFNote {
     if (me == null) {
       this._me = null
     } else {
-      const roleId = this.roles[me.role]
+      localStorage.setItem("JWT", me.jwt)
+      const roleId = this.roles[me.profile.role]
       this._me = { ...me.profile, roleId }
     }
     this.ready()

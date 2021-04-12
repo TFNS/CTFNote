@@ -73,7 +73,6 @@ GRANT EXECUTE ON FUNCTION ctfnote_private.user_id () TO user_guest;
 
 CREATE TYPE ctfnote.me_response AS (
   "profile" ctfnote.profile,
-  "role" ctfnote.role,
   "jwt" ctfnote.jwt
 );
 
@@ -92,7 +91,6 @@ BEGIN
   LIMIT 1;
   IF me IS NOT NULL THEN
     RETURN (me,
-      ctfnote.profile_role (me),
       ctfnote_private.new_token (me.id))::ctfnote.me_response;
   ELSE
     RETURN NULL;
