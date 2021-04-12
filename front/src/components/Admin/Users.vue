@@ -36,7 +36,7 @@
         </template>
         <template #body-cell-btns>
           <q-td auto-width>
-            <q-btn color="negative" size="sm" round icon="delete" />
+            <q-btn color="negative" size="sm" round icon="delete" @click="removeUser(row.id)" />
             <q-btn color="positive" size="sm" round icon="lock_clock" @click="resetPassword" />
           </q-td>
         </template>
@@ -68,11 +68,26 @@ export default {
     return { columns, pagination };
   },
   methods: {
+    removeUser(userId) {
+      // TODO: Actually remove the user
+    },
     updateRole(userId, role) {
       const performUpdate = () => {
         this.$apollo.mutate({
           mutation: db.profile.UPDATE_ROLE,
           variables: { userId, role },
+          update: (store, { data: { updateUserRole } }) => {
+            const query = {
+              query: db.profile.ALL,
+            };
+
+            const data = store.readQuery(query);
+            const profile = data.profiles.nodes.find((u) => u.id === userId);
+
+            profile.role = updateUserRole.role;
+
+            store.writeQuery({ ...query, data });
+          },
         });
       };
 

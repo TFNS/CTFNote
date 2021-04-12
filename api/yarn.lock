@@ -313,6 +313,17 @@
   dependencies:
     tslib "^2.0.1"
 
+"@graphile/pg-pubsub@^4.11.0":
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/@graphile/pg-pubsub/-/pg-pubsub-4.11.0.tgz#a3542545d84290c40b03bedf3a2dbd5a557d4525"
+  integrity sha512-7U2J/QpSu+hsn3bAvEZb8RmS/rYmgY3G1c+TGl+9ZXVVyaQ3sXNACoOnCaF0oAzRak2YTVYuc/o8iIAWxPEv2A==
+  dependencies:
+    "@types/debug" "^4.1.4"
+    "@types/pg" "^7.4.14"
+    debug "^4.1.1"
+    graphql-subscriptions "^1.1.0"
+    tslib "^2.0.1"
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -574,6 +585,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/debug@^4.1.4":
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
+  integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
+
 "@types/express-serve-static-core@^4.17.18":
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.19.tgz#00acfc1632e729acac4f1530e9e16f6dd1508a1d"
@@ -646,7 +662,7 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/pg@>=6 <8", "@types/pg@^7.14.1", "@types/pg@^7.4.10":
+"@types/pg@>=6 <8", "@types/pg@^7.14.1", "@types/pg@^7.4.10", "@types/pg@^7.4.14":
   version "7.14.11"
   resolved "https://registry.yarnpkg.com/@types/pg/-/pg-7.14.11.tgz#daf5555504a1f7af4263df265d91f140fece52e3"
   integrity sha512-EnZkZ1OMw9DvNfQkn2MTJrwKmhJYDEs5ujWrPfvseWNoI95N8B4HzU/Ltrq5ZfYxDX/Zg8mTzwr6UAyTjjFvXA==
@@ -2275,6 +2291,13 @@ graphql-parse-resolve-info@4.11.0:
     debug "^4.1.1"
     tslib "^2.0.1"
 
+graphql-subscriptions@^1.1.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-1.2.1.tgz#2142b2d729661ddf967b7388f7cf1dd4cf2e061d"
+  integrity sha512-95yD/tKi24q8xYa7Q9rhQN16AYj5wPbrb8tmHGM3WRc9EBmWrG/0kkMl+tQG8wcEuE9ibR4zyOM31p5Sdr2v4g==
+  dependencies:
+    iterall "^1.3.0"
+
 graphql-ws@^4.1.1:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/graphql-ws/-/graphql-ws-4.3.2.tgz#c58b03acc3bd5d4a92a6e9f729d29ba5e90d46a3"
@@ -2781,7 +2804,7 @@ istanbul-reports@^3.0.2:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
-iterall@^1.0.2, iterall@^1.2.1, iterall@^1.2.2:
+iterall@^1.0.2, iterall@^1.2.1, iterall@^1.2.2, iterall@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.3.0.tgz#afcb08492e2915cbd8a0884eb93a8c94d0d72fea"
   integrity sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==

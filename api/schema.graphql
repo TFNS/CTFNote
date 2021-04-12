@@ -197,6 +197,27 @@ type Query implements Node {
   task(id: Int!): Task
   workOnTask(taskId: Int!, profileId: Int!): WorkOnTask
 
+  """Reads and enables pagination through a set of `Profile`."""
+  guests(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+  ): ProfilesConnection
+
   """Reads and enables pagination through a set of `Ctf`."""
   incomingCtf(
     """Only read the first `n` values of the set."""
@@ -562,6 +583,7 @@ type Profile implements Node {
     """
     condition: WorkOnTaskCondition
   ): WorkOnTasksConnection!
+  role: Role
 }
 
 """Methods to use when ordering `Invitation`."""
@@ -711,6 +733,13 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: Cursor
+}
+
+enum Role {
+  USER_GUEST
+  USER_MEMBER
+  USER_MANAGER
+  USER_ADMIN
 }
 
 """A `Invitation` edge in the connection."""
@@ -870,13 +899,6 @@ type MeResponse {
   profile: Profile
   role: Role
   jwt: Jwt
-}
-
-enum Role {
-  USER_GUEST
-  USER_MEMBER
-  USER_MANAGER
-  USER_ADMIN
 }
 
 """
@@ -1052,6 +1074,12 @@ type Mutation {
     """
     input: StopWorkingOnInput!
   ): StopWorkingOnPayload
+  updateUserRole(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserRoleInput!
+  ): UpdateUserRolePayload
   importCtf(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -1771,6 +1799,32 @@ input StopWorkingOnInput {
   taskId: Int
 }
 
+"""The output of our `updateUserRole` mutation."""
+type UpdateUserRolePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  role: Role
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `updateUserRole` mutation."""
+input UpdateUserRoleInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  userId: Int
+  role: Role
+}
+
 type ImportCtfPayload {
   ctf: Ctf
   query: Query
@@ -1791,4 +1845,20 @@ input CreateTaskInput {
   category: String!
   description: String
   flag: String
+}
+
+"""
+The root subscription type: contains realtime events you can subscribe to with the `subscription` operation.
+"""
+type Subscription {
+  listen(topic: String!): ListenPayload!
+}
+
+type ListenPayload {
+  """
+  Our root query field type. Allows us to run any query from our subscription payload.
+  """
+  query: Query
+  relatedNode: Node
+  relatedNodeId: ID
 }

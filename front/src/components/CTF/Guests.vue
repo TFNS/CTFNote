@@ -27,7 +27,7 @@ export default {
   apollo: {
     guestUsers: {
       query: db.profile.GUESTS,
-      update: (d) => d.profiles.nodes,
+      update: (d) => d.guests.nodes,
     },
     invitations: {
       query: db.invitation.ALL,

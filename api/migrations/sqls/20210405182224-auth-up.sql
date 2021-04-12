@@ -92,8 +92,8 @@ BEGIN
   LIMIT 1;
   IF me IS NOT NULL THEN
     RETURN (me,
-      ctfnote.profile_role (me.id),
-      ctfnote_private.new_token (me.id)::ctfnote.me_response);
+      ctfnote.profile_role (me),
+      ctfnote_private.new_token (me.id))::ctfnote.me_response;
   ELSE
     RETURN NULL;
   END IF;

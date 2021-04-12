@@ -1,5 +1,5 @@
 query guests {
-	profiles(  condition: {role: USER_GUEST}) {
+	guests {
 		nodes {
 			username
 			id
