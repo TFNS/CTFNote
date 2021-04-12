@@ -203,17 +203,6 @@ export default {
         variables: {
           taskId: task.id,
         },
-        update: (store, response) => {
-          const workOn = response.data.startWorkingOn.workOnTask;
-          const query = {
-            query: db.task.ALL,
-            variables: { ctfId: this.ctf.id },
-          };
-          const data = store.readQuery(query);
-          const t = data.tasks.nodes.find((n) => n.id == task.id);
-          t.workOnTasks.nodes.push(workOn);
-          store.writeQuery({ ...query, data });
-        },
       });
     },
     stopWorkOnTask(task) {
@@ -221,17 +210,6 @@ export default {
         mutation: db.task.STOP_WORKING,
         variables: {
           taskId: task.id,
-        },
-        update: (store, response) => {
-          const deletedNode = response.data.stopWorkingOn.workOnTask.nodeId;
-          const query = {
-            query: db.task.ALL,
-            variables: { ctfId: this.ctf.id },
-          };
-          const data = store.readQuery(query);
-          const t = data.tasks.nodes.find((n) => n.id == task.id);
-          t.workOnTasks.nodes = task.workOnTasks.nodes.filter((n) => n.nodeId != deletedNode);
-          store.writeQuery({ ...query, data });
         },
       });
     },

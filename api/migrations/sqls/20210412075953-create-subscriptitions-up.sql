@@ -58,3 +58,34 @@ CREATE TRIGGER _500_gql_update_task
   FOR EACH ROW
   EXECUTE PROCEDURE ctfnote_private.notify_task_edit ();
 
+-- TRIGGER ON UPDATE/INSERT CTF
+CREATE FUNCTION ctfnote_private.notify_work_on_task ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  CASE TG_OP
+  WHEN 'INSERT' THEN
+    PERFORM
+      pg_notify(concat('postgraphile:taskUpdated', ':', (
+            SELECT
+              ctf_id FROM ctfnote.task
+            WHERE
+              id = NEW.task_id)), json_build_object('__node__', json_build_array('tasks', NEW.task_id))::text); RETURN NEW;
+  WHEN 'DELETE' THEN
+    PERFORM
+      pg_notify(concat('postgraphile:taskUpdated', ':', (
+            SELECT
+              ctf_id FROM ctfnote.task
+            WHERE
+              id = OLD.task_id)), json_build_object('__node__', json_build_array('tasks', OLD.task_id))::text); RETURN NEW;
+  END CASE;
+END
+$$ VOLATILE
+LANGUAGE plpgsql;
+
+GRANT EXECUTE ON FUNCTION ctfnote_private.notify_work_on_task () TO user_guest;
+
+CREATE TRIGGER _500_gql_update_work_on_task
+  AFTER INSERT OR DELETE ON ctfnote.work_on_task
+  FOR EACH ROW
+  EXECUTE PROCEDURE ctfnote_private.notify_work_on_task ();
