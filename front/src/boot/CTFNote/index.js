@@ -36,13 +36,12 @@ class CTFNote {
       const response = await this.apollo.query({ query: db.auth.ME })
       me = response.data.me
     } catch (e) {
-      console.log("ERROR", e)
+      console.error(e)
     }
     if (me == null) {
       this._me = null
     } else {
       const roleId = this.roles[me.profile.role]
-      console.log(roleId)
       this._me = { ...me.profile, roleId }
     }
     this.ready()
