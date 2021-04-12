@@ -26,12 +26,17 @@
         </template>
         <template #body-cell-role="{ row, value }">
           <q-td>
-            <q-select dense :value="value" :options="Object.keys($ctfnote.roles)" @input="v => updateRole(row.id, v)" />
+            <q-select
+              dense
+              :value="value"
+              :options="Object.keys($ctfnote.roles)"
+              @input="(v) => updateRole(row.id, v)"
+            />
           </q-td>
         </template>
         <template #body-cell-btns>
           <q-td auto-width>
-            <q-btn color="negative" size="sm" round icon="delete"/>
+            <q-btn color="negative" size="sm" round icon="delete" />
           </q-td>
         </template>
       </q-table>
@@ -56,18 +61,35 @@ export default {
       { name: "id", label: "ID", field: "id", sortable: true },
       { name: "username", label: "Username", field: "username", sortable: true },
       { name: "role", label: "Role", field: "role", sortable: true },
-      { name: "btns"},
+      { name: "btns" },
     ];
     return { columns, pagination };
   },
   methods: {
-    updateRole(userId, role){
-      this.$apollo.mutate({
-        mutation: db.profile.UPDATE_ROLE,
-        variables: {userId, role}
-      })
-    }
-  }
+    updateRole(userId, role) {
+      const performUpdate = () => {
+        this.$apollo.mutate({
+          mutation: db.profile.UPDATE_ROLE,
+          variables: { userId, role },
+        });
+      };
+
+      if (this.$ctfnote.me.id === userId) {
+        this.$q
+          .dialog({
+            title: `Are you sure ?`,
+            color: "negative",
+            message: "You are about to modify your own role, are you sure ?",
+            ok: "Change Role",
+            cancel: true,
+          })
+          .onOk(performUpdate);
+        return;
+      }
+
+      performUpdate();
+    },
+  },
 };
 </script>
 
