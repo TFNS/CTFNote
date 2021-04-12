@@ -37,6 +37,7 @@
         <template #body-cell-btns>
           <q-td auto-width>
             <q-btn color="negative" size="sm" round icon="delete" />
+            <q-btn color="positive" size="sm" round icon="lock_clock" @click="resetPassword" />
           </q-td>
         </template>
       </q-table>
@@ -46,6 +47,7 @@
 
 <script>
 import db from "src/gql";
+
 export default {
   apollo: {
     profiles: {
@@ -88,6 +90,13 @@ export default {
       }
 
       performUpdate();
+    },
+    resetPassword() {
+      this.$q.dialog({
+        component: ResetPasswordLinkDialog,
+        parent: this,
+        ctf: this.ctf,
+      });
     },
   },
 };
