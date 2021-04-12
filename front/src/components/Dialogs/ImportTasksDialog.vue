@@ -105,18 +105,8 @@ export default {
           mutation: db.task.CREATE,
           variables: {
             ctfId: this.ctfId,
-            ...task,
-          },
-          update: (store, { data: { createTask } }) => {
-            const task = createTask.task;
-            const query = {
-              query: db.task.ALL,
-              variables: { ctfId: this.ctfId },
-            };
-            const data = store.readQuery(query);
-            data.tasks.nodes.push(task);
-            store.writeQuery({ ...query, data });
-          },
+          ...task,
+          }
         });
       });
       await Promise.all(promises);

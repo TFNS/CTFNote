@@ -1,7 +1,7 @@
 #import "./TaskInfo.gql"
 
-subscription subtest {
-	listen(topic: "taskUpdated") {
+subscription SubscribeTask($topic: String!) {
+	listen(topic: $topic) {
 		relatedNodeId
 		relatedNode {
 			nodeId

@@ -34,7 +34,7 @@
         :key="idx"
         v-for="[idx, task] in filteredTasks.entries()"
       />
-      <div class="text-center col" v-if="filteredTasks.length ==0">No tasks :(</div>
+      <div class="text-center col" v-if="filteredTasks.length == 0">No tasks :(</div>
     </div>
 
     <q-page-sticky position="top-right" :offset="[18, 8]">
@@ -59,6 +59,7 @@ import ImportTasksDialog from "../Dialogs/ImportTasksDialog.vue";
 import db from "src/gql";
 import TaskCard from "../TaskCard.vue";
 import EditTaskDialog from "../Dialogs/EditTaskDialog.vue";
+import gql from "graphql-tag";
 
 export default {
   components: { TaskCard },
@@ -78,10 +79,44 @@ export default {
   apollo: {
     tasks: {
       query: db.task.ALL,
+      fetchPolicy: "cache-and-network",
       variables() {
         return { ctfId: this.ctf.id };
       },
       update: (data) => data.tasks.nodes,
+      subscribeToMore: [
+        {
+          document: db.task.SUBSCRIBE,
+          variables() {
+            return { topic: `taskCreated:${this.ctf.id}` };
+          },
+          updateQuery(previousResult, { subscriptionData }) {
+            const newTask = subscriptionData.data.listen.relatedNode;
+            previousResult.tasks.nodes.push(newTask);
+            return previousResult;
+          },
+        },
+        {
+          document: db.task.SUBSCRIBE,
+          variables() {
+            return { topic: `taskDeleted:${this.ctf.id}` };
+          },
+          updateQuery(previousResult, { subscriptionData }) {
+            const nodeId = subscriptionData.data.listen.relatedNodeId;
+            previousResult.tasks.nodes = previousResult.tasks.nodes.filter((n) => n.nodeId != nodeId);
+            return previousResult;
+          },
+        },
+        {
+          document: db.task.SUBSCRIBE,
+          variables() {
+            return { topic: `taskUpdated:${this.ctf.id}` };
+          },
+          updateQuery(previousResult) {
+            return previousResult;
+          },
+        },
+      ],
     },
   },
   computed: {
@@ -216,22 +251,6 @@ export default {
             mutation: db.task.DELETE,
             variables: {
               id: task.id,
-            },
-            update: (
-              store,
-              {
-                data: {
-                  deleteTask: { deletedTaskNodeId },
-                },
-              }
-            ) => {
-              const query = {
-                query: db.task.ALL,
-                variables: { ctfId: this.ctf.id },
-              };
-              const data = store.readQuery(query);
-              data.tasks.nodes = data.tasks.nodes.filter((n) => n.nodeId != deletedTaskNodeId);
-              store.writeQuery({ ...query, data });
             },
           });
         });
