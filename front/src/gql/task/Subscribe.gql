@@ -1,0 +1,13 @@
+#import "./TaskInfo.gql"
+
+subscription subtest {
+	listen(topic: "taskUpdated") {
+		relatedNodeId
+		relatedNode {
+			nodeId
+			... on Task {
+				...TaskInfo
+			}
+		}
+	}
+}
