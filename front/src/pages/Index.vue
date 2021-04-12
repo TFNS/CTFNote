@@ -85,6 +85,9 @@ export default {
               variables: { id },
               refetchQueries: ["IncomingCtfs", "PastCtfs"],
             })
+            .then(() => {
+              this.$q.notify({ message: 'CTF created.', type: "positive" });
+            })
             .catch((error) => {
               this.$q.notify({ message: error.message, type: "negative" });
             });
