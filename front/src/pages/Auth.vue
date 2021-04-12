@@ -53,11 +53,9 @@ export default {
     },
   },
   methods: {
-
     async submit() {
       const mutation = this.register ? db.auth.REGISTER : db.auth.LOGIN;
-      const key = this.register ? "register": "login"
-      console.log(mutation);
+      const key = this.register ? "register" : "login";
       localStorage.removeItem("JWT");
       this.$apollo
         .mutate({
@@ -68,7 +66,7 @@ export default {
           },
         })
         .then((r) => {
-          const jwt = r.data[key].jwt
+          const jwt = r.data[key].jwt;
           if (jwt) {
             localStorage.setItem("JWT", jwt);
             window.location.reload();
@@ -77,7 +75,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           this.$q.notify({ message: "Username already taken", type: "negative" });
         });
     },
