@@ -29,7 +29,12 @@
       >
         <template #day="{ timestamp }">
           <template v-for="(event, index) in getEvents(timestamp.date)">
-            <q-badge :key="index" class="cursor-pointer full-width" :style="event.style" @click="clickCtf(event.ctf)">
+            <q-badge
+              :key="index"
+              class="cursor-pointer full-width event"
+              :style="event.style"
+              @click="clickCtf(event.ctf)"
+            >
               <span class="ellipsis">{{ event.ctf.title }}</span>
             </q-badge>
           </template>
@@ -152,29 +157,18 @@ export default {
   }
 };
 </script>
-<style>
-.body--dark .q-calendar {
-  background: #1d1d1d !important;
-}
-</style>
 <style lang="scss">
-.body--dark .calendar-tabs .q-tab__content {
-  color: white;
+.q-calendar {
+  --calendar-border-current-dark: 2px solid var(--q-color-primary);
+  --calendar-current-color-dark: white;
+  --calendar-outside-background-dark: #151515;
+  --calendar-outside-background: #e5e5f0;
+  --calendar-background-dark: #1d1d1d;
 }
-
-.calendar-month {
-  width: 100%;
-  & .calendar-content {
-    & .calendar-day-weekend {
-      background-color: transparent;
-    }
-    & .calendar-day-current {
-      background-color: transparent;
-      & .calendar-day-number {
-        color: var(--q-color-positive);
-        font-weight: bold;
-      }
-    }
-  }
+.q-calendar .event {
+  font-size: 1em;
+  letter-spacing: 0.01em;
+  line-height: 1.2em;
+  margin: 2px;
 }
 </style>
