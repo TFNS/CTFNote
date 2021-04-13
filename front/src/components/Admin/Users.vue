@@ -74,7 +74,7 @@ export default {
     updateRole(userId, role) {
       const performUpdate = () => {
         this.$apollo.mutate({
-          mutation: db.profile.UPDATE_ROLE,
+          mutation: db.admin.UPDATE_ROLE,
           variables: { userId, role },
           update: (store, { data: { updateUserRole } }) => {
             const query = {

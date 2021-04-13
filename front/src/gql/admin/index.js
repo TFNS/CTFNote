@@ -1,5 +1,7 @@
 import USERS from "./Users.gql"
+import UPDATE_ROLE from "./UpdateRole.gql"
 
 export default {
-  USERS
+  USERS,
+  UPDATE_ROLE
 }
