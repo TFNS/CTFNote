@@ -28,13 +28,13 @@ export default {
   apollo: {
     ctfs: {
       query: db.ctf.ALL,
-      update: (data) => data.ctfs.nodes,
-    },
+      update: data => data.ctfs.nodes
+    }
   },
   data() {
     return {
       DEFAULT_TIMEZONE,
-      CALENDAR_NAME,
+      CALENDAR_NAME
     };
   },
   created() {
@@ -42,20 +42,20 @@ export default {
       if (ctf.granted) {
         return this.$router.push(this.$ctfnote.ctfLink(ctf));
       }
-      this.$q.notify({message: 'You are not allowed to browse this CTF', type: 'negative'});
+      this.$q.notify({ message: "You are not allowed to browse this CTF", type: "negative" });
     });
   },
   computed: {
-    convertedCtfs(){
-      const ctfs = this.ctfs || []
-      return ctfs.map((ctf) => ({
+    convertedCtfs() {
+      const ctfs = this.ctfs || [];
+      return ctfs.map(ctf => ({
         ctf: ctf,
         id: ctf.id,
         summary: ctf.title,
         description: ctf.description,
         start: { dateTime: ctf.startTime },
         end: { dateTime: ctf.endTime },
-        color: "primary",
+        color: "primary"
       }));
     }
   }

@@ -12,15 +12,15 @@ import db from "src/gql";
 
 export default {
   props: {
-    ctfId: Number,
+    ctfId: { type: Number, required: true }
   },
   apollo: {
     ctf: {
       query: db.ctf.GET,
       variables() {
         return { id: this.ctfId };
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>

@@ -47,7 +47,7 @@ function parseCtftimeId(s) {
   if (url.match(/^\d+$/)) {
     return parseInt(url);
   }
-  const match = url.match(/^https\:\/\/ctftime\.org\/event\/(\d+)\/?$/);
+  const match = url.match(/^https:\/\/ctftime\.org\/event\/(\d+)\/?$/);
   if (!match) return null;
   return parseInt(match[1]);
 }
@@ -55,14 +55,14 @@ function parseCtftimeId(s) {
 export default {
   data() {
     return {
-      tab: null,
+      tab: null
     };
   },
   methods: {
     createCtf() {
       this.$q.dialog({
         component: EditCtfDialog,
-        parent: this,
+        parent: this
       });
     },
     importCtf() {
@@ -73,27 +73,27 @@ export default {
           message: "Enter CTF Time url or id",
           prompt: {
             model: "",
-            isValid: (val) => parseCtftimeId(val) != null,
+            isValid: val => parseCtftimeId(val) != null
           },
-          cancel: true,
+          cancel: true
         })
-        .onOk(async (data) => {
+        .onOk(async data => {
           const id = parseCtftimeId(data);
           this.$apollo
             .mutate({
               mutation: db.ctf.IMPORT,
               variables: { id },
-              refetchQueries: ["IncomingCtfs", "PastCtfs"],
+              refetchQueries: ["IncomingCtfs", "PastCtfs"]
             })
             .then(() => {
-              this.$q.notify({ message: 'CTF created.', type: "positive" });
+              this.$q.notify({ message: "CTF created.", type: "positive" });
             })
-            .catch((error) => {
+            .catch(error => {
               this.$q.notify({ message: error.message, type: "negative" });
             });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

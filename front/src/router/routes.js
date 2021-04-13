@@ -1,9 +1,4 @@
-
-
-
-
 function routes() {
-
   const ctfsRoutes = [
     {
       path: "incoming",
@@ -19,9 +14,8 @@ function routes() {
       path: "calendar",
       name: "calendar",
       component: () => import("components/CTF/Calendar.vue")
-    },
-  ]
-
+    }
+  ];
 
   const ctfRoutes = [
     {
@@ -52,8 +46,7 @@ function routes() {
         }
       ]
     }
-  ]
-
+  ];
 
   const routes = [
     {
@@ -87,7 +80,7 @@ function routes() {
         },
         {
           path: "ctf/:ctfId(\\d+)-:ctfSlug",
-          redirect: 'ctfinfo',
+          redirect: "ctfinfo",
           props: route => ({ ctfId: parseInt(route.params.ctfId) }),
           component: () => import(`components/Loader/CTF.vue`),
           children: ctfRoutes

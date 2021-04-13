@@ -2,7 +2,9 @@
   <q-dialog ref="dialog" @hide="$emit('hide')">
     <q-card class="import-task-dialog">
       <q-card-section class="row">
-        <div class="text-h6">Import tasks</div>
+        <div class="text-h6">
+          Import tasks
+        </div>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
@@ -23,7 +25,9 @@
           <q-tab-panel name="confirm" class="full-width">
             <q-table flat dense hide-bottom :columns="columns" :pagination="pagination" :data="parsedTasks">
               <template #body-cell-keep="{ row }">
-                <q-td auto-width class="text-center"><q-checkbox v-model="row['keep']" /></q-td>
+                <q-td auto-width class="text-center">
+                  <q-checkbox v-model="row['keep']" />
+                </q-td>
               </template>
             </q-table>
           </q-tab-panel>
@@ -42,13 +46,16 @@ import parsers from "../../utils/taskParser.js";
 import db from "src/gql";
 
 export default {
-  props: { tasks: Array, ctfId: Number },
+  props: {
+    tasks: { type: Array, required: true },
+    ctfId: { type: Number, required: true }
+  },
   computed: {
     importCount() {
       return this.parsedTasks.reduce((keep, task) => keep + task.keep, 0);
     },
-    btnDisable(){
-      return this.tab == "confirm" && this.importCount == 0
+    btnDisable() {
+      return this.tab == "confirm" && this.importCount == 0;
     },
     btnLabel() {
       if (this.tab == "parse") {
@@ -56,17 +63,17 @@ export default {
       } else {
         return `Import (${this.importCount})`;
       }
-    },
+    }
   },
   methods: {
     autoDetectParser() {
       for (const parser of parsers) {
         if (parser.isValid(this.model)) {
-          this.currentParser = this.parserOptions.find((opt) => opt.value == parser);
+          this.currentParser = this.parserOptions.find(opt => opt.value == parser);
         }
       }
     },
-    onPaste(ev) {
+    onPaste() {
       this.$nextTick(() => this.autoDetectParser());
     },
     show() {
@@ -79,13 +86,13 @@ export default {
       // Get list of task {title,category} from parse
       const parsedTasks = this.currentParser.value.parse(this.model);
       // Precompute a list set task to avoid N square operation
-      const hashTask = (task) => `${task.title}${task.category}`;
+      const hashTask = task => `${task.title}${task.category}`;
       const taskSet = new Set();
       for (const task of this.tasks) {
         taskSet.add(hashTask(task));
       }
       // mark already existing tasks
-      this.parsedTasks = parsedTasks.map((task) => {
+      this.parsedTasks = parsedTasks.map(task => {
         const hash = hashTask(task);
         task["keep"] = !taskSet.has(hash);
         return task;
@@ -96,21 +103,21 @@ export default {
         this.parseTasks();
         this.tab = "confirm";
       } else {
-        this.importTasks(this.parsedTasks.filter((t) => t.keep));
+        this.importTasks(this.parsedTasks.filter(t => t.keep));
       }
     },
     async importTasks(tasks) {
-      tasks.map((task) => {
+      tasks.map(task => {
         return this.$apollo.mutate({
           mutation: db.task.CREATE,
           variables: {
             ctfId: this.ctfId,
-          ...task,
+            ...task
           }
         });
       });
-      this.hide()
-    },
+      this.hide();
+    }
   },
   data() {
     const parserOptions = [];
@@ -118,24 +125,24 @@ export default {
     const columns = [
       { name: "title", label: "Title", field: "title" },
       { name: "category", label: "Category", field: "category" },
-      { name: "keep", label: "Import task", field: "keep" },
+      { name: "keep", label: "Import task", field: "keep" }
     ];
     for (const parser of parsers) {
       parserOptions.push({
         label: parser.name,
-        value: parser,
+        value: parser
       });
     }
     return {
-      model: '',
+      model: "",
       parsedTasks: [],
       parserOptions,
       columns,
       pagination,
       tab: "parse",
-      currentParser:parserOptions[0],
+      currentParser: parserOptions[0]
     };
-  },
+  }
 };
 </script>
 

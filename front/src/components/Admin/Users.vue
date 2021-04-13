@@ -1,7 +1,9 @@
 <template>
   <q-card class="q-ma-md">
     <q-card-section>
-      <div class="text-h6">Registered users</div>
+      <div class="text-h6">
+        Registered users
+      </div>
     </q-card-section>
     <q-card-section>
       <q-table
@@ -14,7 +16,9 @@
         :data="users"
       >
         <template #body-cell-id="{ value }">
-          <q-td auto-width class="text-right">{{ value }}</q-td>
+          <q-td auto-width class="text-right">
+            {{ value }}
+          </q-td>
         </template>
         <template #body-cell-username="{ value }">
           <q-td class="text-right">
@@ -23,19 +27,28 @@
         </template>
         <template #body-cell-role="{ row, value }">
           <q-td>
-            <q-select
-              dense
-              :value="value"
-              :options="Object.keys($ctfnote.roles)"
-              @input="(v) => updateRole(row.id, v)"
-            />
+            <q-select dense :value="value" :options="Object.keys($ctfnote.roles)" @input="v => updateRole(row.id, v)" />
           </q-td>
         </template>
         <template #body-cell-btns="{ row }">
           <q-td auto-width>
             <div class="q-gutter-sm">
-              <q-btn color="negative" title="Delete the user" size="sm" round icon="delete" @click="removeUser(row.id)" />
-              <q-btn color="positive" title="Create a password reset token" size="sm" round icon="lock_clock" @click="resetPassword(row)" />
+              <q-btn
+                color="negative"
+                title="Delete the user"
+                size="sm"
+                round
+                icon="delete"
+                @click="removeUser(row.id)"
+              />
+              <q-btn
+                color="positive"
+                title="Create a password reset token"
+                size="sm"
+                round
+                icon="lock_clock"
+                @click="resetPassword(row)"
+              />
             </div>
           </q-td>
         </template>
@@ -52,23 +65,23 @@ export default {
   apollo: {
     users: {
       query: db.admin.USERS,
-      update: (data) => data.users.nodes,
-    },
+      update: data => data.users.nodes
+    }
   },
   data() {
     const pagination = {
-      rowsPerPage: 0,
+      rowsPerPage: 0
     };
     const columns = [
       { name: "id", label: "ID", field: "id", sortable: true },
       { name: "username", label: "Login", field: "login", sortable: true },
       { name: "role", label: "Role", field: "role", sortable: true },
-      { name: "btns"},
+      { name: "btns" }
     ];
     return { columns, pagination };
   },
   methods: {
-    removeUser(userId) {
+    removeUser() {
       // TODO: Actually remove the user
     },
     updateRole(userId, role) {
@@ -78,16 +91,16 @@ export default {
           variables: { userId, role },
           update: (store, { data: { updateUserRole } }) => {
             const query = {
-              query: db.admin.USERS,
+              query: db.admin.USERS
             };
 
             const data = store.readQuery(query);
-            const user = data.users.nodes.find((u) => u.id === userId);
+            const user = data.users.nodes.find(u => u.id === userId);
 
             user.role = updateUserRole.role;
 
             store.writeQuery({ ...query, data });
-          },
+          }
         });
       };
 
@@ -98,7 +111,7 @@ export default {
             color: "negative",
             message: "You are about to modify your own role, are you sure ?",
             ok: "Change Role",
-            cancel: true,
+            cancel: true
           })
           .onOk(performUpdate);
         return;
@@ -110,9 +123,9 @@ export default {
       this.$q.dialog({
         component: ResetPasswordLinkDialog,
         parent: this,
-        user,
+        user
       });
-    },
-  },
+    }
+  }
 };
 </script>

@@ -1,101 +1,96 @@
-import gql from "graphql-tag"
-import slugify from "slugify"
-import db from "src/gql"
-
+import gql from "graphql-tag";
+import slugify from "slugify";
+import db from "src/gql";
 
 function waitUntil(f) {
   return new Promise(resolve => {
-    const check = () => f() ? resolve() : setTimeout(check, 10)
-    check()
-  })
+    const check = () => (f() ? resolve() : setTimeout(check, 10));
+    check();
+  });
 }
-
 
 class CTFNote {
   roles = {
     USER_GUEST: 1,
     USER_MEMBER: 2,
     USER_MANAGER: 3,
-    USER_ADMIN: 4,
-  }
+    USER_ADMIN: 4
+  };
   anonymous = {
     roleId: 0
-  }
-  _ready = false
-  _readyWaitList = []
-
+  };
+  _ready = false;
+  _readyWaitList = [];
 
   constructor() {
-    this.waitUntilReady(() => this.registerResolvers)
+    this.waitUntilReady(() => this.registerResolvers);
   }
 
   async init(apollo) {
-    this.apollo = apollo
+    this.apollo = apollo;
     let me = null;
     try {
-      const response = await this.apollo.query({ query: db.auth.ME })
-      me = response.data.me
+      const response = await this.apollo.query({ query: db.auth.ME });
+      me = response.data.me;
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
     if (me == null) {
-      this._me = null
+      this._me = null;
     } else {
-      localStorage.setItem("JWT", me.jwt)
-      const roleId = this.roles[me.profile.role]
-      this._me = { ...me.profile, roleId }
+      localStorage.setItem("JWT", me.jwt);
+      const roleId = this.roles[me.profile.role];
+      this._me = { ...me.profile, roleId };
     }
-    this.ready()
+    this.ready();
   }
 
   async waitUntilReady() {
-    if (this._ready) return
+    if (this._ready) return;
     return new Promise(resolve => {
-      this._readyWaitList.push(resolve)
-    })
+      this._readyWaitList.push(resolve);
+    });
   }
 
   ready() {
-    this._ready = true
+    this._ready = true;
     let resolve;
-    while (resolve = this._readyWaitList.shift()) {
-      resolve()
+    while ((resolve = this._readyWaitList.shift())) {
+      resolve();
     }
   }
 
   async registerResolvers(r) {
-    await this.waitUntilReady()
-    this.apollo.addResolvers(r)
+    await this.waitUntilReady();
+    this.apollo.addResolvers(r);
   }
   get me() {
-
-
     if (this._me) {
       const debugRoleId = localStorage.getItem(`ctfnote.debugRoleId`);
       if (debugRoleId) {
-        return { ...this._me, roleId: parseInt(debugRoleId) }
+        return { ...this._me, roleId: parseInt(debugRoleId) };
       }
-      return this._me
+      return this._me;
     }
 
     return this.anonymous;
   }
 
   get isGuest() {
-    return this.me.roleId >= this.roles.USER_GUEST
+    return this.me.roleId >= this.roles.USER_GUEST;
   }
   get isMember() {
-    return this.me.roleId >= this.roles.USER_MEMBER
+    return this.me.roleId >= this.roles.USER_MEMBER;
   }
   get isManager() {
-    return this.me.roleId >= this.roles.USER_MANAGER
+    return this.me.roleId >= this.roles.USER_MANAGER;
   }
   get isAdmin() {
-    return this.me.roleId >= this.roles.USER_ADMIN
+    return this.me.roleId >= this.roles.USER_ADMIN;
   }
   logout() {
-    localStorage.removeItem("JWT")
-    this._me = null
+    localStorage.removeItem("JWT");
+    this._me = null;
   }
 
   ctfLink(ctf) {
@@ -103,9 +98,9 @@ class CTFNote {
       name: "ctfinfo",
       params: {
         ctfId: ctf.id,
-        ctfSlug: ctf.slug,
+        ctfSlug: ctf.slug
       }
-    }
+    };
   }
 
   taskLink(ctf, task) {
@@ -117,12 +112,11 @@ class CTFNote {
         taskId: task.id,
         taskSlug: task.slug
       }
-    }
+    };
   }
 
   taskIcon(task) {
-    if (task.solved)
-      return "flag"
+    if (task.solved) return "flag";
     const count = task.workOnTasks.nodes.length;
     if (count == 0) {
       return null;
@@ -136,33 +130,28 @@ class CTFNote {
     return "groups";
   }
   taskIconColor(task) {
-    if (task.solved)
-      return "positive"
-    const players = task.workOnTasks.nodes
-    if (players?.some((p) => p.profile.id == this.me.id)) {
-      return "secondary"
+    if (task.solved) return "positive";
+    const players = task.workOnTasks.nodes;
+    if (players?.some(p => p.profile.id == this.me.id)) {
+      return "secondary";
     }
-    return "primary"
+    return "primary";
   }
 }
 
-const ctfNote = new CTFNote()
-
+const ctfNote = new CTFNote();
 
 ctfNote.registerResolvers({
   Ctf: {
     slug(ctf) {
-      return slugify(ctf.title)
-    },
+      return slugify(ctf.title);
+    }
   },
   Task: {
     slug(task) {
-      return slugify(task.title)
+      return slugify(task.title);
     }
   }
-})
+});
 
-
-
-
-export default ctfNote
+export default ctfNote;

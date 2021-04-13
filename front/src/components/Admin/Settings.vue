@@ -2,7 +2,7 @@
   <q-page padding class="q-gutter-md">
     <div class="text-h4">CTFNote Settings</div>
     <q-table hide-bottom :data="settings" :columns="columns" row-key="name">
-      <template v-slot:body="props">
+      <template #body="props">
         <q-tr :props="props">
           <q-td key="key" auto-width :props="props">
             <b>{{ props.row.key }}</b>
@@ -35,7 +35,7 @@
         </q-card-section>
 
         <q-card-section>
-          <q-input v-model="editStringValue" @keydown.enter.prevent="submitStringValue()"></q-input>
+          <q-input v-model="editStringValue" @keydown.enter.prevent="submitStringValue()" />
         </q-card-section>
 
         <q-card-actions align="right">

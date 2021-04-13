@@ -1,6 +1,6 @@
 <template>
   <q-page class="page">
-    <iframe v-if="task" :src="task.padUrl"></iframe>
+    <iframe v-if="task" :src="task.padUrl" />
   </q-page>
 </template>
 
@@ -8,15 +8,15 @@
 import db from "src/gql";
 export default {
   props: {
-    taskId: Number,
+    taskId: { type: Number, required: true }
   },
   apollo: {
     task: {
       query: db.task.GET,
       variables() {
         return { id: this.taskId };
-      },
-    },
+      }
+    }
   }
 };
 </script>

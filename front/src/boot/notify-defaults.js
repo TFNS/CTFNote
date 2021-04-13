@@ -1,9 +1,9 @@
-import { Notify } from 'quasar'
+import { Notify } from "quasar";
 export default () => {
   Notify.setDefaults({
-    position: 'top-right',
+    position: "top-right",
     timeout: 2500,
-    textColor: 'white',
-    actions: [{ icon: 'close', color: 'white' }]
-  })
-}
+    textColor: "white",
+    actions: [{ icon: "close", color: "white" }]
+  });
+};

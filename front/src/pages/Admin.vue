@@ -1,17 +1,8 @@
 <template>
   <q-page>
     <q-tabs class="bg-light" v-model="tab" indicator-color="primary" dense align="left">
-      <q-route-tab
-        :to="{ name: 'adminsettings' }"
-        label="settings"
-        icon="tune"
-      />
-      <q-route-tab
-        :to="{ name: 'adminusers' }"
-        content-class="tab-button"
-        label="Users"
-        icon="people"
-      />
+      <q-route-tab :to="{ name: 'adminsettings' }" label="settings" icon="tune" />
+      <q-route-tab :to="{ name: 'adminusers' }" content-class="tab-button" label="Users" icon="people" />
     </q-tabs>
     <router-view />
   </q-page>
@@ -21,9 +12,9 @@
 export default {
   data() {
     return {
-      tab: null,
+      tab: null
     };
-  },
+  }
 };
 </script>
 

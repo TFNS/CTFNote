@@ -8,7 +8,9 @@
               <q-checkbox :value="onIt" @input="updateOnIt" />
             </q-item-section>
             <q-item-section>
-              <q-item-label class="q-px-md">On it</q-item-label>
+              <q-item-label class="q-px-md">
+                On it
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-item tag="label" v-ripple v-close-popup>
@@ -17,7 +19,9 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label class="q-px-md">Solved</q-item-label>
+              <q-item-label class="q-px-md">
+                Solved
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-item tag="label" v-ripple v-close-popup @click="$emit('edit-task')">
@@ -25,7 +29,9 @@
               <q-avatar icon="edit" />
             </q-item-section>
             <q-item-section>
-              <q-item-label class="q-px-md">Edit</q-item-label>
+              <q-item-label class="q-px-md">
+                Edit
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-item clickable v-close-popup @click="$emit('delete-task')">
@@ -33,7 +39,9 @@
               <q-avatar icon="delete" />
             </q-item-section>
             <q-item-section>
-              <q-item-label class="q-px-md">Delete</q-item-label>
+              <q-item-label class="q-px-md">
+                Delete
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -42,14 +50,22 @@
       <q-card-section>
         <q-badge v-if="showBadge" class="solved-badge" floating :color="$ctfnote.taskIconColor(task)">
           <q-icon :name="$ctfnote.taskIcon(task)" />
-          <q-tooltip anchor="top right" self="top left" :offset="[0, 0]" content-class="transparent" v-if="players.length">
+          <q-tooltip
+            anchor="top right"
+            self="top left"
+            :offset="[0, 0]"
+            content-class="transparent"
+            v-if="players.length"
+          >
             <q-card dense bordered>
               <q-card-section class="tooltip-section">
                 <q-list dense>
                   <q-item tag="label" :key="player.slug" v-for="player in players">
                     <q-item-section class="text-center">
                       <q-chip class="text-white text-center" :style="colorHash(player.slug)">
-                        <div class="text-center full-width">{{ player.username }}</div>
+                        <div class="text-center full-width">
+                          {{ player.username }}
+                        </div>
                       </q-chip>
                     </q-item-section>
                   </q-item>
@@ -101,10 +117,10 @@
 import { colorHash } from "../utils";
 export default {
   props: {
-    task: Object,
-    ctf: Object,
-    categories: Array,
-    displayMode: { type: String },
+    task: { type: Object, required: true },
+    ctf: { type: Object, required: true },
+    categories: { type: Array, required: true },
+    displayMode: { type: String, required: true }
   },
   computed: {
     isDense() {
@@ -132,7 +148,7 @@ export default {
       return this.onIt ? "secondary" : "primary";
     },
     onIt() {
-      return this.players?.some((p) => p.id == this.$ctfnote.me.id);
+      return this.players?.some(p => p.id == this.$ctfnote.me.id);
     },
     onItIcon() {
       return this.onIt ? "person_remove" : "person_add_alt_1";
@@ -152,8 +168,8 @@ export default {
     },
 
     players() {
-      return this.task.workOnTasks.nodes.map((n) => n.profile);
-    },
+      return this.task.workOnTasks.nodes.map(n => n.profile);
+    }
   },
   methods: {
     taskStyle(s) {
@@ -165,8 +181,8 @@ export default {
       } else {
         this.$emit("stop-work-on-task");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

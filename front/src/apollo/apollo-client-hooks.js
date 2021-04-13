@@ -1,6 +1,5 @@
-
-import { ApolloLink} from "apollo-link";
-import CTFNote from "src/boot/CTFNote/index.js"
+import { ApolloLink } from "apollo-link";
+import CTFNote from "src/boot/CTFNote/index.js";
 import { HttpLink } from "apollo-link-http";
 import { split } from "apollo-link";
 import { WebSocketLink } from "apollo-link-ws";
@@ -14,12 +13,12 @@ const httpLinkConfig = {
 };
 
 const wsLinkConfig = {
-  uri: `${location.protocol == "https:" ? "wss": "ws"}://${location.host}/graphql`,
+  uri: `${location.protocol == "https:" ? "wss" : "ws"}://${location.host}/graphql`,
   options: {
     reconnect: true,
     connectionParams: {
-        authorization: `Bearer ${localStorage.getItem("JWT")}`,
-    },
+      authorization: `Bearer ${localStorage.getItem("JWT")}`
+    }
   }
 };
 
@@ -37,20 +36,15 @@ const terminatingLink = split(
   // split based on operation type
   ({ query }) => {
     const definition = getMainDefinition(query);
-    return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
-    );
+    return definition.kind === "OperationDefinition" && definition.operation === "subscription";
   },
   wsLink,
   httpLink
 );
 
-
-
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => {
-    const token = localStorage.getItem('JWT');
+    const token = localStorage.getItem("JWT");
 
     if (token) {
       headers = { ...headers, authorization: `Bearer ${token}` };
@@ -62,19 +56,21 @@ const authLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
-
-export async function apolloClientBeforeCreate({ apolloClientConfigObj }/* { apolloClientConfigObj, app, router, store, ssrContext, urlPath, redirect } */) {
+export async function apolloClientBeforeCreate(
+  { apolloClientConfigObj } /* { apolloClientConfigObj, app, router, store, ssrContext, urlPath, redirect } */
+) {
   // if needed you can modify here the config object used for apollo client
   // instantiation
   apolloClientConfigObj.link = ApolloLink.from([authLink, terminatingLink]);
 }
 
-let apollo = {}
-export async function apolloClientAfterCreate({apolloClient}/* { apolloClient, app, router, store, ssrContext, urlPath, redirect } */) {
+let apollo = {};
+export async function apolloClientAfterCreate(
+  { apolloClient } /* { apolloClient, app, router, store, ssrContext, urlPath, redirect } */
+) {
   // if needed you can modify here the created apollo client
-  CTFNote.init(apolloClient)
-  apollo = apolloClient
-
+  CTFNote.init(apolloClient);
+  apollo = apolloClient;
 }
 
-export {apollo}
+export { apollo };

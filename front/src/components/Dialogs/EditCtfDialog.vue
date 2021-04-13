@@ -3,7 +3,9 @@
     <q-card class="edit-ctf">
       <q-form @submit="submit">
         <q-card-section class="row items-center">
-          <div class="text-h6">{{ title }}</div>
+          <div class="text-h6">
+            {{ title }}
+          </div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
@@ -64,10 +66,10 @@ import LogoField from "../LogoField.vue";
 export default {
   components: { DatetimeInput, LogoField },
   props: {
-    ctf: { type: Object, default: null },
+    ctf: { type: Object, default: null }
   },
   data() {
-    const now = new Date().toISOString().split(".")[0]+"Z"
+    const now = new Date().toISOString().split(".")[0] + "Z";
     const form = {
       title: this.ctf?.title,
       weight: this.ctf?.weight,
@@ -77,11 +79,11 @@ export default {
       startTime: this.ctf?.startTime || now,
       endTime: this.ctf?.endTime || now,
       description: this.ctf?.description,
-      credentials: this.ctf?.credentials,
+      credentials: this.ctf?.credentials
     };
     return {
       panel: "description",
-      form,
+      form
     };
   },
   computed: {
@@ -90,7 +92,7 @@ export default {
     },
     title() {
       return this.ctf ? `Edit ${this.ctf.title}` : "Create CTF";
-    },
+    }
   },
   methods: {
     show() {
@@ -102,14 +104,14 @@ export default {
     editCtf(id, ctf) {
       this.$apollo.mutate({
         mutation: db.ctf.UPDATE,
-        variables: { id, ...ctf },
+        variables: { id, ...ctf }
       });
       this.hide();
     },
-    createCtf(ctf){
+    createCtf(ctf) {
       this.$apollo.mutate({
         mutation: db.ctf.CREATE,
-        variables: { id, ...ctf },
+        variables: ctf
       });
     },
     async submit() {
@@ -119,8 +121,8 @@ export default {
         await this.createCtf(this.form);
       }
       this.$emit("ok", this.form);
-    },
-  },
+    }
+  }
 };
 </script>
 

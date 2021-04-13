@@ -2,7 +2,9 @@
   <q-dialog ref="dialog" @hide="$emit('hide')">
     <q-card class="edit-task-dialog">
       <q-card-section class="row">
-        <div class="text-h6">{{ title }}</div>
+        <div class="text-h6">
+          {{ title }}
+        </div>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
@@ -30,7 +32,10 @@
 import db from "src/gql";
 
 export default {
-  props: { task: Object, ctfId: Number },
+  props: {
+    task: { type: Object, default: null },
+    ctfId: { type: Number, required: true }
+  },
   data() {
     const originalTitle = this.task?.title || "Task";
     const form = {
@@ -38,11 +43,11 @@ export default {
       description: this.task?.description,
       category: this.task?.category,
       solved: this.task?.solved,
-      flag: this.task?.flag,
+      flag: this.task?.flag
     };
     return {
       form,
-      originalTitle,
+      originalTitle
     };
   },
   computed: {
@@ -51,7 +56,7 @@ export default {
     },
     title() {
       return this.task ? `Edit task ${this.originalTitle}` : "Create task";
-    },
+    }
   },
   methods: {
     show() {
@@ -63,13 +68,13 @@ export default {
     async updateTask(id, task) {
       await this.$apollo.mutate({
         mutation: db.task.UPDATE,
-        variables: { id, ...task },
+        variables: { id, ...task }
       });
     },
     async createTask(task) {
       await this.$apollo.mutate({
         mutation: db.task.CREATE,
-        variables: { ...task, ctfId: this.ctfId },
+        variables: { ...task, ctfId: this.ctfId }
       });
     },
     async submit() {
@@ -80,8 +85,8 @@ export default {
       }
       this.$emit("ok", this.form);
       this.hide();
-    },
-  },
+    }
+  }
 };
 </script>
 

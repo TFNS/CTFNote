@@ -7,7 +7,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 
-module.exports = function (/* ctx */) {
+module.exports = function(/* ctx */) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -62,10 +62,9 @@ module.exports = function (/* ctx */) {
         cfg.module.rules.push({
           test: /\.(graphql|gql)$/,
           exclude: /node_modules/,
-          loader: 'graphql-tag/loader',
-        })
+          loader: "graphql-tag/loader"
+        });
       }
-
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
@@ -78,7 +77,7 @@ module.exports = function (/* ctx */) {
         "/pad": {
           target: "http://127.0.0.1:3020/",
           pathRewrite: {
-            '^/pad': ''
+            "^/pad": ""
           },
           ws: true
         },
@@ -116,7 +115,7 @@ module.exports = function (/* ctx */) {
 
     // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: 'all',
+    animations: "all",
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {

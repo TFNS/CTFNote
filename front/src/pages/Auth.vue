@@ -4,7 +4,9 @@
       <q-form @submit="submit">
         <q-card>
           <q-card-section>
-            <div class="text-h6">{{ title }}</div>
+            <div class="text-h6">
+              {{ title }}
+            </div>
           </q-card-section>
           <q-card-section>
             <q-input
@@ -12,7 +14,7 @@
               v-model="username"
               label="Username"
               lazy-rules
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+              :rules="[val => (val && val.length > 0) || 'Please type something']"
             />
             <q-input
               filled
@@ -20,7 +22,7 @@
               v-model="password"
               label="Password"
               lazy-rules
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+              :rules="[val => (val && val.length > 0) || 'Please type something']"
             />
 
             <q-toggle v-model="register" color="positive" label="Register" />
@@ -29,7 +31,9 @@
           <q-separator />
           <q-card-actions class="row">
             <q-space />
-            <q-btn type="submit" class="q-px-md" color="primary">{{ this.title }}</q-btn>
+            <q-btn type="submit" class="q-px-md" color="primary">
+              {{ this.title }}
+            </q-btn>
           </q-card-actions>
         </q-card>
       </q-form>
@@ -44,13 +48,13 @@ export default {
     return {
       register: false,
       username: "",
-      password: "",
+      password: ""
     };
   },
   computed: {
     title() {
       return this.register ? "Register" : "Login";
-    },
+    }
   },
   methods: {
     async submit() {
@@ -62,10 +66,10 @@ export default {
           mutation,
           variables: {
             login: this.username,
-            password: this.password,
-          },
+            password: this.password
+          }
         })
-        .then((r) => {
+        .then(r => {
           const jwt = r.data[key].jwt;
           if (jwt) {
             localStorage.setItem("JWT", jwt);
@@ -74,11 +78,11 @@ export default {
             this.$q.notify({ message: "Invalid username or password", type: "negative" });
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
           this.$q.notify({ message: "Username already taken", type: "negative" });
         });
-    },
-  },
+    }
+  }
 };
 </script>

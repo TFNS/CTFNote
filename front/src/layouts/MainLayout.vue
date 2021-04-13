@@ -5,7 +5,9 @@
         <q-btn flat dense round icon="menu" aria-label="Menu" v-if="ctf" @click="leftDrawerOpen = !leftDrawerOpen" />
         <q-toolbar-title>
           <div class="row q-gutter-md items-center">
-            <router-link class="text-white" exact :to="{ name: 'incoming' }">CTFNote</router-link>
+            <router-link class="text-white" exact :to="{ name: 'incoming' }">
+              CTFNote
+            </router-link>
             <template v-if="ctf && ctf.id">
               <q-separator vertical />
               <q-btn type="a" target="_blank" :href="ctf.ctfUrl" flat icon="language" size="sm" round />
@@ -86,26 +88,26 @@ export default {
       return {
         query: db.ctf.GET,
         skip: true,
-        variables: {},
+        variables: {}
       };
     },
     task() {
       return {
         query: db.task.GET,
         skip: true,
-        variables: {},
+        variables: {}
       };
-    },
+    }
   },
   localStorage: {
     darkMode: {
       type: Boolean,
-      default: false,
+      default: false
     },
     liveMode: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
     menu() {
@@ -118,7 +120,7 @@ export default {
         categories[task.category].push({
           title: task.title,
           solved: task.solved,
-          to: this.getTaskLink(this.ctf, task),
+          to: this.getTaskLink(this.ctf, task)
         });
       }
       return Object.entries(categories).sort();
@@ -128,7 +130,7 @@ export default {
     },
     liveMode() {
       return this.$localStorage.liveMode;
-    },
+    }
   },
   mounted() {
     this.updateNavLink(this.$route);
@@ -141,13 +143,13 @@ export default {
       this.$q.dark.set(value);
     },
     ctf(ctf) {
-      this.clearSubscribers()
+      this.clearSubscribers();
       this.registerSubscriber(
         {
           query: db.task.SUBSCRIBE,
-          variables: { topic: `taskSolved:${ctf.id}` },
+          variables: { topic: `taskSolved:${ctf.id}` }
         },
-        (data) => {
+        data => {
           const task = data.listen.relatedNode;
           this.$q.notify({ message: `Task ${task.title} solved!` });
         }
@@ -155,9 +157,9 @@ export default {
       this.registerSubscriber(
         {
           query: db.task.SUBSCRIBE,
-          variables: { topic: `taskCreated:${ctf.id}` },
+          variables: { topic: `taskCreated:${ctf.id}` }
         },
-        (data) => {
+        data => {
           const task = data.listen.relatedNode;
           this.$q.notify({ message: `Task ${task.title} created!` });
         }
@@ -171,20 +173,19 @@ export default {
         } else {
           document.body.classList.remove("live-mode");
         }
-      },
-    },
+      }
+    }
   },
   methods: {
     registerSubscriber(query, next) {
       const observer = this.$apollo.subscribe(query);
-      const subscriber =  observer.subscribe({ next: ({ data }) => next(data) });
-      this.subscribers.push(subscriber)
+      const subscriber = observer.subscribe({ next: ({ data }) => next(data) });
+      this.subscribers.push(subscriber);
     },
-    clearSubscribers(){
+    clearSubscribers() {
       while (this.subscribers.length) {
         this.subscribers.pop().unsubscribe();
       }
-
     },
     updateNavLink(route) {
       const ctfId = route.params.ctfId;
@@ -202,18 +203,18 @@ export default {
       }
       this.$apollo.queries.task.setVariables({ id: parseInt(taskId) });
       this.$apollo.queries.task.skip = false;
-    },
+    }
   },
   data() {
     return {
       leftDrawerOpen: false,
-      subscribers: [],
+      subscribers: []
     };
-  },
+  }
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .ctfnote-header a {
   text-decoration: none;
 }

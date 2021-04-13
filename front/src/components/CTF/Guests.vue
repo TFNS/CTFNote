@@ -10,10 +10,12 @@
           :label="user.username"
           @click="setInvitation(!Boolean(user.invitation), user)"
         >
-          <q-toggle :value="Boolean(user.invitation)" checked-icon="check" @input="(v) => setInvitation(v, user)" />
+          <q-toggle :value="Boolean(user.invitation)" checked-icon="check" @input="v => setInvitation(v, user)" />
         </q-chip>
       </div>
-      <div class="col" v-if="guestUsersWithInvitation.length == 0">No guests :(</div>
+      <div class="col" v-if="guestUsersWithInvitation.length == 0">
+        No guests :(
+      </div>
     </div>
   </div>
 </template>
@@ -23,25 +25,25 @@ import db from "src/gql";
 import { colorHash } from "../../utils";
 export default {
   props: {
-    ctf: Object,
+    ctf: { type: Object, required: true }
   },
   apollo: {
     guestUsers: {
       query: db.profile.GUESTS,
-      fetchPolicy: 'cache-and-network',
-      update: (d) => d.guests.nodes,
+      fetchPolicy: "cache-and-network",
+      update: d => d.guests.nodes
     },
     invitations: {
       query: db.invitation.ALL,
       variables() {
         return { ctfId: this.ctf.id };
       },
-      update: (data) => data.invitations.nodes,
-    },
+      update: data => data.invitations.nodes
+    }
   },
   methods: {
-    userStyle(user){
-      return { backgroundColor: colorHash(user.username) }
+    userStyle(user) {
+      return { backgroundColor: colorHash(user.username) };
     },
     setInvitation(v, profile) {
       if (v) {
@@ -55,38 +57,38 @@ export default {
         mutation: db.invitation.CREATE,
         variables: {
           ctfId: this.ctf.id,
-          profileId: profile.id,
+          profileId: profile.id
         },
         update: (store, { data: { createInvitation } }) => {
           const invitation = createInvitation.invitation;
           const query = {
             query: db.invitation.ALL,
-            variables: { ctfId: this.ctf.id },
+            variables: { ctfId: this.ctf.id }
           };
           const data = store.readQuery(query);
           data.invitations.nodes.push(invitation);
           store.writeQuery({ ...query, data });
-        },
+        }
       });
     },
     deleteInvitation(invitation) {
       this.$apollo.mutate({
         mutation: db.invitation.DELETE,
         variables: {
-          nodeId: invitation.nodeId,
+          nodeId: invitation.nodeId
         },
         update: (store, { data: { deleteInvitationByNodeId } }) => {
           const nodeId = deleteInvitationByNodeId.deletedInvitationNodeId;
           const query = {
             query: db.invitation.ALL,
-            variables: { ctfId: this.ctf.id },
+            variables: { ctfId: this.ctf.id }
           };
           const data = store.readQuery(query);
-          data.invitations.nodes = data.invitations.nodes.filter((n) => n.nodeId != nodeId);
+          data.invitations.nodes = data.invitations.nodes.filter(n => n.nodeId != nodeId);
           store.writeQuery({ ...query, data });
-        },
+        }
       });
-    },
+    }
   },
   computed: {
     loading() {
@@ -96,10 +98,10 @@ export default {
       return this.invitations;
     },
     guestUsersWithInvitation() {
-      return this.guestUsers.map((profile) => {
-        return { ...profile, invitation: this.ctfInvitations.find((i) => i.profile.nodeId == profile.nodeId) };
+      return this.guestUsers.map(profile => {
+        return { ...profile, invitation: this.ctfInvitations.find(i => i.profile.nodeId == profile.nodeId) };
       });
-    },
-  },
+    }
+  }
 };
 </script>

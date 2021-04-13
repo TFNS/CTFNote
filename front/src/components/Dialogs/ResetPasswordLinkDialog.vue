@@ -11,11 +11,11 @@
       <q-separator />
       <q-card-section>
         <q-input hint="Valid for one hour." filled bottom-slots :value="link" readonly ref="resetPasswordLink">
-          <template v-slot:before>
+          <template #before>
             <q-icon name="lock" />
           </template>
 
-          <template v-slot:append>
+          <template #append>
             <q-btn round dense flat title="Copy" icon="content_copy" @click="clipboardCopy()" />
           </template>
         </q-input>
@@ -31,10 +31,10 @@
 import db from "src/gql";
 
 export default {
-  props: { user: Object },
+  props: { user: { type: Object, required: true } },
   data() {
     return {
-      link: null,
+      link: null
     };
   },
   watch: {
@@ -42,8 +42,8 @@ export default {
       immediate: true,
       handler(user) {
         this.retrieveLink(user);
-      },
-    },
+      }
+    }
   },
   methods: {
     show() {
@@ -59,8 +59,8 @@ export default {
       const response = await this.$apollo.mutate({
         mutation: db.auth.RESET_PASSWORD_LINK,
         variables: {
-          userId: user.id,
-        },
+          userId: user.id
+        }
       });
 
       const { token } = response.data.createResetPasswordLink.resetPasswordLinkResponse;
@@ -79,9 +79,9 @@ export default {
         actions: [],
         closeBtn: false,
         position: "center",
-        timeout: 1,
+        timeout: 1
       });
-    },
-  },
+    }
+  }
 };
 </script>

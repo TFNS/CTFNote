@@ -1,7 +1,14 @@
 <template>
   <q-card>
     <q-card-section>
-      <q-table no-data-label="No CTF available." flat :pagination="pagination" :data="ctfs" :loading="$apollo.queries.ctfs.loading" :columns="columns">
+      <q-table
+        no-data-label="No CTF available."
+        flat
+        :pagination="pagination"
+        :data="ctfs"
+        :loading="$apollo.queries.ctfs.loading"
+        :columns="columns"
+      >
         <template #body-cell-title="props">
           <q-td :props="props">
             <q-btn
@@ -31,18 +38,18 @@ export default {
         align: "right",
         sortable: true,
         label: "Date",
-        field: (task) => task.startTime,
-        format: (t) => formatTime(t),
-      },
+        field: task => task.startTime,
+        format: t => formatTime(t)
+      }
     ];
-    return {columns, pagination };
+    return { columns, pagination };
   },
   apollo: {
     ctfs: {
       query: db.ctf.PAST,
       fetchPolicy: "cache-and-network",
-      update: (data) => data.pastCtf.nodes,
-    },
-  },
+      update: data => data.pastCtf.nodes
+    }
+  }
 };
 </script>

@@ -12,6 +12,6 @@ Vue.use(Vuex);
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
-export default async function (/* { ssrContext } */) {
+export default async function(/* { ssrContext } */) {
   return new Vuex.Store();
 }

@@ -6,13 +6,17 @@
           <q-item-section side>
             <q-avatar icon="create" />
           </q-item-section>
-          <q-item-section class="q-px-md">Edit</q-item-section>
+          <q-item-section class="q-px-md">
+            Edit
+          </q-item-section>
         </q-item>
         <q-item clickable v-close-popup @click="deleteCtf">
           <q-item-section side>
             <q-avatar icon="delete" />
           </q-item-section>
-          <q-item-section class="q-px-md">Delete</q-item-section>
+          <q-item-section class="q-px-md">
+            Delete
+          </q-item-section>
         </q-item>
       </q-list>
     </q-menu>
@@ -28,7 +32,9 @@
           <q-btn :to="$ctfnote.ctfLink(ctf)" flat :label="ctf.title" :disable="!ctf.granted" size="md" />
         </div>
         <div class="text-h6 col-auto">
-          <q-badge v-if="running" color="positive" class="running"> LIVE </q-badge>
+          <q-badge v-if="running" color="positive" class="running">
+            LIVE
+          </q-badge>
         </div>
         <q-space class="col-12 col-md-auto col-md-grow" />
         <div class="col-md-auto col-grow">
@@ -47,7 +53,7 @@
     <q-card-section>
       <div class="row justify-between q-col-gutter-md">
         <div class="text-justify col-12 col-md ctfcard-desc">
-          <q-markdown no-html :src="ctf.description"/>
+          <q-markdown no-html :src="ctf.description" />
           <q-space />
           <div class="text-right">
             <router-link :to="$ctfnote.ctfLink(ctf)">
@@ -75,10 +81,10 @@
 <script>
 import EditCtfDialog from "./Dialogs/EditCtfDialog.vue";
 import db from "src/gql";
-import * as utils from "src/utils"
+import * as utils from "src/utils";
 export default {
   props: {
-    ctf: Object,
+    ctf: { type: Object, required: true }
   },
   data() {
     return { showEditCtf: false, now: Date.now() };
@@ -99,7 +105,7 @@ export default {
       } else {
         return {
           from: startDate,
-          to: endDate,
+          to: endDate
         };
       }
     },
@@ -113,14 +119,14 @@ export default {
       const elapsed = this.now - start;
       const progress = (elapsed / duration) * 100;
       return { "--progress-percent": `${progress.toFixed(2)}%` };
-    },
+    }
   },
   methods: {
     shortTime(t) {
-      return utils.getTime(t)
+      return utils.getTime(t);
     },
     shortDate(t) {
-      return utils.getDate(t)
+      return utils.getDate(t);
     },
     updateTime() {
       this.now = Date.now();
@@ -129,7 +135,7 @@ export default {
       this.$q.dialog({
         component: EditCtfDialog,
         parent: this,
-        ctf: this.ctf,
+        ctf: this.ctf
       });
     },
     async deleteCtf() {
@@ -139,19 +145,19 @@ export default {
           color: "negative",
           message: `This will delete all the tasks, but not the pads.`,
           ok: "Delete",
-          cancel: true,
+          cancel: true
         })
         .onOk(async () => {
           await this.$apollo.mutate({
             mutation: db.ctf.DELETE,
             variables: {
-              id: this.ctf.id,
+              id: this.ctf.id
             },
-            refetchQueries: ["IncomingCtfs", "PastCtfs"],
+            refetchQueries: ["IncomingCtfs", "PastCtfs"]
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

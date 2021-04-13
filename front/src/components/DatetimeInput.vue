@@ -1,6 +1,6 @@
 <template>
   <q-input filled :value="model" :label="label">
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy transition-show="scale" transition-hide="scale">
           <q-date v-model="model" :mask="mask">
@@ -12,7 +12,7 @@
       </q-icon>
     </template>
 
-    <template v-slot:append>
+    <template #append>
       <q-icon name="access_time" class="cursor-pointer">
         <q-popup-proxy transition-show="scale" transition-hide="scale">
           <q-time v-model="model" :mask="mask" format24h>
@@ -31,8 +31,8 @@ import { getDateTime } from "src/utils";
 import { date } from "quasar";
 export default {
   props: {
-    value: String,
-    label: String,
+    value: { type: String, required: true },
+    label: { type: String, required: true }
   },
   data() {
     const mask = "YYYY/MM/DD HH:mm";
@@ -43,7 +43,7 @@ export default {
     model(v) {
       const d = date.extractDate(v, this.mask);
       this.$emit("input", date.formatDate(d, "YYYY-MM-DDTHH:mm:ssZ"));
-    },
-  },
+    }
+  }
 };
 </script>

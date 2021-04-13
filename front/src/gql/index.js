@@ -1,11 +1,10 @@
-import auth from "./auth" 
-import ctf from "./ctf"
-import task from "./task"
-import profile from "./profile"
-import invitation from "./invitation"
-import secret from "./secret"
-import admin from "./admin"
-
+import auth from "./auth";
+import ctf from "./ctf";
+import task from "./task";
+import profile from "./profile";
+import invitation from "./invitation";
+import secret from "./secret";
+import admin from "./admin";
 
 export default {
   auth,
@@ -15,4 +14,4 @@ export default {
   invitation,
   profile,
   ctf
-}
+};

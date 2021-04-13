@@ -5,17 +5,20 @@ const RawParser = {
     const tasks = [];
     for (const line of s.trim().split("\n")) {
       let [title, ...category] = line.split("|");
-      title = title.trim()
-      category = category.join("|").trim()
+      title = title.trim();
+      category = category.join("|").trim();
       if (!title || !category) {
-        continue
+        continue;
       }
       tasks.push({ title, category });
     }
     return tasks;
   },
   isValid(s) {
-    return s.trim().split("\n").every(s => s.match(/[^|]+\|[^|]+/))
+    return s
+      .trim()
+      .split("\n")
+      .every(s => s.match(/[^|]+\|[^|]+/));
   }
 };
 
@@ -25,29 +28,29 @@ const CTFDParser = {
 
   _getJson(s) {
     try {
-      return JSON.parse(s)
+      return JSON.parse(s);
     } catch (e) {
-      return null
+      return null;
     }
   },
 
   parse(s) {
     const tasks = [];
-    const data = this._getJson(s)
+    const data = this._getJson(s);
     if (!Array.isArray(data?.data)) {
-      return null
+      return null;
     }
     for (const task of data.data) {
       if (!task.name || !task.category) {
-        continue
+        continue;
       }
       tasks.push({ title: task.name, category: task.category });
     }
     return tasks;
   },
   isValid(s) {
-    const data = this._getJson(s)
-    return Array.isArray(data?.data)
+    const data = this._getJson(s);
+    return Array.isArray(data?.data);
   }
 };
 

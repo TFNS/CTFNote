@@ -8,7 +8,9 @@
       v-for="[category, tasks] of menu"
     />
     <q-list v-if="Object.keys(menu).length == 0">
-      <q-item-label header> No tasks yet </q-item-label>
+      <q-item-label header>
+        No tasks yet
+      </q-item-label>
     </q-list>
   </div>
 </template>
@@ -19,7 +21,7 @@ import LeftMenuCategoryList from "./LeftMenuCategoryList.vue";
 export default {
   components: { LeftMenuCategoryList },
   props: {
-    ctf: Object,
+    ctf: { type: Object, required: true }
   },
   apollo: {
     tasks: {
@@ -27,8 +29,8 @@ export default {
       variables() {
         return { ctfId: this.ctf.id };
       },
-      update: (data) => data.tasks.nodes,
-    },
+      update: data => data.tasks.nodes
+    }
   },
   computed: {
     menu() {
@@ -41,7 +43,7 @@ export default {
         categories[task.category].push(task);
       }
       return Object.entries(categories).sort();
-    },
-  },
+    }
+  }
 };
 </script>

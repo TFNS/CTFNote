@@ -3,7 +3,7 @@
     <div class="row col-12 q-mb-md q-gutter-md items-end">
       <div class="col col-3">
         <q-input v-model="filter" label="search">
-          <template v-slot:append>
+          <template #append>
             <q-icon name="search" />
           </template>
         </q-input>
@@ -21,20 +21,22 @@
     </div>
     <div class="row col-12 q-col-gutter-sm" :class="{ 'q-col-gutter-md': $localStorage.displayMode == 'classic' }">
       <task-card
-        v-on:filter-category="filterCategory"
-        v-on:start-work-on-task="startWorkOnTask(task)"
-        v-on:stop-work-on-task="stopWorkOnTask(task)"
-        v-on:solve-task="solveTask(task)"
-        v-on:delete-task="deleteTask(task)"
-        v-on:edit-task="editTask(task)"
-        :displayMode="$localStorage.displayMode"
+        @filter-category="filterCategory"
+        @start-work-on-task="startWorkOnTask(task)"
+        @stop-work-on-task="stopWorkOnTask(task)"
+        @solve-task="solveTask(task)"
+        @delete-task="deleteTask(task)"
+        @edit-task="editTask(task)"
+        :display-mode="$localStorage.displayMode"
         :categories="categories"
         :ctf="ctf"
         :task="task"
         :key="idx"
         v-for="[idx, task] in filteredTasks.entries()"
       />
-      <div class="text-center col" v-if="filteredTasks.length == 0">No tasks :(</div>
+      <div class="text-center col" v-if="filteredTasks.length == 0">
+        No tasks :(
+      </div>
     </div>
 
     <q-page-sticky position="top-right" :offset="[18, 8]">
@@ -59,22 +61,21 @@ import ImportTasksDialog from "../Dialogs/ImportTasksDialog.vue";
 import db from "src/gql";
 import TaskCard from "../TaskCard.vue";
 import EditTaskDialog from "../Dialogs/EditTaskDialog.vue";
-import gql from "graphql-tag";
 
 export default {
   components: { TaskCard },
   props: {
-    ctf: Object,
+    ctf: { type: Object, required: true }
   },
   localStorage: {
     displayMode: {
       type: String,
-      default: "classic",
+      default: "classic"
     },
     hideSolved: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   apollo: {
     tasks: {
@@ -83,7 +84,7 @@ export default {
       variables() {
         return { ctfId: this.ctf.id };
       },
-      update: (data) => data.tasks.nodes,
+      update: data => data.tasks.nodes,
       subscribeToMore: [
         {
           document: db.task.SUBSCRIBE,
@@ -94,7 +95,7 @@ export default {
             const newTask = subscriptionData.data.listen.relatedNode;
             previousResult.tasks.nodes.push(newTask);
             return previousResult;
-          },
+          }
         },
         {
           document: db.task.SUBSCRIBE,
@@ -103,9 +104,9 @@ export default {
           },
           updateQuery(previousResult, { subscriptionData }) {
             const nodeId = subscriptionData.data.listen.relatedNodeId;
-            previousResult.tasks.nodes = previousResult.tasks.nodes.filter((n) => n.nodeId != nodeId);
+            previousResult.tasks.nodes = previousResult.tasks.nodes.filter(n => n.nodeId != nodeId);
             return previousResult;
-          },
+          }
         },
         {
           document: db.task.SUBSCRIBE,
@@ -114,10 +115,10 @@ export default {
           },
           updateQuery(previousResult) {
             return previousResult;
-          },
-        },
-      ],
-    },
+          }
+        }
+      ]
+    }
   },
   computed: {
     filteredTasks() {
@@ -126,7 +127,7 @@ export default {
       const needle = this.filter.toLowerCase();
 
       return tasks
-        .filter((task) => {
+        .filter(task => {
           if (this.$localStorage.hideSolved && task.solved) {
             return false;
           }
@@ -134,7 +135,7 @@ export default {
           if (this.categoryFilter.length && !this.categoryFilter.includes(task.category)) {
             return false;
           }
-          const checkField = (f) => task[f]?.toLowerCase().includes(needle);
+          const checkField = f => task[f]?.toLowerCase().includes(needle);
 
           return checkField("title") || checkField("category") || checkField("description");
         })
@@ -147,8 +148,8 @@ export default {
     },
     categories() {
       const tasks = this.tasks || [];
-      return [...new Set(tasks.map((t) => t.category))];
-    },
+      return [...new Set(tasks.map(t => t.category))];
+    }
   },
   data() {
     return { categoryFilter: [], filter: "" };
@@ -159,14 +160,14 @@ export default {
         component: ImportTasksDialog,
         ctfId: this.ctf.id,
         tasks: this.tasks,
-        parent: this,
+        parent: this
       });
     },
     openCreateDialog() {
       this.$q.dialog({
         component: EditTaskDialog,
         ctfId: this.ctf.id,
-        parent: this,
+        parent: this
       });
     },
     solveTask(task) {
@@ -176,14 +177,14 @@ export default {
           cancel: true,
           prompt: {
             model: task.flag,
-            type: "text",
+            type: "text"
           },
-          color: "primary",
+          color: "primary"
         })
-        .onOk((flag) => {
+        .onOk(flag => {
           this.$apollo.mutate({
             mutation: db.task.UPDATE,
-            variables: { id: task.id, flag },
+            variables: { id: task.id, flag }
           });
         });
     },
@@ -194,23 +195,23 @@ export default {
       this.$q.dialog({
         component: EditTaskDialog,
         parent: this,
-        task,
+        task
       });
     },
     startWorkOnTask(task) {
       this.$apollo.mutate({
         mutation: db.task.START_WORKING,
         variables: {
-          taskId: task.id,
-        },
+          taskId: task.id
+        }
       });
     },
     stopWorkOnTask(task) {
       this.$apollo.mutate({
         mutation: db.task.STOP_WORKING,
         variables: {
-          taskId: task.id,
-        },
+          taskId: task.id
+        }
       });
     },
     deleteTask(task) {
@@ -221,18 +222,18 @@ export default {
           cancel: true,
           ok: {
             label: "Delete",
-            color: "negative",
-          },
+            color: "negative"
+          }
         })
         .onOk(async () => {
           this.$apollo.mutate({
             mutation: db.task.DELETE,
             variables: {
-              id: task.id,
-            },
+              id: task.id
+            }
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>

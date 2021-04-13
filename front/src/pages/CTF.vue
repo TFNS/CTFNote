@@ -30,7 +30,7 @@
 <script>
 export default {
   props: {
-    ctf: Object,
+    ctf: { type: Object, required: true }
   },
   methods: {
     navigate(evt, go, idx) {
@@ -50,42 +50,42 @@ export default {
         heigt: `${heigt}px`,
         position: "absolute",
         top: "16px",
-        left: "16px",
+        left: "16px"
       });
-    },
+    }
   },
   computed: {
     taskStyle() {
       let backgroundImage = "none";
       if (this.$q.screen.gt.md) backgroundImage = `url(${this.ctf?.logoUrl})`;
       return { backgroundImage };
-    },
+    }
   },
   data() {
     const tabs = [
       {
         label: "info",
-        route: { name: "ctfinfo" },
+        route: { name: "ctfinfo" }
       },
       {
         label: "tasks",
-        route: { name: "ctftasks" },
-      },
+        route: { name: "ctftasks" }
+      }
     ];
     if (this.$ctfnote.isMember) {
       tabs.push({
         label: "guests",
-        route: { name: "ctfinvitations" },
+        route: { name: "ctfinvitations" }
       });
     }
-    const tabIndex = tabs.findIndex((t) => t.route.name == this.$route.name);
+    const tabIndex = tabs.findIndex(t => t.route.name == this.$route.name);
     return {
       tabs,
       tabIndex,
       slideIn: "animated slideInLeft",
-      slideOut: "animated slideOutRight",
+      slideOut: "animated slideOutRight"
     };
-  },
+  }
 };
 </script>
 

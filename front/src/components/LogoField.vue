@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-input v-model="model" clearable label="Logo link">
-      <template v-slot:after>
+      <template #after>
         <q-btn round color="primary" icon="backup" @click="openPicker" />
       </template>
     </q-input>
@@ -12,7 +12,7 @@
 <script>
 export default {
   props: {
-    value: String,
+    value: { type: String, default: "" }
   },
   data() {
     return { model: this.value };
@@ -33,12 +33,12 @@ export default {
       if (file) {
         reader.readAsDataURL(file);
       }
-    },
+    }
   },
   watch: {
     model(v) {
       this.$emit("input", v);
-    },
-  },
+    }
+  }
 };
 </script>

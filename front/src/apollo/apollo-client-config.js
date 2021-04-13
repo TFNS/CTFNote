@@ -1,4 +1,4 @@
-export default async function (/* { app, router, store, ssrContext, urlPath, redirect } */) {
+export default async function(/* { app, router, store, ssrContext, urlPath, redirect } */) {
   return {
     default: {
       // 'apollo-link-http' config
@@ -8,7 +8,7 @@ export default async function (/* { app, router, store, ssrContext, urlPath, red
         // running quasar commands, for example:
         // `GRAPHQL_URI=https://prod.example.com/graphql quasar build`
         // `GRAPHQL_URI=https://dev.example.com/graphql quasar dev`
-        uri: process.env.GRAPHQL_URI || '/graphql'
+        uri: process.env.GRAPHQL_URI || "/graphql"
       },
 
       // 'apollo-cache-inmemory' config
@@ -52,5 +52,5 @@ export default async function (/* { app, router, store, ssrContext, urlPath, red
         ssrForceFetchDelay: 100
       }
     }
-  }
+  };
 }
