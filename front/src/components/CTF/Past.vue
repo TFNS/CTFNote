@@ -26,7 +26,7 @@
 
 <script>
 import db from "src/gql";
-import { formatTime } from "src/utils";
+import { getDateTime } from "src/utils";
 
 export default {
   data() {
@@ -39,7 +39,7 @@ export default {
         sortable: true,
         label: "Date",
         field: task => task.startTime,
-        format: t => formatTime(t)
+        format: t => getDateTime(t)
       }
     ];
     return { columns, pagination };
