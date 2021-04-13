@@ -90,14 +90,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-body.live-mode .blur {
-  filter: blur(5px);
-  transition: filter 0.2s;
-  &:hover {
-    filter: blur(0px);
-    transition-delay: 0.2s;
-  }
-}
 .float-away {
   position: absolute;
   width: 100vw;
