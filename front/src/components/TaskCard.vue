@@ -42,7 +42,7 @@
       <q-card-section>
         <q-badge v-if="showBadge" class="solved-badge" floating :color="$ctfnote.taskIconColor(task)">
           <q-icon :name="$ctfnote.taskIcon(task)" />
-          <q-tooltip anchor="top right" self="top left" :offset="[0, 0]" content-class="transparent">
+          <q-tooltip anchor="top right" self="top left" :offset="[0, 0]" content-class="transparent" v-if="players.length">
             <q-card dense bordered>
               <q-card-section class="tooltip-section">
                 <q-list dense>
@@ -175,7 +175,7 @@ export default {
   text-decoration: none;
 }
 .solved {
-  border-color: var(--q-color-positive);
+  border-color: $positive;
 }
 .action-btn .q-btn {
   width: 30px;
@@ -211,4 +211,3 @@ export default {
   padding: 2px 4px !important;
 }
 </style>
-<style></style>

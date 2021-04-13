@@ -46,7 +46,7 @@
 
     <q-card-section>
       <div class="row justify-between q-col-gutter-md">
-        <div class="task-desc text-justify col-12 col-md ctfcard-desc">
+        <div class="text-justify col-12 col-md ctfcard-desc">
           <q-markdown no-html :src="ctf.description"/>
           <q-space />
           <div class="text-right">
@@ -55,7 +55,7 @@
             </router-link>
           </div>
         </div>
-        <div class="ctfcard-cal col-auto col-grow">
+        <div class="col-auto col-grow">
           <div class="column items-center q-gutter-sm">
             <q-date
               mask="YYYY-MM-DDTHH:mm:ssZ"
@@ -156,13 +156,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ctfcard-cal {
-  display: flex;
-  justify-content: center;
-}
-.task-desc {
-  height: 100%;
-}
 .progress-row {
   --progress-percent: 0%;
 

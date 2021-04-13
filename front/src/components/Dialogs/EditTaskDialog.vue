@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="$emit('hide')">
-    <q-card class="import-task-dialog">
+    <q-card class="edit-task-dialog">
       <q-card-section class="row">
         <div class="text-h6">{{ title }}</div>
         <q-space />
@@ -32,7 +32,7 @@ import db from "src/gql";
 export default {
   props: { task: Object, ctfId: Number },
   data() {
-    const originalTitle = this.task?.title || 'Task'
+    const originalTitle = this.task?.title || "Task";
     const form = {
       title: this.task?.title,
       description: this.task?.description,
@@ -42,7 +42,7 @@ export default {
     };
     return {
       form,
-      originalTitle
+      originalTitle,
     };
   },
   computed: {
@@ -85,8 +85,8 @@ export default {
 };
 </script>
 
-<style>
-.import-task-dialog {
+<style scoped>
+.edit-task-dialog {
   min-width: 50%;
   max-width: 100%;
 }
