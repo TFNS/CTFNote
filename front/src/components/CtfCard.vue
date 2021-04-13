@@ -99,8 +99,7 @@ export default {
     dateRange() {
       const startDate = this.ctf.startTime;
       const endDate = this.ctf.endTime;
-
-      if (startDate == endDate) {
+      if (startDate.slice(0, 10) == endDate.slice(0, 10)) {
         return startDate;
       } else {
         return {
