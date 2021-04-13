@@ -17,7 +17,7 @@ export default {
     stop: false
   }),
   props: {
-    date: String
+    date: { type: String, required: true }
   },
   mounted() {
     this.parsedDate = new Date(this.date);

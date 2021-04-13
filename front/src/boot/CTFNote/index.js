@@ -1,28 +1,19 @@
-import gql from "graphql-tag";
 import slugify from "slugify";
 import db from "src/gql";
 
-function waitUntil(f) {
-  return new Promise(resolve => {
-    const check = () => (f() ? resolve() : setTimeout(check, 10));
-    check();
-  });
-}
-
 class CTFNote {
-  roles = {
-    USER_GUEST: 1,
-    USER_MEMBER: 2,
-    USER_MANAGER: 3,
-    USER_ADMIN: 4
-  };
-  anonymous = {
-    roleId: 0
-  };
-  _ready = false;
-  _readyWaitList = [];
-
   constructor() {
+    this.roles = {
+      USER_GUEST: 1,
+      USER_MEMBER: 2,
+      USER_MANAGER: 3,
+      USER_ADMIN: 4
+    };
+    this.anonymous = {
+      roleId: 0
+    };
+    this._ready = false;
+    this._readyWaitList = [];
     this.waitUntilReady(() => this.registerResolvers);
   }
 

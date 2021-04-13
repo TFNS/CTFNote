@@ -13,7 +13,8 @@
     "test": "echo \"No test specified\" && exit 0",
     "format": "prettier --write '**/*.js' '**/*.vue'",
     "dev": "quasar dev",
-    "build": "quasar build"
+    "build": "quasar build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@daykeep/calendar-quasar": "^1.0.0-beta.3",
@@ -47,7 +48,8 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-quasar": "^1.0.0",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^7.1.0"
+    "eslint-plugin-vue": "^7.1.0",
+    "husky": "^6.0.0"
   },
   "browserslist": [
     "last 10 Chrome versions",
