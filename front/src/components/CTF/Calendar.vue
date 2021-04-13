@@ -50,11 +50,7 @@ import db from "src/gql";
 import * as utils from "src/utils";
 import QCalendar from "@quasar/quasar-ui-qcalendar";
 
-const DEFAULT_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const CALENDAR_NAME = "CTFNote";
-
 export default {
-  name: "Calendar",
   components: {},
   apollo: {
     ctfs: {
@@ -72,18 +68,8 @@ export default {
   },
   data() {
     return {
-      DEFAULT_TIMEZONE,
-      CALENDAR_NAME,
       selectedDate: QCalendar.today()
     };
-  },
-  created() {
-    this.$root.$on(`click-event-${CALENDAR_NAME}`, ({ ctf }) => {
-      if (ctf.granted) {
-        return this.$router.push(this.$ctfnote.ctfLink(ctf));
-      }
-      this.$q.notify({ message: "You are not allowed to browse this CTF", type: "negative" });
-    });
   },
   methods: {
     showToday() {
@@ -141,18 +127,6 @@ export default {
       const ts = QCalendar.parseTimestamp(this.selectedDate);
       const date = new Date(ts.year, ts.month + 1, ts.day);
       return date.toLocaleString("default", { month: "long", year: "numeric" });
-    },
-    convertedCtfs() {
-      const ctfs = this.ctfs || [];
-      return ctfs.map(ctf => ({
-        ctf: ctf,
-        id: ctf.id,
-        summary: ctf.title,
-        description: ctf.description,
-        start: { dateTime: ctf.startTime },
-        end: { dateTime: ctf.endTime },
-        color: "primary"
-      }));
     }
   }
 };
