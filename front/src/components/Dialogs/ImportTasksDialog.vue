@@ -100,7 +100,7 @@ export default {
       }
     },
     async importTasks(tasks) {
-      const promises = tasks.map((task) => {
+      tasks.map((task) => {
         return this.$apollo.mutate({
           mutation: db.task.CREATE,
           variables: {
@@ -109,8 +109,7 @@ export default {
           }
         });
       });
-      await Promise.all(promises);
-      this.hide();
+      this.hide()
     },
   },
   data() {
