@@ -1,0 +1,9 @@
+query getUsers{
+  users{
+    nodes{
+      id
+      login
+      role
+    }
+  }
+}

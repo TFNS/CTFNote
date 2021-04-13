@@ -261,6 +261,27 @@ type Query implements Node {
     after: Cursor
   ): CtfsConnection
 
+  """Reads and enables pagination through a set of `UserResponse`."""
+  users(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+  ): UserResponsesConnection
+
   """Reads a single `Ctf` using its globally unique `ID`."""
   ctfByNodeId(
     """The globally unique `ID` to be used in selecting a single `Ctf`."""
@@ -905,6 +926,38 @@ A JSON Web Token defined by [RFC 7519](https://tools.ietf.org/html/rfc7519)
 which securely represents claims between two parties.
 """
 scalar Jwt
+
+"""A connection to a list of `UserResponse` values."""
+type UserResponsesConnection {
+  """A list of `UserResponse` objects."""
+  nodes: [UserResponse!]!
+
+  """
+  A list of edges which contains the `UserResponse` and cursor to aid in pagination.
+  """
+  edges: [UserResponsesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UserResponse` you could get from the connection."""
+  totalCount: Int!
+}
+
+type UserResponse {
+  id: Int
+  login: String
+  role: Role
+}
+
+"""A `UserResponse` edge in the connection."""
+type UserResponsesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `UserResponse` at the end of the edge."""
+  node: UserResponse!
+}
 
 """
 The root mutation type which contains root level fields which mutate data.

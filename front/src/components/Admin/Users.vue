@@ -9,19 +9,16 @@
         bordered
         hide-bottom
         :pagination="pagination"
-        :loading="$apollo.queries.profiles.loading"
+        :loading="$apollo.queries.users.loading"
         :columns="columns"
-        :data="profiles"
+        :data="users"
       >
         <template #body-cell-id="{ value }">
-          <q-td auto-width>{{ value }}</q-td>
+          <q-td auto-width class="text-right">{{ value }}</q-td>
         </template>
         <template #body-cell-username="{ value }">
           <q-td class="text-right">
             {{ value }}
-            <q-popup-edit :value="value">
-              <q-input :value="value" dense autofocus />
-            </q-popup-edit>
           </q-td>
         </template>
         <template #body-cell-role="{ row, value }">
@@ -36,8 +33,10 @@
         </template>
         <template #body-cell-btns="{ row }">
           <q-td auto-width>
-            <q-btn color="negative" size="sm" round icon="delete" @click="removeUser(row.id)" />
-            <q-btn color="positive" size="sm" round icon="lock_clock" @click="resetPassword(row)" />
+            <div class="q-gutter-sm">
+              <q-btn color="negative" title="Delete the user" size="sm" round icon="delete" @click="removeUser(row.id)" />
+              <q-btn color="positive" title="Create a password reset token" size="sm" round icon="lock_clock" @click="resetPassword(row)" />
+            </div>
           </q-td>
         </template>
       </q-table>
@@ -51,9 +50,9 @@ import ResetPasswordLinkDialog from "../Dialogs/ResetPasswordLinkDialog";
 
 export default {
   apollo: {
-    profiles: {
-      query: db.profile.ALL,
-      update: (data) => data.profiles.nodes,
+    users: {
+      query: db.admin.USERS,
+      update: (data) => data.users.nodes,
     },
   },
   data() {
@@ -62,9 +61,9 @@ export default {
     };
     const columns = [
       { name: "id", label: "ID", field: "id", sortable: true },
-      { name: "username", label: "Username", field: "username", sortable: true },
+      { name: "username", label: "Login", field: "login", sortable: true },
       { name: "role", label: "Role", field: "role", sortable: true },
-      { name: "btns" },
+      { name: "btns"},
     ];
     return { columns, pagination };
   },
@@ -79,13 +78,13 @@ export default {
           variables: { userId, role },
           update: (store, { data: { updateUserRole } }) => {
             const query = {
-              query: db.profile.ALL,
+              query: db.admin.USERS,
             };
 
             const data = store.readQuery(query);
-            const profile = data.profiles.nodes.find((u) => u.id === userId);
+            const user = data.users.nodes.find((u) => u.id === userId);
 
-            profile.role = updateUserRole.role;
+            user.role = updateUserRole.role;
 
             store.writeQuery({ ...query, data });
           },
