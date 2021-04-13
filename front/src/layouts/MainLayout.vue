@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import { colorHash } from "../utils";
 import db from "src/gql";
 import LeftMenu from "components/LeftMenu.vue";
 
@@ -203,9 +202,6 @@ export default {
       }
       this.$apollo.queries.task.setVariables({ id: parseInt(taskId) });
       this.$apollo.queries.task.skip = false;
-    },
-    colorHash(s) {
-      return { backgroundColor: colorHash(s) };
     },
   },
   data() {
