@@ -43,11 +43,6 @@ export default {
       return Object.entries(categories).sort();
     },
   },
-  methods: {
-    categoryStyle(category) {
-      return { backgroundColor: colorHash(category) };
-    },
-  },
 };
 </script>
 

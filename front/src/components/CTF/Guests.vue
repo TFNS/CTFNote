@@ -6,7 +6,7 @@
           clickable
           class="text-white q-py-md q-pl-md q-pr-none"
           size="bg"
-          :style="{ backgroundColor: colorHash(user.username) }"
+          :style="userStyle(user)"
           :label="user.username"
           @click="setInvitation(!Boolean(user.invitation), user)"
         >
@@ -40,6 +40,9 @@ export default {
     },
   },
   methods: {
+    userStyle(user){
+      return { backgroundColor: colorHash(user.username) }
+    },
     setInvitation(v, profile) {
       if (v) {
         this.inviteUser(profile);
@@ -83,9 +86,6 @@ export default {
           store.writeQuery({ ...query, data });
         },
       });
-    },
-    colorHash(s) {
-      return colorHash(s);
     },
   },
   computed: {

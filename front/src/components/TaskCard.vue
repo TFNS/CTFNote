@@ -67,7 +67,7 @@
               class="text-white"
               clickable
               @click="$emit('filter-category', task.category)"
-              :style="colorHash(task.category)"
+              :style="taskStyle(task.category)"
             >
               {{ task.category }}
             </q-chip>
@@ -156,7 +156,7 @@ export default {
     },
   },
   methods: {
-    colorHash(s) {
+    taskStyle(s) {
       return { backgroundColor: colorHash(s) };
     },
     updateOnIt(v) {
