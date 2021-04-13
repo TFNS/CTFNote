@@ -5,10 +5,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "db-migrate up && node dist/index.js",
+    "start": "db-migrate -e prod up && node dist/index.js",
     "build": "tsc",
-    "dev": "NODE_ENV=development nodemon src/index.ts",
-    "test": "mocha"
+    "dev": "NODE_ENV=development nodemon src/index.ts"
   },
   "dependencies": {
     "@graphile-contrib/pg-many-to-many": "^1.0.0",
@@ -22,14 +21,10 @@
     "graphile-migrate": "^1.0.2",
     "graphile-utils": "^4.11.2",
     "postgraphile": "^4.11.0",
-    "postgraphile-plugin-connection-filter": "^2.1.1",
-    "slugify": "^1.5.0"
+    "postgraphile-plugin-connection-filter": "^2.1.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
-    "cors": "^2.8.5",
-    "jest": "^26.6.3",
-    "mocha": "^8.3.2",
     "nodemon": "^2.0.7",
     "ts-node": "^9.1.1",
     "tslint": "^6.1.3",

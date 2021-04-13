@@ -6,5 +6,13 @@
         "database": "ctfnote",
         "username": "ctfnote",
         "password": "ctfnote" 
+    },
+    "prod" : {
+        "driver": "pg",
+        "host": "db",
+        "port": "5432",
+        "database": "ctfnote",
+        "username": "ctfnote",
+        "password": "ctfnote" 
     }
 }

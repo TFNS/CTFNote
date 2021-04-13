@@ -19,36 +19,38 @@ const postgraphileOptions: PostGraphileOptions = {
     simpleSubscriptions: true,
     setofFunctionsContainNulls: false,
     ignoreRBAC: false,
-    ownerConnectionString: process.env.DATABASE_URL || "postgres://ctfnote:ctfnote@localhost:5432/ctfnote",
+    disableQueryLog: true,
     ignoreIndexes: false,
     pgDefaultRole: "user_guest",
     jwtPgTypeIdentifier: "ctfnote.jwt",
     jwtSecret: crypto.randomBytes(32).toString("hex"),
-    extendedErrors: ["hint", "detail", "errcode"],
     appendPlugins: [
         simplifyPlugin,
         importCtfPlugin,
         createTasKPlugin,
         // require("./plugins/settings.js")
     ],
-    exportGqlSchemaPath: "schema.graphql",
     enableQueryBatching: true,
     legacyRelations: "omit" as const,
 };
 
-if (process.env.NODE_ENV == "development"){
+if (process.env.NODE_ENV == "development") {
     postgraphileOptions.watchPg = true
+    postgraphileOptions.disableQueryLog = false
     postgraphileOptions.graphiql = true
+    postgraphileOptions.exportGqlSchemaPath = "schema.graphql"
+    postgraphileOptions.retryOnInitFail = true
     postgraphileOptions.enhanceGraphiql = true
     postgraphileOptions.allowExplain = true
     postgraphileOptions.jwtSecret = "DEV"
     postgraphileOptions.showErrorStack = "json" as const
     postgraphileOptions.extendedErrors = ["hint", "detail", "errcode"]
+    postgraphileOptions.ownerConnectionString = "postgres://ctfnote:ctfnote@localhost:5432/ctfnote"
 }
 
 app.use(
     postgraphile(
-        "postgres://user_postgraphile:secret_password@localhost:5432/ctfnote",
+        process.env.DATABASE_URL || "postgres://user_postgraphile:secret_password@db:5432/ctfnote",
         "ctfnote",
         postgraphileOptions
     )
