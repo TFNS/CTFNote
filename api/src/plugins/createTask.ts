@@ -5,7 +5,6 @@ import savepointWrapper  from "./savepointWrapper"
 
 
 async function createPad() : Promise<string> {
-  return "/pad"
   const createUrl = process.env.CREATE_PAD_URL || 'http://hedgedoc:3000/new'
   try {
     const res = await axios.get(createUrl, {
