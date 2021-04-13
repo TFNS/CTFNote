@@ -7,6 +7,8 @@
   "scripts": {
     "start": "db-migrate -e prod up && node dist/index.js",
     "build": "tsc",
+    "lint": "eslint --fix 'src/**/*.ts'",
+    "format": "prettier --write 'src/*.ts'",
     "dev": "NODE_ENV=development nodemon src/index.ts"
   },
   "dependencies": {
@@ -25,7 +27,11 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
     "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
     "tslint": "^6.1.3",
     "typescript": "^4.2.4"

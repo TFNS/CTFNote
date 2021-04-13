@@ -4,3 +4,9 @@
 pushd front
 yarn lint
 yarn format
+popd
+
+pushd api
+yarn lint
+yarn format
+popd

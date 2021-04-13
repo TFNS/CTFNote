@@ -7,7 +7,7 @@ interface CTFTimeResponse {
     title: string;
     weight: number;
     url: string,
-    logo: String,
+    logo: string,
     ctftime_url: string,
     description: string,
     start: string,
@@ -46,7 +46,7 @@ export default makeExtendSchemaPlugin(build => {
             Mutation: {
                 importCtf: async (_query, { input: { ctftimeId } }, { pgClient }, resolveInfo) => {
                     const ctf = await fetchFromCtftime(ctftimeId)
-                    return await savepointWrapper(pgClient, async () => {
+                    await savepointWrapper(pgClient, async () => {
                         const { rows: [newCtf] } = await pgClient.query(
                             `INSERT INTO ctfnote.ctf(
                                 title,
