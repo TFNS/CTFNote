@@ -35,7 +35,7 @@ BEGIN
     PERFORM
       pg_notify(concat('postgraphile:taskCreated', ':', NEW.ctf_id), json_build_object('__node__', json_build_array('tasks', NEW.id))::text); RETURN NEW;
   WHEN 'UPDATE' THEN
-    IF NEW.flag <> '' AND OLD.flag = '' THEN
+    IF NEW.flag <> '' AND (OLD.flag is null or OLD.flag = '') THEN
         PERFORM
           pg_notify(concat('postgraphile:taskSolved', ':', NEW.ctf_id), json_build_object('__node__', json_build_array('tasks', NEW.id))::text);
     END IF;
@@ -89,3 +89,4 @@ CREATE TRIGGER _500_gql_update_work_on_task
   AFTER INSERT OR DELETE ON ctfnote.work_on_task
   FOR EACH ROW
   EXECUTE PROCEDURE ctfnote_private.notify_work_on_task ();
+
