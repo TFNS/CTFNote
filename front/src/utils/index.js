@@ -1,6 +1,3 @@
-
-import { date } from "quasar";
-
 export function colorHash(str) {
   let hash = 0;
   for (const c of str + "TFNS") {
@@ -9,40 +6,6 @@ export function colorHash(str) {
   const hue = Math.floor(hash % 360);
   const color = `hsl(${hue}, 100%, 30%)`;
   return color;
-}
-export function formatTime(t) {
-  return new Date(t).toLocaleString([], {
-    weekday: "short",
-    year: "numeric",
-    day: "numeric",
-    month: "long",
-    hour: "2-digit",
-    timeZoneName: "short",
-  });
-}
-
-export function getISOTime() {
-  return date.formatDate(Date.now(), "YYYY-MM-DDTHH:mm:ssZ");
-}
-
-export function sleep(t) {
-  return new Promise(resolve => setTimeout(resolve, t));
-}
-
-export function showErrors(vm, errors) {
-  if (errors) {
-    for (const error of errors) {
-      vm.$q.notify({
-        type: "negative",
-        position: "top",
-        message: error.msg
-      });
-    }
-  }
-}
-
-function pad(s, size, padding = " ") {
-  return (padding.repeat(size) + s).substr(-size);
 }
 
 export function getDate(date) {

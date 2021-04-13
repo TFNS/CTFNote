@@ -75,6 +75,7 @@
 <script>
 import EditCtfDialog from "./Dialogs/EditCtfDialog.vue";
 import db from "src/gql";
+import * as utils from "src/utils"
 export default {
   props: {
     ctf: Object,
@@ -116,15 +117,10 @@ export default {
   },
   methods: {
     shortTime(t) {
-      return new Date(t).toLocaleTimeString({}, { hour12: false, hour: "2-digit", minute: "2-digit" });
+      return utils.getTime(t)
     },
     shortDate(t) {
-      const date = new Date(t);
-      const y = date.getFullYear();
-      const m = date.getMonth() + 1;
-      const d = date.getDate();
-      const fmt = (i) => `00${i}`.slice(-2);
-      return `${y}/${fmt(m)}/${fmt(d)}`;
+      return utils.getDate(t)
     },
     updateTime() {
       this.now = Date.now();

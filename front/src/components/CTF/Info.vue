@@ -45,7 +45,7 @@
 
 <script>
 import EditCtfDialog from "../Dialogs/EditCtfDialog.vue";
-import { formatTime } from "src/utils";
+import * as utils from "src/utils";
 import db from "src/gql";
 export default {
   props: {
@@ -65,16 +65,13 @@ export default {
       return { "--bgUrl": `url(${this.ctf.logoUrl})` };
     },
     startTime() {
-      return this.formatTime(this.ctf.startTime);
+      return utils.getDateTime(this.ctf.startTime);
     },
     endTime() {
-      return this.formatTime(this.ctf.endTime);
+      return utils.getDateTime(this.ctf.endTime);
     },
   },
   methods: {
-    formatTime(t) {
-      return formatTime(t);
-    },
     editCredentials() {
       this.$q
         .dialog({
