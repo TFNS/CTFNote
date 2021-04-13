@@ -25,7 +25,7 @@
         <div class="col">
           <div class="column q-gutter-sm">
             <div class="text-h6">Description</div>
-            <vue-markdown :html="false" :source="ctf.description || ''" />
+            <q-markdown no-html :src="ctf.description"/>
           </div>
         </div>
         <q-separator vertical />
@@ -35,7 +35,7 @@
               <div class="text-h6 q-mr-md">Credentials</div>
               <q-btn round size="sm" color="primary" v-if="$ctfnote.isManager" icon="edit" @click="editCredentials" />
             </div>
-            <vue-markdown :source="credentials || ''" class="blur" />
+            <q-markdown no-html :src="credentials" class="blur"/>
           </div>
         </div>
       </div>
@@ -44,12 +44,10 @@
 </template>
 
 <script>
-import VueMarkdown from "vue-markdown";
 import EditCtfDialog from "../Dialogs/EditCtfDialog.vue";
 import { formatTime } from "src/utils";
 import db from "src/gql";
 export default {
-  components: { VueMarkdown },
   props: {
     ctf: Object,
   },

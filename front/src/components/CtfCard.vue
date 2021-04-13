@@ -47,7 +47,7 @@
     <q-card-section>
       <div class="row justify-between q-col-gutter-md">
         <div class="task-desc text-justify col-12 col-md ctfcard-desc">
-          <vue-markdown :html="false" :source="ctf.description" />
+          <q-markdown no-html :src="ctf.description"/>
           <q-space />
           <div class="text-right">
             <router-link :to="$ctfnote.ctfLink(ctf)">
@@ -73,12 +73,9 @@
 </template>
 
 <script>
-import { getTime } from "src/utils";
-import VueMarkdown from "vue-markdown";
 import EditCtfDialog from "./Dialogs/EditCtfDialog.vue";
 import db from "src/gql";
 export default {
-  components: { VueMarkdown },
   props: {
     ctf: Object,
   },

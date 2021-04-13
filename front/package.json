@@ -31,12 +31,12 @@
     "socket.io": "^2.4.0",
     "subscriptions-transport-ws": "^0.9.18",
     "vue-localstorage": "^0.6.2",
-    "vue-markdown": "^2.2.4",
     "websocket": "^1.0.33"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
     "@quasar/quasar-app-extension-apollo": "^1.0.0-beta.8",
+    "@quasar/quasar-app-extension-qmarkdown": "^1.4.1",
     "babel-eslint": "^10.0.1",
     "eslint": "^7.12.1",
     "eslint-config-standard": "^14.1.0",
