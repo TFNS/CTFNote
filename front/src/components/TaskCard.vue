@@ -62,7 +62,7 @@
                 <q-list dense>
                   <q-item tag="label" :key="player.slug" v-for="player in players">
                     <q-item-section class="text-center">
-                      <q-chip class="text-white text-center" :style="colorHash(player.slug)">
+                      <q-chip class="text-white text-center" :style="taskStyle(player.slug)">
                         <div class="text-center full-width">
                           {{ player.username }}
                         </div>
