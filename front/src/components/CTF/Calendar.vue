@@ -17,10 +17,9 @@
         no-active-date
         no-default-header-btn
         enable-outside-days
-        day-class="calendar"
         event
         :show-month-label="false"
-        animated
+        :animated="animated"
         day-height="120"
         v-model="selectedDate"
         :weekdays="[1, 2, 3, 4, 5, 6, 0]"
@@ -32,7 +31,7 @@
             <div
               :key="index"
               v-for="(event, index) in getEvents(timestamp.date)"
-              class="cursor-pointer col row justify-center  items-center  full-width event"
+              class="cursor-pointer col row justify-center items-center full-width event"
               :style="event.style"
               @click="clickCtf(event.ctf)"
             >
@@ -69,6 +68,7 @@ export default {
   },
   data() {
     return {
+      animated: false,
       selectedDate: QCalendar.today()
     };
   },
@@ -83,9 +83,11 @@ export default {
       this.$q.notify({ message: "You are not allowed to browse this CTF", type: "negative" });
     },
     calendarNext() {
+      this.animated = true;
       this.$refs.calendar.next();
     },
     calendarPrev() {
+      this.animated = true;
       this.$refs.calendar.prev();
     },
     getEvents(dt) {
