@@ -31,7 +31,7 @@
             <div
               :key="index"
               v-for="(event, index) in getEvents(timestamp.date)"
-              class="cursor-pointer col row justify-center items-center full-width event"
+              class="cursor-pointer text-white col row justify-center items-center full-width event"
               :style="event.style"
               @click="clickCtf(event.ctf)"
             >
