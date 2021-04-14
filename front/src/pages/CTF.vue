@@ -6,7 +6,7 @@
           <q-route-tab
             :to="tab.route"
             :label="tab.label"
-            @click="(e, g) => navigate(e, g, idx)"
+            @click="(e, g) => navigate(idx)"
             :key="idx"
             v-for="(tab, idx) in tabs"
           />
@@ -33,7 +33,7 @@ export default {
     ctf: { type: Object, required: true }
   },
   methods: {
-    navigate(evt, go, idx) {
+    navigate(idx) {
       if (idx < this.tabIndex) {
         this.slideIn = "animated slideInLeft";
         this.slideOut = "animated slideOutRight";
@@ -90,12 +90,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.float-away {
-  position: absolute;
-  width: 100vw;
-  top: 16px;
-}
-
 .titlelink {
   color: inherit;
   text-decoration: none;

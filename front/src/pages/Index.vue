@@ -1,24 +1,25 @@
 <template>
   <q-page>
-    <q-tabs class="bg-light" v-model="tab" indicator-color="primary" dense align="left">
+    <q-tabs class="bg-light" indicator-color="primary" dense align="left">
       <q-route-tab
-        :to="{ name: 'incoming' }"
-        name="incoming"
+        :to="tab.route"
+        :label="tab.label"
         content-class="tab-button"
-        label="Incoming"
-        icon="query_builder"
-      />
-      <q-route-tab :to="{ name: 'past' }" name="past" content-class="tab-button" label="Past" icon="archive" />
-      <q-route-tab
-        :to="{ name: 'calendar' }"
-        name="calendar"
-        content-class="tab-button"
-        label="Calendar"
-        icon="calendar_today"
+        :icon="tab.icon"
+        @click="(e, g) => navigate(idx)"
+        :key="idx"
+        v-for="(tab, idx) in tabs"
       />
     </q-tabs>
     <div class="q-pa-md">
-      <router-view />
+      <transition
+        :enter-active-class="slideIn"
+        :leave-active-class="slideOut"
+        @before-leave="floatElement"
+        :duration="200"
+      >
+        <router-view />
+      </transition>
     </div>
     <q-page-sticky position="top-right" :offset="[18, 8]">
       <q-fab
@@ -54,8 +55,27 @@ function parseCtftimeId(s) {
 
 export default {
   data() {
+    const tabs = [
+      {
+        label: "Incoming",
+        icon: "query_builder",
+        route: { name: "incoming" }
+      },
+      {
+        label: "Past",
+        icon: "archive",
+        route: { name: "past" }
+      },
+      {
+        label: "calendar",
+        icon: "calendar_today",
+        route: { name: "calendar" }
+      }
+    ];
     return {
-      tab: null
+      tabs,
+      slideIn: "animated slideInLeft",
+      slideOut: "animated slideOutRight"
     };
   },
   methods: {
@@ -63,6 +83,27 @@ export default {
       this.$q.dialog({
         component: EditCtfDialog,
         parent: this
+      });
+    },
+    navigate(idx) {
+      console.log(idx);
+      if (idx < this.tabIndex) {
+        this.slideIn = "animated slideInLeft";
+        this.slideOut = "animated slideOutRight";
+      } else {
+        this.slideIn = "animated slideInRight";
+        this.slideOut = "animated slideOutLeft";
+      }
+      this.tabIndex = idx;
+    },
+    floatElement(el) {
+      const { width, heigt } = el.getBoundingClientRect();
+      Object.assign(el.style, {
+        width: `${width}px`,
+        heigt: `${heigt}px`,
+        position: "absolute",
+        top: "77px",
+        left: "16px"
       });
     },
     importCtf() {
