@@ -30,7 +30,6 @@ export default {
   apollo: {
     guestUsers: {
       query: db.profile.GUESTS,
-      fetchPolicy: "cache-and-network",
       update: d => d.guests.nodes
     },
     invitations: {

@@ -26,7 +26,11 @@ BEGIN
   RETURNING
     * INTO new_profile;
   RETURN ctfnote_private.new_token (new_user.id);
+EXCEPTION
+  WHEN unique_violation THEN
+    RAISE EXCEPTION 'Username already taken';
 END;
+
 $$
 LANGUAGE plpgsql
 STRICT
@@ -49,7 +53,7 @@ BEGIN
   IF log_user."password" = crypt("password", log_user."password") THEN
     RETURN ctfnote_private.new_token (log_user.id);
   ELSE
-    RETURN NULL;
+    RAISE EXCEPTION 'Invalid username or password';
   END IF;
 END;
 $$

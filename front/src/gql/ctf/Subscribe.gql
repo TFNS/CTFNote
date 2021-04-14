@@ -1,0 +1,13 @@
+#import "./CtfInfo.gql"
+
+subscription SubscribeCtf($topic: String!) {
+	listen(topic: $topic) {
+		relatedNodeId
+		relatedNode {
+			nodeId
+			... on Ctf {
+				...CtfInfo
+			}
+		}
+	}
+}

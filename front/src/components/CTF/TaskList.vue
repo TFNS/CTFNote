@@ -80,7 +80,6 @@ export default {
   apollo: {
     tasks: {
       query: db.task.ALL,
-      fetchPolicy: "cache-and-network",
       variables() {
         return { ctfId: this.ctf.id };
       },

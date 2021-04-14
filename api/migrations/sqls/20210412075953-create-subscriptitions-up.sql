@@ -17,13 +17,13 @@ BEGIN
   CASE TG_OP
   WHEN 'INSERT' THEN
     PERFORM
-      pg_notify(ctfnote_private.ctf_event_topic (NEW.id, 'ctfCreated'), json_build_object('__node__', json_build_array('ctfs', NEW.id))::text); RETURN NEW;
+      pg_notify(ctfnote_private.ctf_event_topic (0, 'created'), json_build_object('__node__', json_build_array('ctfs', NEW.id))::text); RETURN NEW;
   WHEN 'UPDATE' THEN
     PERFORM
-      pg_notify(ctfnote_private.ctf_event_topic (NEW.id, 'ctfUpdated'), json_build_object('__node__', json_build_array('ctfs', NEW.id))::text); RETURN NEW;
+      pg_notify(ctfnote_private.ctf_event_topic (0, 'updated'), json_build_object('__node__', json_build_array('ctfs', NEW.id))::text); RETURN NEW;
   WHEN 'DELETE' THEN
     PERFORM
-      pg_notify(ctfnote_private.ctf_event_topic (OLD.id, 'ctfDeleted'), json_build_object('__node__', json_build_array('ctfs', OLD.id))::text); RETURN OLD;
+      pg_notify(ctfnote_private.ctf_event_topic (0, 'deleted'), json_build_object('__node__', json_build_array('ctfs', OLD.id))::text); RETURN OLD;
   END CASE;
 END
 $$ VOLATILE
@@ -104,13 +104,19 @@ CREATE TRIGGER _500_gql_update_work_on_task
 CREATE FUNCTION ctfnote_private.validate_subscription (topic text)
   RETURNS text
   AS $$
+DECLARE
+  ctf_id int;
 BEGIN
-  IF strpos(topic, 'postgraphile:ctf:') = 1 AND ctfnote_private.can_play_ctf (split_part(topic, ':', 3)::int) THEN
+  IF strpos(topic, 'postgraphile:ctf:') <> 1 THEN
+    RAISE EXCEPTION 'Subscription denied';
+  END IF;
+  SELECT
+    split_part(topic, ':', 3)::int INTO ctf_id;
+  IF (ctf_id = 0 OR ctfnote_private.can_play_ctf (ctf_id)) THEN
     RETURN 'e0d7b844-89cd-4d00-9818-47a3e9c3a429';
   ELSE
-    RAISE EXCEPTION 'Subscription denied'
-      USING errcode = 'Error';
-    END IF;
+    RAISE EXCEPTION 'Subscription denied';
+  END IF;
 END;
 $$
 LANGUAGE plpgsql

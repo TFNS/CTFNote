@@ -6,10 +6,12 @@ import CREATE from "./Create.gql";
 import DELETE from "./Delete.gql";
 import IMPORT from "./Import.gql";
 import UPDATE from "./Update.gql";
+import SUBSCRIBE from "./Subscribe.gql";
 
 export default {
   ALL,
   CREATE,
+  SUBSCRIBE,
   DELETE,
   IMPORT,
   UPDATE,

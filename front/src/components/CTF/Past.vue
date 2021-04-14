@@ -47,7 +47,6 @@ export default {
   apollo: {
     ctfs: {
       query: db.ctf.PAST,
-      fetchPolicy: "cache-and-network",
       update: data => data.pastCtf.nodes
     }
   }

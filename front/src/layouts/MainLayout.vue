@@ -134,6 +134,16 @@ export default {
   },
   mounted() {
     this.updateNavLink(this.$route);
+    this.registerSubscriber(
+      {
+        query: db.ctf.SUBSCRIBE,
+        variables: { topic: `ctf:0:created` }
+      },
+      data => {
+        const ctf = data.listen.relatedNode;
+        this.$q.notify({ message: `CTF ${ctf.title} created!`, type: "positive" });
+      }
+    );
   },
   watch: {
     $route(to) {
@@ -151,7 +161,7 @@ export default {
         },
         data => {
           const task = data.listen.relatedNode;
-          this.$q.notify({ message: `Task ${task.title} solved!` });
+          this.$q.notify({ message: `Task ${task.title} solved!`, type: "positive" });
         }
       );
       this.registerSubscriber(
@@ -161,7 +171,7 @@ export default {
         },
         data => {
           const task = data.listen.relatedNode;
-          this.$q.notify({ message: `Task ${task.title} created!` });
+          this.$q.notify({ message: `Task ${task.title} created!`, type: "positive" });
         }
       );
     },
@@ -177,10 +187,12 @@ export default {
     }
   },
   methods: {
-    registerSubscriber(query, next) {
+    registerSubscriber(query, next, keep = false) {
       const observer = this.$apollo.subscribe(query);
       const subscriber = observer.subscribe({ next: ({ data }) => next(data) });
-      this.subscribers.push(subscriber);
+      if (!keep) {
+        this.subscribers.push(subscriber);
+      }
     },
     clearSubscribers() {
       while (this.subscribers.length) {

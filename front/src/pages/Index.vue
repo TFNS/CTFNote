@@ -121,18 +121,11 @@ export default {
         })
         .onOk(async data => {
           const id = parseCtftimeId(data);
-          this.$apollo
-            .mutate({
-              mutation: db.ctf.IMPORT,
-              variables: { id },
-              refetchQueries: ["IncomingCtfs", "PastCtfs"]
-            })
-            .then(() => {
-              this.$q.notify({ message: "CTF created.", type: "positive" });
-            })
-            .catch(error => {
-              this.$q.notify({ message: error.message, type: "negative" });
-            });
+          this.$apollo.mutate({
+            mutation: db.ctf.IMPORT,
+            variables: { id },
+            refetchQueries: ["IncomingCtfs", "PastCtfs"]
+          });
         });
     }
   }

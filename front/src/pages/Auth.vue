@@ -71,16 +71,8 @@ export default {
         })
         .then(r => {
           const jwt = r.data[key].jwt;
-          if (jwt) {
-            localStorage.setItem("JWT", jwt);
-            window.location.reload();
-          } else {
-            this.$q.notify({ message: "Invalid username or password", type: "negative" });
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          this.$q.notify({ message: "Username already taken", type: "negative" });
+          localStorage.setItem("JWT", jwt);
+          window.location.reload();
         });
     }
   }

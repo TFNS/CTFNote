@@ -16,7 +16,6 @@ export default {
   apollo: {
     ctfs: {
       query: db.ctf.INCOMING,
-      fetchPolicy: "cache-and-network",
       update: data => data.incomingCtf.nodes
     }
   }
