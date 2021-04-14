@@ -72,8 +72,10 @@ export default {
         route: { name: "calendar" }
       }
     ];
+    const tabIndex = tabs.findIndex(t => t.route.name == this.$route.name);
     return {
       tabs,
+      tabIndex,
       slideIn: "animated slideInLeft",
       slideOut: "animated slideOutRight"
     };
