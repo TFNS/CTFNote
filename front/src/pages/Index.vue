@@ -86,7 +86,6 @@ export default {
       });
     },
     navigate(idx) {
-      console.log(idx);
       if (idx < this.tabIndex) {
         this.slideIn = "animated slideInLeft";
         this.slideOut = "animated slideOutRight";
