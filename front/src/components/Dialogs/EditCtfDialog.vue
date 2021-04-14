@@ -113,6 +113,7 @@ export default {
         mutation: db.ctf.CREATE,
         variables: ctf
       });
+      this.hide();
     },
     async submit() {
       if (this.ctf) {
