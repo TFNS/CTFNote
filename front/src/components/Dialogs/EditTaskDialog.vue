@@ -65,14 +65,14 @@ export default {
     hide() {
       this.$refs.dialog.hide();
     },
-    async updateTask(id, task) {
-      await this.$apollo.mutate({
+    updateTask(id, task) {
+      this.$apollo.mutate({
         mutation: db.task.UPDATE,
         variables: { id, ...task }
       });
     },
-    async createTask(task) {
-      await this.$apollo.mutate({
+    createTask(task) {
+      this.$apollo.mutate({
         mutation: db.task.CREATE,
         variables: { ...task, ctfId: this.ctfId }
       });
