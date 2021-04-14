@@ -54,12 +54,6 @@
       <div class="row justify-between q-col-gutter-md">
         <div class="text-justify col-12 col-md ctfcard-desc">
           <q-markdown no-html :src="ctf.description" />
-          <q-space />
-          <div class="text-right">
-            <router-link :to="$ctfnote.ctfLink(ctf)">
-              <q-btn :disable="!ctf.granted" color="secondary" label="Open CTF" />
-            </router-link>
-          </div>
         </div>
         <div class="col-auto col-grow">
           <div class="column items-center q-gutter-sm">
