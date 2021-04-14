@@ -89,7 +89,7 @@ export default {
         {
           document: db.task.SUBSCRIBE,
           variables() {
-            return { topic: `taskCreated:${this.ctf.id}` };
+            return { topic: `ctf:${this.ctf.id}:taskCreated` };
           },
           updateQuery(previousResult, { subscriptionData }) {
             const newTask = subscriptionData.data.listen.relatedNode;
@@ -100,7 +100,7 @@ export default {
         {
           document: db.task.SUBSCRIBE,
           variables() {
-            return { topic: `taskDeleted:${this.ctf.id}` };
+            return { topic: `ctf:${this.ctf.id}:taskDeleted` };
           },
           updateQuery(previousResult, { subscriptionData }) {
             const nodeId = subscriptionData.data.listen.relatedNodeId;
@@ -111,7 +111,7 @@ export default {
         {
           document: db.task.SUBSCRIBE,
           variables() {
-            return { topic: `taskUpdated:${this.ctf.id}` };
+            return { topic: `ctf:${this.ctf.id}:taskUpdated` };
           },
           updateQuery(previousResult) {
             return previousResult;

@@ -147,7 +147,7 @@ export default {
       this.registerSubscriber(
         {
           query: db.task.SUBSCRIBE,
-          variables: { topic: `taskSolved:${ctf.id}` }
+          variables: { topic: `ctf:${ctf.id}:taskSolved` }
         },
         data => {
           const task = data.listen.relatedNode;
@@ -157,7 +157,7 @@ export default {
       this.registerSubscriber(
         {
           query: db.task.SUBSCRIBE,
-          variables: { topic: `taskCreated:${ctf.id}` }
+          variables: { topic: `ctf:${ctf.id}:taskCreated` }
         },
         data => {
           const task = data.listen.relatedNode;

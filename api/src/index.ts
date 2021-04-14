@@ -25,6 +25,7 @@ const postgraphileOptions: PostGraphileOptions = {
   ignoreRBAC: false,
   disableQueryLog: true,
   ignoreIndexes: false,
+  subscriptionAuthorizationFunction: "ctfnote_private.validate_subscription",
   pgDefaultRole: "user_guest",
   jwtPgTypeIdentifier: "ctfnote.jwt",
   jwtSecret: crypto.randomBytes(32).toString("hex"),
