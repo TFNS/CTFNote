@@ -1,12 +1,20 @@
 <template>
   <q-card v-if="ctfs">
     <q-card-section>
-      <div class="row justify-between items-center">
+      <div class="row justify-between items-center" v-if="$q.screen.gt.md">
         <q-btn icon="arrow_back_ios" flat :label="prevBtn" @click="calendarPrev" />
         <div class="row items-center q-gutter-md">
           <q-btn round flat icon="today" title="Today" @click="showToday" />
           <div class="text-h5">{{ currentMonth }}</div>
         </div>
+        <q-btn icon-right="arrow_forward_ios" flat :label="nextBtn" @click="calendarNext" />
+      </div>
+      <div class="row justify-between items-center" v-else>
+        <div class="row col col-12 items-center  justify-center q-gutter-md">
+          <q-btn round flat icon="today" title="Today" @click="showToday" />
+          <div class="text-h5">{{ currentMonth }}</div>
+        </div>
+        <q-btn icon="arrow_back_ios" flat :label="prevBtn" @click="calendarPrev" />
         <q-btn icon-right="arrow_forward_ios" flat :label="nextBtn" @click="calendarNext" />
       </div>
     </q-card-section>
