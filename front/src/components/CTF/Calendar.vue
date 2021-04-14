@@ -28,16 +28,17 @@
         locale="en-us"
       >
         <template #day="{ timestamp }">
-          <template v-for="(event, index) in getEvents(timestamp.date)">
-            <q-badge
+          <div class="column full-height q-pa-sm">
+            <div
               :key="index"
-              class="cursor-pointer full-width event"
+              v-for="(event, index) in getEvents(timestamp.date)"
+              class="cursor-pointer col row justify-center  items-center  full-width event"
               :style="event.style"
               @click="clickCtf(event.ctf)"
             >
               <span class="ellipsis">{{ event.ctf.title }}</span>
-            </q-badge>
-          </template>
+            </div>
+          </div>
         </template>
       </q-calendar>
     </q-card-section>
@@ -136,13 +137,20 @@ export default {
   --calendar-border-current-dark: 2px solid var(--q-color-primary);
   --calendar-current-color-dark: white;
   --calendar-outside-background-dark: #151515;
+  --calendar-current-background-dark: #1d1d1d;
   --calendar-outside-background: #e5e5f0;
   --calendar-background-dark: #1d1d1d;
 }
 .q-calendar .event {
   font-size: 1em;
   letter-spacing: 0.01em;
+  border-radius: 4px;
   line-height: 1.2em;
-  margin: 2px;
+}
+.q-calendar .event:only-child {
+  font-size: 1.2em;
+}
+.q-calendar .event:not(:last-child) {
+  margin-bottom: 8px;
 }
 </style>
