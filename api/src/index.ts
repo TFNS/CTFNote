@@ -10,6 +10,7 @@ import simplifyPlugin from "@graphile-contrib/pg-simplify-inflector";
 import PgPubsub from "@graphile/pg-pubsub";
 import importCtfPlugin from "./plugins/importCtf";
 import createTasKPlugin from "./plugins/createTask";
+import settingsPlugin from "./plugins/settings";
 
 dotenv.config();
 
@@ -33,7 +34,7 @@ const postgraphileOptions: PostGraphileOptions = {
     simplifyPlugin,
     importCtfPlugin,
     createTasKPlugin,
-    // require("./plugins/settings.js")
+    settingsPlugin,
   ],
   enableQueryBatching: true,
   legacyRelations: "omit" as const,
