@@ -1,4 +1,5 @@
 import { makeExtendSchemaPlugin, gql } from "graphile-utils";
+const NODE_ID = "WyJzZXR0aW5ncyIsdHJ1ZV0=";
 
 const settings = {
   allowRegistration: true,
@@ -25,6 +26,7 @@ export default makeExtendSchemaPlugin(() => {
   return {
     typeDefs: gql`     
                 type Settings {
+                    nodeId: ID
                     ${fieldList.map((s) => `${s}!`).join("\n")}
                 }
         
@@ -58,7 +60,7 @@ export default makeExtendSchemaPlugin(() => {
             settingsFetched = true;
           }
           // deliver from cache
-          return settings;
+          return { ...settings, nodeId: NODE_ID };
         },
       },
       Mutation: {
@@ -70,7 +72,7 @@ export default makeExtendSchemaPlugin(() => {
           await pgClient.query("SELECT ctfnote_private.update_settings($1);", [
             JSON.stringify(settings),
           ]);
-          return { settings };
+          return { settings: { ...settings, nodeId: NODE_ID } };
         },
       },
     },
