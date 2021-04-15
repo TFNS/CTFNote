@@ -1,8 +1,8 @@
 fragment InvitationInfo on Invitation {
-	nodeId
-	profile {
-        nodeId
-        username
-        role
-    }
+  nodeId
+  profile {
+    nodeId
+    username
+    role
+  }
 }

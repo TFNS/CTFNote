@@ -1,9 +1,9 @@
 #import "./InvitationInfo.gql"
 
 query invitationByCtfId($ctfId: Int!) {
-	invitations(condition: { ctfId: $ctfId}) {
-		nodes {
+  invitations(condition: { ctfId: $ctfId }) {
+    nodes {
       ...InvitationInfo
-		}
-	}
+    }
+  }
 }

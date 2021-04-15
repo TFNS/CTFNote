@@ -1,6 +1,6 @@
 #import "./ProfileInfo.gql"
 query Profiles {
-  profiles{
+  profiles {
     nodes {
       ...ProfileInfo
     }

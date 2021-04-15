@@ -1,8 +1,8 @@
 #import "./WorkingOnInfo.gql"
 mutation startWorking($taskId: Int!) {
-	startWorkingOn(input: { taskId: $taskId}) {
-		workOnTask {
-			...WorkingOnInfo
-		}
-	}
+  startWorkingOn(input: { taskId: $taskId }) {
+    workOnTask {
+      ...WorkingOnInfo
+    }
+  }
 }

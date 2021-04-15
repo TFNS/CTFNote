@@ -1,10 +1,9 @@
 #import "./CtfInfo.gql"
 
 query PastCtfs {
-	pastCtf {
-		nodes {
-			...CtfInfo
-      
-		}
-	}
+  pastCtf {
+    nodes {
+      ...CtfInfo
+    }
+  }
 }

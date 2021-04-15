@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "format": "prettier --write '**/*.js' '**/*.vue'",
+    "format": "prettier --write '**/*.{js,vue,gql}'",
     "dev": "quasar dev",
     "build": "quasar build"
   },
