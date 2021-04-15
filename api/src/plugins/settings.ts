@@ -1,4 +1,6 @@
 import { makeExtendSchemaPlugin, gql } from "graphile-utils";
+import { PostGraphilePlugin } from "postgraphile";
+
 const NODE_ID = "WyJzZXR0aW5ncyIsdHJ1ZV0=";
 
 const settings = {
@@ -17,8 +19,28 @@ function convertType(obj: string | number | boolean) {
       return "Boolean";
   }
 }
+/*
+ Add settings to the request context
+*/
+export const settingsHook: PostGraphilePlugin = {
+  withPostGraphileContext: (callback) => {
+    return (context, next) => {
+      if (context.pgSettings == undefined) {
+        context.pgSettings = {};
+      }
+      for (const [key, value] of Object.entries(settings)) {
+        const name = key.replace(/[A-Z]/g, (l) => `_${l.toLowerCase()}`);
+        context.pgSettings[`settings.${name}`] = value.toString();
+      }
+      return callback(context, next);
+    };
+  },
+};
 
-export default makeExtendSchemaPlugin(() => {
+/*
+ Extend the schema with our settings
+*/
+export const settingsPlugin = makeExtendSchemaPlugin(() => {
   const fieldList = Object.entries(settings).map(
     ([name, value]) => `${name}: ${convertType(value)}`
   );

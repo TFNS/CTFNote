@@ -15,17 +15,18 @@ class CTFNote {
     this._ready = false;
     this._readyWaitList = [];
     this.waitUntilReady(() => this.registerResolvers);
+    this.settings = {};
   }
 
   async init(apollo) {
     this.apollo = apollo;
-    let me = null;
-    try {
-      const response = await this.apollo.query({ query: db.auth.ME });
-      me = response.data.me;
-    } catch (e) {
-      console.error(e);
-    }
+
+    const responses = await Promise.all([
+      this.apollo.query({ query: db.settings.GET }),
+      this.apollo.query({ query: db.auth.ME })
+    ]);
+    this.settings = responses[0].data.settings;
+    const me = responses[1].data.me;
     if (me == null) {
       this._me = null;
     } else {

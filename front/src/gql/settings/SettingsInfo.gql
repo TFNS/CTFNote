@@ -1,0 +1,4 @@
+fragment SettingsInfo on Settings {
+	nodeId
+  allowRegistration
+}

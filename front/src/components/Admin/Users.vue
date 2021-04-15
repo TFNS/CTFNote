@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-ma-md">
+  <q-card>
     <q-card-section>
       <div class="text-h6">
         Registered users

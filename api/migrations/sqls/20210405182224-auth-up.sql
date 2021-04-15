@@ -8,6 +8,9 @@ DECLARE
   new_user ctfnote_private.user;
   new_profile ctfnote.profile;
 BEGIN
+  IF NOT current_setting('settings.allow_registration')::boolean THEN
+    RAISE EXCEPTION 'Registration are disabled';
+  END IF;
   SELECT
     (count(id) = 0) INTO is_first_user
   FROM

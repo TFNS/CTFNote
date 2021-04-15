@@ -5,6 +5,7 @@ import profile from "./profile";
 import invitation from "./invitation";
 import secret from "./secret";
 import admin from "./admin";
+import settings from "./settings";
 
 export default {
   auth,
@@ -13,5 +14,6 @@ export default {
   secret,
   invitation,
   profile,
+  settings,
   ctf
 };
