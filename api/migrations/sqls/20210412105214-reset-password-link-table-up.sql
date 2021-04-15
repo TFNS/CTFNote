@@ -50,25 +50,27 @@ CREATE FUNCTION ctfnote.reset_password ("token" text, "password" text)
     RETURNS ctfnote.jwt
     AS $$
 DECLARE
-    reset_id int;
+    user_id int;
 BEGIN
     SELECT
-        user_id INTO reset_id
+        user_id INTO user_id
     FROM
         ctfnote_private.reset_password_link
     WHERE
         reset_password_link.token::text = reset_password.token
         AND expiration > now();
-    IF reset_id IS NOT NULL THEN
+    IF user_id IS NOT NULL THEN
+        DELETE FROM ctfnote_private.reset_password_link
+        WHERE reset_password_link.token::text = reset_password.token;
         UPDATE
             ctfnote_private."user"
         SET
             PASSWORD = crypt(reset_password."password", gen_salt('bf'))
         WHERE
-            "user".id = reset_id;
-        RETURN ctfnote_private.new_token (reset_id);
+            "user".id = user_id;
+        RETURN ctfnote_private.new_token (user_id);
     ELSE
-        RETURN NULL;
+        RAISE EXCEPTION 'Invalid token';
     END IF;
 END
 $$

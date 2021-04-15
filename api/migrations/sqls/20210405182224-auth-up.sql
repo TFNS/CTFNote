@@ -1,27 +1,14 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-CREATE FUNCTION ctfnote.register (LOGIN text, PASSWORD text)
+CREATE FUNCTION ctfnote_private.do_register ("login" text, "password" text, "role" ctfnote.role)
   RETURNS ctfnote.jwt
   AS $$
 DECLARE
-  is_first_user boolean;
   new_user ctfnote_private.user;
   new_profile ctfnote.profile;
 BEGIN
-  IF NOT current_setting('settings.allow_registration')::boolean THEN
-    RAISE EXCEPTION 'Registration are disabled';
-  END IF;
-  SELECT
-    (count(id) = 0) INTO is_first_user
-  FROM
-    ctfnote_private.user;
   INSERT INTO ctfnote_private.user ("login", "password", "role")
-    VALUES (login, crypt("password", gen_salt('bf')), (
-        CASE WHEN (is_first_user) THEN
-          'user_admin'::ctfnote.role
-        ELSE
-          'user_guest'::ctfnote.role
-        END))
+    VALUES (do_register.login, crypt(do_register.password, gen_salt('bf')), do_register.role)
   RETURNING
     * INTO new_user;
   INSERT INTO ctfnote.profile ("id", "username")
@@ -34,6 +21,31 @@ EXCEPTION
     RAISE EXCEPTION 'Username already taken';
 END;
 
+$$
+LANGUAGE plpgsql
+STRICT
+SECURITY DEFINER;
+
+CREATE FUNCTION ctfnote.register (LOGIN text, PASSWORD text)
+  RETURNS ctfnote.jwt
+  AS $$
+DECLARE
+  is_first_user boolean;
+BEGIN
+  IF NOT current_setting('settings.allow_registration')::boolean THEN
+    RAISE EXCEPTION 'Registration are disabled';
+  END IF;
+  SELECT
+    (count(id) = 0) INTO is_first_user
+  FROM
+    ctfnote_private.user;
+  RETURN ctfnote_private.do_register (login, crypt("password", gen_salt('bf')), (
+      CASE WHEN (is_first_user) THEN
+        'user_admin'::ctfnote.role
+      ELSE
+        'user_guest'::ctfnote.role
+      END));
+END;
 $$
 LANGUAGE plpgsql
 STRICT
