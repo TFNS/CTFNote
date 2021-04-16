@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="$emit('hide')">
-    <q-card class="import-task-dialog">
+    <q-card class="ctfnote-dialog">
       <q-card-section class="row">
         <div class="text-h6">
           Import tasks
@@ -145,9 +145,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.import-task-dialog {
-  min-width: calc(min(600px, 90vw));
-}
-</style>
