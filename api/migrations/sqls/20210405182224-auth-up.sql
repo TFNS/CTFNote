@@ -39,7 +39,7 @@ BEGIN
     (count(id) = 0) INTO is_first_user
   FROM
     ctfnote_private.user;
-  RETURN ctfnote_private.do_register (login, crypt("password", gen_salt('bf')), (
+  RETURN ctfnote_private.do_register (login, "register"."password", (
       CASE WHEN (is_first_user) THEN
         'user_admin'::ctfnote.role
       ELSE
@@ -65,7 +65,7 @@ BEGIN
     ctfnote_private.user
   WHERE
     "user"."login" = "login"."login";
-  IF log_user."password" = crypt("password", log_user."password") THEN
+  IF log_user."password" = crypt("login"."password", log_user."password") THEN
     RETURN ctfnote_private.new_token (log_user.id);
   ELSE
     RAISE EXCEPTION 'Invalid username or password';
