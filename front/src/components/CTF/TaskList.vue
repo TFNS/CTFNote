@@ -59,7 +59,7 @@
 <script>
 import ImportTasksDialog from "../Dialogs/ImportTasksDialog.vue";
 import db from "src/gql";
-import TaskCard from "../TaskCard.vue";
+import TaskCard from "./TaskCard.vue";
 import EditTaskDialog from "../Dialogs/EditTaskDialog.vue";
 
 export default {

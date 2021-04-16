@@ -65,6 +65,7 @@
 <script>
 import db from "src/gql";
 import ResetPasswordLinkDialog from "../Dialogs/ResetPasswordLinkDialog";
+import InviteUserDialog from "../Dialogs/InviteUserDialog.vue";
 
 export default {
   apollo: {
@@ -90,6 +91,10 @@ export default {
       // TODO: Actually remove the user
     },
     inviteUser() {
+      this.$q.dialog({
+        component: InviteUserDialog,
+        parent: this
+      });
       // TODO
     },
     updateRole(userId, role) {

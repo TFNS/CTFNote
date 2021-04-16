@@ -42,7 +42,7 @@
         </div>
         <div class="col-auto">
           <a :href="ctf.ctftimeUrl" target="_blank">
-            <img height="30px" src="../assets/ctftime-logo.svg" />
+            <img height="30px" src="../../assets/ctftime-logo.svg" />
           </a>
         </div>
       </div>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import EditCtfDialog from "./Dialogs/EditCtfDialog.vue";
+import EditCtfDialog from "../Dialogs/EditCtfDialog.vue";
 import db from "src/gql";
 import * as utils from "src/utils";
 export default {

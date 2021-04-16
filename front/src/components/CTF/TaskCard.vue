@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { colorHash } from "../utils";
+import { colorHash } from "../../utils";
 export default {
   props: {
     task: { type: Object, required: true },
