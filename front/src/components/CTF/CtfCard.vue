@@ -81,7 +81,7 @@ export default {
     ctf: { type: Object, required: true }
   },
   data() {
-    return { showEditCtf: false, now: Date.now() };
+    return { now: Date.now() };
   },
   created() {
     window.setInterval(this.updateTime, 1000);
