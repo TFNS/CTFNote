@@ -54,6 +54,7 @@
       <div class="row justify-between q-col-gutter-md">
         <div class="text-justify col-12 col-md ctfcard-desc">
           <q-markdown no-html :src="ctf.description" />
+          <Timer :date="ctf.startTime" />
         </div>
         <div class="col-auto col-grow">
           <div class="column items-center q-gutter-sm">
@@ -74,9 +75,11 @@
 
 <script>
 import EditCtfDialog from "../Dialogs/EditCtfDialog.vue";
+import Timer from "../Timer.vue";
 import db from "src/gql";
 import * as utils from "src/utils";
 export default {
+  components: { Timer },
   props: {
     ctf: { type: Object, required: true }
   },
