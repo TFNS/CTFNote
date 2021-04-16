@@ -1,19 +1,21 @@
+import admin from "./admin";
 import auth from "./auth";
 import ctf from "./ctf";
-import task from "./task";
-import profile from "./profile";
 import invitation from "./invitation";
+import profile from "./profile";
 import secret from "./secret";
-import admin from "./admin";
 import settings from "./settings";
+import task from "./task";
+import user from "./user";
 
 export default {
-  auth,
   admin,
-  task,
-  secret,
+  auth,
+  ctf,
   invitation,
   profile,
+  secret,
   settings,
-  ctf
+  task,
+  user
 };

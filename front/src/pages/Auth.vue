@@ -25,7 +25,7 @@
               :rules="[val => (val && val.length > 0) || 'Please type something']"
             />
 
-            <q-toggle v-model="register" color="positive" label="Register" />
+            <q-toggle :disable="authWithToken" v-model="register" color="positive" label="Register" />
           </q-card-section>
 
           <q-separator />
@@ -44,9 +44,14 @@
 <script>
 import db from "src/gql";
 export default {
+  props: {
+    token: { type: String, default: null }
+  },
   data() {
+    const hasToken = Boolean(this.token);
     return {
-      register: false,
+      authWithToken: hasToken,
+      register: hasToken,
       username: "",
       password: ""
     };
@@ -57,16 +62,25 @@ export default {
     }
   },
   methods: {
+    getMutationAndKey() {
+      if (this.authWithToken) {
+        return [db.auth.REGISTER_WITH_TOKEN, "registerWithToken"];
+      }
+      if (this.register) {
+        return [db.auth.REGISTER, "register"];
+      }
+      return [db.auth.LOGIN, "login"];
+    },
     async submit() {
-      const mutation = this.register ? db.auth.REGISTER : db.auth.LOGIN;
-      const key = this.register ? "register" : "login";
+      const [mutation, key] = this.getMutationAndKey();
       localStorage.removeItem("JWT");
       this.$apollo
         .mutate({
           mutation,
           variables: {
             login: this.username,
-            password: this.password
+            password: this.password,
+            token: this.token
           }
         })
         .then(r => {

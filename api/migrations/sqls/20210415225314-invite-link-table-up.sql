@@ -45,7 +45,7 @@ CREATE TRIGGER delete_expirated_invitation_links
   FOR EACH ROW
   EXECUTE PROCEDURE ctfnote_private.delete_expired_invitation_link ();
 
-CREATE FUNCTION ctfnote.register_with_link ("token" text, "login" text, "password" text)
+CREATE FUNCTION ctfnote.register_with_token ("token" text, "login" text, "password" text)
   RETURNS ctfnote.jwt
   AS $$
 DECLARE
@@ -56,12 +56,12 @@ BEGIN
   FROM
     ctfnote_private.invitation_link
   WHERE
-    invitation_link.token::text = register_with_link.token
+    invitation_link.token::text = register_with_token.token
     AND expiration > now();
   IF invitation_role IS NOT NULL THEN
     DELETE FROM ctfnote_private.invitation_link
-    WHERE invitation_link.token::text = register_with_link.token;
-    RETURN ctfnote_private.do_register (register_with_link.login, register_with_link.password, invitation_role);
+    WHERE invitation_link.token::text = register_with_token.token;
+    RETURN ctfnote_private.do_register (register_with_token.login, register_with_token.password, invitation_role);
   ELSE
     RAISE EXCEPTION 'Invalid token';
   END IF;
@@ -70,5 +70,5 @@ $$
 LANGUAGE plpgsql
 SECURITY DEFINER;
 
-GRANT EXECUTE ON FUNCTION ctfnote.register_with_link (text, text, text) TO user_anonymous;
+GRANT EXECUTE ON FUNCTION ctfnote.register_with_token (text, text, text) TO user_anonymous;
 
