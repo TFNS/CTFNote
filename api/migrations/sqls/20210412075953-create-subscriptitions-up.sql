@@ -73,6 +73,8 @@ CREATE TRIGGER _500_gql_update_task
 CREATE FUNCTION ctfnote_private.notify_work_on_task ()
   RETURNS TRIGGER
   AS $$
+DECLARE
+  current_ctf_id int;
 BEGIN
   CASE TG_OP
   WHEN 'INSERT' THEN
@@ -83,12 +85,16 @@ BEGIN
           WHERE
             id = NEW.task_id), 'taskUpdated'), json_build_object('__node__', json_build_array('tasks', NEW.task_id))::text); RETURN NEW;
   WHEN 'DELETE' THEN
-    PERFORM
-      pg_notify(ctfnote_private.ctf_event_topic ((
-          SELECT
-            ctf_id FROM ctfnote.task
-          WHERE
-            id = OLD.task_id), 'taskUpdated'), json_build_object('__node__', json_build_array('tasks', OLD.task_id))::text); RETURN NEW;
+    SELECT
+      ctf_id INTO current_ctf_id
+    FROM
+      ctfnote.task
+    WHERE
+      task.id = OLD.task_id; IF current_ctf_id IS NOT NULL THEN
+          PERFORM
+            pg_notify(ctfnote_private.ctf_event_topic (current_ctf_id, 'taskUpdated'), json_build_object('__node__', json_build_array('tasks', OLD.task_id))::text);
+        END IF;
+  RETURN OLD;
   END CASE;
 END
 $$ VOLATILE

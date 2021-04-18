@@ -17,7 +17,7 @@ GRANT SELECT ON ctfnote_private.user TO user_postgraphile;
 
 -- Public profile
 CREATE TABLE ctfnote.profile (
-  "id" int PRIMARY KEY REFERENCES ctfnote_private.user (id),
+  "id" int PRIMARY KEY REFERENCES ctfnote_private.user (id) ON DELETE CASCADE,
   "color" text DEFAULT '#333333',
   "username" text
 );
@@ -78,4 +78,3 @@ LANGUAGE SQL
 SECURITY DEFINER;
 
 GRANT EXECUTE ON FUNCTION ctfnote.update_user_role (int, ctfnote.role) TO user_admin;
-

@@ -4,9 +4,7 @@
       <q-form @submit="submit">
         <q-card>
           <q-card-section>
-            <div class="text-h6">
-              {{ title }}
-            </div>
+            <div class="text-h6">{{ title }} on CTFNote</div>
           </q-card-section>
           <q-card-section>
             <q-input
@@ -24,16 +22,22 @@
               lazy-rules
               :rules="[val => (val && val.length > 0) || 'Please type something']"
             />
-
-            <q-toggle :disable="authWithToken" v-model="register" color="positive" label="Register" />
+            <q-toggle
+              :title="toggleTitle"
+              :disable="!$ctfnote.settings.allowRegistration"
+              v-model="register"
+              color="positive"
+              label="Register"
+              v-if="!registerWithToken"
+            />
           </q-card-section>
 
-          <q-separator />
-          <q-card-actions class="row">
-            <q-space />
-            <q-btn type="submit" class="q-px-md" color="primary">
-              {{ this.title }}
-            </q-btn>
+          <q-card-actions class="row justify-end q-pa-md">
+            <div class="col col-auto">
+              <q-btn type="submit" class="q-px-md" color="primary">
+                {{ this.title }}
+              </q-btn>
+            </div>
           </q-card-actions>
         </q-card>
       </q-form>
@@ -50,7 +54,7 @@ export default {
   data() {
     const hasToken = Boolean(this.token);
     return {
-      authWithToken: hasToken,
+      registerWithToken: hasToken,
       register: hasToken,
       username: "",
       password: ""
@@ -59,11 +63,17 @@ export default {
   computed: {
     title() {
       return this.register ? "Register" : "Login";
+    },
+    toggleTitle() {
+      if (!this.$ctfnote.settings.allowRegistration) {
+        return "Registration are disabled.";
+      }
+      return null;
     }
   },
   methods: {
     getMutationAndKey() {
-      if (this.authWithToken) {
+      if (this.registerWithToken) {
         return [db.auth.REGISTER_WITH_TOKEN, "registerWithToken"];
       }
       if (this.register) {

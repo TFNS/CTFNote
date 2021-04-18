@@ -12,11 +12,7 @@
       <q-card-section>
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="role" class="full-width">
-            <q-select dense v-model="role" :options="Object.keys($ctfnote.roles)">
-              <template #after>
-                <q-btn round dense icon="add" color="positive" @click="createLink" />
-              </template>
-            </q-select>
+            <q-select label="Role" dense v-model="role" :options="Object.keys($ctfnote.roles)" />
           </q-tab-panel>
           <q-tab-panel name="link" class="full-width">
             <copy-link :link="link" />
@@ -24,7 +20,11 @@
         </q-tab-panels>
       </q-card-section>
       <q-card-actions class="row justify-end q-pt-none q-pb-md q-pr-md">
-        <q-btn color="warning" label="Cancel" v-close-popup />
+        <template v-if="tab == 'role'">
+          <q-btn color="warning" label="Cancel" v-close-popup />
+          <q-btn color="positive" label="Create" @click="createLink" />
+        </template>
+        <q-btn color="positive" label="Close" v-close-popup v-else />
       </q-card-actions>
     </q-card>
   </q-dialog>

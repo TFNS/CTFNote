@@ -38,14 +38,7 @@
         <template #body-cell-btns="{ row }">
           <q-td auto-width>
             <div class="q-gutter-sm">
-              <q-btn
-                color="negative"
-                title="Delete the user"
-                size="sm"
-                round
-                icon="delete"
-                @click="removeUser(row.id)"
-              />
+              <q-btn color="negative" title="Delete the user" size="sm" round icon="delete" @click="removeUser(row)" />
               <q-btn
                 color="positive"
                 title="Create a password reset token"
@@ -87,15 +80,32 @@ export default {
     return { columns, pagination };
   },
   methods: {
-    removeUser() {
-      // TODO: Actually remove the user
+    removeUser(user) {
+      this.$q
+        .dialog({
+          title: `Delete ${user.login} ?`,
+          message: `This operation is irreversible.`,
+          cancel: true,
+          ok: {
+            label: "Delete",
+            color: "negative"
+          }
+        })
+        .onOk(async () => {
+          this.$apollo.mutate({
+            mutation: db.admin.DELETE_USER,
+            variables: {
+              userId: user.id
+            },
+            refetchQueries: [{ query: db.admin.USERS }]
+          });
+        });
     },
     inviteUser() {
       this.$q.dialog({
         component: InviteUserDialog,
         parent: this
       });
-      // TODO
     },
     updateRole(userId, role) {
       const performUpdate = () => {
