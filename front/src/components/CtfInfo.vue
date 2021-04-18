@@ -68,7 +68,17 @@
         <div class="ctfcard-cal col-auto col-grow">
           <div class="column items-center q-gutter-sm">
             <q-date today-btn :subtitle="getTimeStart(ctf)" :value="getDateRange(ctf)" range />
-            <Timer :date="ctf.start" />
+            <div class="text-center">
+              <div v-if="(new Date(ctf.start)).getTime() > new Date().getTime()">
+                Starts in
+                <Timer :date="ctf.start" />
+              </div>
+              
+              <div v-else>
+                Time left
+                <Timer :date="ctf.finish" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
