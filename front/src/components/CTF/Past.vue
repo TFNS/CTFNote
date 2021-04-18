@@ -31,7 +31,7 @@ import { getDateTime } from "src/utils";
 
 const MAX_PER_PAGE = 100;
 
-const DEFAULT_COUNT = 10;
+const DEFAULT_COUNT = 20;
 
 export default {
   mounted() {
@@ -46,13 +46,13 @@ export default {
           align: "right",
           sortable: true,
           label: "Date",
-          field: (task) => task.startTime,
-          format: (t) => getDateTime(t),
-        },
+          field: task => task.startTime,
+          format: t => getDateTime(t)
+        }
       ],
       pagination: { rowsNumber: 0, rowsPerPage: DEFAULT_COUNT },
       ctfs: [],
-      loading: false,
+      loading: false
     };
   },
   methods: {
@@ -75,11 +75,11 @@ export default {
       this.loading = true;
       const {
         data: {
-          pastCtf: { totalCount, nodes: ctfs },
-        },
+          pastCtf: { totalCount, nodes: ctfs }
+        }
       } = await this.$apollo.mutate({
         mutation: db.ctf.PAST,
-        variables: { first, offset },
+        variables: { first, offset }
       });
       this.loading = false;
 
@@ -88,7 +88,7 @@ export default {
       this.pagination.rowsNumber = totalCount;
       this.pagination.rowsPerPage = first;
       this.pagination.page = page + 1;
-    },
-  },
+    }
+  }
 };
 </script>
