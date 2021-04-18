@@ -8,6 +8,8 @@ CREATE TABLE ctfnote.task (
   "ctf_id" integer  NOT NULL REFERENCES ctfnote.ctf (id) ON DELETE CASCADE
 );
 
+comment on table ctfnote.task is E'@omit create';
+
 CREATE INDEX ON ctfnote.task (ctf_id);
 
 GRANT SELECT ON TABLE ctfnote.task TO user_guest;
