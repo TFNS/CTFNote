@@ -65,4 +65,6 @@ app.use(
   )
 );
 
-app.listen(3000);
+app.listen(3000, () => {
+	console.log("Listening on :3000");
+});

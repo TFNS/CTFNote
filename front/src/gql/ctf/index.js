@@ -17,5 +17,5 @@ export default {
   UPDATE,
   GET,
   INCOMING,
-  PAST
+  PAST,
 };
