@@ -49,7 +49,7 @@
         <div class="text-justify col-12 col-md ctfcard-desc">
           <q-markdown no-html :src="ctf.description" />
           <div v-if="!running">
-            <Timer v-if="!running" :date="ctf.startTime" />
+            <Timer :date="ctf.startTime" />
           </div>
           <div v-else><b>Time Left: </b><Timer :date="ctf.endTime" /></div>
         </div>
