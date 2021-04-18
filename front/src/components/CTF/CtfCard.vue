@@ -36,6 +36,7 @@
         </div>
         <div class="col-auto">
           <a :href="ctf.ctftimeUrl" target="_blank">
+            <q-tooltip>Browse CTFTime.org</q-tooltip>
             <img height="30px" src="../../assets/ctftime-logo.svg" />
           </a>
         </div>

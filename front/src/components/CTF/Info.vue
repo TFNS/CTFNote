@@ -13,8 +13,8 @@
         <q-chip icon="fitness_center" color="grey-4" text-color="grey-10" :label="ctf.weight || '-'" />
 
         <a :href="ctf.ctftimeUrl" target="_blank">
-          <img height="30px" src="../../assets/ctftime-logo.svg" />
           <q-tooltip>Browse CTFTime.org</q-tooltip>
+          <img height="30px" src="../../assets/ctftime-logo.svg" />
         </a>
       </div>
     </div>
