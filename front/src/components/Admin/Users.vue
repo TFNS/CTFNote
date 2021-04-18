@@ -2,9 +2,7 @@
   <q-card>
     <q-card-section>
       <div class="row q-gutter-md">
-        <div class="text-h6">
-          Registered users
-        </div>
+        <div class="text-h6">Registered users</div>
         <div>
           <q-btn icon="person_add" round color="positive" size="sm" @click="inviteUser" />
         </div>
@@ -14,11 +12,11 @@
       <q-table
         flat
         bordered
-        hide-bottom
-        :pagination="pagination"
-        :loading="$apollo.queries.users.loading"
+        :pagination.sync="pagination"
+        :loading="loading"
         :columns="columns"
         :data="users"
+        @request="onRequest"
       >
         <template #body-cell-id="{ value }">
           <q-td auto-width class="text-right">
@@ -32,7 +30,12 @@
         </template>
         <template #body-cell-role="{ row, value }">
           <q-td>
-            <q-select dense :value="value" :options="Object.keys($ctfnote.roles)" @input="v => updateRole(row.id, v)" />
+            <q-select
+              dense
+              :value="value"
+              :options="Object.keys($ctfnote.roles)"
+              @input="(v) => updateRole(row.id, v)"
+            />
           </q-td>
         </template>
         <template #body-cell-btns="{ row }">
@@ -60,24 +63,25 @@ import db from "src/gql";
 import ResetPasswordLinkDialog from "../Dialogs/ResetPasswordLinkDialog";
 import InviteUserDialog from "../Dialogs/InviteUserDialog.vue";
 
+const MAX_PER_PAGE = 100;
+const DEFAULT_COUNT = 10;
+
 export default {
-  apollo: {
-    users: {
-      query: db.admin.USERS,
-      update: data => data.users.nodes
-    }
+  mounted() {
+    this.onRequest({ pagination: this.pagination });
   },
   data() {
     const pagination = {
-      rowsPerPage: 0
+      rowsNumber: 0,
+      rowsPerPage: DEFAULT_COUNT,
     };
     const columns = [
       { name: "id", label: "ID", field: "id", sortable: true },
       { name: "username", label: "Login", field: "login", sortable: true },
       { name: "role", label: "Role", field: "role", sortable: true },
-      { name: "btns" }
+      { name: "btns" },
     ];
-    return { columns, pagination };
+    return { columns, pagination, loading: false, users: [] };
   },
   methods: {
     removeUser(user) {
@@ -88,23 +92,23 @@ export default {
           cancel: true,
           ok: {
             label: "Delete",
-            color: "negative"
-          }
+            color: "negative",
+          },
         })
         .onOk(async () => {
           this.$apollo.mutate({
             mutation: db.admin.DELETE_USER,
             variables: {
-              userId: user.id
+              userId: user.id,
             },
-            refetchQueries: [{ query: db.admin.USERS }]
+            refetchQueries: [{ query: db.admin.USERS }],
           });
         });
     },
     inviteUser() {
       this.$q.dialog({
         component: InviteUserDialog,
-        parent: this
+        parent: this,
       });
     },
     updateRole(userId, role) {
@@ -114,16 +118,16 @@ export default {
           variables: { userId, role },
           update: (store, { data: { updateUserRole } }) => {
             const query = {
-              query: db.admin.USERS
+              query: db.admin.USERS,
             };
 
             const data = store.readQuery(query);
-            const user = data.users.nodes.find(u => u.id === userId);
+            const user = data.users.nodes.find((u) => u.id === userId);
 
             user.role = updateUserRole.role;
 
             store.writeQuery({ ...query, data });
-          }
+          },
         });
       };
 
@@ -134,7 +138,7 @@ export default {
             color: "negative",
             message: "You are about to modify your own role, are you sure ?",
             ok: "Change Role",
-            cancel: true
+            cancel: true,
           })
           .onOk(performUpdate);
         return;
@@ -146,9 +150,45 @@ export default {
       this.$q.dialog({
         component: ResetPasswordLinkDialog,
         parent: this,
-        user
+        user,
       });
-    }
-  }
+    },
+
+    async onRequest(props) {
+      const { rowsPerPage } = props.pagination;
+
+      let page = props.pagination.page;
+
+      if (page === void 0) {
+        page = 1;
+      }
+      page--;
+
+      let first = rowsPerPage > MAX_PER_PAGE ? MAX_PER_PAGE : rowsPerPage;
+
+      if (first == 0) first = MAX_PER_PAGE;
+
+      console.log(rowsPerPage);
+
+      const offset = page * first;
+
+      this.loading = true;
+      const {
+        data: {
+          users: { nodes: users, totalCount },
+        },
+      } = await this.$apollo.mutate({
+        mutation: db.admin.USERS,
+        variables: { first, offset },
+      });
+      this.loading = false;
+
+      this.users = users;
+
+      this.pagination.rowsNumber = totalCount;
+      this.pagination.rowsPerPage = first;
+      this.pagination.page = page + 1;
+    },
+  },
 };
 </script>

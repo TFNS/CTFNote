@@ -31,6 +31,8 @@ import { getDateTime } from "src/utils";
 
 const MAX_PER_PAGE = 100;
 
+const DEFAULT_COUNT = 10;
+
 export default {
   mounted() {
     this.onRequest({ pagination: this.pagination });
@@ -48,7 +50,7 @@ export default {
           format: (t) => getDateTime(t),
         },
       ],
-      pagination: { rowsNumber: 500, rowsPerPage: 15 },
+      pagination: { rowsNumber: 0, rowsPerPage: DEFAULT_COUNT },
       ctfs: [],
       loading: false,
     };
