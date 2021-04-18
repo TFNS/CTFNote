@@ -1,0 +1,6 @@
+#import "./SettingsInfo.gql"
+query getSettings {
+  settings {
+    ...SettingsInfo
+  }
+}

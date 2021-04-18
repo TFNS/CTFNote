@@ -1,15 +1,14 @@
-
 fragment CtfInfo on Ctf {
-	nodeId
-	id
-	granted
-	ctfUrl
-	slug @client
-	ctftimeUrl
-	description
-	endTime
-	logoUrl
-	startTime
-	weight
-	title
+  nodeId
+  id
+  granted
+  ctfUrl
+  slug @client
+  ctftimeUrl
+  description
+  endTime
+  logoUrl
+  startTime
+  weight
+  title
 }

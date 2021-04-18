@@ -7,7 +7,7 @@ CREATE FUNCTION ctfnote.incoming_ctf ()
     ctfnote.ctf
   WHERE
     end_time >= NOW()
-    ORDER BY start_time DESC;
+    ORDER BY start_time ASC;
 
 $$
 LANGUAGE SQL

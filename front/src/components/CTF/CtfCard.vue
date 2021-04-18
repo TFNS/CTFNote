@@ -42,7 +42,7 @@
         </div>
         <div class="col-auto">
           <a :href="ctf.ctftimeUrl" target="_blank">
-            <img height="30px" src="../assets/ctftime-logo.svg" />
+            <img height="30px" src="../../assets/ctftime-logo.svg" />
           </a>
         </div>
       </div>
@@ -54,6 +54,7 @@
       <div class="row justify-between q-col-gutter-md">
         <div class="text-justify col-12 col-md ctfcard-desc">
           <q-markdown no-html :src="ctf.description" />
+          <Timer :date="ctf.startTime" />
         </div>
         <div class="col-auto col-grow">
           <div class="column items-center q-gutter-sm">
@@ -73,15 +74,17 @@
 </template>
 
 <script>
-import EditCtfDialog from "./Dialogs/EditCtfDialog.vue";
+import EditCtfDialog from "../Dialogs/EditCtfDialog.vue";
+import Timer from "../Timer.vue";
 import db from "src/gql";
 import * as utils from "src/utils";
 export default {
+  components: { Timer },
   props: {
     ctf: { type: Object, required: true }
   },
   data() {
-    return { showEditCtf: false, now: Date.now() };
+    return { now: Date.now() };
   },
   created() {
     window.setInterval(this.updateTime, 1000);

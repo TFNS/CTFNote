@@ -1,5 +1,5 @@
 mutation deleteInvitation($nodeId: ID!) {
-	deleteInvitationByNodeId(input: { nodeId: $nodeId}) {
-		deletedInvitationNodeId	
-	}
+  deleteInvitationByNodeId(input: { nodeId: $nodeId }) {
+    deletedInvitationNodeId
+  }
 }

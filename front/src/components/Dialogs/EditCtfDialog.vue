@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="$emit('hide')">
-    <q-card class="edit-ctf">
+    <q-card class="ctfnote-dialog">
       <q-form @submit="submit">
         <q-card-section class="row items-center">
           <div class="text-h6">
@@ -126,10 +126,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.edit-ctf {
-  min-width: 50%;
-  max-width: 100%;
-}
-</style>

@@ -1,8 +1,13 @@
 <template>
-  <q-card class="q-ma-md">
+  <q-card>
     <q-card-section>
-      <div class="text-h6">
-        Registered users
+      <div class="row q-gutter-md">
+        <div class="text-h6">
+          Registered users
+        </div>
+        <div>
+          <q-btn icon="person_add" round color="positive" size="sm" @click="inviteUser" />
+        </div>
       </div>
     </q-card-section>
     <q-card-section>
@@ -60,6 +65,7 @@
 <script>
 import db from "src/gql";
 import ResetPasswordLinkDialog from "../Dialogs/ResetPasswordLinkDialog";
+import InviteUserDialog from "../Dialogs/InviteUserDialog.vue";
 
 export default {
   apollo: {
@@ -83,6 +89,13 @@ export default {
   methods: {
     removeUser() {
       // TODO: Actually remove the user
+    },
+    inviteUser() {
+      this.$q.dialog({
+        component: InviteUserDialog,
+        parent: this
+      });
+      // TODO
     },
     updateRole(userId, role) {
       const performUpdate = () => {

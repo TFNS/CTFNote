@@ -10,11 +10,13 @@ import simplifyPlugin from "@graphile-contrib/pg-simplify-inflector";
 import PgPubsub from "@graphile/pg-pubsub";
 import importCtfPlugin from "./plugins/importCtf";
 import createTasKPlugin from "./plugins/createTask";
+import { settingsPlugin, settingsHook } from "./plugins/settings";
 
 dotenv.config();
 
 const app = express();
-const pluginHook = makePluginHook([PgPubsub]);
+
+const pluginHook = makePluginHook([PgPubsub, settingsHook]);
 
 const postgraphileOptions: PostGraphileOptions = {
   pluginHook,
@@ -26,14 +28,14 @@ const postgraphileOptions: PostGraphileOptions = {
   disableQueryLog: true,
   ignoreIndexes: false,
   subscriptionAuthorizationFunction: "ctfnote_private.validate_subscription",
-  pgDefaultRole: "user_guest",
   jwtPgTypeIdentifier: "ctfnote.jwt",
+  pgDefaultRole: "user_guest",
   jwtSecret: crypto.randomBytes(32).toString("hex"),
   appendPlugins: [
     simplifyPlugin,
     importCtfPlugin,
     createTasKPlugin,
-    // require("./plugins/settings.js")
+    settingsPlugin,
   ],
   enableQueryBatching: true,
   legacyRelations: "omit" as const,

@@ -58,6 +58,14 @@ function routes() {
         {
           path: "auth",
           name: "auth",
+          meta: { allowAnonymous: true },
+          component: () => import("pages/Auth.vue")
+        },
+        {
+          path: "auth/:token",
+          name: "registerWithLink",
+          meta: { allowAnonymous: true },
+          props: route => ({ token: route.params.token }),
           component: () => import("pages/Auth.vue")
         },
         {

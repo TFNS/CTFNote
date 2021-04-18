@@ -1,0 +1,5 @@
+mutation Register($login: String!, $password: String!, $token: String!) {
+  registerWithToken(input: { login: $login, password: $password, token: $token }) {
+    jwt
+  }
+}

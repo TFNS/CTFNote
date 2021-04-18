@@ -29,7 +29,7 @@ export default function({ Vue }) {
   });
   Router.beforeEach(async (to, from, next) => {
     await Vue.ctfnote.waitUntilReady();
-    if (to.name == "auth" || to.name == "resetPassword") {
+    if (to.meta.allowAnonymous) {
       if (Vue.ctfnote.isGuest) {
         return next({ name: "ctfs" });
       }

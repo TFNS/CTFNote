@@ -1,9 +1,9 @@
 #import "./CtfInfo.gql"
 
 query IncomingCtfs {
-	incomingCtf {
-		nodes {
-			...CtfInfo
-		}
-	}
+  incomingCtf {
+    nodes {
+      ...CtfInfo
+    }
+  }
 }

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import CtfList from "src/components/CtfCardList.vue";
+import CtfList from "src/components/CTF/CtfCardList.vue";
 import db from "src/gql";
 
 export default {

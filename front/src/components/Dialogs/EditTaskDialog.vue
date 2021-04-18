@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialog" @hide="$emit('hide')">
-    <q-card class="edit-task-dialog">
+    <q-card class="ctfnote-dialog">
       <q-card-section class="row">
         <div class="text-h6">
           {{ title }}
@@ -89,10 +89,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.edit-task-dialog {
-  min-width: 50%;
-  max-width: 100%;
-}
-</style>

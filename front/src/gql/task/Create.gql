@@ -1,15 +1,9 @@
 #import "./TaskInfo.gql"
 
 mutation createTaskForCtfId($ctfId: Int!, $title: String!, $category: String!, $description: String, $flag: String) {
-	createTask(input: {
-		ctfId: $ctfId, 
-		title: $title, 
-		category: $category, 
-		description: $description, 
-		flag: $flag, 
-	}) {
-		task {
-			...TaskInfo
-		}
-	}
+  createTask(input: { ctfId: $ctfId, title: $title, category: $category, description: $description, flag: $flag }) {
+    task {
+      ...TaskInfo
+    }
+  }
 }
