@@ -3,7 +3,7 @@
     <q-card class="ctfnote-dialog">
       <q-card-section>
         <div class="row q-gutter-md">
-          <div class="text-h6">New Reset Password Link For '{{ user.login }}'</div>
+          <div class="text-h6">Reset password link for {{ user.login }}</div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </div>
