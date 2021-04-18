@@ -106,7 +106,6 @@ export default {
         component: InviteUserDialog,
         parent: this
       });
-      // TODO
     },
     updateRole(userId, role) {
       const performUpdate = () => {
