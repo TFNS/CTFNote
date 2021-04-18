@@ -4,7 +4,9 @@
       <div class="row q-gutter-md">
         <div class="text-h6">Registered users</div>
         <div>
-          <q-btn icon="person_add" round color="positive" size="sm" @click="inviteUser" />
+          <q-btn icon="person_add" round color="positive" size="sm" @click="inviteUser">
+            <q-tooltip>Create an invitation link</q-tooltip>
+          </q-btn>
         </div>
       </div>
     </q-card-section>
@@ -41,7 +43,9 @@
         <template #body-cell-btns="{ row }">
           <q-td auto-width>
             <div class="q-gutter-sm">
-              <q-btn color="negative" title="Delete the user" size="sm" round icon="delete" @click="removeUser(row)" />
+              <q-btn color="negative" title="Delete the user" size="sm" round icon="delete" @click="removeUser(row)">
+                <q-tooltip>Remove the user</q-tooltip>
+              </q-btn>
               <q-btn
                 color="positive"
                 title="Create a password reset token"
@@ -49,7 +53,9 @@
                 round
                 icon="lock_clock"
                 @click="resetPassword(row)"
-              />
+              >
+                <q-tooltip>Generate a reset password link</q-tooltip>
+              </q-btn>
             </div>
           </q-td>
         </template>

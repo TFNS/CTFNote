@@ -6,12 +6,15 @@
         <div class="text-h4">
           {{ ctf.title }}
         </div>
-        <q-btn round icon="edit" color="primary" @click="editCtf" v-if="$ctfnote.isManager" />
+        <q-btn round icon="edit" color="primary" @click="editCtf" v-if="$ctfnote.isManager">
+          <q-tooltip>Edit the CTF</q-tooltip>
+        </q-btn>
         <q-space />
         <q-chip icon="fitness_center" color="grey-4" text-color="grey-10" :label="ctf.weight || '-'" />
 
         <a :href="ctf.ctftimeUrl" target="_blank">
           <img height="30px" src="../../assets/ctftime-logo.svg" />
+          <q-tooltip>Browse CTFTime.org</q-tooltip>
         </a>
       </div>
     </div>
@@ -26,9 +29,7 @@
       <div class="row q-gutter-md">
         <div class="col">
           <div class="column q-gutter-sm">
-            <div class="text-h6">
-              Description
-            </div>
+            <div class="text-h6">Description</div>
             <q-markdown no-html :src="ctf.description" />
           </div>
         </div>
@@ -36,10 +37,10 @@
         <div class="col">
           <div class="column q-gutter-sm">
             <div class="row">
-              <div class="text-h6 q-mr-md">
-                Credentials
-              </div>
-              <q-btn round size="sm" color="primary" v-if="$ctfnote.isManager" icon="edit" @click="editCredentials" />
+              <div class="text-h6 q-mr-md">Credentials</div>
+              <q-btn round size="sm" color="primary" v-if="$ctfnote.isManager" icon="edit" @click="editCredentials">
+                <q-tooltip>Edit the credentials</q-tooltip>
+              </q-btn>
             </div>
             <q-markdown no-html :src="credentials" class="blur" />
           </div>
@@ -55,7 +56,7 @@ import * as utils from "src/utils";
 import db from "src/gql";
 export default {
   props: {
-    ctf: { type: Object, required: true }
+    ctf: { type: Object, required: true },
   },
   apollo: {
     credentials: {
@@ -63,8 +64,8 @@ export default {
       variables() {
         return { ctfId: this.ctf.id };
       },
-      update: data => data.ctfSecret.credentials
-    }
+      update: (data) => data.ctfSecret.credentials,
+    },
   },
   computed: {
     style() {
@@ -75,7 +76,7 @@ export default {
     },
     endTime() {
       return utils.getDateTime(this.ctf.endTime);
-    }
+    },
   },
   methods: {
     editCredentials() {
@@ -85,23 +86,23 @@ export default {
           color: "primary",
           prompt: {
             model: "",
-            type: "textarea"
+            type: "textarea",
           },
-          cancel: true
+          cancel: true,
         })
-        .onOk(async credz => {
+        .onOk(async (credz) => {
           this.$apollo.mutate({
             mutation: db.secret.UPDATE,
             variables: { ctfId: this.ctf.id, credentials: credz },
-            update: store => {
+            update: (store) => {
               const query = {
                 query: db.secret.GET,
-                variables: { ctfId: this.ctf.id }
+                variables: { ctfId: this.ctf.id },
               };
               const data = store.readQuery(query);
               data.ctfSecret.credentials = credz;
               store.writeQuery({ ...query, data });
-            }
+            },
           });
         });
     },
@@ -109,10 +110,10 @@ export default {
       this.$q.dialog({
         component: EditCtfDialog,
         parent: this,
-        ctf: this.ctf
+        ctf: this.ctf,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
