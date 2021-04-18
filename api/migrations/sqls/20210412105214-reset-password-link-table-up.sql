@@ -1,6 +1,6 @@
 CREATE TABLE ctfnote_private.reset_password_link (
     "id" serial PRIMARY KEY,
-    "user_id" int REFERENCES ctfnote_private.user (id),
+    "user_id" int REFERENCES ctfnote_private.user (id) ON DELETE CASCADE,
     "token" uuid,
     "expiration" timestamptz DEFAULT (now() + interval '1 hour')
 );

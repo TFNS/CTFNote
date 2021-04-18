@@ -5,7 +5,7 @@ CREATE TABLE ctfnote.task (
   "category" text,
   "flag" text,
   "pad_url" text NOT NULL,
-  "ctf_id" integer REFERENCES ctfnote.ctf (id) NOT NULL
+  "ctf_id" integer  NOT NULL REFERENCES ctfnote.ctf (id) ON DELETE CASCADE
 );
 
 CREATE INDEX ON ctfnote.task (ctf_id);
@@ -39,28 +39,6 @@ $$
 LANGUAGE SQL STABLE; 
 
 GRANT EXECUTE ON FUNCTION ctfnote.task_solved (ctfnote.task) TO user_guest;
-
-
-CREATE FUNCTION ctfnote_private.delete_task_by_ctf ()
-    RETURNS TRIGGER
-    AS $$
-BEGIN
-    DELETE FROM ctfnote.task
-    WHERE task.ctf_id = OLD.id;
-    RETURN OLD;
-END
-$$
-LANGUAGE plpgsql
-SECURITY DEFINER;
-
-GRANT EXECUTE ON FUNCTION ctfnote_private.delete_task_by_ctf () TO user_guest;
-
-CREATE TRIGGER delete_task_on_ctf_delete
-    BEFORE DELETE ON ctfnote.ctf
-    FOR EACH ROW
-    EXECUTE PROCEDURE ctfnote_private.delete_task_by_ctf ();
-
-
 
 CREATE FUNCTION ctfnote_private.can_play_task (task_id int)
   RETURNS boolean

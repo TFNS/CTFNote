@@ -1,6 +1,6 @@
 CREATE TABLE ctfnote.work_on_task (
-    task_id int NOT NULL REFERENCES ctfnote.task (id),
-    profile_id int NOT NULL REFERENCES ctfnote.profile (id),
+    task_id int NOT NULL REFERENCES ctfnote.task (id) ON DELETE CASCADE,
+    profile_id int NOT NULL REFERENCES ctfnote.profile (id) ON DELETE CASCADE,
     PRIMARY KEY (task_id, profile_id)
 );
 
@@ -38,42 +38,4 @@ LANGUAGE SQL
 SECURITY DEFINER;
 
 GRANT EXECUTE ON FUNCTION ctfnote.stop_working_on (int) TO user_guest;
-
-CREATE FUNCTION ctfnote_private.delete_workonit_by_task ()
-    RETURNS TRIGGER
-    AS $$
-BEGIN
-    DELETE FROM ctfnote.work_on_task
-    WHERE work_on_task.task_id = OLD.id;
-    RETURN OLD;
-END
-$$
-LANGUAGE plpgsql
-SECURITY DEFINER;
-
-GRANT EXECUTE ON FUNCTION ctfnote_private.delete_workonit_by_task () TO user_guest;
-
-CREATE FUNCTION ctfnote_private.delete_workonit_by_profile ()
-    RETURNS TRIGGER
-    AS $$
-BEGIN
-    DELETE FROM ctfnote.work_on_task
-    WHERE work_on_task.profile_id = OLD.id;
-    RETURN OLD;
-END
-$$
-LANGUAGE plpgsql
-SECURITY DEFINER;
-
-GRANT EXECUTE ON FUNCTION ctfnote_private.delete_workonit_by_profile () TO user_guest;
-
-CREATE TRIGGER delete_workonit_on_task_delete
-    BEFORE DELETE ON ctfnote.task
-    FOR EACH ROW
-    EXECUTE PROCEDURE ctfnote_private.delete_workonit_by_task ();
-
-CREATE TRIGGER delete_workonit_on_profile_delete
-    BEFORE DELETE ON ctfnote.profile
-    FOR EACH ROW
-    EXECUTE PROCEDURE ctfnote_private.delete_workonit_by_profile ();
 
