@@ -5,9 +5,7 @@
         <q-btn flat dense round icon="menu" aria-label="Menu" v-if="ctf" @click="leftDrawerOpen = !leftDrawerOpen" />
         <q-toolbar-title>
           <div class="row q-gutter-md items-center">
-            <router-link class="text-white" exact :to="{ name: 'incoming' }">
-              CTFNote
-            </router-link>
+            <router-link class="text-white" exact :to="{ name: 'incoming' }"> CTFNote </router-link>
             <template v-if="ctf && ctf.id">
               <q-separator vertical />
               <q-btn type="a" target="_blank" :href="ctf.ctfUrl" flat icon="language" size="sm" round />
@@ -25,9 +23,14 @@
         </q-toolbar-title>
         <q-btn-dropdown stretch flat :label="$ctfnote.me.username" v-if="$ctfnote.me">
           <q-list class="text-center">
-            <q-item v-if="$ctfnote.isAdmin" clickable v-close-popup :to="{ name: 'admin' }">
+            <q-item v-if="$ctfnote.isAdmin" clickable :to="{ name: 'admin' }">
               <q-item-section>
                 <q-item-label>Admin</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable :to="{ name: 'settings' }">
+              <q-item-section>
+                <q-item-label>Settings</q-item-label>
               </q-item-section>
             </q-item>
             <q-item>
@@ -54,7 +57,7 @@
             </q-item>
             <q-separator inset spaced />
 
-            <q-item clickable v-close-popup :to="{ name: 'logout' }">
+            <q-item clickable :to="{ name: 'logout' }">
               <q-item-section>
                 <q-item-label>Logout</q-item-label>
               </q-item-section>

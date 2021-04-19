@@ -94,6 +94,11 @@ function routes() {
           children: ctfRoutes
         },
         {
+          path: "settings",
+          name: "settings",
+          component: () => import("src/pages/Settings.vue")
+        },
+        {
           path: "admin",
           name: "admin",
           component: () => import("pages/Admin.vue"),
