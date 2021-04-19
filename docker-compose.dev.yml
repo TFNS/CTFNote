@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+  db:
+    build:
+      context: "./db"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ctfnote
+      POSTGRES_USER: ctfnote
+      POSTGRES_MULTIPLE_DATABASES: hedgedoc
+    volumes:
+      - ctfnote-db:/var/lib/postgresql/data
+    networks:
+      - ctfnote
+    ports:
+      - '5432:5432'
+  hedgedoc:
+    image: quay.io/hedgedoc/hedgedoc:1.7.2-debian
+    environment:
+      - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
+      - CMD_URL_PATH=pad
+      - CMD_IMAGE_UPLOAD_TYPE=filesystem
+    depends_on:
+      - db
+    restart: always
+    volumes:
+      - pad-uploads:/home/hackmd/app/public/uploads
+    networks:
+      - ctfnote
+    ports:
+      - '3001:3000'
+volumes:
+  ctfnote-db:
+  pad-uploads:
+networks:
+  ctfnote:
