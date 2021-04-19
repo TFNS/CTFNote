@@ -79,7 +79,7 @@ import * as utils from "src/utils";
 export default {
   components: { Timer },
   props: {
-    ctf: { type: Object, required: true },
+    ctf: { type: Object, required: true }
   },
   data() {
     return { now: Date.now() };
@@ -99,7 +99,7 @@ export default {
       } else {
         return {
           from: startDate,
-          to: endDate,
+          to: endDate
         };
       }
     },
@@ -113,7 +113,7 @@ export default {
       const elapsed = this.now - start;
       const progress = (elapsed / duration) * 100;
       return { "--progress-percent": `${progress.toFixed(2)}%` };
-    },
+    }
   },
   methods: {
     shortTime(t) {
@@ -129,7 +129,7 @@ export default {
       this.$q.dialog({
         component: EditCtfDialog,
         parent: this,
-        ctf: this.ctf,
+        ctf: this.ctf
       });
     },
     async deleteCtf() {
@@ -139,19 +139,19 @@ export default {
           color: "negative",
           message: `This will delete all the tasks, but not the pads.`,
           ok: "Delete",
-          cancel: true,
+          cancel: true
         })
         .onOk(async () => {
           await this.$apollo.mutate({
             mutation: db.ctf.DELETE,
             variables: {
-              id: this.ctf.id,
+              id: this.ctf.id
             },
-            refetchQueries: ["IncomingCtfs", "PastCtfs"],
+            refetchQueries: ["IncomingCtfs", "PastCtfs"]
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -14,10 +14,10 @@ export default {
   data: () => ({
     currentTime: null,
     parsedDate: null,
-    stop: false,
+    stop: false
   }),
   props: {
-    date: { type: String, required: true },
+    date: { type: String, required: true }
   },
   mounted() {
     this.parsedDate = new Date(this.date);
@@ -56,14 +56,14 @@ export default {
           sec,
           min,
           hours,
-          days,
+          days
         };
 
         return window.requestAnimationFrame(this.countdown);
       }
 
       this.currentTime = null;
-    },
-  },
+    }
+  }
 };
 </script>

@@ -1,4 +1,4 @@
 fragment SettingsInfo on Settings {
-	nodeId
+  nodeId
   allowRegistration
 }

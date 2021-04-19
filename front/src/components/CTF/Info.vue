@@ -56,7 +56,7 @@ import * as utils from "src/utils";
 import db from "src/gql";
 export default {
   props: {
-    ctf: { type: Object, required: true },
+    ctf: { type: Object, required: true }
   },
   apollo: {
     credentials: {
@@ -64,8 +64,8 @@ export default {
       variables() {
         return { ctfId: this.ctf.id };
       },
-      update: (data) => data.ctfSecret.credentials,
-    },
+      update: data => data.ctfSecret.credentials
+    }
   },
   computed: {
     style() {
@@ -76,7 +76,7 @@ export default {
     },
     endTime() {
       return utils.getDateTime(this.ctf.endTime);
-    },
+    }
   },
   methods: {
     editCredentials() {
@@ -86,23 +86,23 @@ export default {
           color: "primary",
           prompt: {
             model: "",
-            type: "textarea",
+            type: "textarea"
           },
-          cancel: true,
+          cancel: true
         })
-        .onOk(async (credz) => {
+        .onOk(async credz => {
           this.$apollo.mutate({
             mutation: db.secret.UPDATE,
             variables: { ctfId: this.ctf.id, credentials: credz },
-            update: (store) => {
+            update: store => {
               const query = {
                 query: db.secret.GET,
-                variables: { ctfId: this.ctf.id },
+                variables: { ctfId: this.ctf.id }
               };
               const data = store.readQuery(query);
               data.ctfSecret.credentials = credz;
               store.writeQuery({ ...query, data });
-            },
+            }
           });
         });
     },
@@ -110,10 +110,10 @@ export default {
       this.$q.dialog({
         component: EditCtfDialog,
         parent: this,
-        ctf: this.ctf,
+        ctf: this.ctf
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -32,12 +32,7 @@
         </template>
         <template #body-cell-role="{ row, value }">
           <q-td>
-            <q-select
-              dense
-              :value="value"
-              :options="Object.keys($ctfnote.roles)"
-              @input="(v) => updateRole(row.id, v)"
-            />
+            <q-select dense :value="value" :options="Object.keys($ctfnote.roles)" @input="v => updateRole(row.id, v)" />
           </q-td>
         </template>
         <template #body-cell-btns="{ row }">
@@ -79,13 +74,13 @@ export default {
   data() {
     const pagination = {
       rowsNumber: 0,
-      rowsPerPage: DEFAULT_COUNT,
+      rowsPerPage: DEFAULT_COUNT
     };
     const columns = [
       { name: "id", label: "ID", field: "id", sortable: true },
       { name: "username", label: "Login", field: "login", sortable: true },
       { name: "role", label: "Role", field: "role", sortable: true },
-      { name: "btns" },
+      { name: "btns" }
     ];
     return { columns, pagination, loading: false, users: [] };
   },
@@ -98,23 +93,23 @@ export default {
           cancel: true,
           ok: {
             label: "Delete",
-            color: "negative",
-          },
+            color: "negative"
+          }
         })
         .onOk(async () => {
           this.$apollo.mutate({
             mutation: db.admin.DELETE_USER,
             variables: {
-              userId: user.id,
+              userId: user.id
             },
-            refetchQueries: [{ query: db.admin.USERS }],
+            refetchQueries: [{ query: db.admin.USERS }]
           });
         });
     },
     inviteUser() {
       this.$q.dialog({
         component: InviteUserDialog,
-        parent: this,
+        parent: this
       });
     },
     updateRole(userId, role) {
@@ -124,16 +119,16 @@ export default {
           variables: { userId, role },
           update: (store, { data: { updateUserRole } }) => {
             const query = {
-              query: db.admin.USERS,
+              query: db.admin.USERS
             };
 
             const data = store.readQuery(query);
-            const user = data.users.nodes.find((u) => u.id === userId);
+            const user = data.users.nodes.find(u => u.id === userId);
 
             user.role = updateUserRole.role;
 
             store.writeQuery({ ...query, data });
-          },
+          }
         });
       };
 
@@ -144,7 +139,7 @@ export default {
             color: "negative",
             message: "You are about to modify your own role, are you sure ?",
             ok: "Change Role",
-            cancel: true,
+            cancel: true
           })
           .onOk(performUpdate);
         return;
@@ -156,7 +151,7 @@ export default {
       this.$q.dialog({
         component: ResetPasswordLinkDialog,
         parent: this,
-        user,
+        user
       });
     },
 
@@ -181,11 +176,11 @@ export default {
       this.loading = true;
       const {
         data: {
-          users: { nodes: users, totalCount },
-        },
+          users: { nodes: users, totalCount }
+        }
       } = await this.$apollo.mutate({
         mutation: db.admin.USERS,
-        variables: { first, offset },
+        variables: { first, offset }
       });
       this.loading = false;
 
@@ -194,7 +189,7 @@ export default {
       this.pagination.rowsNumber = totalCount;
       this.pagination.rowsPerPage = first;
       this.pagination.page = page + 1;
-    },
-  },
+    }
+  }
 };
 </script>

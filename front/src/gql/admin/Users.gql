@@ -8,4 +8,3 @@ query getUsers($first: Int, $offset: Int) {
     totalCount
   }
 }
-

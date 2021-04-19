@@ -1,6 +1,6 @@
-mutation deleteUser($userId: Int!){
-  deleteUser(input:{userId:$userId}){
-    userResponse{
+mutation deleteUser($userId: Int!) {
+  deleteUser(input: { userId: $userId }) {
+    userResponse {
       id
       login
       role
