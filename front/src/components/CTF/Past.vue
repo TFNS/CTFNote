@@ -12,6 +12,22 @@
       >
         <template #body-cell-title="props">
           <q-td :props="props">
+            <q-menu touch-position context-menu>
+              <q-list dense>
+                <q-item clickable v-close-popup @click="editCtf(props.row)">
+                  <q-item-section side>
+                    <q-avatar icon="create" />
+                  </q-item-section>
+                  <q-item-section class="q-px-md"> Edit </q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="deleteCtf(props.row)">
+                  <q-item-section side>
+                    <q-avatar icon="delete" />
+                  </q-item-section>
+                  <q-item-section class="q-px-md"> Delete </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
             <q-btn
               flat
               :to="{ name: 'ctfinfo', params: { ctfId: props.row.id, ctfSlug: props.row.slug } }"
@@ -28,9 +44,9 @@
 <script>
 import db from "src/gql";
 import { getDateTime } from "src/utils";
+import EditCtfDialog from "src/components/Dialogs/EditCtfDialog.vue";
 
 const MAX_PER_PAGE = 100;
-
 const DEFAULT_COUNT = 20;
 
 export default {
@@ -88,6 +104,38 @@ export default {
       this.pagination.rowsNumber = totalCount;
       this.pagination.rowsPerPage = first;
       this.pagination.page = page + 1;
+    },
+
+    editCtf(ctf) {
+      this.$q
+        .dialog({
+          component: EditCtfDialog,
+          parent: this,
+          ctf
+        })
+        .onOk(() => {
+          this.onRequest({ pagination: this.pagination });
+        });
+    },
+    async deleteCtf(ctf) {
+      this.$q
+        .dialog({
+          title: `Delete ${ctf.title} ?`,
+          color: "negative",
+          message: `This will delete all the tasks, but not the pads.`,
+          ok: "Delete",
+          cancel: true
+        })
+        .onOk(async () => {
+          await this.$apollo.mutate({
+            mutation: db.ctf.DELETE,
+            variables: {
+              id: ctf.id
+            }
+          });
+
+          this.onRequest({ pagination: this.pagination });
+        });
     }
   }
 };

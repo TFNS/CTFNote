@@ -101,15 +101,15 @@ export default {
     hide() {
       this.$refs.dialog.hide();
     },
-    editCtf(id, ctf) {
-      this.$apollo.mutate({
+    async editCtf(id, ctf) {
+      await this.$apollo.mutate({
         mutation: db.ctf.UPDATE,
         variables: { id, ...ctf }
       });
       this.hide();
     },
-    createCtf(ctf) {
-      this.$apollo.mutate({
+    async createCtf(ctf) {
+      await this.$apollo.mutate({
         mutation: db.ctf.CREATE,
         variables: ctf
       });
