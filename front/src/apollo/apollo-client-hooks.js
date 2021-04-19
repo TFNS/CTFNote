@@ -1,5 +1,5 @@
 import { ApolloLink } from "apollo-link";
-import CTFNote from "src/boot/CTFNote/index.js";
+import { ctfNote } from "src/boot/CTFNote";
 import { HttpLink } from "apollo-link-http";
 import { split } from "apollo-link";
 import { WebSocketLink } from "apollo-link-ws";
@@ -76,7 +76,7 @@ export async function apolloClientBeforeCreate({ apolloClientConfigObj }) {
 
 let apollo = {};
 export async function apolloClientAfterCreate({ apolloClient }) {
-  CTFNote.init(apolloClient);
+  ctfNote.init(apolloClient);
   apollo = apolloClient;
 }
 
