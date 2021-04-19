@@ -14,3 +14,11 @@ body.live-mode .blur {
   width: 800px;
   max-width: 90vw !important;
 }
+
+
+.q-markdown--link {
+  color: $primary;
+  &:visited {
+    color: $primary;
+  }
+}
