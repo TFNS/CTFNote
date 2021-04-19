@@ -1,8 +1,6 @@
 <template>
-  <div class="row q-col-gutter-md justify-center">
-    <div class="noctf col text-center q-pa-md" v-if="ctfs.length == 0">
-      No ctfs :(
-    </div>
+  <div class="row q-col-gutter-md justify-evenly">
+    <div class="noctf col text-center q-pa-md" v-if="ctfs.length == 0">No ctfs :(</div>
     <template v-else>
       <div
         class="column col q-gutter-md justify-start align-center"
