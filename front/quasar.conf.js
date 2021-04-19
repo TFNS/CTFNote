@@ -7,7 +7,7 @@
 // https://quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 
-module.exports = function(/* ctx */) {
+module.exports = function (/* ctx */) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
@@ -75,16 +75,12 @@ module.exports = function(/* ctx */) {
           ws: true
         },
         "/pad": {
-          target: "http://127.0.0.1:3020/",
+          target: "http://127.0.0.1:3001/",
           pathRewrite: {
             "^/pad": ""
           },
           ws: true
         },
-        "/ws": {
-          target: "ws://127.0.0.1:31337/socket.io",
-          ws: true
-        }
       },
       https: false,
       port: process.env.PORT || 5000,
