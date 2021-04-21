@@ -34,7 +34,7 @@ We use a cascade privilege system. That means ADMIN users have all the rights MA
 
 * ADMIN: Can create and manage CTFs, as well as managing the instance ( managing users and configuration of the platform ).
 * MANAGER: Can edit CTFs information and invite guests into a specific CTFs.
-* MEMBER: A member represents a standard CTF player from your team, he can access all the CTFs of the platform by default
+* MEMBER: A member represents a standard CTF player from your team, can access all CTFs of the platform by default
 * GUEST: no privileges: can only view CTFs when invited; this is used for irregular guests ( ponctually invited user ). GUESTs are allowed to create and edit tasks, but not the CTF information.
 
 ## Security
