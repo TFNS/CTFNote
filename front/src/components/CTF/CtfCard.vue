@@ -68,6 +68,9 @@
         </div>
       </div>
     </q-card-section>
+    <q-card-section>
+      <q-btn color="primary" :to="$ctfnote.ctfLink(ctf)" label="Open CTF" :disable="!ctf.granted" size="md" />
+    </q-card-section>
   </q-card>
 </template>
 
