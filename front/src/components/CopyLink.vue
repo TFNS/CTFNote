@@ -15,7 +15,7 @@ import { copyToClipboard } from "quasar";
 
 export default {
   props: {
-    link: { type: String, required: false },
+    link: { type: String, required: false, default: null }
   },
   methods: {
     notify({ color, message }) {
@@ -25,7 +25,7 @@ export default {
         actions: [],
         closeBtn: false,
         position: "center",
-        timeout: 1,
+        timeout: 1
       });
     },
     clipboardCopy() {
@@ -33,17 +33,17 @@ export default {
         .then(() => {
           this.notify({
             message: "Copied!",
-            color: "primary",
+            color: "primary"
           });
         })
         .catch(() => {
           this.notify({
             message: "Failed to copy to the clipboard",
-            color: "negative",
+            color: "negative"
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
