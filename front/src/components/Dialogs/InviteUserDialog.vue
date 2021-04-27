@@ -15,7 +15,7 @@
             <q-select label="Role" dense v-model="role" :options="Object.keys($ctfnote.roles)" />
           </q-tab-panel>
           <q-tab-panel name="link" class="full-width">
-            <copy-link :link="link" />
+            <copy-link v-if="link" :link="link" />
           </q-tab-panel>
         </q-tab-panels>
       </q-card-section>
@@ -39,7 +39,7 @@ export default {
     return {
       link: null,
       tab: "role",
-      role: "USER_GUEST"
+      role: "USER_GUEST",
     };
   },
   methods: {
@@ -54,7 +54,7 @@ export default {
       this.$apollo
         .mutate({
           mutation: db.user.CREATE_INVITATION_LINK,
-          variables: { role: this.role }
+          variables: { role: this.role },
         })
         .then(({ data }) => {
           const token = data.createInvitationLink.invitationLinkResponse.token;
@@ -62,7 +62,7 @@ export default {
           this.link = `${location.origin}/${path.href}`;
           this.tab = "link";
         });
-    }
-  }
+    },
+  },
 };
 </script>

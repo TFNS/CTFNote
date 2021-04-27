@@ -1,5 +1,5 @@
 <template>
-  <q-input hint="Valid for one hour." filled bottom-slots :value="link" readonly ref="linkInput">
+  <q-input hint="Valid for one hour." filled bottom-slots :value="link" readonly>
     <template #before>
       <q-icon name="lock" />
     </template>
@@ -11,27 +11,39 @@
 </template>
 
 <script>
+import { copyToClipboard } from "quasar";
+
 export default {
   props: {
-    link: { type: String, required: true }
+    link: { type: String, required: false },
   },
   methods: {
-    clipboardCopy() {
-      const linkElement = this.$refs.linkInput;
-
-      linkElement.select();
-      document.execCommand("copy");
-      window.getSelection().removeAllRanges();
+    notify({ color, message }) {
       this.$q.notify({
-        message: "Copied!",
-        color: "primary",
+        message,
+        color,
         actions: [],
         closeBtn: false,
         position: "center",
-        timeout: 1
+        timeout: 1,
       });
-    }
-  }
+    },
+    clipboardCopy() {
+      copyToClipboard(this.link)
+        .then(() => {
+          this.notify({
+            message: "Copied!",
+            color: "primary",
+          });
+        })
+        .catch(() => {
+          this.notify({
+            message: "Failed to copy to the clipboard",
+            color: "negative",
+          });
+        });
+    },
+  },
 };
 </script>
 

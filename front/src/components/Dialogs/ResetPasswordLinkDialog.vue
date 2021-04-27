@@ -10,7 +10,7 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <copy-link :link="link" />
+        <copy-link v-if="link" :link="link" />
       </q-card-section>
       <q-card-actions class="row justify-end q-pt-none q-pb-md q-pr-md">
         <q-btn color="warning" label="Cancel" v-close-popup />
@@ -27,7 +27,7 @@ export default {
   props: { user: { type: Object, required: true } },
   data() {
     return {
-      link: null
+      link: null,
     };
   },
   watch: {
@@ -35,8 +35,8 @@ export default {
       immediate: true,
       handler(user) {
         this.retrieveLink(user);
-      }
-    }
+      },
+    },
   },
   methods: {
     show() {
@@ -52,14 +52,14 @@ export default {
       const response = await this.$apollo.mutate({
         mutation: db.auth.RESET_PASSWORD_LINK,
         variables: {
-          userId: user.id
-        }
+          userId: user.id,
+        },
       });
 
       const { token } = response.data.createResetPasswordLink.resetPasswordLinkResponse;
       const path = this.$router.resolve({ name: "resetPassword", params: { token } });
       this.link = `${location.origin}/${path.href}`;
-    }
-  }
+    },
+  },
 };
 </script>
