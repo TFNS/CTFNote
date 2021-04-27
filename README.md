@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="100" src="./front/public/favicon.png">
+</p>
+
 # CTFNote
 
 ## Welcome
@@ -32,10 +36,10 @@ You can optionally edit the API configuration file depending on your needs:
 
 We use a cascade privilege system. That means ADMIN users have all the rights MANAGER users have and MANAGER have all the rights MEMBER users have and so on.
 
-* ADMIN: Can create and manage CTFs, as well as managing the instance ( managing users and configuration of the platform ).
-* MANAGER: Can edit CTFs information and invite guests into a specific CTFs.
-* MEMBER: A member represents a standard CTF player from your team, can access all CTFs of the platform by default
-* GUEST: no privileges: can only view CTFs when invited; this is used for irregular guests ( ponctually invited user ). GUESTs are allowed to create and edit tasks, but not the CTF information.
+- ADMIN: Can create and manage CTFs, as well as managing the instance ( managing users and configuration of the platform ).
+- MANAGER: Can edit CTFs information and invite guests into a specific CTFs.
+- MEMBER: A member represents a standard CTF player from your team, can access all CTFs of the platform by default
+- GUEST: no privileges: can only view CTFs when invited; this is used for irregular guests ( ponctually invited user ). GUESTs are allowed to create and edit tasks, but not the CTF information.
 
 ## Security
 
@@ -67,4 +71,3 @@ $ MD_PROVIDER=https://ur-codimd-instance-full-url yarn start
 
 [BitK](https://twitter.com/bitk_)
 [SakiiR](https://twitter.com/sakiirsecurity/)
-
