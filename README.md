@@ -26,11 +26,7 @@ Use the provided docker configuration to deploy the project:
 $ docker-compose up -d
 ```
 
-Then, visit 127.0.0.1 and create your first account, which will automatically be provided with admin privileges
-
-You can optionally edit the API configuration file depending on your needs:
-
-[API Configuration File](./api/src/config/globals.ts)
+Then, visit 127.0.0.1 and create your first account, which will automatically be provided with admin privileges.
 
 ## Privileges
 
@@ -47,25 +43,40 @@ cf. [SECURITY.md](./SECURITY.md)
 
 ## Development
 
-The development server includes a simple HTTP proxy allowing the frontend to access the local API (cf [quasar.conf.js](front/quasar.conf.js)).
+The development server includes a simple HTTP proxy allowing the frontend to access the local graphql API (cf [quasar.conf.js](front/quasar.conf.js)).
 Hot reloading is configured on both components as well.
 
-### Setup and launch the frontend
+First of all, run the following command to run the required services **hedgedoc** and **postgresql**:
+
+### Start hedgedoc and postgresql
 
 ```shell
-$ cd front/
-$ yarn install
-$ yarn start
+$ docker-compose -f docker-compose.dev.yml up -d
 ```
 
-### Setup and launch the API
+### Start the API
 
 ```shell
 $ cd api/
-$ yarn install
-$ yarn start
-$ MD_PROVIDER=https://ur-codimd-instance-full-url yarn start
+$ yarn
+$ yarn dev:migrate # Will run the migration on the database
+$ yarn dev
 ```
+
+### Start the quasar app
+
+```shell
+$ cd front/
+$ yarn
+$ yarn dev
+```
+
+You can now access the application/api through the following endpoints:
+
+| Endpoint                           | Description                                                     |
+| :--------------------------------- | :-------------------------------------------------------------- |
+| [](http://127.0.0.1:5000)          | The Web UI                                                      |
+| [](http://127.0.0.1:3000/graphiql) | The Graphql UI allowing to run the graphql queries/mutation/etc |
 
 ## Authors
 
