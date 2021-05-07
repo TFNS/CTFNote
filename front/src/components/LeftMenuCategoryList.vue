@@ -9,6 +9,7 @@
         </q-item-section>
         <q-item-section avatar>
           <q-icon :color="$ctfnote.taskIconColor(task)" :name="$ctfnote.taskIcon(task)" />
+          <player-tooltip :task="task"></player-tooltip>
         </q-item-section>
       </q-item>
     </q-list>
@@ -17,7 +18,9 @@
 
 <script>
 import { colorHash } from "../utils";
+import PlayerTooltip from './CTF/PlayerTooltip.vue';
 export default {
+	components: { PlayerTooltip },
   props: {
     ctf: { type: Object, required: true },
     title: { type: String, required: true },
@@ -28,7 +31,7 @@ export default {
   },
   computed: {
     style() {
-      return { fontWeight: "bold", backgroundColor: colorHash(this.title) };
+      return { fontWeight: "bold", backgroundColor: colorHash(this.title), color: "white" };
     }
   }
 };
