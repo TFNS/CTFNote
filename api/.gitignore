@@ -148,3 +148,5 @@ temp/
 
 
 schema.graphql
+
+ormconfig.js
