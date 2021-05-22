@@ -1,0 +1,8 @@
+#import "./SettingsInfo.gql"
+mutation updateSettings($settings: SettingsInput!) {
+  updateSettings(input: $settings) {
+    settings {
+      ...SettingsInfo
+    }
+  }
+}

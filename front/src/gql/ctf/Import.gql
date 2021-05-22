@@ -1,0 +1,9 @@
+#import "./CtfInfo.gql"
+
+mutation importctf($id: Int!) {
+  importCtf(input: { ctftimeId: $id }) {
+    ctf {
+      ...CtfInfo
+    }
+  }
+}

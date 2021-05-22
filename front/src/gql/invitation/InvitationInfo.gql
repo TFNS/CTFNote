@@ -1,0 +1,8 @@
+fragment InvitationInfo on Invitation {
+  nodeId
+  profile {
+    nodeId
+    username
+    role
+  }
+}

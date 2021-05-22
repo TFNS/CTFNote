@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-import routes from './routes'
+import routes from "./routes";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 /*
  * If not building with SSR mode, you can
@@ -14,10 +14,10 @@ Vue.use(VueRouter)
  * with the Router instance.
  */
 
-export default function ({ store }) {
+export default function({ Vue }) {
   const Router = new VueRouter({
     scrollBehavior: () => ({ x: 0, y: 0 }),
-    routes: routes(store),
+    routes: routes(Vue),
 
     // Leave these as they are and change in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
@@ -26,7 +26,20 @@ export default function ({ store }) {
     mode: process.env.VUE_ROUTER_MODE,
     // eslint-disable-next-line no-undef
     base: process.env.VUE_ROUTER_BASE
-  })
+  });
+  Router.beforeEach(async (to, from, next) => {
+    await Vue.ctfnote.waitUntilReady();
+    if (to.meta.allowAnonymous) {
+      if (Vue.ctfnote.isGuest) {
+        return next({ name: "ctfs" });
+      }
+      return next();
+    }
 
-  return Router
+    if (!Vue.ctfnote.isGuest) {
+      return next({ name: "auth" });
+    }
+    next();
+  });
+  return Router;
 }

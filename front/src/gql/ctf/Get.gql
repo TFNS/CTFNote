@@ -1,0 +1,7 @@
+#import "./CtfInfo.gql"
+
+query CtfById($id: Int!) {
+  ctf(id: $id) {
+    ...CtfInfo
+  }
+}

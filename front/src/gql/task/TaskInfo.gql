@@ -1,0 +1,19 @@
+#import "./WorkingOnInfo.gql"
+
+fragment TaskInfo on Task {
+  nodeId
+  id
+  title
+  ctfId
+  padUrl
+  slug @client
+  description
+  flag
+  solved
+  category
+  workOnTasks {
+    nodes {
+      ...WorkingOnInfo
+    }
+  }
+}

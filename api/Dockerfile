@@ -1,20 +1,54 @@
-FROM node:14.5.0-alpine3.10
+# Dockerfile
 
-RUN mkdir -p /usr/src/app && \
-    apk add openssh-client g++ make python
+# Global args, set before the first FROM, shared by all stages
+ARG NODE_ENV="production"
 
-WORKDIR /usr/src/app
+################################################################################
+# Build stage 1 - `yarn build`
 
-COPY tsconfig.json package.json yarn.lock /usr/src/app/
-RUN yarn install
+FROM node:15-buster as builder
+# Import our shared args
+ARG NODE_ENV
 
-COPY ormconfig.docker.json /usr/src/app/ormconfig.json
-COPY src /usr/src/app/src
+# Cache node_modules for as long as possible
+COPY package.json yarn.lock tsconfig.json database.json wait-for-it.sh /app/
+WORKDIR /app/
+RUN yarn install --frozen-lockfile --production=false --no-progress
+# Copy over the server source code
+COPY src/ /app/src/
+COPY migrations/ /app/migrations/
 
-RUN yarn build && \
-    rm -rf /usr/src/app/src
+# Finally run the build script
+RUN yarn run build
 
-EXPOSE 31337
+################################################################################
+# Build stage 2 - COPY the relevant things (multiple steps)
 
-CMD yarn sync && NODE_ENV=prod node /usr/src/app/dist/index.js
+FROM node:15-buster as clean
+# Import our shared args
+ARG NODE_ENV
 
+# Copy over selectively just the tings we need, try and avoid the rest
+COPY --from=builder /app/package.json /app/yarn.lock /app/database.json /app/wait-for-it.sh /app/
+COPY --from=builder /app/dist/ /app/dist/
+COPY --from=builder /app/migrations/ /app/migrations/
+
+################################################################################
+# Build stage FINAL - COPY everything, once, and then do a clean `yarn install`
+
+FROM node:15-buster
+# Import our shared args
+ARG NODE_ENV
+
+EXPOSE 3000
+WORKDIR /app/
+# Copy everything from stage 2, it's already been filtered
+COPY --from=clean /app/ /app/
+
+# Install yarn ASAP because it's the slowest
+RUN yarn install --frozen-lockfile --production=true --no-progress
+
+# You might want to disable GRAPHILE_TURBO if you have issues
+ENV GRAPHILE_TURBO=1
+ENV NODE_ENV=$NODE_ENV
+CMD chmod +x wait-for-it.sh && bash ./wait-for-it.sh db:5432 && yarn start

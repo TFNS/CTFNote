@@ -21,7 +21,7 @@ $dark: #1d1d1d;
 $positive: #4caf50;
 $negative: #c10015;
 $info: #31ccec;
-$warning: #f2c037;
+$warning: #ee7700;
 
 body.body--light {
   --q-color-light: white;
@@ -32,8 +32,4 @@ body.body--dark {
 
 .bg-light {
   background-color: var(--q-color-light);
-}
-
-a {
-    color:  var(--q-color-primary);
 }

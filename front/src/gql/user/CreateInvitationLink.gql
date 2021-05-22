@@ -1,0 +1,7 @@
+mutation createInvitationLink($role: Role!) {
+  createInvitationLink(input: { role: $role }) {
+    invitationLinkResponse {
+      token
+    }
+  }
+}

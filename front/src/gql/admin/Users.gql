@@ -1,0 +1,10 @@
+query getUsers($first: Int, $offset: Int) {
+  users(first: $first, offset: $offset) {
+    nodes {
+      id
+      login
+      role
+    }
+    totalCount
+  }
+}

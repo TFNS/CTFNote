@@ -1,0 +1,33 @@
+#import "./CtfInfo.gql"
+
+mutation updateCtf(
+  $id: Int!
+  $title: String
+  $weight: Float
+  $ctfUrl: String
+  $ctftimeUrl: String
+  $logoUrl: String
+  $startTime: Datetime
+  $endTime: Datetime
+  $description: String
+) {
+  updateCtf(
+    input: {
+      id: $id
+      patch: {
+        title: $title
+        weight: $weight
+        ctfUrl: $ctfUrl
+        ctftimeUrl: $ctftimeUrl
+        logoUrl: $logoUrl
+        startTime: $startTime
+        endTime: $endTime
+        description: $description
+      }
+    }
+  ) {
+    ctf {
+      ...CtfInfo
+    }
+  }
+}

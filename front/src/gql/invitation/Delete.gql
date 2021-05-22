@@ -1,0 +1,5 @@
+mutation deleteInvitation($nodeId: ID!) {
+  deleteInvitationByNodeId(input: { nodeId: $nodeId }) {
+    deletedInvitationNodeId
+  }
+}

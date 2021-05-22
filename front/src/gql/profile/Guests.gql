@@ -1,0 +1,10 @@
+query guests {
+  guests {
+    nodes {
+      username
+      id
+      role
+      nodeId
+    }
+  }
+}

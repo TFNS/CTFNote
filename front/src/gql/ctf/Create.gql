@@ -1,0 +1,31 @@
+#import "./CtfInfo.gql"
+
+mutation createCtf(
+  $title: String!
+  $weight: Float
+  $ctfUrl: String
+  $ctftimeUrl: String
+  $logoUrl: String
+  $startTime: Datetime
+  $endTime: Datetime
+  $description: String
+) {
+  createCtf(
+    input: {
+      ctf: {
+        title: $title
+        weight: $weight
+        ctfUrl: $ctfUrl
+        ctftimeUrl: $ctftimeUrl
+        logoUrl: $logoUrl
+        startTime: $startTime
+        endTime: $endTime
+        description: $description
+      }
+    }
+  ) {
+    ctf {
+      ...CtfInfo
+    }
+  }
+}

@@ -1,0 +1,11 @@
+#import "./TaskInfo.gql"
+
+mutation updateTask($id: Int!, $title: String, $description: String, $category: String, $flag: String) {
+  updateTask(
+    input: { id: $id, patch: { title: $title, category: $category, description: $description, flag: $flag } }
+  ) {
+    task {
+      ...TaskInfo
+    }
+  }
+}

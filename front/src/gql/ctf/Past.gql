@@ -1,0 +1,10 @@
+#import "./CtfInfo.gql"
+
+query PastCtfs($first: Int, $offset: Int) {
+  pastCtf(first: $first, offset: $offset) {
+    nodes {
+      ...CtfInfo
+    }
+    totalCount
+  }
+}

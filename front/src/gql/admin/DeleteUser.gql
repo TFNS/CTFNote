@@ -1,0 +1,9 @@
+mutation deleteUser($userId: Int!) {
+  deleteUser(input: { userId: $userId }) {
+    userResponse {
+      id
+      login
+      role
+    }
+  }
+}
