@@ -1,0 +1,1 @@
+ALTER TABLE ctfnote.ctf ALTER COLUMN secrets_id SET NOT NULL;
