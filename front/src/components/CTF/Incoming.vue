@@ -16,7 +16,40 @@ export default {
   apollo: {
     ctfs: {
       query: db.ctf.INCOMING,
-      update: data => data.incomingCtf.nodes
+      update: data => data.incomingCtf.nodes,
+      subscribeToMore: [
+        {
+          document: db.ctf.SUBSCRIBE,
+          variables() {
+            return { topic: `ctf:0:created` };
+          },
+          updateQuery(previousResult, { subscriptionData }) {
+            const newCTF = subscriptionData.data.listen.relatedNode;
+            previousResult.incomingCtf.nodes.unshift(newCTF);
+            return previousResult;
+          }
+        },
+        {
+          document: db.ctf.SUBSCRIBE,
+          variables() {
+            return { topic: `ctf:0:deleted` };
+          },
+          updateQuery(previousResult, { subscriptionData }) {
+            const nodeId = subscriptionData.data.listen.relatedNodeId;
+            previousResult.incomingCtf.nodes = previousResult.incomingCtf.nodes.filter(n => n.nodeId != nodeId);
+            return previousResult;
+          }
+        },
+        {
+          document: db.ctf.SUBSCRIBE,
+          variables() {
+            return { topic: `ctf:0:updated` };
+          },
+          updateQuery(previousResult) {
+            return previousResult;
+          }
+        }
+      ]
     }
   }
 };
