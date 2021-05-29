@@ -28,6 +28,34 @@ $ docker-compose up -d
 
 Then, visit 127.0.0.1 and create your first account, which will automatically be provided with admin privileges.
 
+### nginx
+
+An example configuration for `nginx` on the host looks like this:
+
+```
+server {
+        server_name ctfnote.my.domain;
+
+        listen 443 ssl;
+        listen [::]:443 ssl;
+
+        root /var/www/html;
+        index index.html;
+
+        location / {
+                proxy_pass http://127.0.0.1:80/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection $http_connection;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                add_header Pragma "no-cache";
+        }
+}
+```
+
 ## Privileges
 
 We use a cascade privilege system. That means ADMIN users have all the rights MANAGER users have and MANAGER have all the rights MEMBER users have and so on.
