@@ -104,6 +104,16 @@ class CTFNote {
     };
   }
 
+  ctfTasks(ctf) {
+    return {
+      name: "ctftasks",
+      params: {
+        ctfId: ctf.id,
+        ctfSlug: ctf.slug
+      }
+    };
+  }
+
   taskLink(ctf, task) {
     return {
       name: "task",

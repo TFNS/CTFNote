@@ -9,14 +9,14 @@
             <template v-if="ctf && ctf.id">
               <q-separator vertical />
               <q-btn type="a" target="_blank" :href="ctf.ctfUrl" flat icon="language" size="sm" round />
-              <router-link class="text-white" exact :to="$ctfnote.ctfLink(ctf)">
+              <router-link class="text-white" exact :to="$ctfnote.ctfTasks(ctf)">
                 {{ ctf.title }}
               </router-link>
             </template>
             <template v-if="task">
               <q-separator vertical />
-              <router-link class="text-white" exact :to="$ctfnote.taskLink(ctf, task)">
-                {{ task.title }}
+              <router-link v-for="t in taskHistory" :key="t.path" class="text-white" exact :to="t.path">
+                {{ t.name }}
               </router-link>
             </template>
           </div>
@@ -206,6 +206,7 @@ export default {
       const ctfId = route.params.ctfId;
       if (!ctfId) {
         this.$apollo.queries.ctf.skip = true;
+        this.taskHistory = [];
         return;
       }
       this.$apollo.queries.ctf.setVariables({ id: parseInt(ctfId) });
@@ -218,12 +219,22 @@ export default {
       }
       this.$apollo.queries.task.setVariables({ id: parseInt(taskId) });
       this.$apollo.queries.task.skip = false;
+
+      this.addTaskToHistory(route)
+    },
+
+    addTaskToHistory(route) {
+      let filtered = this.taskHistory.filter(t => t.path != route.path);
+      filtered.unshift({name: route.params.taskSlug, path: route.path});
+      filtered.splice(3);
+      this.taskHistory = filtered;
     }
   },
   data() {
     return {
       leftDrawerOpen: false,
-      subscribers: []
+      subscribers: [],
+      taskHistory: []
     };
   }
 };
