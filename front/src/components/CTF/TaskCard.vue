@@ -50,29 +50,7 @@
       <q-card-section>
         <q-badge v-if="showBadge" class="solved-badge" floating :color="$ctfnote.taskIconColor(task)">
           <q-icon :name="$ctfnote.taskIcon(task)" />
-          <q-tooltip
-            anchor="top right"
-            self="top left"
-            :offset="[0, 0]"
-            content-class="transparent"
-            v-if="players.length"
-          >
-            <q-card dense bordered>
-              <q-card-section class="tooltip-section">
-                <q-list dense>
-                  <q-item tag="label" :key="player.slug" v-for="player in players">
-                    <q-item-section class="text-center">
-                      <q-chip class="text-white text-center" :style="taskStyle(player.slug)">
-                        <div class="text-center full-width">
-                          {{ player.username }}
-                        </div>
-                      </q-chip>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-card-section>
-            </q-card>
-          </q-tooltip>
+          <player-tooltip :task="task"></player-tooltip>
         </q-badge>
         <div class="row justify-between">
           <router-link class="text-h6 col tasklink" tag="a" :to="$ctfnote.taskLink(ctf, task)">
@@ -91,6 +69,15 @@
         </div>
       </q-card-section>
       <q-separator inset v-if="!isUltraDense" />
+      <q-card-section v-if="!isUltraDense">
+        <q-chip
+          :label="player.username"
+          :key="player.nodeId"
+          class="text-white"
+          :style="taskStyle(player.nodeId)"
+          v-for="player in players"
+        />
+      </q-card-section>
       <q-card-section v-if="!isUltraDense">
         <p class="task-description">
           {{ task.description || "..." }}
@@ -115,7 +102,9 @@
 
 <script>
 import { colorHash } from "../../utils";
+import PlayerTooltip from "./PlayerTooltip.vue";
 export default {
+  components: { PlayerTooltip },
   props: {
     task: { type: Object, required: true },
     ctf: { type: Object, required: true },
@@ -220,10 +209,5 @@ export default {
       box-shadow: 0px 0px 5px rgba(25, 25, 25, 0.8);
     }
   }
-}
-
-.tooltip-section,
-.tooltip-section label {
-  padding: 2px 4px !important;
 }
 </style>
