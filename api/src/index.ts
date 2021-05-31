@@ -10,6 +10,7 @@ import simplifyPlugin from "@graphile-contrib/pg-simplify-inflector";
 import PgPubsub from "@graphile/pg-pubsub";
 import importCtfPlugin from "./plugins/importCtf";
 import createTasKPlugin from "./plugins/createTask";
+import hedgedocAuth from "./plugins/hedgedocAuth";
 import { settingsPlugin, settingsHook } from "./plugins/settings";
 
 dotenv.config();
@@ -36,9 +37,15 @@ const postgraphileOptions: PostGraphileOptions = {
     importCtfPlugin,
     createTasKPlugin,
     settingsPlugin,
+    hedgedocAuth
   ],
   enableQueryBatching: true,
   legacyRelations: "omit" as const,
+  async additionalGraphQLContextFromRequest(req, res) {
+    return {
+      setHeader: (name: string, value: string | number) => res.setHeader(name, value)
+    };
+  },
 };
 
 if (process.env.NODE_ENV == "development") {
@@ -66,5 +73,5 @@ app.use(
 );
 
 app.listen(3000, () => {
-	console.log("Listening on :3000");
+  console.log("Listening on :3000");
 });
