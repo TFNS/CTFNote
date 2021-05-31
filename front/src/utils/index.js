@@ -27,3 +27,7 @@ export function getDateTime(date) {
   date = date.constructor.name == "Date" ? date : new Date(date);
   return `${getDate(date)} ${getTime(date)}`;
 }
+
+export function isRunningCtf(ctf, now) {
+  return new Date(ctf.startTime) < now && new Date(ctf.endTime) > now;
+}

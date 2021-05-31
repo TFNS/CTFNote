@@ -107,7 +107,7 @@ export default {
       }
     },
     running() {
-      return new Date(this.ctf.startTime) < this.now && new Date(this.ctf.endTime) > this.now;
+      return utils.isRunningCtf(this.ctf, this.now);
     },
     style() {
       const start = new Date(this.ctf.startTime);

@@ -21,7 +21,7 @@
             </template>
           </div>
         </q-toolbar-title>
-        <q-btn-dropdown stretch flat :label="$ctfnote.me.username" v-if="$ctfnote.me">
+        <q-btn-dropdown stretch flat :label="$ctfnote.me.username" v-if="$ctfnote.me !== $ctfnote.anonymous">
           <q-list class="text-center">
             <q-item v-if="$ctfnote.isAdmin" clickable :to="{ name: 'admin' }">
               <q-item-section>
@@ -65,6 +65,8 @@
           </q-list>
         </q-btn-dropdown>
       </q-toolbar>
+      <q-linear-progress v-if="ctf && runningCtf" color="secondary" :value="ctfProgress"></q-linear-progress>
+      <q-linear-progress v-if="ctf && !runningCtf" color="red" :value="100"></q-linear-progress>
     </q-header>
     <q-drawer v-model="leftDrawerOpen" bordered v-if="ctf">
       <LeftMenu :ctf="ctf" />
@@ -79,6 +81,7 @@
 <script>
 import db from "src/gql";
 import LeftMenu from "components/LeftMenu.vue";
+import * as utils from "src/utils";
 
 export default {
   name: "MainLayout",
@@ -133,6 +136,21 @@ export default {
     },
     liveMode() {
       return this.$localStorage.liveMode;
+    },
+    runningCtf() {
+      return utils.isRunningCtf(this.ctf, this.now);
+    },
+    ctfProgress() {
+      const { startTime, endTime } = this.ctf;
+      const now = this.now.getTime();
+
+      const start = new Date(startTime).getTime();
+      const end = new Date(endTime).getTime();
+
+      const delta = end - start;
+      const fromNow = now - start;
+
+      return fromNow / delta;
     }
   },
   mounted() {
@@ -223,7 +241,8 @@ export default {
   data() {
     return {
       leftDrawerOpen: false,
-      subscribers: []
+      subscribers: [],
+      now: new Date()
     };
   }
 };
