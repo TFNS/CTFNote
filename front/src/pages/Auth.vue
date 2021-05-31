@@ -12,7 +12,8 @@
               v-model="username"
               label="Username"
               lazy-rules
-              :rules="[val => (val && val.length > 0) || 'Please type something']"
+              :rules="[val => (val && val.length > 0) || 'Please type something', val => val && val.indexOf('@') === -1 || 'Please dont use @']"
+              hint="Your username is visible to other members"
             />
             <q-input
               filled
