@@ -25,8 +25,9 @@ async function handleApiCall(commit, f) {
   const startTime = new Date();
   commit("startLoading");
   let errors = null;
+  let result = null;
   try {
-    await f();
+    result = await f();
   } catch (e) {
     errors = e;
   }
@@ -35,7 +36,7 @@ async function handleApiCall(commit, f) {
   setTimeout(() => {
     commit("stopLoading");
   }, MIN_LOAD_TIME - ellapsed);
-  return errors;
+  return [result, errors];
 }
 
 export default async function (/* { ssrContext } */) {
@@ -188,12 +189,14 @@ export default async function (/* { ssrContext } */) {
         });
       },
       async getCtf({ commit, state }, name) {
+        const oldCtf = state.currentCtf;
         const oldSlug = state.currentCtf ? state.currentCtf.slug : null;
 
         return handleApiCall(commit, async () => {
           const ctf = await api.getCtf(name);
           if (oldSlug != ctf.slug) commit("setCurrentTask", null);
           commit("setCurrentCtf", ctf);
+          return [oldCtf, ctf];
         });
       },
       async logout({ commit }) {

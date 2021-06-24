@@ -13,7 +13,7 @@ export function sleep(t) {
     return new Promise(resolve => setTimeout(resolve, t))
 }
 
-export function showErrors(vm, errors) {
+export function showErrors(vm, [_, errors]) {
     if (errors) {
         console.log(errors)
         for (const error of errors) {
