@@ -15,9 +15,8 @@ COPY ormconfig.docker.json /usr/src/app/ormconfig.json
 COPY src /usr/src/app/src
 
 RUN yarn build && \
-    rm -rf /usr/src/app/src
+   rm -rf /usr/src/app/src
 
 EXPOSE 31337
 
 CMD yarn sync && NODE_ENV=prod node /usr/src/app/dist/index.js
-

@@ -1,4 +1,4 @@
-FROM node:latest AS build-deps
+FROM node:16 AS build-deps
 
 # specify production for possible optimizations
 ENV NODE_ENV production
