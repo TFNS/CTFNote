@@ -22,6 +22,7 @@ FROM nginx:alpine
 RUN mkdir -p /logs
 
 COPY --from=build-deps /usr/src/app/dist/spa /usr/share/nginx/html
+COPY src/static /www/media
 
 ARG API_HOST
 ARG PAD_HOST
