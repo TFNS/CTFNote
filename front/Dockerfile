@@ -1,8 +1,11 @@
 FROM node:latest AS build-deps
 
+# specify production for possible optimizations
+ENV NODE_ENV production
+
 RUN mkdir -p /usr/src/app
 COPY package.json quasar.conf.js .postcssrc.js yarn.lock babel.config.js /usr/src/app/
-RUN cd /usr/src/app && yarn install
+RUN cd /usr/src/app && yarn install --production
 
 COPY src /usr/src/app/src
 COPY public /usr/src/app/public
@@ -25,5 +28,5 @@ ARG PAD_HOST
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN sed -i "s/{{API\_HOST}}/${API_HOST}/g"  /etc/nginx/conf.d/default.conf 
-RUN sed -i "s/{{PAD\_HOST}}/${PAD_HOST}/g"  /etc/nginx/conf.d/default.conf 
+RUN sed -i "s/{{API\_HOST}}/${API_HOST}/g"  /etc/nginx/conf.d/default.conf
+RUN sed -i "s/{{PAD\_HOST}}/${PAD_HOST}/g"  /etc/nginx/conf.d/default.conf
