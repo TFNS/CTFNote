@@ -6,7 +6,7 @@
       :event="linkEvent"
       :to="{
         name: 'task',
-        params: { ctfSlug: ctf.slug, taskSlug: task.slug }
+        params: { ctfSlug: ctf.slug, taskSlug: task.slug },
       }"
     >
       <q-card bordered class="task" :class="{ solved: task.solved }">
@@ -29,6 +29,9 @@
               <q-item-section>
                 <q-item-label class="q-px-md">Solved</q-item-label>
               </q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="showAddStatus = true">
+              <q-item-section class="q-px-md">Add status</q-item-section>
             </q-item>
             <q-item tag="label" v-ripple v-close-popup @click="editTask = !editTask">
               <q-item-section side>
@@ -98,8 +101,30 @@
           />
           <q-chip class="q-pa-md" label="nobody" v-if="task.players.length == 0" />
         </q-card-section>
+        <q-card-section>
+          <q-chip
+            :label="`${status.user.username}: ${status.value}`"
+            :key="status.id"
+            class="text-white q-pa-md"
+            :style="colorHash(status.user.slug)"
+            v-for="status in task.statuses"
+          />
+        </q-card-section>
       </q-card>
     </router-link>
+
+    <q-dialog v-model="showAddStatus">
+      <q-card>
+        <q-card-section>
+          <q-form @submit="submitStatus" class="q-gutter-md">
+            <q-input filled v-model="newStatus" label="Status" hint="Writing sploit x, doing y..." />
+            <div>
+              <q-btn label="Submit" type="submit" color="primary" />
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 
     <q-dialog v-model="showConfirmDelete">
       <q-card>
@@ -124,26 +149,28 @@ import { colorHash, showErrors } from "../utils";
 export default {
   props: {
     task: Object,
-    ctf: Object
+    ctf: Object,
   },
   computed: {
     ...mapGetters(["currentUser"]),
 
     linkEvent() {
       return this.editTask ? "none" : "click";
-    }
+    },
   },
   data() {
     const currentUser = this.$store.getters.currentUser;
-    const onIt = Boolean(this.task.players.find(u => u.slug == currentUser.slug));
+    const onIt = Boolean(this.task.players.find((u) => u.slug == currentUser.slug));
     return {
+      showAddStatus: false,
       showConfirmDelete: false,
       solved: this.task.solved,
       onIt,
       editTask: false,
+      newStatus: "",
       title: this.task.title,
       category: this.task.category,
-      description: this.task.description
+      description: this.task.description,
     };
   },
   mounted() {},
@@ -167,13 +194,16 @@ export default {
       const errors = await this.$store.dispatch("updateTaskCategory", [this.task.slug, category]);
       showErrors(this, errors);
     },
-
+    async submitStatus() {
+      this.$store.dispatch("newStatus", [this.task.slug, this.newStatus]);
+      this.newStatus = "";
+    },
     async updateOnIt(v) {
       this.$store.dispatch("onIt", [this.task.slug, v]);
     },
     async updateSolved(v) {
       this.$store.dispatch("solved", [this.task.slug, v]);
-    }
+    },
   },
   watch: {
     task(t, old) {
@@ -183,12 +213,12 @@ export default {
       if (this.editTask == false) {
         this.title = t.title;
         this.category = t.category;
-        this.onIt = Boolean(t.players.find(u => u.slug == this.currentUser.slug));
+        this.onIt = Boolean(t.players.find((u) => u.slug == this.currentUser.slug));
         this.solved = t.solved;
         this.editTask = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

@@ -250,6 +250,13 @@ export default async function (/* { ssrContext } */) {
         });
       },
 
+      async newStatus({ commit, state }, [taskSlug, status]) {
+        return handleApiCall(commit, async () => {
+          const task = await api.newStatus(state.currentCtf.slug, taskSlug, status);
+          commit("updateTask", task);
+        });
+      },
+
       async solved({ commit, state }, [taskSlug, solved]) {
         return handleApiCall(commit, async () => {
           const task = await api.solveTask(state.currentCtf.slug, taskSlug, solved);

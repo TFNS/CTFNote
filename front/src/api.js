@@ -85,6 +85,11 @@ class API {
   async onIt(ctfSlug, taskSlug, onIt) {
     return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}/onit`, { onIt });
   }
+
+  async newStatus(ctfSlug, taskSlug, status) {
+    return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}/newstatus`, { status });
+  }
+
   async solveTask(ctfSlug, taskSlug, solved) {
     return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}`, { solved });
   }

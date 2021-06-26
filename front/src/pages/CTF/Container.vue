@@ -12,7 +12,6 @@ function filterTasksByUser(tasks, username) {
 }
 
 function notificationsByTask(oldTask, newTask) {
-  console.log(oldTask, newTask);
   let notifications = [];
   if (!oldTask.solved && newTask.solved) {
     notifications.push("Task " + oldTask.title + " has been solved!");
