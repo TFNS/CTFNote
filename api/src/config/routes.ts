@@ -13,6 +13,7 @@ import InviteUserAction from "../controllers/ctf.controller/invite.action";
 import CreateTaskAction from "../controllers/task.controller/create.action";
 import UpdateTaskAction from "../controllers/task.controller/update.action";
 import OnItAction from "../controllers/task.controller/onit.action";
+import NewStatusAction from "../controllers/task.controller/newstatus.action";
 import RemoveTaskAction from "../controllers/task.controller/remove.action";
 import UpdateCTFAction from "../controllers/ctf.controller/update.action";
 import CreateCtfAction from "../controllers/ctf.controller/create.action";
@@ -45,6 +46,7 @@ export class Routes {
     app.post("/ctf/:slug/task", [...CreateTaskAction.middlewares], CreateTaskAction.action);
     app.put("/ctf/:ctfSlug/tasks/:taskSlug", [...UpdateTaskAction.middlewares], UpdateTaskAction.action);
     app.put("/ctf/:ctfSlug/tasks/:taskSlug/onit", [...OnItAction.middlewares], OnItAction.action);
+    app.put("/ctf/:ctfSlug/tasks/:taskSlug/newstatus", [...NewStatusAction.middlewares], NewStatusAction.action);
     app.delete("/ctf/:ctfSlug/tasks/:taskSlug", [...RemoveTaskAction.middlewares], RemoveTaskAction.action);
 
     app.get("/admin/config", [...GetConfigAction.middlewares], GetConfigAction.action);
