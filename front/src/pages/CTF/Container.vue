@@ -21,6 +21,11 @@ function notificationsByTask(oldTask, newTask) {
       notifications.push(username + " is now solving " + oldTask.title + " as well");
     }
   }
+  for (const newStatus of newTask.statuses) {
+    if (!oldTask.statuses.find((oldStatus) => oldStatus.id == newStatus.id)) {
+      notifications.push(`${newStatus.user.username}: ${newStatus.value}`);
+    }
+  }
   return notifications;
 }
 
