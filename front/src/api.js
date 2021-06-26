@@ -1,9 +1,3 @@
-import { sleep } from "./utils";
-
-function choice(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
 class API {
   constructor(host) {
     this.host = host;
@@ -87,7 +81,11 @@ class API {
   }
 
   async newStatus(ctfSlug, taskSlug, status) {
-    return this.putJson(`/ctf/${ctfSlug}/tasks/${taskSlug}/newstatus`, { status });
+    return this.postJson(`/ctf/${ctfSlug}/tasks/${taskSlug}/statuses`, { status });
+  }
+
+  async delStatus(ctfSlug, taskSlug, id) {
+    return this.delete(`/ctf/${ctfSlug}/tasks/${taskSlug}/statuses/${id}`);
   }
 
   async solveTask(ctfSlug, taskSlug, solved) {

@@ -107,6 +107,8 @@
             :key="status.id"
             class="text-white q-pa-md"
             :style="colorHash(status.user.slug)"
+            clickable
+            @click="delStatus(status.id)"
             v-for="status in task.statuses"
           />
         </q-card-section>
@@ -198,6 +200,9 @@ export default {
       this.$store.dispatch("newStatus", [this.task.slug, this.newStatus]);
       this.newStatus = "";
       this.showAddStatus = false;
+    },
+    async delStatus(id) {
+      this.$store.dispatch("delStatus", [this.task.slug, id]);
     },
     async updateOnIt(v) {
       this.$store.dispatch("onIt", [this.task.slug, v]);

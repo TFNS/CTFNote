@@ -257,6 +257,13 @@ export default async function (/* { ssrContext } */) {
         });
       },
 
+      async delStatus({ commit, state }, [taskSlug, id]) {
+        return handleApiCall(commit, async () => {
+          const task = await api.delStatus(state.currentCtf.slug, taskSlug, id);
+          commit("updateTask", task);
+        });
+      },
+
       async solved({ commit, state }, [taskSlug, solved]) {
         return handleApiCall(commit, async () => {
           const task = await api.solveTask(state.currentCtf.slug, taskSlug, solved);
