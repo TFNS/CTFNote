@@ -22,7 +22,7 @@ const NewStatusAction: IRoute = {
     const ctfRepo = getConnection().getRepository(CTF);
     const taskRepo = getConnection().getRepository(Task);
     const statusRepo = getConnection().getRepository(Status);
-    const ctf = await ctfRepo.findOne({ slug: ctfSlug }, { relations: ["tasks", "tasks.statuses", "task.players", "guests"] });
+    const ctf = await ctfRepo.findOne({ slug: ctfSlug }, { relations: ["tasks", "tasks.statuses", "tasks.players", "guests"] });
     if (!ctf) return res.status(404).json({ errors: [{ msg: "Invalid CTF slug" }] });
 
     const isGranted = await RightsManager.isGrantedCTF(user, ctf);
