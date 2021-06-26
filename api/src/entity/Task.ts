@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Unique, ManyToOne, ManyToMany, JoinTable, OneToMany } from "typeorm";
 import CTF from "./CTF";
 import User from "./User";
+import Status from "./Status";
 
 
 @Entity()
@@ -30,6 +31,9 @@ export default class Task {
 
     @ManyToOne(() => CTF, ctf => ctf.tasks)
     ctf: CTF;
+
+    @OneToMany(() => Status, status => status.task)
+    statuses: Status[];
 
     @ManyToMany(() => User)
     @JoinTable()
