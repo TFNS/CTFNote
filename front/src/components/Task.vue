@@ -197,6 +197,7 @@ export default {
     async submitStatus() {
       this.$store.dispatch("newStatus", [this.task.slug, this.newStatus]);
       this.newStatus = "";
+      this.showAddStatus = false;
     },
     async updateOnIt(v) {
       this.$store.dispatch("onIt", [this.task.slug, v]);
