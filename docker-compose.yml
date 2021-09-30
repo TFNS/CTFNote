@@ -34,7 +34,7 @@ services:
     ports:
       - 80:80
   codimd:
-    image: quay.io/hedgedoc/hedgedoc:1.7.2-alpine
+    image: quay.io/hedgedoc/hedgedoc:1.9.0-alpine
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/ctfnote
       - CMD_URL_PATH=pad
