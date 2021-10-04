@@ -1,28 +1,10 @@
 <template>
   <q-card bordered class="ctfcard">
-    <q-menu touch-position context-menu>
-      <q-list dense>
-        <q-item clickable v-close-popup @click="editCtf">
-          <q-item-section side>
-            <q-avatar icon="create" />
-          </q-item-section>
-          <q-item-section class="q-px-md"> Edit </q-item-section>
-        </q-item>
-        <q-item clickable v-close-popup @click="deleteCtf">
-          <q-item-section side>
-            <q-avatar icon="delete" />
-          </q-item-section>
-          <q-item-section class="q-px-md"> Delete </q-item-section>
-        </q-item>
-      </q-list>
-    </q-menu>
+    <card-admin-menu @edit="editCtf" @delete="deleteCtf" />
     <q-card-section>
-      <div class="row progress-row q-gutter-md" :style="style">
+      <div class="row progress-row q-gutter-md items-center" :style="style">
         <div class="col-auto">
-          <a :href="ctf.ctfUrl" target="_blank" v-if="ctf.logoUrl">
-            <img height="30px" :src="ctf.logoUrl" />
-          </a>
-          <q-btn v-else color="primary" type="a" :href="ctf.ctfUrl" icon="language" />
+          <logo-link :ctf="ctf" />
         </div>
         <div class="text-h6 col-auto">
           <q-btn :to="$ctfnote.ctfLink(ctf)" flat :label="ctf.title" :disable="!ctf.granted" size="md" />
@@ -30,15 +12,12 @@
         <div class="text-h6 col-auto">
           <q-badge v-if="running" color="positive" class="running"> LIVE </q-badge>
         </div>
-        <q-space class="col-12 col-md-auto col-md-grow" />
-        <div class="col-md-auto col-grow">
-          <q-chip icon="fitness_center" color="grey-4" text-color="grey-10" :label="ctf.weight || '-'" />
+        <q-space />
+        <div class="col-auto">
+          <weight-badge :ctf="ctf" />
         </div>
         <div class="col-auto">
-          <a :href="ctf.ctftimeUrl" target="_blank">
-            <q-tooltip>Browse CTFTime.org</q-tooltip>
-            <img height="30px" src="../../assets/ctftime-logo.svg" />
-          </a>
+          <ctf-time-link :ctf="ctf" />
         </div>
       </div>
     </q-card-section>
@@ -47,29 +26,36 @@
 
     <q-card-section>
       <div class="row justify-between q-col-gutter-md">
-        <div class="text-justify col-12 col-md ctfcard-desc">
+        <div class="text-justify col-md">
           <q-markdown no-html :src="ctf.description" />
-          <div v-if="!running">
-            <Timer :date="ctf.startTime" />
-          </div>
-          <div v-else><b>Time Left: </b><Timer :date="ctf.endTime" /></div>
+          <Timer label="Start in" :date="ctf.startTime" v-if="!running" />
+          <Timer label="Time Left:" :date="ctf.endTime" v-else />
         </div>
         <div class="col-auto col-grow">
-          <div class="column items-center q-gutter-sm">
-            <q-date
-              mask="YYYY-MM-DDTHH:mm:ssZ"
-              today-btn
-              :title="shortDate(ctf.startTime)"
-              :subtitle="shortTime(ctf.startTime)"
-              :value="dateRange"
-              range
-            />
-          </div>
+          <q-date
+            mask="YYYY-MM-DDTHH:mm:ssZ"
+            today-btn
+            :title="shortDate(ctf.startTime)"
+            :subtitle="shortTime(ctf.startTime)"
+            :value="dateRange"
+            range
+          />
         </div>
       </div>
     </q-card-section>
     <q-card-section>
-      <q-btn color="primary" :to="$ctfnote.ctfLink(ctf)" label="Open CTF" :disable="!ctf.granted" size="md" />
+      <div class="q-gutter-md">
+        <q-btn
+          color="primary"
+          :to="$ctfnote.ctfLink(ctf)"
+          label="Open CTF"
+          :disable="!ctf.granted"
+          icon="flag"
+          size="md"
+        />
+        <btn-edit @click="editCtf" />
+        <btn-delete @click="deleteCtf" />
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -79,8 +65,14 @@ import EditCtfDialog from "../Dialogs/EditCtfDialog.vue";
 import Timer from "../Timer.vue";
 import db from "src/gql";
 import * as utils from "src/utils";
+import CardAdminMenu from "./CardAdminMenu.vue";
+import LogoLink from "./LogoLink.vue";
+import CtfTimeLink from "./CtfTimeLink.vue";
+import WeightBadge from "./WeightBadge.vue";
+import BtnEdit from "./BtnEdit.vue";
+import BtnDelete from "./BtnDelete.vue";
 export default {
-  components: { Timer },
+  components: { Timer, CardAdminMenu, LogoLink, CtfTimeLink, WeightBadge, BtnEdit, BtnDelete },
   props: {
     ctf: { type: Object, required: true }
   },

@@ -41,15 +41,8 @@
               <q-btn color="negative" title="Delete the user" size="sm" round icon="delete" @click="removeUser(row)">
                 <q-tooltip>Remove the user</q-tooltip>
               </q-btn>
-              <q-btn
-                color="positive"
-                title="Create a password reset token"
-                size="sm"
-                round
-                icon="lock_clock"
-                @click="resetPassword(row)"
-              >
-                <q-tooltip>Generate a reset password link</q-tooltip>
+              <q-btn color="positive" size="sm" round icon="lock_clock" @click="resetPassword(row)">
+                <q-tooltip>Generate a password reset link</q-tooltip>
               </q-btn>
             </div>
           </q-td>
@@ -168,8 +161,6 @@ export default {
       let first = rowsPerPage > MAX_PER_PAGE ? MAX_PER_PAGE : rowsPerPage;
 
       if (first == 0) first = MAX_PER_PAGE;
-
-      console.log(rowsPerPage);
 
       const offset = page * first;
 

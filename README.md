@@ -26,20 +26,18 @@ Use the provided docker configuration to deploy the project:
 $ docker-compose up -d
 ```
 
-Then, visit 127.0.0.1 and create your first account, which will automatically be provided with admin privileges.
+Then, visit 127.0.0.1 and create your first account, which will automatically be provided with admin privileges
 
 ## Privileges
 
 We use a cascade privilege system. That means ADMIN users have all the rights MANAGER users have and MANAGER have all the rights MEMBER users have and so on.
+| Role | Privileges |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| USER_GUEST (default) | This is used for irregular guests (ponctually invited user).<br> Can only view CTFs when invited.<br> Guests cannot invite other guests. |
+| USER_MEMBER | A member represents a standard CTF player from your team.<br>Can play all CTFs and invite guests. |
+| USER_MANAGER | Can create and edit CTFs |
+| USER_ADMIN | Can edit users and settings
 
-- ADMIN: Can create and manage CTFs, as well as managing the instance ( managing users and configuration of the platform ).
-- MANAGER: Can edit CTFs information and invite guests into a specific CTFs.
-- MEMBER: A member represents a standard CTF player from your team, can access all CTFs of the platform by default
-- GUEST: no privileges: can only view CTFs when invited; this is used for irregular guests ( ponctually invited user ). GUESTs are allowed to create and edit tasks, but not the CTF information.
-
-## Security
-
-cf. [SECURITY.md](./SECURITY.md)
 
 ## Development
 
@@ -58,9 +56,8 @@ $ docker-compose -f docker-compose.dev.yml up -d
 
 ```shell
 $ cd api/
-$ yarn
-$ yarn dev:migrate # Will run the migration on the database
-$ yarn dev
+$ yarn install
+$ yarn start
 ```
 
 ### Start the quasar app

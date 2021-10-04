@@ -2,20 +2,15 @@
   <div class="head column q-px-md" :style="style">
     <div class="col q-py-md">
       <div class="row q-gutter-md items-center">
-        <q-btn type="a" :title="ctf.ctfUrl" target="_blank" :href="ctf.ctfUrl" flat icon="language" round />
+        <logo-link :ctf="ctf" />
         <div class="text-h4">
           {{ ctf.title }}
         </div>
-        <q-btn round icon="edit" color="primary" @click="editCtf" v-if="$ctfnote.isManager">
-          <q-tooltip>Edit the CTF</q-tooltip>
-        </q-btn>
+        <btn-edit round @click="editCtf" />
+        <btn-delete round @click="deleteCtf" />
         <q-space />
-        <q-chip icon="fitness_center" color="grey-4" text-color="grey-10" :label="ctf.weight || '-'" />
-
-        <a :href="ctf.ctftimeUrl" target="_blank">
-          <q-tooltip>Browse CTFTime.org</q-tooltip>
-          <img height="30px" src="../../assets/ctftime-logo.svg" />
-        </a>
+        <weight-badge :ctf="ctf" />
+        <ctf-time-link :ctf="ctf" />
       </div>
     </div>
 
@@ -54,7 +49,13 @@
 import EditCtfDialog from "../Dialogs/EditCtfDialog.vue";
 import * as utils from "src/utils";
 import db from "src/gql";
+import LogoLink from "./LogoLink.vue";
+import CtfTimeLink from "./CtfTimeLink.vue";
+import WeightBadge from "./WeightBadge.vue";
+import BtnEdit from "./BtnEdit.vue";
+import BtnDelete from "./BtnDelete.vue";
 export default {
+  components: { LogoLink, CtfTimeLink, WeightBadge, BtnEdit, BtnDelete },
   props: {
     ctf: { type: Object, required: true }
   },
@@ -112,6 +113,26 @@ export default {
         parent: this,
         ctf: this.ctf
       });
+    },
+    async deleteCtf() {
+      this.$q
+        .dialog({
+          title: `Delete ${this.ctf.title} ?`,
+          color: "negative",
+          message: `This will delete all the tasks, but not the pads.`,
+          ok: "Delete",
+          cancel: true
+        })
+        .onOk(async () => {
+          await this.$apollo.mutate({
+            mutation: db.ctf.DELETE,
+            variables: {
+              id: this.ctf.id
+            },
+            refetchQueries: ["IncomingCtfs", "PastCtfs"]
+          });
+          this.$router.push({ name: "index" });
+        });
     }
   }
 };

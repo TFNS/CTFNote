@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ label }}
     <i v-if="currentTime" style="margin: 0">
       {{ currentTime.days }} days {{ f(currentTime.hours, 2) }}:{{ f(currentTime.min, 2) }}:{{
         f(currentTime.sec, 2)
@@ -17,7 +18,8 @@ export default {
     stop: false
   }),
   props: {
-    date: { type: String, required: true }
+    date: { type: String, required: true },
+    label: { type: String, default: "" }
   },
   mounted() {
     this.parsedDate = new Date(this.date);

@@ -1,6 +1,6 @@
 <template>
   <div class="row q-col-gutter-md justify-evenly">
-    <div class="noctf col text-center q-pa-md" v-if="ctfs.length == 0">No ctfs :(</div>
+    <div class="col text-center q-pa-md" v-if="ctfs.length == 0">No ctfs :(</div>
     <template v-else>
       <div
         class="column col q-gutter-md justify-start align-center"
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import ctfCard from "./CtfCard.vue";
+import ctfCard from "./Card.vue";
 export default {
   components: { ctfCard },
   props: {

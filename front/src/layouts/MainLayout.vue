@@ -21,14 +21,14 @@
             </template>
           </div>
         </q-toolbar-title>
-        <q-btn-dropdown stretch flat :label="$ctfnote.me.username" v-if="$ctfnote.me !== $ctfnote.anonymous">
+        <q-btn-dropdown stretch flat :label="$ctfnote.me.username">
           <q-list class="text-center">
             <q-item v-if="$ctfnote.isAdmin" clickable :to="{ name: 'admin' }">
               <q-item-section>
                 <q-item-label>Admin</q-item-label>
               </q-item-section>
             </q-item>
-            <q-item clickable :to="{ name: 'settings' }">
+            <q-item clickable :to="{ name: 'settings' }" v-if="$ctfnote.isGuest">
               <q-item-section>
                 <q-item-label>Settings</q-item-label>
               </q-item-section>
@@ -55,9 +55,9 @@
                 />
               </div>
             </q-item>
-            <q-separator inset spaced />
+            <q-separator inset spaced v-if="$ctfnote.isGuest" />
 
-            <q-item clickable :to="{ name: 'logout' }">
+            <q-item clickable :to="{ name: 'logout' }" v-if="$ctfnote.isGuest">
               <q-item-section>
                 <q-item-label>Logout</q-item-label>
               </q-item-section>

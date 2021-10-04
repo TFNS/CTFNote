@@ -10,7 +10,7 @@
         <q-btn icon-right="arrow_forward_ios" flat :label="nextBtn" @click="calendarNext" />
       </div>
       <div class="row justify-between items-center" v-else>
-        <div class="row col col-12 items-center  justify-center q-gutter-md">
+        <div class="row col col-12 items-center justify-center q-gutter-md">
           <q-btn round flat icon="today" title="Today" @click="showToday" />
           <div class="text-h5">{{ currentMonth }}</div>
         </div>
@@ -55,7 +55,7 @@
 <script>
 // TODO: fetch CTF lazily month by month
 import db from "src/gql";
-import * as utils from "src/utils";
+import { colorHash } from "src/utils";
 import QCalendar from "@quasar/quasar-ui-qcalendar";
 
 export default {
@@ -105,7 +105,7 @@ export default {
         if (QCalendar.isBetweenDates(currentDate, ctf.startDate, ctf.endDate)) {
           events.push({
             ctf,
-            style: { backgroundColor: utils.colorHash(ctf.title) },
+            style: { backgroundColor: colorHash(ctf.title) },
             days: 7
           });
         }
