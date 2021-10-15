@@ -41,8 +41,6 @@ function createOptions() {
     legacyRelations: "omit" as const,
   };
 
-  postgraphileOptions.showErrorStack = "json" as const;
-  postgraphileOptions.extendedErrors = ["hint", "detail", "errcode"];
   if (config.env == "development") {
     postgraphileOptions.watchPg = true;
     postgraphileOptions.disableQueryLog = false;
