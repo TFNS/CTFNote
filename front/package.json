@@ -44,6 +44,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-vue": "^7.19.1",
+    "lint-staged": "^11.2.3",
     "prettier": "^2.4.1"
   },
   "browserslist": [
