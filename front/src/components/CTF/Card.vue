@@ -1,17 +1,22 @@
 <template>
   <q-card bordered class="ctfcard">
-    <card-admin-menu @edit="editCtf" @delete="deleteCtf" />
+    <card-admin-menu :ctf="ctf" />
     <q-card-section>
       <div class="row progress-row q-gutter-md items-center" :style="style">
         <div class="col-auto">
           <logo-link :ctf="ctf" />
         </div>
-        <div class="text-h6 col-auto">
-          <q-btn :to="$ctfnote.ctfLink(ctf)" flat :label="ctf.title" :disable="!ctf.granted" size="md" />
+        <div class="col-auto">
+          <ctf-note-link name="ctf" :ctf="ctf" :label="ctf.title">
+            <q-btn flat :label="ctf.title" />
+          </ctf-note-link>
         </div>
-        <div class="text-h6 col-auto">
-          <q-badge v-if="running" color="positive" class="running"> LIVE </q-badge>
+        <div class="col-auto">
+          <q-badge v-if="running" color="positive" class="running">
+            LIVE
+          </q-badge>
         </div>
+
         <q-space />
         <div class="col-auto">
           <weight-badge :ctf="ctf" />
@@ -21,133 +26,97 @@
         </div>
       </div>
     </q-card-section>
-
     <q-separator inset />
-
     <q-card-section>
       <div class="row justify-between q-col-gutter-md">
-        <div class="text-justify col-md">
+        <div class="text-justify col-sm">
           <q-markdown no-html :src="ctf.description" />
-          <Timer label="Start in" :date="ctf.startTime" v-if="!running" />
-          <Timer label="Time Left:" :date="ctf.endTime" v-else />
         </div>
         <div class="col-auto col-grow">
           <q-date
             mask="YYYY-MM-DDTHH:mm:ssZ"
             today-btn
-            :title="shortDate(ctf.startTime)"
-            :subtitle="shortTime(ctf.startTime)"
-            :value="dateRange"
+            :title="startDate"
+            :subtitle="startTime"
+            :model-value="dateRange"
             range
           />
         </div>
       </div>
     </q-card-section>
     <q-card-section>
-      <div class="q-gutter-md">
-        <q-btn
-          color="primary"
-          :to="$ctfnote.ctfLink(ctf)"
-          label="Open CTF"
-          :disable="!ctf.granted"
-          icon="flag"
-          size="md"
-        />
-        <btn-edit @click="editCtf" />
-        <btn-delete @click="deleteCtf" />
+      <div class="q-gutter-sm row">
+        <ctf-note-link name="ctf" :ctf="ctf" :label="ctf.title">
+          <q-btn color="primary" icon="flag" label="Open Ctf" />
+        </ctf-note-link>
+        <q-space />
+        <btn-edit suze round :ctf="ctf" />
+        <btn-delete round :ctf="ctf" />
       </div>
     </q-card-section>
   </q-card>
 </template>
 
-<script>
-import EditCtfDialog from "../Dialogs/EditCtfDialog.vue";
-import Timer from "../Timer.vue";
-import db from "src/gql";
-import * as utils from "src/utils";
-import CardAdminMenu from "./CardAdminMenu.vue";
-import LogoLink from "./LogoLink.vue";
-import CtfTimeLink from "./CtfTimeLink.vue";
-import WeightBadge from "./WeightBadge.vue";
-import BtnEdit from "./BtnEdit.vue";
-import BtnDelete from "./BtnDelete.vue";
-export default {
-  components: { Timer, CardAdminMenu, LogoLink, CtfTimeLink, WeightBadge, BtnEdit, BtnDelete },
-  props: {
-    ctf: { type: Object, required: true }
+<script lang="ts">
+import { Ctf } from 'src/ctfnote/models';
+import { getDate, getTime } from 'src/utils';
+import { defineComponent } from 'vue';
+import BtnDelete from '../CTF/BtnDelete.vue';
+import BtnEdit from '../CTF/BtnEdit.vue';
+import CtfTimeLink from '../CTF/CtfTimeLink.vue';
+import LogoLink from '../CTF/LogoLink.vue';
+import WeightBadge from '../CTF/WeightBadge.vue';
+import CtfNoteLink from '../Utils/CtfNoteLink.vue';
+import CardAdminMenu from './CardAdminMenu.vue';
+
+export default defineComponent({
+  components: {
+    LogoLink,
+    WeightBadge,
+    CtfTimeLink,
+    BtnEdit,
+    BtnDelete,
+    CardAdminMenu,
+    CtfNoteLink,
   },
-  data() {
-    return { now: Date.now() };
-  },
-  created() {
-    window.setInterval(this.updateTime, 1000);
-  },
-  destroyed() {
-    window.clearInterval(this.updateTime);
-  },
+  props: { ctf: { type: Object as () => Ctf, required: true } },
   computed: {
+    running(): boolean {
+      const now = new Date();
+      return (
+        new Date(this.ctf.startTime) < now && new Date(this.ctf.endTime) > now
+      );
+    },
     dateRange() {
       const startDate = this.ctf.startTime;
       const endDate = this.ctf.endTime;
+
+      // If it's only one day return only the start
       if (startDate.slice(0, 10) == endDate.slice(0, 10)) {
         return startDate;
       } else {
         return {
           from: startDate,
-          to: endDate
+          to: endDate,
         };
       }
     },
-    running() {
-      return utils.isRunningCtf(this.ctf, this.now);
+    startTime() {
+      return getTime(this.ctf.startTime);
     },
-    style() {
-      const start = new Date(this.ctf.startTime);
-      const end = new Date(this.ctf.endTime);
+    startDate() {
+      return getDate(this.ctf.startTime);
+    },
+    style(): Record<string, string> {
+      const start = new Date(this.ctf.startTime).getTime();
+      const end = new Date(this.ctf.endTime).getTime();
       const duration = end - start;
-      const elapsed = this.now - start;
+      const elapsed = Date.now() - start;
       const progress = (elapsed / duration) * 100;
-      return { "--progress-percent": `${progress.toFixed(2)}%` };
-    }
+      return { '--progress-percent': `${progress.toFixed(2)}%` };
+    },
   },
-  methods: {
-    shortTime(t) {
-      return utils.getTime(t);
-    },
-    shortDate(t) {
-      return utils.getDate(t);
-    },
-    updateTime() {
-      this.now = Date.now();
-    },
-    editCtf() {
-      this.$q.dialog({
-        component: EditCtfDialog,
-        parent: this,
-        ctf: this.ctf
-      });
-    },
-    async deleteCtf() {
-      this.$q
-        .dialog({
-          title: `Delete ${this.ctf.title} ?`,
-          color: "negative",
-          message: `This will delete all the tasks, but not the pads.`,
-          ok: "Delete",
-          cancel: true
-        })
-        .onOk(async () => {
-          await this.$apollo.mutate({
-            mutation: db.ctf.DELETE,
-            variables: {
-              id: this.ctf.id
-            },
-            refetchQueries: ["IncomingCtfs", "PastCtfs"]
-          });
-        });
-    }
-  }
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -156,7 +125,7 @@ export default {
 
   &::before {
     position: absolute;
-    content: "";
+    content: '';
     transition: max-width linear 1s;
     top: 1px;
     left: 4px;
@@ -164,7 +133,8 @@ export default {
     width: calc(var(--progress-percent) - 8px);
     border-radius: 5px;
     background: $positive;
-    box-shadow: 0 1px 3px 0px lighten($positive, 5%), 0 0.2px 1px 0px rgba(255, 255, 255, 0.8) inset;
+    box-shadow: 0 1px 3px 0px lighten($positive, 5%),
+      0 0.2px 1px 0px rgba(255, 255, 255, 0.8) inset;
   }
 }
 @keyframes blinker {

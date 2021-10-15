@@ -1,27 +1,28 @@
 <template>
-  <div class="row q-col-gutter-md justify-evenly">
-    <div class="col text-center q-pa-md" v-if="ctfs.length == 0">No ctfs :(</div>
-    <template v-else>
-      <div
-        class="column col q-gutter-md justify-start align-center"
-        style="max-width: 850px"
-        :key="idx"
-        v-for="(column, idx) in columns"
-      >
-        <div :key="ctf.slug" v-for="ctf in column">
-          <ctfCard :ctf="ctf" />
-        </div>
+  <div class="row q-col-gutter-lg justify-evenly">
+    <div
+      v-for="(column, idx) in columns"
+      :key="idx"
+      class="column col q-gutter-lg justify-start align-center"
+    >
+      <div v-for="ctf in column" :key="ctf.nodeId">
+        <card :ctf="ctf" />
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
-<script>
-import ctfCard from "./Card.vue";
-export default {
-  components: { ctfCard },
+<script lang="ts">
+import { Ctf } from 'src/ctfnote';
+import { defineComponent } from 'vue';
+import Card from './Card.vue';
+export default defineComponent({
+  components: { Card },
   props: {
-    ctfs: { type: Array, required: true }
+    ctfs: {
+      type: Array as () => Ctf[],
+      required: true,
+    },
   },
 
   computed: {
@@ -35,14 +36,15 @@ export default {
       return 3;
     },
     columns() {
-      const columns = Array(this.columnCount)
+      const ctfs = this.ctfs ?? [];
+      const columns: Ctf[][] = Array(this.columnCount)
         .fill(0)
         .map(() => []);
-      for (const [idx, ctf] of this.ctfs.entries()) {
+      for (const [idx, ctf] of ctfs.entries()) {
         columns[idx % this.columnCount].push(ctf);
       }
       return columns;
-    }
-  }
-};
+    },
+  },
+});
 </script>

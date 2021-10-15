@@ -1,5 +1,34 @@
 <template>
-  <q-btn v-bind="$attrs" @click="$emit('click')" icon="edit" color="warning" v-if="$ctfnote.isManager">
+  <q-btn
+    v-if="me.isManager"
+    v-bind="$attrs"
+    icon="edit"
+    color="warning"
+    @click="openEditCtfDialog"
+  >
     <q-tooltip>Edit the CTF</q-tooltip>
   </q-btn>
 </template>
+
+<script lang="ts">
+import { Ctf } from 'src/ctfnote';
+import { openEditCtfDialog } from 'src/ctfnote/dialog';
+import { MeKey } from 'src/ctfnote/symbols';
+import { injectStrict } from 'src/utils';
+import { defineComponent } from 'vue';
+export default defineComponent({
+  props: {
+    ctf: { type: Object as () => Ctf, required: true },
+  },
+  setup() {
+    return { me: injectStrict(MeKey) };
+  },
+  methods: {
+    openEditCtfDialog() {
+      openEditCtfDialog(this.ctf);
+    },
+  },
+});
+</script>
+
+<style scoped></style>

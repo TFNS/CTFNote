@@ -1,8 +1,0 @@
-#import "./ProfileInfo.gql"
-query Profiles {
-  profiles {
-    nodes {
-      ...ProfileInfo
-    }
-  }
-}

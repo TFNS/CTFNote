@@ -1,0 +1,60 @@
+#import "./Profile.graphql"
+
+fragment MeFragment on MeResponse {
+  jwt
+  profile {
+    ...ProfileFragment
+  }
+}
+
+query Me {
+  me {
+    ...MeFragment
+  }
+}
+
+mutation Login($login: String!, $password: String!) {
+  login(input: { login: $login, password: $password }) {
+    jwt
+  }
+}
+
+mutation Register($login: String!, $password: String!) {
+  register(input: { login: $login, password: $password }) {
+    jwt
+  }
+}
+
+mutation RegisterWithToken(
+  $login: String!
+  $password: String!
+  $token: String!
+) {
+  registerWithToken(
+    input: { login: $login, password: $password, token: $token }
+  ) {
+    jwt
+  }
+}
+
+mutation RegisterWithPassword(
+  $login: String!
+  $password: String!
+  $ctfnotePassword: String!
+) {
+  registerWithPassword(
+    input: {
+      login: $login
+      password: $password
+      ctfnotePassword: $ctfnotePassword
+    }
+  ) {
+    jwt
+  }
+}
+
+mutation ResetPassword($password: String!, $token: String!) {
+  resetPassword(input: { password: $password, token: $token }) {
+    jwt
+  }
+}

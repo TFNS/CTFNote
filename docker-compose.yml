@@ -6,9 +6,16 @@ services:
     networks:
       - ctfnote
     environment:
-      CREATE_PAD_URL: "http://hedgedoc:3000/new"
-      SHOW_PAD_URL: "/"
-      DATABASE_URL: "postgres://ctfnote:ctfnote@db:5432/ctfnote"
+      PAD_CREATE_URL: http://hedgedoc:3000/new
+      PAD_SHOW_URL: /
+      DB_DATABASE: ctfnote
+      DB_ADMIN_LOGIN: ctfnote
+      DB_ADMIN_PASSWORD: ctfnote
+      DB_USER_LOGIN: user_postgraphile
+      DB_USER_PASSWORD: secret_password
+      DB_HOST: db
+      DB_PORT: 5432
+      WEB_PORT: 3000
     depends_on:
       - db
   db:
@@ -27,13 +34,13 @@ services:
     networks:
       - ctfnote
     build:
-      context: "./front"
+      context: "./front-vue3"
     depends_on:
       - hedgedoc
     ports:
-      - 80:80
+      - 3000:80
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:1.9.0-alpine
+    image: quay.io/hedgedoc/hedgedoc:latest
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad

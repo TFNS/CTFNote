@@ -15,19 +15,17 @@
 $primary: #085292;
 $secondary: #26a69a;
 $accent: #9c27b0;
-
 $dark: #1d1d1d;
-
-$positive: #4caf50;
+$positive: #2b992f;
 $negative: #c10015;
 $info: #31ccec;
 $warning: #ee7700;
 
 body.body--light {
-  --q-color-light: white;
+  --q-light: white;
 }
 body.body--dark {
-  --q-color-light: var(--q-color-dark);
+  --q-light: var(--q-color-dark);
 }
 
 .bg-light {

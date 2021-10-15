@@ -1,10 +1,16 @@
 <template>
-  <q-card>
+  <q-card bordered>
     <q-card-section>
       <div class="row q-gutter-md">
         <div class="text-h6">Registered users</div>
         <div>
-          <q-btn icon="person_add" round color="positive" size="sm" @click="inviteUser">
+          <q-btn
+            icon="person_add"
+            round
+            color="positive"
+            size="sm"
+            @click="inviteUser"
+          >
             <q-tooltip>Create an invitation link</q-tooltip>
           </q-btn>
         </div>
@@ -14,14 +20,19 @@
       <q-table
         flat
         bordered
-        :pagination.sync="pagination"
+        :rows-per-page-options="[0]"
         :loading="loading"
         :columns="columns"
-        :data="users"
-        @request="onRequest"
+        :rows="users"
+        hide-pagination
       >
         <template #body-cell-id="{ value }">
           <q-td auto-width class="text-right">
+            {{ value }}
+          </q-td>
+        </template>
+        <template #body-cell-login="{ value }">
+          <q-td class="text-right">
             {{ value }}
           </q-td>
         </template>
@@ -32,16 +43,33 @@
         </template>
         <template #body-cell-role="{ row, value }">
           <q-td>
-            <q-select dense :value="value" :options="Object.keys($ctfnote.roles)" @input="v => updateRole(row.id, v)" />
+            <select-role
+              dense
+              :model-value="value"
+              @update:model-value="(v) => updateRole(row, v)"
+            />
           </q-td>
         </template>
         <template #body-cell-btns="{ row }">
           <q-td auto-width>
             <div class="q-gutter-sm">
-              <q-btn color="negative" title="Delete the user" size="sm" round icon="delete" @click="removeUser(row)">
+              <q-btn
+                color="negative"
+                title="Delete the user"
+                size="sm"
+                round
+                icon="delete"
+                @click="removeUser(row)"
+              >
                 <q-tooltip>Remove the user</q-tooltip>
               </q-btn>
-              <q-btn color="positive" size="sm" round icon="lock_clock" @click="resetPassword(row)">
+              <q-btn
+                color="positive"
+                size="sm"
+                round
+                icon="lock_clock"
+                @click="resetPassword(row)"
+              >
                 <q-tooltip>Generate a password reset link</q-tooltip>
               </q-btn>
             </div>
@@ -52,135 +80,113 @@
   </q-card>
 </template>
 
-<script>
-import db from "src/gql";
-import ResetPasswordLinkDialog from "../Dialogs/ResetPasswordLinkDialog";
-import InviteUserDialog from "../Dialogs/InviteUserDialog.vue";
+<script lang="ts">
+import { Role, User } from 'src/ctfnote';
+import { deleteUser, getUsers, updateUserRole } from 'src/ctfnote/admin';
+import { MeKey } from 'src/ctfnote/symbols';
+import { injectStrict } from 'src/utils';
+import { defineComponent } from 'vue';
+import InviteUserDialog from '../Dialogs/InviteUserDialog.vue';
+import ResetPasswordDialog from '../Dialogs/ResetPasswordDialog.vue';
+import SelectRole from '../Utils/SelectRole.vue';
 
-const MAX_PER_PAGE = 100;
-const DEFAULT_COUNT = 10;
-
-export default {
-  mounted() {
-    this.onRequest({ pagination: this.pagination });
+const pagination = {
+  rowsNumber: 0,
+  rowsPerPage: 0,
+};
+const columns = [
+  {
+    name: 'id',
+    label: 'ID',
+    field: (u: User) => u.profile.id,
+    sortable: true,
   },
-  data() {
-    const pagination = {
-      rowsNumber: 0,
-      rowsPerPage: DEFAULT_COUNT
+  { name: 'login', label: 'Login', field: 'login', sortable: true },
+  {
+    name: 'username',
+    label: 'Username',
+    field: (u: User) => u.profile.username,
+    sortable: true,
+  },
+  { name: 'role', label: 'Role', field: 'role', sortable: true },
+  { name: 'btns' },
+];
+
+export default defineComponent({
+  components: { SelectRole },
+  setup() {
+    const me = injectStrict(MeKey);
+
+    const { result: users, loading, refetch } = getUsers();
+    return {
+      me,
+      deleteUser: (id: number) => deleteUser(id),
+      updateUserRole: (user: User, role: Role) => updateUserRole(user, role),
+      pagination,
+      users,
+      columns,
+      loading,
+      refetch,
     };
-    const columns = [
-      { name: "id", label: "ID", field: "id", sortable: true },
-      { name: "username", label: "Login", field: "login", sortable: true },
-      { name: "role", label: "Role", field: "role", sortable: true },
-      { name: "btns" }
-    ];
-    return { columns, pagination, loading: false, users: [] };
   },
   methods: {
-    removeUser(user) {
-      this.$q
-        .dialog({
-          title: `Delete ${user.login} ?`,
-          message: `This operation is irreversible.`,
-          cancel: true,
-          ok: {
-            label: "Delete",
-            color: "negative"
-          }
-        })
-        .onOk(async () => {
-          this.$apollo.mutate({
-            mutation: db.admin.DELETE_USER,
-            variables: {
-              userId: user.id
-            },
-            refetchQueries: [{ query: db.admin.USERS }]
-          });
-        });
-    },
-    inviteUser() {
+    inviteUser(user: User) {
       this.$q.dialog({
         component: InviteUserDialog,
-        parent: this
+        componentProps: {
+          user,
+        },
       });
     },
-    updateRole(userId, role) {
-      const performUpdate = () => {
-        this.$apollo.mutate({
-          mutation: db.admin.UPDATE_ROLE,
-          variables: { userId, role },
-          update: (store, { data: { updateUserRole } }) => {
-            const query = {
-              query: db.admin.USERS
-            };
-
-            const data = store.readQuery(query);
-            const user = data.users.nodes.find(u => u.id === userId);
-
-            user.role = updateUserRole.role;
-
-            store.writeQuery({ ...query, data });
-          }
+    removeUser(user: User) {
+      this.$q
+        .dialog({
+          title: `Delete ${user.login ?? ''} ?`,
+          message: 'This operation is irreversible.',
+          cancel: true,
+          ok: {
+            label: 'Delete',
+            color: 'negative',
+          },
+        })
+        .onOk(async () => {
+          if (!user.id) return;
+          await this.deleteUser(user.id);
+          await this.refetch();
         });
+    },
+    resetPassword(user: User) {
+      this.$q.dialog({
+        component: ResetPasswordDialog,
+        componentProps: {
+          user,
+        },
+      });
+    },
+    async updateRole(user: User, role: Role) {
+      const profile = user.profile;
+      const performUpdate = async () => {
+        await this.updateUserRole(user, role);
+        await this.refetch();
       };
 
-      if (this.$ctfnote.me.id === userId) {
+      if (profile.id == this.me.profile?.id) {
         this.$q
           .dialog({
-            title: `Are you sure ?`,
-            color: "negative",
-            message: "You are about to modify your own role, are you sure ?",
-            ok: "Change Role",
-            cancel: true
+            title: 'Are you sure ?',
+            color: 'negative',
+            message:
+              'You are about to modify your own role, do you want to continue ?',
+            ok: 'Change Role',
+            cancel: true,
           })
-          .onOk(performUpdate);
-        return;
+          .onOk(() => performUpdate());
+      } else {
+        await performUpdate();
       }
-
-      performUpdate();
     },
-    resetPassword(user) {
-      this.$q.dialog({
-        component: ResetPasswordLinkDialog,
-        parent: this,
-        user
-      });
-    },
-
-    async onRequest(props) {
-      const { rowsPerPage } = props.pagination;
-
-      let page = props.pagination.page;
-
-      if (page === void 0) {
-        page = 1;
-      }
-      page--;
-
-      let first = rowsPerPage > MAX_PER_PAGE ? MAX_PER_PAGE : rowsPerPage;
-
-      if (first == 0) first = MAX_PER_PAGE;
-
-      const offset = page * first;
-
-      this.loading = true;
-      const {
-        data: {
-          users: { nodes: users, totalCount }
-        }
-      } = await this.$apollo.mutate({
-        mutation: db.admin.USERS,
-        variables: { first, offset }
-      });
-      this.loading = false;
-
-      this.users = users;
-
-      this.pagination.rowsNumber = totalCount;
-      this.pagination.rowsPerPage = first;
-      this.pagination.page = page + 1;
-    }
-  }
-};
+  },
+});
 </script>
+
+<style scoped></style>

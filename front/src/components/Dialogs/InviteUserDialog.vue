@@ -1,18 +1,18 @@
 <template>
-  <q-dialog ref="dialog" @hide="$emit('hide')">
-    <q-card class="ctfnote-dialog">
+  <q-dialog ref="dialogRef" @hide="onDialogHide">
+    <q-card class="q-dialog-plugin ctfnote-dialog">
       <q-card-section>
         <div class="row q-gutter-md">
           <div class="text-h6">Create a new invitation link</div>
           <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
+          <q-btn v-close-popup icon="close" flat round dense />
         </div>
       </q-card-section>
       <q-separator />
       <q-card-section>
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="role" class="full-width">
-            <q-select label="Role" dense v-model="role" :options="Object.keys($ctfnote.roles)" />
+            <select-role v-model="role" label="Role" />
           </q-tab-panel>
           <q-tab-panel name="link" class="full-width">
             <copy-link v-if="link" :link="link" />
@@ -21,48 +21,52 @@
       </q-card-section>
       <q-card-actions class="row justify-end q-pt-none q-pb-md q-pr-md">
         <template v-if="tab == 'role'">
-          <q-btn color="warning" label="Cancel" v-close-popup />
+          <q-btn v-close-popup color="warning" label="Cancel" />
           <q-btn color="positive" label="Create" @click="createLink" />
         </template>
-        <q-btn color="positive" label="Close" v-close-popup v-else />
+        <q-btn v-else v-close-popup color="positive" label="Close" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
-<script>
-import db from "src/gql";
-import CopyLink from "../CopyLink.vue";
-export default {
-  components: { CopyLink },
-  data() {
+<script lang="ts">
+import { useDialogPluginComponent } from 'quasar';
+import { Role } from 'src/ctfnote';
+import { createInvitationToken } from 'src/ctfnote/admin';
+import { defineComponent, ref } from 'vue';
+import CopyLink from '../Utils/CopyLink.vue';
+import SelectRole from '../Utils/SelectRole.vue';
+export default defineComponent({
+  components: { SelectRole, CopyLink },
+  emits: useDialogPluginComponent.emits,
+  setup() {
+    const { dialogRef, onDialogHide, onDialogCancel } =
+      useDialogPluginComponent();
+
     return {
-      link: null,
-      tab: "role",
-      role: "USER_GUEST",
+      tab: ref<'role' | 'link'>('role'),
+      link: ref<string | null>(null),
+      role: ref<Role>('USER_GUEST' as Role),
+      dialogRef,
+      onDialogHide,
+      onCancelClick: onDialogCancel,
     };
   },
+
   methods: {
-    show() {
-      this.$refs.dialog.show();
-    },
-    hide() {
-      this.$refs.dialog.hide();
-    },
-    createLink() {
-      db;
-      this.$apollo
-        .mutate({
-          mutation: db.user.CREATE_INVITATION_LINK,
-          variables: { role: this.role },
-        })
-        .then(({ data }) => {
-          const token = data.createInvitationLink.invitationLinkResponse.token;
-          const path = this.$router.resolve({ name: "registerWithLink", params: { token } });
-          this.link = `${location.origin}/${path.href}`;
-          this.tab = "link";
-        });
+    async createLink() {
+      const token = await createInvitationToken(this.role);
+
+      const path = this.$router.resolve({
+        name: 'auth-register-token',
+        params: { token },
+      });
+      this.link = `${location.origin}/${path.href}`;
+      this.tab = 'link';
     },
   },
-};
+});
 </script>
+
+<style scoped></style>

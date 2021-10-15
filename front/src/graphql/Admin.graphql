@@ -1,0 +1,48 @@
+#import "./Profile.graphql"
+
+fragment UserFragment on User {
+  nodeId
+  login
+  role
+  id
+  profile {
+    ...ProfileFragment
+  }
+}
+
+query getUsers {
+  users {
+    nodes {
+      ...UserFragment
+    }
+  }
+}
+
+mutation createInvitationToken($role: Role!) {
+  createInvitationLink(input: { role: $role }) {
+    invitationLinkResponse {
+      token
+    }
+  }
+}
+mutation createResetPasswordToken($userId: Int!) {
+  createResetPasswordLink(input: { userId: $userId }) {
+    resetPasswordLinkResponse {
+      token
+    }
+  }
+}
+mutation deleteUserById($userId: Int!) {
+  deleteUser(input: { userId: $userId }) {
+    userResponse {
+      id
+      login
+      role
+    }
+  }
+}
+mutation updateRoleForUserId($userId: Int!, $role: Role!) {
+  updateUserRole(input: { userId: $userId, role: $role }) {
+    role
+  }
+}

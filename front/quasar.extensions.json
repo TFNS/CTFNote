@@ -1,10 +1,9 @@
 {
   "@quasar/apollo": {
-    "graphql_uri": "/graphql"
+    "typescript": true
   },
   "@quasar/qmarkdown": {
-    "import_md": false,
-    "import_vmd": false
-  },
-  "@quasar/qcalendar": {}
+    "import_md": true,
+    "import_vmd": true
+  }
 }

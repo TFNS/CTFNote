@@ -1,106 +1,86 @@
 <template>
   <div class="q-gutter-md">
-    <div class="row" v-if="!loading">
-      <div class="col col-auto" :key="user.nodeId" v-for="user in guestUsersWithInvitation">
+    <div class="row">
+      <div class="col q-px-sm">
+        Invite guests to join <b>{{ ctf.title }}</b>
+      </div>
+    </div>
+    <div class="row">
+      <div
+        v-for="guest in guestsWithInvitation"
+        :key="guest.nodeId"
+        class="col col-auto"
+      >
         <q-chip
           clickable
           class="text-white q-py-md q-pl-md q-pr-none"
           size="bg"
-          :style="userStyle(user)"
-          :label="user.username"
-          @click="setInvitation(!Boolean(user.invitation), user)"
+          :style="chipStyle(guest)"
+          :label="guest.username"
+          @click="
+            !guest.invitation
+              ? createInvitation(guest)
+              : deleteInvitation(guest)
+          "
         >
-          <q-toggle :value="Boolean(user.invitation)" checked-icon="check" @input="v => setInvitation(v, user)" />
+          <q-toggle
+            :model-value="!!guest.invitation"
+            checked-icon="check"
+            @update:modelValue="
+              (v) => (v ? createInvitation(guest) : deleteInvitation(guest))
+            "
+          />
         </q-chip>
-      </div>
-      <div class="col" v-if="guestUsersWithInvitation.length == 0">
-        No guests :(
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import db from "src/gql";
-import { colorHash } from "../../utils";
-export default {
+<script lang="ts">
+import { Ctf, Profile, Role, TeamKey } from 'src/ctfnote';
+import { inviteUserToCtf, uninviteUserToCtf } from 'src/ctfnote/ctfs';
+import { colorHash, injectStrict } from 'src/utils';
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   props: {
-    ctf: { type: Object, required: true }
+    ctf: { type: Object as () => Ctf, required: true },
   },
-  apollo: {
-    guestUsers: {
-      query: db.profile.GUESTS,
-      update: d => d.guests.nodes
-    },
-    invitations: {
-      query: db.invitation.ALL,
-      variables() {
-        return { ctfId: this.ctf.id };
-      },
-      update: data => data.invitations.nodes
-    }
-  },
-  methods: {
-    userStyle(user) {
-      return { backgroundColor: colorHash(user.username) };
-    },
-    setInvitation(v, profile) {
-      if (v) {
-        this.inviteUser(profile);
-      } else {
-        this.deleteInvitation(profile.invitation);
-      }
-    },
-    async inviteUser(profile) {
-      await this.$apollo.mutate({
-        mutation: db.invitation.CREATE,
-        variables: {
-          ctfId: this.ctf.id,
-          profileId: profile.id
-        },
-        update: (store, { data: { createInvitation } }) => {
-          const invitation = createInvitation.invitation;
-          const query = {
-            query: db.invitation.ALL,
-            variables: { ctfId: this.ctf.id }
-          };
-          const data = store.readQuery(query);
-          data.invitations.nodes.push(invitation);
-          store.writeQuery({ ...query, data });
-        }
-      });
-    },
-    deleteInvitation(invitation) {
-      this.$apollo.mutate({
-        mutation: db.invitation.DELETE,
-        variables: {
-          nodeId: invitation.nodeId
-        },
-        update: (store, { data: { deleteInvitationByNodeId } }) => {
-          const nodeId = deleteInvitationByNodeId.deletedInvitationNodeId;
-          const query = {
-            query: db.invitation.ALL,
-            variables: { ctfId: this.ctf.id }
-          };
-          const data = store.readQuery(query);
-          data.invitations.nodes = data.invitations.nodes.filter(n => n.nodeId != nodeId);
-          store.writeQuery({ ...query, data });
-        }
-      });
-    }
+  setup() {
+    const team = injectStrict(TeamKey);
+
+    return {
+      team,
+    };
   },
   computed: {
-    loading() {
-      return this.$apollo.queries.guestUsers.loading || this.$apollo.queries.invitations.loading;
+    guests() {
+      return this.team.filter((p) => p.role == Role.UserGuest);
     },
-    ctfInvitations() {
-      return this.invitations;
-    },
-    guestUsersWithInvitation() {
-      return this.guestUsers.map(profile => {
-        return { ...profile, invitation: this.ctfInvitations.find(i => i.profile.nodeId == profile.nodeId) };
+    guestsWithInvitation() {
+      return this.guests.map((g) => {
+        const invitation = this.ctf.invitations.find(
+          (i) => i.profileId == g.id
+        );
+        return { ...g, invitation };
       });
-    }
-  }
-};
+    },
+  },
+  methods: {
+    isInvited(guest: Profile): boolean {
+      return !!this.ctf.invitations.find((i) => i.profileId == guest.id);
+    },
+    chipStyle(guest: Profile): Record<string, string> {
+      return { backgroundColor: colorHash(guest.username ?? '') };
+    },
+    async createInvitation(profile: Profile) {
+      await inviteUserToCtf(this.ctf, profile);
+    },
+    async deleteInvitation(profile: Profile) {
+      await uninviteUserToCtf(this.ctf, profile);
+    },
+  },
+});
 </script>
+
+<style scoped></style>

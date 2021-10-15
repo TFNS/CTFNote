@@ -11,7 +11,7 @@ FROM node:15-buster as builder
 ARG NODE_ENV
 
 # Cache node_modules for as long as possible
-COPY package.json yarn.lock tsconfig.json database.json wait-for-it.sh /app/
+COPY package.json yarn.lock tsconfig.json wait-for-it.sh /app/
 WORKDIR /app/
 RUN yarn install --frozen-lockfile --production=false --no-progress
 # Copy over the server source code
@@ -29,7 +29,7 @@ FROM node:15-buster as clean
 ARG NODE_ENV
 
 # Copy over selectively just the tings we need, try and avoid the rest
-COPY --from=builder /app/package.json /app/yarn.lock /app/database.json /app/wait-for-it.sh /app/
+COPY --from=builder /app/package.json /app/yarn.lock /app/wait-for-it.sh /app/
 COPY --from=builder /app/dist/ /app/dist/
 COPY --from=builder /app/migrations/ /app/migrations/
 

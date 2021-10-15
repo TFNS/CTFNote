@@ -1,5 +1,0 @@
-mutation Login($login: String!, $password: String!) {
-  login(input: { login: $login, password: $password }) {
-    jwt
-  }
-}

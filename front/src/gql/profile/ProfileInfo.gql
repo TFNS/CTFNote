@@ -1,6 +1,0 @@
-fragment ProfileInfo on Profile {
-  id
-  username
-  role
-  nodeId
-}

@@ -1,9 +1,0 @@
-#import "./CtfInfo.gql"
-
-query Ctfs {
-  ctfs {
-    nodes {
-      ...CtfInfo
-    }
-  }
-}

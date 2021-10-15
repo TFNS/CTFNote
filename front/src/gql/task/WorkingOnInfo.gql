@@ -1,7 +1,0 @@
-#import "../profile/ProfileInfo.gql"
-fragment WorkingOnInfo on WorkOnTask {
-  nodeId
-  profile {
-    ...ProfileInfo
-  }
-}

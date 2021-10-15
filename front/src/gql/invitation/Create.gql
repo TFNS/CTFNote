@@ -1,8 +1,0 @@
-#import "./InvitationInfo.gql"
-mutation inviteUser($ctfId: Int!, $profileId: Int!) {
-  createInvitation(input: { invitation: { ctfId: $ctfId, profileId: $profileId } }) {
-    invitation {
-      ...InvitationInfo
-    }
-  }
-}

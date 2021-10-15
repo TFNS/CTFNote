@@ -1,8 +1,0 @@
-#import "./WorkingOnInfo.gql"
-mutation stopWorking($taskId: Int!) {
-  stopWorkingOn(input: { taskId: $taskId }) {
-    workOnTask {
-      ...WorkingOnInfo
-    }
-  }
-}

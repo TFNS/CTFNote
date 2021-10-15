@@ -1,8 +1,0 @@
-#import "./TaskInfo.gql"
-query getTasksForCtfId($ctfId: Int!) {
-  tasks(condition: { ctfId: $ctfId }) {
-    nodes {
-      ...TaskInfo
-    }
-  }
-}

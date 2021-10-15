@@ -1,7 +1,0 @@
-mutation changeUsername($id: Int!, $newUsername: String!) {
-  updateProfile(input: { id: $id, patch: { username: $newUsername } }) {
-    profile {
-      username
-    }
-  }
-}

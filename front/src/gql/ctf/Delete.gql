@@ -1,5 +1,0 @@
-mutation deleteCtf($id: Int!) {
-  deleteCtf(input: { id: $id }) {
-    deletedCtfNodeId
-  }
-}

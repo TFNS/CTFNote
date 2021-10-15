@@ -1,26 +1,34 @@
 <template>
   <div>
-    <router-view :ctf="ctf" v-if="ctf" />
-    <q-inner-loading :showing="$apollo.queries.ctf.loading">
+    <router-view v-if="ctf" :ctf="ctf" />
+    <q-inner-loading :showing="loading">
       <q-spinner-gears size="50px" color="primary" />
     </q-inner-loading>
   </div>
 </template>
 
-<script>
-import db from "src/gql";
+<script lang="ts">
+import { getCtf } from 'src/ctfnote/ctfs';
+import { openCtf } from 'src/ctfnote/menu';
+import { defineComponent, watch } from 'vue';
 
-export default {
+export default defineComponent({
   props: {
-    ctfId: { type: Number, required: true }
+    ctfId: { type: Number, required: true },
   },
-  apollo: {
-    ctf: {
-      query: db.ctf.GET,
-      variables() {
-        return { id: this.ctfId };
-      }
-    }
-  }
-};
+  setup(props) {
+    const { result: ctf, loading } = getCtf(() => ({
+      id: props.ctfId,
+    }));
+
+    watch(
+      ctf,
+      (ctf) => {
+        if (ctf) openCtf(ctf);
+      },
+      { immediate: true }
+    );
+    return { ctf, loading };
+  },
+});
 </script>

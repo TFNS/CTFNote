@@ -1,0 +1,52 @@
+fragment ProfileFragment on Profile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+
+query getGuests {
+  guests {
+    nodes {
+      ...ProfileFragment
+    }
+  }
+}
+
+mutation updatePassword($oldPassword: String!, $newPassword: String!) {
+  changePassword(
+    input: { oldpassword: $oldPassword, newpassword: $newPassword }
+  ) {
+    changePasswordResponse {
+      ok
+    }
+  }
+}
+mutation updateProfile($id: Int!, $patch: ProfilePatch!) {
+  updateProfile(input: { id: $id, patch: $patch }) {
+    profile {
+      ...ProfileFragment
+    }
+  }
+}
+
+query getTeam {
+  profiles {
+    nodes {
+      ...ProfileFragment
+    }
+  }
+}
+
+subscription subscribeToProfile($topic: String!) {
+  listen(topic: $topic) {
+    relatedNode {
+      nodeId
+      ... on Profile {
+        ...ProfileFragment
+      }
+    }
+  }
+}

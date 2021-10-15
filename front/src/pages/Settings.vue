@@ -1,94 +1,170 @@
 <template>
-  <q-page class="q-pa-md">
-    <q-card>
-      <q-card-section>
-        <div class="text-h4">User settings</div>
-      </q-card-section>
+  <q-page>
+    <q-tabs
+      model-value="Profile"
+      class="bg-light"
+      indicator-color="primary"
+      dense
+      align="left"
+    >
+      <q-tab name="Profile" label="Profile" icon="person" />
+    </q-tabs>
 
-      <q-card-section class="q-gutter-md">
-        <div class="text-h5">Change Username</div>
-        <q-input
-          filled
-          v-model="username"
-          label="Username"
-          hint="Display Name"
-          lazy-rules
-          @keyup.enter="changeUsername"
-          :value="$ctfnote.me.username"
-          :rules="[val => (val && val.length > 0) || 'Please type something']"
-        >
-          <template #after>
-            <q-btn round icon="save" color="positive" title="Change username" @click="changeUsername"> </q-btn>
-          </template>
-        </q-input>
-      </q-card-section>
+    <div class="q-pa-md">
+      <div class="row q-gutter-md">
+        <div class="col">
+          <q-card v-if="me" bordered>
+            <q-card-section class="row justify-between">
+              <div class="text-h6">Change Profile</div>
+              <user-badge :profile="tmpProfile" />
+            </q-card-section>
 
-      <q-card-section class="q-gutter-md">
-        <div class="text-h5">Change Password</div>
-        <q-input
-          filled
-          v-model="oldPassword"
-          type="password"
-          label="Current Password"
-          hint="The password you currently use"
-          :rules="[val => (val && val.length > 0) || 'Please type something']"
-        />
-        <q-input
-          filled
-          v-model="newPassword"
-          @keyup.enter="changePassword"
-          type="password"
-          label="New Password"
-          hint="The new password you want to use"
-          :rules="[val => (val && val.length > 0) || 'Please type something']"
-        >
-          <template #after>
-            <q-btn round icon="save" color="positive" title="Change password" @click="changePassword"> </q-btn>
-          </template>
-        </q-input>
-      </q-card-section>
-    </q-card>
+            <q-card-section class="q-gutter-lg">
+              <div class="col">
+                <q-input
+                  v-model="username"
+                  filled
+                  label="Username"
+                  hint="Displayed name"
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Please type something',
+                  ]"
+                  @keyup.enter="changeProfile"
+                >
+                </q-input>
+              </div>
+              <div class="col">
+                <color-picker v-model="color" label="color" />
+              </div>
+              <div class="col">
+                <q-input
+                  v-model="description"
+                  type="textarea"
+                  filled
+                  label="Description"
+                >
+                </q-input>
+              </div>
+            </q-card-section>
+            <q-card-actions align="right" class="q-pa-md">
+              <div>
+                <q-btn
+                  icon="save"
+                  label="save"
+                  color="positive"
+                  title="Change username"
+                  @click="changeProfile"
+                />
+              </div>
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div class="col">
+          <q-card bordered>
+            <q-card-section>
+              <div class="text-h6">Change Password</div>
+            </q-card-section>
+            <q-separator class="q-mx-xl" />
+            <q-card-section class="q-gutter-sm">
+              <password-input
+                v-model="oldPassword"
+                label="Old Password"
+                hint="The password you currently use"
+              />
+              <password-input
+                v-model="newPassword"
+                label="New Password"
+                hint="The new password you want to use"
+                @keyup.enter="changePassword"
+              />
+            </q-card-section>
+            <q-card-actions align="right" class="q-pa-md">
+              <div>
+                <q-btn
+                  icon="save"
+                  label="save"
+                  color="positive"
+                  title="Change username"
+                  @click="changePassword"
+                />
+              </div>
+            </q-card-actions>
+          </q-card>
+        </div>
+      </div>
+    </div>
   </q-page>
 </template>
 
-<script>
-import db from "src/gql";
+<script lang="ts">
+import UserBadge from 'src/components/Profile/UserBadge.vue';
+import ColorPicker from 'src/components/Utils/ColorPicker.vue';
+import PasswordInput from 'src/components/Utils/PasswordInput.vue';
+import { MeKey, Profile } from 'src/ctfnote';
+import { updatePassword, updateProfile } from 'src/ctfnote/me';
+import { colorHash, injectStrict } from 'src/utils';
+import { defineComponent, ref, watch } from 'vue';
 
-export default {
-  name: "UserSettings",
-  data() {
+export default defineComponent({
+  components: { PasswordInput, ColorPicker, UserBadge },
+  setup() {
+    const me = injectStrict(MeKey);
+
+    const username = ref(me.value.profile?.username ?? '');
+    const description = ref(me.value.profile?.description ?? '');
+
+    const color = ref(
+      me.value.profile?.color ?? colorHash(me.value.profile?.username ?? '')
+    );
+
+    watch(
+      me,
+      (v) => {
+        if (!v.profile?.username) return;
+        username.value = v.profile?.username;
+        description.value = v.profile?.description;
+        color.value = v.profile?.color ?? colorHash(v.profile.username);
+      },
+      { deep: true }
+    );
+
     return {
-      username: this.$ctfnote.me.username,
-      oldPassword: "",
-      newPassword: ""
+      color,
+      username,
+      description,
+      me,
+      oldPassword: ref(''),
+      newPassword: ref(''),
     };
   },
+  computed: {
+    tmpProfile(): Profile {
+      return { username: this.username, color: this.color } as Profile;
+    },
+  },
   methods: {
-    changeUsername() {
-      this.$apollo
-        .mutate({
-          mutation: db.user.CHANGE_USERNAME,
-          variables: { id: this.$ctfnote.me.id, newUsername: this.username }
-        })
-        .then(response => {
-          this.$ctfnote.me.username = response.data.updateProfile.profile.username;
-          this.$q.notify({ type: "positive", message: "Username changed" });
-        });
+    changeProfile() {
+      if (!this.me.profile) return;
+      void updateProfile(this.me.profile, {
+        color: this.color,
+        description: this.description,
+        username: this.username,
+      });
     },
     changePassword() {
-      const { oldPassword, newPassword } = this;
-
-      this.$apollo
-        .mutate({
-          mutation: db.user.CHANGE_PASSWORD,
-          variables: { oldPassword, newPassword }
-        })
-        .then(response => {
-          if (response.data.changePassword) {
-            this.$q.notify({ type: "positive", message: "Password changed" });
-          }
-        });
-    }
-  }
-};
+      void updatePassword(this.oldPassword, this.newPassword).then(() => {
+        this.oldPassword = '';
+        this.newPassword = '';
+      });
+    },
+  },
+});
 </script>
+
+<style lang="scss" scoped>
+.q-tab {
+  min-width: 200px;
+  padding-top: 5px;
+}
+</style>

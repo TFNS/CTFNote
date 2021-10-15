@@ -1,25 +1,37 @@
 <template>
   <q-page class="page">
     <iframe v-if="task" :src="task.padUrl" />
+    <p v-else>Unable to load task</p>
   </q-page>
 </template>
 
-<script>
-import db from "src/gql";
-export default {
+<script lang="ts">
+import { Ctf, Id, Task } from 'src/ctfnote';
+import { openTask } from 'src/ctfnote/menu';
+import { computed, defineComponent, watch } from 'vue';
+
+export default defineComponent({
   props: {
-    taskId: { type: Number, required: true }
+    ctf: { type: Object as () => Ctf, required: true },
+    taskId: { type: Object as () => Id<Task>, required: true },
   },
-  apollo: {
-    task: {
-      query: db.task.GET,
-      variables() {
-        return { id: this.taskId };
-      }
-    }
-  }
-};
+  setup(props) {
+    const task = computed(
+      () => props.ctf.tasks.find((t) => t.id == props.taskId) ?? null
+    );
+
+    watch(
+      task,
+      (task) => {
+        if (task) openTask(task);
+      },
+      { immediate: true }
+    );
+    return { task };
+  },
+});
 </script>
+
 <style scoped>
 iframe {
   width: 100%;

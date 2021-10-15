@@ -1,9 +1,13 @@
+/* eslint-env node */
+// See https://www.apollographql.com/docs/devtools/apollo-config/
 module.exports = {
   client: {
     service: {
-      name: "ctfnote",
-      url: "http://localhost:3000/graphql"
+      name: 'ctf-note',
+      url: 'http://localhost:3000/graphql',
     },
-    includes: ["src/**/*.vue", "src/**/*.js", "src/**/*.gql"]
-  }
+    // Files processed by the extension
+    includes: [],
+    excludes: ['src/**/*.vue', 'src/**/*.js', 'src/**/*.ts'],
+  },
 };

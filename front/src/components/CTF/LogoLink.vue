@@ -1,30 +1,39 @@
 <template>
-  <q-btn :href="ctf.ctfUrl" target="_blank" class="logo" type="a" :style="style" icon="icon" round>
+  <q-btn
+    :href="ctf.ctfUrl"
+    target="_blank"
+    class="logo"
+    type="a"
+    :style="style"
+    icon="icon"
+    round
+  >
     <q-tooltip>Browse CTF website</q-tooltip>
   </q-btn>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { Ctf } from 'src/ctfnote';
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   props: {
-    ctf: { type: Object, required: true },
-    noLogo: { type: Boolean, default: false }
+    ctf: { type: Object as () => Ctf, required: true },
   },
   computed: {
-    hasLogo() {
-      return !!this.ctf.logoUrl;
-    },
     style() {
-      return this.hasLogo ? { "--logo-url": `url(${this.ctf.logoUrl})` } : {};
+      return this.ctf.logoUrl
+        ? { '--logo-url': `url(${this.ctf.logoUrl})` }
+        : {};
     },
     icon() {
-      return this.hasLogo ? "" : "language";
-    }
-  }
-};
+      return this.ctf.logoUrl ? '' : 'language';
+    },
+  },
+});
 </script>
 
-<style>
+<style scoped>
 .logo {
   background: var(--logo-url);
   background-size: cover;

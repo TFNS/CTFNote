@@ -1,13 +1,13 @@
 <template>
-  <q-dialog ref="dialog" @hide="$emit('hide')">
-    <q-card class="ctfnote-dialog">
+  <q-dialog ref="dialogRef" @hide="onDialogHide">
+    <q-card class="q-dialog-plugin ctfnote-dialog">
       <q-form @submit="submit">
         <q-card-section class="row items-center">
           <div class="text-h6">
             {{ title }}
           </div>
           <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
+          <q-btn v-close-popup icon="close" flat round dense />
         </q-card-section>
 
         <q-separator />
@@ -18,7 +18,12 @@
                 <q-input v-model="form.title" required label="Title" />
               </div>
               <div class="col-auto">
-                <q-input v-model.number="form.weight" step="0.01" type="number" label="Weight" />
+                <q-input
+                  v-model.number="form.weight"
+                  step="0.01"
+                  type="number"
+                  label="Weight"
+                />
               </div>
             </div>
             <div class="row q-col-gutter-md">
@@ -37,7 +42,8 @@
 
             <div class="row q-col-gutter-md">
               <div class="col">
-                <datetime-input v-model="form.startTime" label="Start on" />
+                {{ form.startTime }}
+                <datetime-input v-model="startTime" label="Start on" />
               </div>
               <div class="col">
                 <datetime-input v-model="form.endTime" label="End on" />
@@ -45,13 +51,18 @@
             </div>
             <div class="row q-col-gutter-md">
               <div class="col">
-                <q-input v-model="form.description" type="textarea" label="Description" hint="markdown" />
+                <q-input
+                  v-model="form.description"
+                  type="textarea"
+                  label="Description"
+                  hint="markdown"
+                />
               </div>
             </div>
           </div>
         </q-card-section>
         <q-card-actions class="q-gutter-md justify-end">
-          <q-btn color="warning" label="Cancel" @click="hide" />
+          <q-btn color="warning" label="Cancel" @click="onCancelClick" />
           <q-btn color="positive" type="submit" :label="editText" />
         </q-card-actions>
       </q-form>
@@ -59,70 +70,43 @@
   </q-dialog>
 </template>
 
-<script>
-import DatetimeInput from "../DatetimeInput.vue";
-import db from "src/gql";
-import LogoField from "../LogoField.vue";
-export default {
+<script lang="ts">
+import LogoField from '../Utils/LogoField.vue';
+import { useDialogPluginComponent } from 'quasar';
+import { defineComponent, reactive, ref } from 'vue';
+import DatetimeInput from '../Utils/DatetimeInput.vue';
+import { Ctf } from 'src/ctfnote';
+export default defineComponent({
   components: { DatetimeInput, LogoField },
   props: {
-    ctf: { type: Object, default: null }
+    ctf: { type: Object as () => Ctf | null, default: null },
   },
-  data() {
-    const now = new Date().toISOString().split(".")[0] + "Z";
-    const form = {
-      title: this.ctf?.title,
-      weight: this.ctf?.weight,
-      ctfUrl: this.ctf?.ctfUrl,
-      ctftimeUrl: this.ctf?.ctftimeUrl,
-      logoUrl: this.ctf?.logoUrl,
-      startTime: this.ctf?.startTime || now,
-      endTime: this.ctf?.endTime || now,
-      description: this.ctf?.description,
-      credentials: this.ctf?.credentials
-    };
+  emits: useDialogPluginComponent.emits,
+  setup(props) {
+    const form = reactive(Object.assign({}, props.ctf));
+    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
+      useDialogPluginComponent();
+
     return {
-      panel: "description",
-      form
+      dialogRef,
+      form,
+      onDialogHide,
+      startTime: ref(''),
+      onCancelClick: onDialogCancel,
+      submit() {
+        onDialogOK(form);
+      },
     };
   },
   computed: {
     editText() {
-      return this.ctf ? "Edit" : "Create";
+      return this.ctf ? 'Save' : 'Create';
     },
     title() {
-      return this.ctf ? `Edit ${this.ctf.title}` : "Create CTF";
-    }
+      return this.ctf ? `Edit ${this.ctf.title}` : 'Create CTF';
+    },
   },
-  methods: {
-    show() {
-      this.$refs.dialog.show();
-    },
-    hide() {
-      this.$refs.dialog.hide();
-    },
-    async editCtf(id, ctf) {
-      await this.$apollo.mutate({
-        mutation: db.ctf.UPDATE,
-        variables: { id, ...ctf }
-      });
-      this.hide();
-    },
-    async createCtf(ctf) {
-      await this.$apollo.mutate({
-        mutation: db.ctf.CREATE,
-        variables: ctf
-      });
-      this.hide();
-    },
-    async submit() {
-      if (this.ctf) {
-        await this.editCtf(this.ctf.id, this.form);
-      } else {
-        await this.createCtf(this.form);
-      }
-      this.$emit("ok", this.form);
-    }
-  }
-};
+});
 </script>
+
+<style scoped></style>
