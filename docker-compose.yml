@@ -46,6 +46,9 @@ services:
       - CMD_URL_PATH=pad
       - CMD_IMAGE_UPLOAD_TYPE=filesystem
       - CMD_CSP_ENABLE=false
+      # To enable CSP:
+      # - CMD_CSP_ENABLE=true
+      # - CMD_DOMAIN=http://example.org:1337
     depends_on:
       - db
     restart: always
