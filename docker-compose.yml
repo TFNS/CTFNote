@@ -40,7 +40,7 @@ services:
     ports:
       - 80:80
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:latest
+    image: quay.io/hedgedoc/hedgedoc:1.9.0-alpine
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad
