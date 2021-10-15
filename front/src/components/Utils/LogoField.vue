@@ -23,37 +23,44 @@ export default defineComponent({
   props: {
     modelValue: { type: String, default: '' },
   },
-  emits: ['input:modelValue'],
-  setup(props, { emit }) {
-    const model = ref(props.modelValue);
-    const picker = ref<QFile | null>(null);
-
+  emits: ['update:modelValue'],
+  setup() {
     return {
-      picker,
-      model,
-      clear() {
-        model.value = '';
-      },
-      openPicker() {
-        const qpicker = picker.value;
-        if (qpicker) {
-          qpicker.pickFiles();
-        }
-      },
-      upload(file: Blob) {
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-          if (typeof reader.result === 'string') {
-            model.value = reader.result;
-            emit('input:modelValue', reader.result);
-          }
-        });
-
-        reader.readAsDataURL(file);
-      },
+      picker: ref<QFile | null>(null),
     };
+  },
+  computed: {
+    model: {
+      get(): string {
+        return this.modelValue;
+      },
+      set(v: string) {
+        this.$emit('update:modelValue', v);
+      },
+    },
+  },
+  methods: {
+    clear() {
+      this.$emit('update:modelValue', '');
+    },
+    openPicker() {
+      const qpicker = this.picker;
+      if (qpicker) {
+        qpicker.pickFiles();
+      }
+    },
+    upload(file: Blob) {
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        if (typeof reader.result === 'string') {
+          this.model = reader.result;
+        }
+      });
+
+      reader.readAsDataURL(file);
+    },
   },
 });
 </script>

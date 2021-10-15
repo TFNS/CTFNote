@@ -42,8 +42,7 @@
 
             <div class="row q-col-gutter-md">
               <div class="col">
-                {{ form.startTime }}
-                <datetime-input v-model="startTime" label="Start on" />
+                <datetime-input v-model="form.startTime" label="Start on" />
               </div>
               <div class="col">
                 <datetime-input v-model="form.endTime" label="End on" />
@@ -71,11 +70,14 @@
 </template>
 
 <script lang="ts">
-import LogoField from '../Utils/LogoField.vue';
 import { useDialogPluginComponent } from 'quasar';
-import { defineComponent, reactive, ref } from 'vue';
-import DatetimeInput from '../Utils/DatetimeInput.vue';
 import { Ctf } from 'src/ctfnote';
+import { defineComponent, reactive } from 'vue';
+import DatetimeInput from '../Utils/DatetimeInput.vue';
+import LogoField from '../Utils/LogoField.vue';
+
+
+
 export default defineComponent({
   components: { DatetimeInput, LogoField },
   props: {
@@ -83,7 +85,25 @@ export default defineComponent({
   },
   emits: useDialogPluginComponent.emits,
   setup(props) {
-    const form = reactive(Object.assign({}, props.ctf));
+    
+    const now = new Date().toISOString().slice(0, -5) + 'Z'
+    
+
+    const form = reactive(
+      Object.assign(
+        {
+          title: '',
+          description: '',
+          startTime: now,
+          endTime: now,
+          weight: 0,
+          ctfUrl: null,
+          ctftimeUrl: null,
+          logoUrl: null,
+        },
+        props.ctf
+      )
+    );
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
 
@@ -91,7 +111,6 @@ export default defineComponent({
       dialogRef,
       form,
       onDialogHide,
-      startTime: ref(''),
       onCancelClick: onDialogCancel,
       submit() {
         onDialogOK(form);

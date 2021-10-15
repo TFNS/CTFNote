@@ -1,9 +1,10 @@
 <template>
-  <q-input v-model="model" filled :label="label" :mask="inputMask" fill-mask>
+  {{ time }}
+  <q-input v-model="time" filled :label="label" :mask="inputMask" fill-mask>
     <template #prepend>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy transition-show="scale" transition-hide="scale">
-          <q-date v-model="model" :mask="mask">
+          <q-date v-model="time" :mask="mask">
             <div class="row items-center justify-end">
               <q-btn v-close-popup label="Close" color="primary" flat />
             </div>
@@ -15,7 +16,7 @@
     <template #append>
       <q-icon name="access_time" class="cursor-pointer">
         <q-popup-proxy transition-show="scale" transition-hide="scale">
-          <q-time v-model="model" :mask="mask" format24h>
+          <q-time v-model="time" :mask="mask" format24h>
             <div class="row items-center justify-end">
               <q-btn v-close-popup label="Close" color="primary" flat />
             </div>
@@ -27,9 +28,8 @@
 </template>
 
 <script lang="ts">
-import * as utils from 'src/utils';
 import { date } from 'quasar';
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent } from 'vue';
 
 const humanMask = 'YYYY/MM/DD HH:mm';
 const isoMask = 'YYYY-MM-DDTHH:mm:ssZ';
@@ -43,26 +43,24 @@ function isoToHuman(d: string): string {
   return date.formatDate(date.extractDate(d, isoMask), humanMask);
 }
 
-function now() {
-  const now = new Date();
-  return utils.getDateTime(now);
-}
-
 export default defineComponent({
   props: {
     modelValue: { type: String, default: '' },
     label: { type: String, required: true },
   },
   emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const model = ref(props.modelValue ? isoToHuman(props.modelValue) : now());
-    watch(
-      () => model.value,
-      (v) => {
-        emit('update:modelValue', humanToIso(v));
-      }
-    );
-    return { model, mask: humanMask, inputMask };
+  setup() {
+    return { mask: humanMask, inputMask };
+  },
+  computed: {
+    time: {
+      get(): string {
+        return isoToHuman(this.modelValue);
+      },
+      set(v: string) {
+        this.$emit('update:modelValue', humanToIso(v));
+      },
+    },
   },
 });
 </script>
