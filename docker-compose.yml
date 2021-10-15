@@ -51,7 +51,7 @@ services:
       - db
     restart: always
     volumes:
-      - pad-uploads:/home/hackmd/app/public/uploads
+      - pad-uploads:/hedgedoc/public/uploads
     networks:
       - ctfnote
 volumes:
