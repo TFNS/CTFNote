@@ -52,11 +52,11 @@ export function taskLink(ctf: Ctf, task: Task) {
   };
 }
 
-export function parseJsonStrict<T extends unknown>(s: string) {
+export function parseJsonStrict<T>(s: string) {
   return JSON.parse(s) as T;
 }
 
-export function parseJson<T extends unknown>(s: string): T | null {
+export function parseJson<T>(s: string): T | null {
   try {
     return parseJsonStrict<T | null>(s);
   } catch (e) {
