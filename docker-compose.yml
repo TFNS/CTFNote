@@ -44,14 +44,9 @@ services:
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad
-      - CMD_IMAGE_UPLOAD_TYPE=imgur
-      # To enable filesystem:
-      # - CMD_IMAGE_UPLOAD=filesystem
-      # - CMD_DOMAIN=http://example.org:1337
-      - CMD_CSP_ENABLE=false
-      # To enable CSP:
-      # - CMD_CSP_ENABLE=true
-      # - CMD_DOMAIN=http://example.org:1337
+      - CMD_DOMAIN
+      - CMD_CSP_ENABLE=${CMD_CSP_ENABLE:-false}
+      - CMD_IMAGE_UPLOAD_TYPE=${CMD_IMAGE_UPLOAD_TYPE:-imgur}
     depends_on:
       - db
     restart: always
