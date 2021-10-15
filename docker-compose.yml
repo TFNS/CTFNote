@@ -34,11 +34,11 @@ services:
     networks:
       - ctfnote
     build:
-      context: "./front-vue3"
+      context: "./front"
     depends_on:
       - hedgedoc
     ports:
-      - 3000:80
+      - 80:80
   hedgedoc:
     image: quay.io/hedgedoc/hedgedoc:latest
     environment:
