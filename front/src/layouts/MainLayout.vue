@@ -38,7 +38,9 @@ export default defineComponent({
     });
 
     ctfnote.me.onLogout(() => {
-      void $router.push({ name: 'auth-login' });
+      if (!$route.meta.public) {
+        void $router.push({ name: 'auth-login' });
+      }
     });
 
     ctfnote.me.onLogin(() => {

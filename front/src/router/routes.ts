@@ -39,6 +39,7 @@ const ctfRoute: RouteRecordRaw = {
     },
     {
       path: '',
+      redirect: { name: 'ctf-info' },
       component: () => import('pages/CTF.vue'),
       children: [
         {
