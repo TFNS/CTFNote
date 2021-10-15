@@ -1,32 +1,30 @@
 <template>
   <q-card>
     <q-card-section>
-      <div>
-        <q-table
-          v-model:pagination="pagination"
-          no-data-label="No CTF available."
-          flat
-          :rows="ctfs"
-          :loading="loading"
-          :columns="columns"
-          :rows-per-page-options="rowsPerPageOptions"
-          @request="onRequest"
-        >
-          <template #body="props">
-            <q-tr :props="props">
-              <card-admin-menu :ctf="props.row" />
-              <q-td key="title" :props="props">
-                <ctf-note-link :ctf="props.row" name="ctf">
-                  <q-btn flat :label="props.row.title" />
-                </ctf-note-link>
-              </q-td>
-              <q-td key="date" :props="props">
-                {{ formatTime(props.row.startTime) }}
-              </q-td>
-            </q-tr>
-          </template>
-        </q-table>
-      </div>
+      <q-table
+        v-model:pagination="pagination"
+        no-data-label="No CTF available."
+        flat
+        :rows="ctfs"
+        :loading="loading"
+        :columns="columns"
+        :rows-per-page-options="rowsPerPageOptions"
+        @request="onRequest"
+      >
+        <template #body="props">
+          <q-tr :props="props">
+            <card-admin-menu :ctf="props.row" />
+            <q-td key="title" :props="props">
+              <ctf-note-link :ctf="props.row" name="ctf">
+                <q-btn flat :label="props.row.title" />
+              </ctf-note-link>
+            </q-td>
+            <q-td key="date" :props="props">
+              {{ formatTime(props.row.startTime) }}
+            </q-td>
+          </q-tr>
+        </template>
+      </q-table>
     </q-card-section>
   </q-card>
 </template>
