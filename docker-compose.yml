@@ -56,6 +56,8 @@ services:
       - ctfnote
 volumes:
   ctfnote-db:
+    name: ctfnote
   pad-uploads:
+    name: pad-uploads
 networks:
   ctfnote:
