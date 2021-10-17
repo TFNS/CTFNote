@@ -6,6 +6,7 @@ import {
   useSubscribeToProfileDeletedSubscription,
   useSubscribeToProfileSubscription
 } from 'src/generated/graphql';
+import { colorHash } from 'src/utils';
 import { makeId, Profile } from '.';
 import { wrapQuery } from './utils';
 
@@ -14,7 +15,7 @@ import { wrapQuery } from './utils';
 export function buildProfile(p: ProfileFragment): Profile {
   return {
     ...p,
-    color: p.color ?? null,
+    color: p.color ?? colorHash(p.username),
     id: makeId(p.id),
     role: p.role as Role,
   };

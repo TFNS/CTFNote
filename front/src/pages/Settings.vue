@@ -105,7 +105,7 @@ import ColorPicker from 'src/components/Utils/ColorPicker.vue';
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
 import { MeKey, Profile } from 'src/ctfnote';
 import { updatePassword, updateProfile } from 'src/ctfnote/me';
-import { colorHash, injectStrict } from 'src/utils';
+import { injectStrict } from 'src/utils';
 import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
@@ -117,7 +117,7 @@ export default defineComponent({
     const description = ref(me.value.profile?.description ?? '');
 
     const color = ref(
-      me.value.profile?.color ?? colorHash(me.value.profile?.username ?? '')
+      me.value.profile?.color 
     );
 
     watch(
@@ -126,7 +126,7 @@ export default defineComponent({
         if (!v.profile?.username) return;
         username.value = v.profile?.username;
         description.value = v.profile?.description;
-        color.value = v.profile?.color ?? colorHash(v.profile.username);
+        color.value = v.profile?.color ;
       },
       { deep: true }
     );

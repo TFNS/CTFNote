@@ -19,7 +19,7 @@ export type Profile = {
   username: string;
   role: Role;
   description: string;
-  color: string | null;
+  color: string;
   nodeId: string;
 };
 

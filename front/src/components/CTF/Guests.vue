@@ -40,7 +40,6 @@
 import { Ctf, Profile, Role } from 'src/ctfnote';
 import { inviteUserToCtf, uninviteUserToCtf } from 'src/ctfnote/ctfs';
 import { getTeam } from 'src/ctfnote/profiles';
-import { colorHash } from 'src/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -72,7 +71,7 @@ export default defineComponent({
       return !!this.ctf.invitations.find((i) => i.profileId == guest.id);
     },
     chipStyle(guest: Profile): Record<string, string> {
-      return { backgroundColor: colorHash(guest.username ?? '') };
+      return { backgroundColor: guest.color };
     },
     async createInvitation(profile: Profile) {
       await inviteUserToCtf(this.ctf, profile);

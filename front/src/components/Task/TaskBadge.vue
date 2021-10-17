@@ -35,7 +35,7 @@
 <script lang="ts">
 import { MeKey, Task } from 'src/ctfnote';
 import { getTeam } from 'src/ctfnote/profiles';
-import { colorHash, injectStrict } from 'src/utils';
+import { injectStrict } from 'src/utils';
 import { defineComponent } from 'vue';
 import UserBadge from '../Profile/UserBadge.vue';
 
@@ -76,11 +76,6 @@ export default defineComponent({
         return 'secondary';
       }
       return 'primary';
-    },
-  },
-  methods: {
-    colorHash(s: string | null) {
-      return { backgroundColor: colorHash(s ?? '') };
     },
   },
 });

@@ -10,7 +10,6 @@
 
 <script lang="ts">
 import { Profile } from 'src/ctfnote';
-import { colorHash } from 'src/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -21,11 +20,8 @@ export default defineComponent({
     return {};
   },
   computed: {
-    backgroundColor() {
-      return this.profile.color ?? colorHash(this.profile.username);
-    },
     style() {
-      return { 'background-color': this.backgroundColor };
+      return { 'background-color': this.profile.color };
     },
   },
 });
