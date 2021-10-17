@@ -1,6 +1,7 @@
 import { Role } from 'src/generated/graphql';
 export { Role } from 'src/generated/graphql';
 
+
 /* Utils */
 
 export type Id<T> = number & { __type: T };
@@ -40,6 +41,7 @@ export type Task = {
   id: Id<Task>;
   title: string;
   padUrl: string;
+  slug: string;
   description: string;
   flag: string;
   solved: boolean;
@@ -63,6 +65,7 @@ export type Ctf = {
   startTime: string;
   endTime: string;
   weight: number;
+  slug: string;
   granted: boolean;
   ctfUrl: string | null;
   ctftimeUrl: string | null;

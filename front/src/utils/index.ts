@@ -1,7 +1,6 @@
-import { Ctf, Task } from 'src/ctfnote/models';
-import slugify from 'slugify';
 import ColorHash from 'color-hash';
-import { InjectionKey, inject } from 'vue';
+import { Ctf, Task } from 'src/ctfnote/models';
+import { inject, InjectionKey } from 'vue';
 
 const ch = new ColorHash({ saturation: [0.5, 0.75, 1], lightness: 0.3 });
 
@@ -35,7 +34,7 @@ export function ctfLink(ctf: Ctf, name = 'ctf-info') {
     name,
     params: {
       ctfId: ctf.id,
-      ctfSlug: slugify(ctf.title),
+      ctfSlug: ctf.slug,
     },
   };
 }
@@ -45,9 +44,9 @@ export function taskLink(ctf: Ctf, task: Task) {
     name: 'task',
     params: {
       ctfId: ctf.id,
-      ctfSlug: slugify(ctf.title),
+      ctfSlug: ctf.slug,
       taskId: task.id,
-      taskSlug: slugify(task.title),
+      taskSlug: task.slug,
     },
   };
 }

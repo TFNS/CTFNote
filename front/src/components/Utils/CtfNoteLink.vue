@@ -5,10 +5,9 @@
 </template>
 
 <script lang="ts">
-import { RouteLocationRaw } from 'vue-router';
-import { defineComponent } from 'vue';
 import { Ctf, Task } from 'src/ctfnote';
-import slugify from 'slugify';
+import { defineComponent } from 'vue';
+import { RouteLocationRaw } from 'vue-router';
 
 export default defineComponent({
   props: {
@@ -27,11 +26,11 @@ export default defineComponent({
       const params: Record<string, string> = {};
       if (this.ctf) {
         params['ctfId'] = this.ctf.id.toString();
-        params['ctfSlug'] = slugify(this.ctf.title);
+        params['ctfSlug'] = this.ctf.slug;
       }
       if (this.task) {
         params['taskId'] = this.task.id.toString();
-        params['taskSlug'] = slugify(this.task.title);
+        params['taskSlug'] = this.task.slug;
       }
       return { name: this.name, params };
     },

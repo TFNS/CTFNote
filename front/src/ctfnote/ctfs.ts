@@ -1,3 +1,4 @@
+import slugify from 'slugify';
 import {
   CtfFragment,
   CtfInput,
@@ -45,10 +46,12 @@ export function buildInvitation(invitation: InvitationFragment): CtfInvitation {
 }
 
 export function buildTask(task: TaskFragment): Task {
+  const slug = slugify(task.title)
   return {
     ...task,
     id: makeId(task.id),
     ctfId: makeId(task.ctfId),
+    slug,
     solved: task.solved ?? false,
     workOnTasks: task.workOnTasks.nodes.map((n) =>
       makeId<Profile>(n.profileId)
@@ -57,6 +60,7 @@ export function buildTask(task: TaskFragment): Task {
 }
 
 export function buildCtf(ctf: CtfFragment): Ctf {
+  const slug = slugify(ctf.title)
   return {
     ...ctf,
     id: makeId(ctf.id),
@@ -65,6 +69,7 @@ export function buildCtf(ctf: CtfFragment): Ctf {
     ctftimeUrl: ctf.ctftimeUrl ?? null,
     granted: ctf.granted ?? false,
     credentials: null,
+    slug,
     tasks: [],
     invitations: [],
   };
