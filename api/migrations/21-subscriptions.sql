@@ -145,12 +145,30 @@ CREATE TRIGGER _500_gql_update_profile
   FOR EACH ROW
   EXECUTE PROCEDURE ctfnote_private.notify_profile_edit ();
 
+-- Invitations
+CREATE FUNCTION ctfnote_private.notify_invitation_edit ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  CASE TG_OP
+  WHEN 'INSERT' THEN
+    PERFORM
+      ctfnote_private.notify ('update', 'ctfs', NEW.ctf_id); RETURN NEW;
+  WHEN 'DELETE' THEN
+    PERFORM
+      ctfnote_private.notify ('update', 'ctfs', OLD.ctf_id); RETURN OLD;
+  END CASE;
+END
+$$ VOLATILE
+LANGUAGE plpgsql;
 
-/*
- postgraphile:taskCreated:{id}
- postgraphile:ctfCreated
- postgraphile:nodeUpdated:{nodeId}
- */
+GRANT EXECUTE ON FUNCTION ctfnote_private.notify_invitation_edit () TO user_guest;
+
+CREATE TRIGGER _500_gql_update_invitation
+  AFTER INSERT OR DELETE ON ctfnote.invitation
+  FOR EACH ROW
+  EXECUTE PROCEDURE ctfnote_private.notify_invitation_edit ();
+
 CREATE FUNCTION ctfnote_private.can_watch_node (topic text)
   RETURNS boolean
   AS $$
