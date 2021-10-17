@@ -4,15 +4,15 @@
       <q-card-section>
         <div class="text-h6">Team</div>
       </q-card-section>
-      <q-table :columns="columns" :rows="team" hide-pagination :pagination="pagination">
+      <q-table
+        :columns="columns"
+        :rows="team"
+        hide-pagination
+        :pagination="pagination"
+      >
         <template #body-cell-username="props">
           <q-td key="username" :props="props">
             <user-badge :profile="props.row" />
-          </q-td>
-        </template>
-        <template #body-cell-description="props">
-          <q-td key="description" :props="props"
-            ><q-markdown no-html :src="props.value" />
           </q-td>
         </template>
       </q-table>
@@ -32,8 +32,7 @@ export default defineComponent({
     const { result: team } = getTeam();
     const pagination = {
       rowsPerPage: 0,
-
-    }
+    };
     const columns = [
       {
         name: 'role',
