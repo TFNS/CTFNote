@@ -52,7 +52,13 @@ export function getMe(refresh = false) {
     fetchPolicy: refresh ? 'network-only' : 'cache-first',
   });
 
-  const query = wrapQuery(q, buildMe({}), (data) => buildMe(data.me));
+  const query = wrapQuery(q, buildMe({}), (data) => {
+    if (!data){
+      localStorage.removeItem('JWT')
+      window.location.reload()
+    }
+    return buildMe(data.me)
+  });
   query.onResult((r) => {
     if (r.profile) {
       onLoginCallbacks.forEach((cb) => cb());
