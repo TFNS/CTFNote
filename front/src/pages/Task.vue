@@ -7,7 +7,6 @@
 
 <script lang="ts">
 import { Ctf, Id, Task } from 'src/ctfnote';
-import { openTask } from 'src/ctfnote/menu';
 import { computed, defineComponent, watch } from 'vue';
 
 export default defineComponent({
@@ -23,10 +22,13 @@ export default defineComponent({
     watch(
       task,
       (task) => {
-        if (task) openTask(task);
+        if (task) {
+          document.title = `CTFNote - ${task.title}`;
+        }
       },
       { immediate: true }
     );
+
     return { task };
   },
 });

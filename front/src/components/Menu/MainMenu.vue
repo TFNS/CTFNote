@@ -6,26 +6,7 @@
           <q-img src="/favicon.svg" width="30px" class="q-mr-md" />
           <q-btn flat no-caps>CTFNote</q-btn>
         </ctf-note-link>
-        <template v-if="ctf && $q.screen.gt.sm">
-          <q-separator dark vertical />
-          <div class="row items-center justify-center">
-            <q-btn
-              class="q-mr-sm"
-              type="a"
-              target="_blank"
-              :href="ctf.ctfUrl"
-              flat
-              icon="language"
-              size="sm"
-              round
-            />
-            <ctf-note-link name="ctf-tasks" :ctf="ctf">
-              <q-btn flat no-caps>{{ ctf.title }}</q-btn>
-            </ctf-note-link>
-          </div>
-          <q-separator v-show="ctf.tasks.length" dark vertical />
-          <task-list-menu v-show="ctf.tasks.length" :ctf="ctf" :task="task" />
-        </template>
+        <slot />
       </q-toolbar-title>
       <q-btn-dropdown
         flat
@@ -93,18 +74,14 @@
 <script lang="ts">
 import { useQuasar } from 'quasar';
 import CtfNoteLink from 'src/components/Utils/CtfNoteLink.vue';
-import TaskListMenu from 'src/components/Utils/TaskListMenu.vue';
-import { Ctf, Task } from 'src/ctfnote';
 import { logout } from 'src/ctfnote/auth';
-import { onLogout } from 'src/ctfnote/me';
-import { onMenuChange } from 'src/ctfnote/menu';
 import { MeKey } from 'src/ctfnote/symbols';
 import { injectStrict } from 'src/ctfnote/utils';
 import { useStoredSettings } from 'src/extensions/storedSettings';
 import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
-  components: { CtfNoteLink, TaskListMenu },
+  components: { CtfNoteLink },
 
   setup() {
     const $q = useQuasar();
@@ -112,8 +89,6 @@ export default defineComponent({
     const { makePersistant } = useStoredSettings();
     const liveMode = makePersistant('live-mode', ref(true));
     const darkMode = makePersistant('dark-mode', ref(true));
-    const ctf = ref<Ctf | null>(null);
-    const task = ref<Task | null>(null);
 
     watch(darkMode, (v) => $q.dark.set(v), { immediate: true });
     watch(
@@ -127,22 +102,11 @@ export default defineComponent({
 
     const me = injectStrict(MeKey);
 
-    onMenuChange((c, t) => {
-      ctf.value = c;
-      task.value = t;
-    }, true);
-
-    onLogout(() => {
-      ctf.value = null;
-      task.value = null;
-    });
 
     return {
       me,
       liveMode,
       darkMode,
-      ctf,
-      task,
       logout,
     };
   },

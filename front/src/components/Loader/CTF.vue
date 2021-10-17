@@ -9,25 +9,30 @@
 
 <script lang="ts">
 import { getCtf } from 'src/ctfnote/ctfs';
-import { openCtf } from 'src/ctfnote/menu';
 import { defineComponent, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   props: {
     ctfId: { type: Number, required: true },
   },
   setup(props) {
+    const $router = useRouter();
     const { result: ctf, loading } = getCtf(() => ({
       id: props.ctfId,
     }));
 
-    watch(
-      ctf,
-      (ctf) => {
-        if (ctf) openCtf(ctf);
-      },
-      { immediate: true }
-    );
+    watch(ctf, (ctf) => {
+      if (ctf) {
+        document.title = `CTFNote - ${ctf.title}`
+      }
+    });
+
+    $router.afterEach((to) => {
+      if (to.name != 'task' && ctf.value) {
+        document.title = `CTFNote - ${ctf.value.title}`
+      }
+    });
     return { ctf, loading };
   },
 });

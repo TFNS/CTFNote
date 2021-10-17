@@ -56,9 +56,12 @@ export default defineComponent({
   components: {},
   props: {
     ctf: { type: Object as () => Ctf, required: true },
-    task: { type: Object as () => Task | null, default: null },
+    taskId: { type: Number, default: null },
   },
   computed: {
+    task() {
+      return this.ctf.tasks.find((t) => t.id == this.taskId);
+    },
     title() {
       if (this.task) {
         return this.task.title;

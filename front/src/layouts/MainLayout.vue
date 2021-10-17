@@ -1,6 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <main-menu />
+    <main-menu>
+      <router-view name="menu" />
+    </main-menu>
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -9,9 +11,9 @@
 
 <script lang="ts">
 import { useQuasar } from 'quasar';
-import MainMenu from 'src/components/MainMenu.vue';
+import MainMenu from 'src/components/Menu/MainMenu.vue';
 import { ctfnote, MeKey, SettingsKey } from 'src/ctfnote';
-import { defineComponent, provide, watch } from 'vue';
+import { defineComponent, provide, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 export default defineComponent({
   name: 'MainLayout',
@@ -46,6 +48,18 @@ export default defineComponent({
       }
     });
 
+    const updateTitle = (title?: string) => {
+      void nextTick(() => {
+        document.title = title ? `CTFNote - ${title}` : 'CTFNote';
+      });
+    };
+
+    updateTitle($route.meta.title as string);
+    $router.afterEach((to) => {
+      if (typeof to.meta.title == 'string') {
+        updateTitle(to.meta.title);
+      }
+    });
     watch(
       () => settings.value.style,
       (s) => {
