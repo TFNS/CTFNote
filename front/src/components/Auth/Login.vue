@@ -21,7 +21,7 @@
           :model-value="token"
           label="Token"
         />
-        <div>
+        <div v-if="registrationEnabled">
           I don't have an account:
           <ctf-note-link
             name="auth-register"
@@ -42,7 +42,9 @@
 
 <script lang="ts">
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
+import { SettingsKey } from 'src/ctfnote';
 import { login } from 'src/ctfnote/auth';
+import { injectStrict } from 'src/utils';
 import { defineComponent, reactive } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 
@@ -52,7 +54,9 @@ export default defineComponent({
     token: { type: String, default: '' },
   },
   setup() {
+    const settings = injectStrict(SettingsKey);
     return {
+      settings,
       allowRegistration: true,
       form: reactive({
         login: '',
@@ -60,7 +64,14 @@ export default defineComponent({
       }),
     };
   },
-  computed: {},
+  computed: {
+    registrationEnabled() {
+      return (
+        this.settings.registrationAllowed ||
+        this.settings.registrationPasswordAllowed
+      );
+    },
+  },
   methods: {
     required(val: string) {
       if (!val) {
