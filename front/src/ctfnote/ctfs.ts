@@ -4,7 +4,6 @@ import {
   CtfPatch,
   CtfSecretFragment,
   InvitationFragment,
-  SubscribeToCtfCreated,
   TaskFragment,
   useCreateCtfMutation,
   useCtfsQuery,
@@ -83,7 +82,7 @@ export function buildFullCtf(data: FullCtfResponse): Ctf {
 /* Queries */
 
 export function getIncomingCtfs() {
-  const query = useIncomingCtfsQuery({fetchPolicy: 'cache-and-network'});
+  const query = useIncomingCtfsQuery({ fetchPolicy: 'cache-and-network' });
   const wrappedQuery = wrapQuery(query, [], (data) =>
     data.incomingCtf.nodes.map(buildCtf)
   );
@@ -107,7 +106,7 @@ export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
 }
 
 export function getCtf(...args: Parameters<typeof useGetFullCtfQuery>) {
-  const query = useGetFullCtfQuery(...args,);
+  const query = useGetFullCtfQuery(...args);
   const wrappedQuery = wrapQuery(query, null, (data) => buildFullCtf(data));
 
   wrappedQuery.onResult((ctf) => {

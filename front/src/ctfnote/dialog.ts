@@ -1,4 +1,4 @@
-import { QVueGlobals, useQuasar } from 'quasar';
+import { QVueGlobals } from 'quasar';
 import EditCtfDialog from 'src/components/Dialogs/EditCtfDialog.vue';
 import TaskEditDialog from 'src/components/Dialogs/TaskEditDialog.vue';
 import TaskImportDialog from 'src/components/Dialogs/TaskImportDialog.vue';
