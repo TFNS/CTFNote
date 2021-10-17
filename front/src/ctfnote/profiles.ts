@@ -6,9 +6,8 @@ import {
   useSubscribeToProfileDeletedSubscription,
   useSubscribeToProfileSubscription
 } from 'src/generated/graphql';
-import { colorHash } from 'src/utils';
 import { makeId, Profile } from '.';
-import { wrapQuery } from './utils';
+import { colorHash, wrapQuery } from './utils';
 
 /* Builders */
 

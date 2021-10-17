@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { MeKey, Task } from 'src/ctfnote';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({

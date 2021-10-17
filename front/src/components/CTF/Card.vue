@@ -34,7 +34,6 @@
         </div>
         <div class="col-auto col-grow">
           <q-date
-            mask="YYYY-MM-DDTHH:mm:ssZ"
             today-btn
             :title="startDate"
             :subtitle="startTime"
@@ -58,8 +57,8 @@
 </template>
 
 <script lang="ts">
+import { date } from 'quasar';
 import { Ctf } from 'src/ctfnote/models';
-import { getDate, getTime } from 'src/utils';
 import { defineComponent } from 'vue';
 import BtnDelete from '../CTF/BtnDelete.vue';
 import BtnEdit from '../CTF/BtnEdit.vue';
@@ -83,16 +82,13 @@ export default defineComponent({
   computed: {
     running(): boolean {
       const now = new Date();
-      return (
-        new Date(this.ctf.startTime) < now && new Date(this.ctf.endTime) > now
-      );
+      return this.ctf.startTime < now && this.ctf.endTime > now;
     },
     dateRange() {
-      const startDate = this.ctf.startTime;
-      const endDate = this.ctf.endTime;
-
+      const startDate = date.formatDate(this.ctf.startTime, 'YYYY/MM/DD');
+      const endDate = date.formatDate(this.ctf.endTime, 'YYYY/MM/DD');
       // If it's only one day return only the start
-      if (startDate.slice(0, 10) == endDate.slice(0, 10)) {
+      if (startDate == endDate) {
         return startDate;
       } else {
         return {
@@ -102,14 +98,14 @@ export default defineComponent({
       }
     },
     startTime() {
-      return getTime(this.ctf.startTime);
+      return date.formatDate(this.ctf.startTime, 'HH:mm');
     },
     startDate() {
-      return getDate(this.ctf.startTime);
+      return date.formatDate(this.ctf.startTime, 'YYYY/MM/DD');
     },
     style(): Record<string, string> {
-      const start = new Date(this.ctf.startTime).getTime();
-      const end = new Date(this.ctf.endTime).getTime();
+      const start = this.ctf.startTime.getTime();
+      const end = this.ctf.endTime.getTime();
       const duration = end - start;
       const elapsed = Date.now() - start;
       const progress = (elapsed / duration) * 100;

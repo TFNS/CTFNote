@@ -20,7 +20,7 @@
 <script lang="ts">
 import { Ctf, MeKey } from 'src/ctfnote';
 import { openDeleteCtfDialog, openEditCtfDialog } from 'src/ctfnote/dialog';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({

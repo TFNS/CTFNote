@@ -1,6 +1,6 @@
 import { Role } from 'src/generated/graphql';
 export { Role } from 'src/generated/graphql';
-
+import { RouteLocationRaw } from 'vue-router';
 
 /* Utils */
 
@@ -62,10 +62,13 @@ export type Ctf = {
   id: Id<Ctf>;
   title: string;
   description: string;
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  endTime: Date;
   weight: number;
   slug: string;
+  infoLink: RouteLocationRaw;
+  tasksLink: RouteLocationRaw;
+  guestsLink: RouteLocationRaw;
   granted: boolean;
   ctfUrl: string | null;
   ctftimeUrl: string | null;

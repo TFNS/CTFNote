@@ -28,7 +28,7 @@
 import { getIncomingCtfs } from 'src/ctfnote/ctfs';
 import { openCreateCtfDialog, openImportCtfDialog } from 'src/ctfnote/dialog';
 import { MeKey } from 'src/ctfnote/symbols';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 import CardList from './CardList.vue';
 

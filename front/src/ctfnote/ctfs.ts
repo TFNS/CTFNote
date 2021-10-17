@@ -26,6 +26,7 @@ import { CtfInvitation, makeId } from '.';
 import { Ctf, Profile, Task } from './models';
 import { watchTask } from './tasks';
 import { wrapQuery } from './utils';
+import { date } from 'quasar';
 
 type FullCtfResponse = {
   ctf: CtfFragment & {
@@ -46,7 +47,7 @@ export function buildInvitation(invitation: InvitationFragment): CtfInvitation {
 }
 
 export function buildTask(task: TaskFragment): Task {
-  const slug = slugify(task.title)
+  const slug = slugify(task.title);
   return {
     ...task,
     id: makeId(task.id),
@@ -60,7 +61,12 @@ export function buildTask(task: TaskFragment): Task {
 }
 
 export function buildCtf(ctf: CtfFragment): Ctf {
-  const slug = slugify(ctf.title)
+  const slug = slugify(ctf.title);
+  const params = { ctfId: ctf.id, ctfSlug: slug };
+  const infoLink = { name: 'ctf-info', params };
+  const tasksLink = { name: 'ctf-tasks', params };
+  const guestsLink = { name: 'ctf-guests', params };
+
   return {
     ...ctf,
     id: makeId(ctf.id),
@@ -70,6 +76,11 @@ export function buildCtf(ctf: CtfFragment): Ctf {
     granted: ctf.granted ?? false,
     credentials: null,
     slug,
+    infoLink,
+    tasksLink,
+    guestsLink,
+    startTime: date.extractDate(ctf.startTime, 'YYYY-MM-DDTHH:mm:ssZ'),
+    endTime: date.extractDate(ctf.endTime, 'YYYY-MM-DDTHH:mm:ssZ'),
     tasks: [],
     invitations: [],
   };

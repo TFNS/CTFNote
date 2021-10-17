@@ -84,7 +84,7 @@
 import { Role, User } from 'src/ctfnote';
 import { deleteUser, getUsers, updateUserRole } from 'src/ctfnote/admin';
 import { MeKey } from 'src/ctfnote/symbols';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 import InviteUserDialog from '../Dialogs/InviteUserDialog.vue';
 import ResetPasswordDialog from '../Dialogs/ResetPasswordDialog.vue';

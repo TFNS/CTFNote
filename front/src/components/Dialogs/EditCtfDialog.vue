@@ -83,7 +83,7 @@ export default defineComponent({
   },
   emits: useDialogPluginComponent.emits,
   setup(props) {
-    const now = new Date().toISOString().slice(0, -5) + 'Z';
+    const now = Date.now();
 
     const form = reactive(
       Object.assign(

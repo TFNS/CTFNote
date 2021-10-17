@@ -32,15 +32,6 @@ import { defineComponent } from 'vue';
 
 const humanMask = 'YYYY/MM/DD HH:mm';
 const isoMask = 'YYYY-MM-DDTHH:mm:ssZ';
-const inputMask = '####/##/## ##:##';
-
-function humanToIso(d: string): string {
-  return date.formatDate(date.extractDate(d, humanMask), isoMask);
-}
-
-function isoToHuman(d: string): string {
-  return date.formatDate(date.extractDate(d, isoMask), humanMask);
-}
 
 export default defineComponent({
   props: {
@@ -49,15 +40,16 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup() {
-    return { mask: humanMask, inputMask };
+    return { mask: humanMask, inputMask: '####/##/## ##:##' };
   },
   computed: {
     time: {
       get(): string {
-        return isoToHuman(this.modelValue);
+        return date.formatDate(this.modelValue, 'YYYY/MM/DD HH:mm');
       },
       set(v: string) {
-        this.$emit('update:modelValue', humanToIso(v));
+        const d =  date.formatDate(date.extractDate(v, humanMask), isoMask);
+        this.$emit('update:modelValue', d);
       },
     },
   },

@@ -1,6 +1,7 @@
 import { UseQueryReturn, useResult } from '@vue/apollo-composable';
+import ColorHash from 'color-hash';
 import { DeepNonNullable, DeepRequired } from 'ts-essentials';
-import { Ref } from 'vue';
+import { inject, InjectionKey, Ref } from 'vue';
 import { notify, notifyError } from './dialog';
 
 export function wrapQuery<D, T, U>(
@@ -27,8 +28,23 @@ export function wrapNotify<T>(p: Promise<T>, success = ''): Promise<T> {
       resolve(r);
     }).catch((err: Error) => {
       notifyError(err);
-      console.error(err)
+      console.error(err);
       reject(err);
     });
   });
+}
+
+const ch = new ColorHash({ saturation: [0.5, 0.75, 1], lightness: 0.3 });
+
+export function colorHash(str: string): string {
+  return ch.hex(str + 'TFNS');
+}
+
+export function injectStrict<T>(key: InjectionKey<T>, fallback?: T) {
+  const resolved = inject(key, fallback);
+  if (!resolved) {
+    throw new Error(`Could not resolve ${key.toString()}`);
+  }
+
+  return resolved;
 }

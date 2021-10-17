@@ -14,7 +14,7 @@
 import { Ctf } from 'src/ctfnote';
 import { openEditCtfDialog } from 'src/ctfnote/dialog';
 import { MeKey } from 'src/ctfnote/symbols';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 export default defineComponent({
   props: {

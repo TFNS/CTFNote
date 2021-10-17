@@ -20,7 +20,7 @@
               </ctf-note-link>
             </q-td>
             <q-td key="date" :props="props">
-              {{ formatTime(props.row.startTime) }}
+              {{ formatTime(props.row) }}
             </q-td>
           </q-tr>
         </template>
@@ -30,8 +30,9 @@
 </template>
 
 <script lang="ts">
+import { date } from 'quasar';
 import { getPastCtfs } from 'src/ctfnote/ctfs';
-import { getDateTime } from 'src/utils';
+import { Ctf } from 'src/generated/graphql';
 import { defineComponent, ref } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import CardAdminMenu from './CardAdminMenu.vue';
@@ -75,8 +76,8 @@ export default defineComponent({
     };
   },
   methods: {
-    formatTime(t: string) {
-      return getDateTime(t);
+    formatTime(ctf: Ctf) {
+      return date.formatDate(ctf.startTime, 'YYYY-MM-DD');
     },
     onRequest(props: OnRequestProps) {
       const { rowsPerPage, page } = props.pagination;

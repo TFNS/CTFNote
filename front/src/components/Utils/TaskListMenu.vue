@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { Ctf, Task } from 'src/ctfnote';
-import { colorHash, taskLink } from 'src/utils';
+import { colorHash } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -83,7 +83,15 @@ export default defineComponent({
       if (!task) {
         return null;
       }
-      return taskLink(this.ctf, task);
+      return {
+        name: 'task',
+        params: {
+          ctfId: this.ctf.id,
+          ctfSlug: this.ctf.slug,
+          taskId: task.id,
+          taskSlug: task.slug,
+        },
+      };
     },
 
     colorHash(s?: string | null) {

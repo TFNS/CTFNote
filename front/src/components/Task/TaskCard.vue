@@ -14,7 +14,7 @@
         <ctf-note-link
           tag="a"
           underline
-          class="text-h6 col tasklink text-light"
+          class="text-h6 col text-light"
           :ctf="ctf"
           :task="task"
           name="task"
@@ -49,7 +49,7 @@
     <q-card-section v-show="!isDense">
       <div class="row q-gutter-sm">
         <ctf-note-link name="task" :ctf="ctf" :task="task">
-          <q-btn class="col-auto tasklink" color="primary"> Open Task </q-btn>
+          <q-btn class="col-auto" color="primary"> Open Task </q-btn>
         </ctf-note-link>
         <q-space class="col-md col-grow" />
         <div class="col-auto">
@@ -100,11 +100,14 @@
 <script lang="ts">
 import { Ctf, MeKey, Task } from 'src/ctfnote';
 import { getTeam } from 'src/ctfnote/profiles';
-import { colorHash, injectStrict } from 'src/utils';
+import { colorHash, injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import TaskBadge from './TaskBadge.vue';
 import TaskMenu from './TaskMenu.vue';
+
+
+
 export default defineComponent({
   components: { TaskBadge, CtfNoteLink, TaskMenu },
   props: {

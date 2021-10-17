@@ -85,7 +85,7 @@ import {
   registerWithPassword,
   registerWithToken,
 } from 'src/ctfnote/auth';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent, reactive, ref } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 

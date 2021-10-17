@@ -35,7 +35,7 @@
 <script lang="ts">
 import { MeKey, Task } from 'src/ctfnote';
 import { getTeam } from 'src/ctfnote/profiles';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 import UserBadge from '../Profile/UserBadge.vue';
 

@@ -99,8 +99,8 @@ import { logout } from 'src/ctfnote/auth';
 import { onLogout } from 'src/ctfnote/me';
 import { onMenuChange } from 'src/ctfnote/menu';
 import { MeKey } from 'src/ctfnote/symbols';
+import { injectStrict } from 'src/ctfnote/utils';
 import { useStoredSettings } from 'src/extensions/storedSettings';
-import { injectStrict } from 'src/utils';
 import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({

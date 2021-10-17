@@ -7,9 +7,9 @@
       align="left"
       narrow-indicator
     >
-      <q-route-tab :to="infoLink" label="Info" />
-      <q-route-tab :to="taskLink" label="Tasks" :disable="!ctf.granted" />
-      <q-route-tab v-show="me.isMember" :to="guestLink" label="Guests" />
+      <q-route-tab :to="ctf.infoLink" label="Info" />
+      <q-route-tab :to="ctf.tasksLink" label="Tasks" :disable="!ctf.granted" />
+      <q-route-tab v-show="me.isMember" :to="ctf.guestsLink" label="Guests" />
     </q-tabs>
     <q-card>
       <q-separator />
@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { Ctf, MeKey } from 'src/ctfnote';
-import { ctfLink, injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -31,20 +31,7 @@ export default defineComponent({
   },
   setup() {
     const me = injectStrict(MeKey);
-
     return { me };
-  },
-  computed: {
-    infoLink() {
-      this.ctf;
-      return ctfLink(this.ctf, 'ctf-info');
-    },
-    taskLink() {
-      return ctfLink(this.ctf, 'ctf-tasks');
-    },
-    guestLink() {
-      return ctfLink(this.ctf, 'ctf-guests');
-    },
   },
 });
 </script>

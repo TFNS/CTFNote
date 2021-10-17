@@ -44,7 +44,7 @@
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
 import { SettingsKey } from 'src/ctfnote';
 import { login } from 'src/ctfnote/auth';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent, reactive } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 

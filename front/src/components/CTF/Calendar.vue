@@ -87,14 +87,14 @@ import {
   QCalendar,
   QCalendarMonth,
   Timestamp,
-  today,
+  today
 } from '@quasar/quasar-ui-qcalendar';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarMonth.sass';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarTransitions.sass';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarVariables.sass';
 import { Ctf } from 'src/ctfnote';
 import { getAllCtfs } from 'src/ctfnote/ctfs';
-import { colorHash, ctfLink } from 'src/utils';
+import { colorHash } from 'src/ctfnote/utils';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -132,8 +132,8 @@ export default defineComponent({
     getEvents(currentDate: Timestamp) {
       const events = [];
       for (const ctf of this.ctfs) {
-        const start = parseDate(new Date(ctf.startTime));
-        const end = parseDate(new Date(ctf.endTime));
+        const start = parseDate(ctf.startTime);
+        const end = parseDate(ctf.endTime);
         if (!start || !end) continue;
         if (isBetweenDates(currentDate, start, end)) {
           events.push({
@@ -160,7 +160,7 @@ export default defineComponent({
       this.calendar?.prev();
     },
     clickCtf(ctf: Ctf) {
-      void this.$router.push(ctfLink(ctf));
+      void this.$router.push(ctf.infoLink);
     },
   },
 });

@@ -1,4 +1,14 @@
-import { parseJson, parseJsonStrict } from './index';
+function parseJsonStrict<T>(s: string) {
+  return JSON.parse(s) as T;
+}
+
+function parseJson<T>(s: string): T | null {
+  try {
+    return parseJsonStrict<T | null>(s);
+  } catch (e) {
+    return null;
+  }
+}
 
 type ParsedTask = {
   title: string;
@@ -60,8 +70,5 @@ const CTFDParser: Parser = {
     return Array.isArray(data?.data);
   },
 };
-
-
-
 
 export default [RawParser, CTFDParser];

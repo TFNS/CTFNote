@@ -105,7 +105,7 @@ import ColorPicker from 'src/components/Utils/ColorPicker.vue';
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
 import { MeKey, Profile } from 'src/ctfnote';
 import { updatePassword, updateProfile } from 'src/ctfnote/me';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({

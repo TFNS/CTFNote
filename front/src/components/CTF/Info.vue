@@ -45,9 +45,10 @@
 </template>
 
 <script lang="ts">
+import { date } from 'quasar';
 import { Ctf } from 'src/ctfnote';
 import { MeKey } from 'src/ctfnote/symbols';
-import * as utils from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 import BtnDelete from './BtnDelete.vue';
 import BtnEdit from './BtnEdit.vue';
@@ -69,7 +70,7 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const me = utils.injectStrict(MeKey);
+    const me = injectStrict(MeKey);
     return { me };
   },
   computed: {
@@ -79,10 +80,10 @@ export default defineComponent({
       };
     },
     startTime() {
-      return utils.getDateTime(this.ctf.startTime);
+      return date.formatDate(this.ctf.startTime, 'YYYY-MM-DD HH:mm');
     },
     endTime() {
-      return utils.getDateTime(this.ctf.endTime);
+      return date.formatDate(this.ctf.endTime, 'YYYY-MM-DD HH:mm');
     },
   },
 });

@@ -43,7 +43,7 @@ import {
   SettingsKey,
 } from 'src/ctfnote';
 import { defaultColors, updateSettings } from 'src/ctfnote/settings';
-import { injectStrict } from 'src/utils';
+import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent, reactive, watch } from 'vue';
 import ColorPicker from '../Utils/ColorPicker.vue';
 
