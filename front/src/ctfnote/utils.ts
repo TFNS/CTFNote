@@ -48,3 +48,15 @@ export function injectStrict<T>(key: InjectionKey<T>, fallback?: T) {
 
   return resolved;
 }
+
+export function parseJsonStrict<T>(s: string) {
+  return JSON.parse(s) as T;
+}
+
+export function parseJson<T>(s: string): T | null {
+  try {
+    return parseJsonStrict<T | null>(s);
+  } catch (e) {
+    return null;
+  }
+}

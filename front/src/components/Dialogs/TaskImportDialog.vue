@@ -65,7 +65,7 @@
 import { useDialogPluginComponent } from 'quasar';
 import { Ctf, Task } from 'src/ctfnote';
 import { createTask } from 'src/ctfnote/tasks';
-import parsers from 'src/utils/taskParser';
+import parsers from 'src/ctfnote/parsers';
 import { defineComponent, ref } from 'vue';
 
 type ParsedTask = {
