@@ -170,3 +170,15 @@ mutation updateCtfById(
     }
   }
 }
+
+subscription subscribeToCtfCreated {
+  listen(topic: "ctf-created") {
+    relatedNodeId
+  }
+}
+
+subscription subscribeToCtfDeleted {
+  listen(topic: "ctf-deleted") {
+    relatedNodeId
+  }
+}

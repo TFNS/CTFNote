@@ -2130,6 +2130,16 @@ export type UpdateCtfByIdMutationVariables = Exact<{
 
 export type UpdateCtfByIdMutation = { __typename?: 'Mutation', updateCtf?: { __typename?: 'UpdateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined } | null | undefined };
 
+export type SubscribeToCtfCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SubscribeToCtfCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined } };
+
+export type SubscribeToCtfDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SubscribeToCtfDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined } };
+
 export type InvitationFragment = { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number };
 
 export type InviteUserToCtfMutationVariables = Exact<{
@@ -2149,11 +2159,6 @@ export type UninviteUserToCtfMutationVariables = Exact<{
 export type UninviteUserToCtfMutation = { __typename?: 'Mutation', deleteInvitation?: { __typename?: 'DeleteInvitationPayload', deletedInvitationNodeId?: string | null | undefined } | null | undefined };
 
 export type ProfileFragment = { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string };
-
-export type GetGuestsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetGuestsQuery = { __typename?: 'Query', guests?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string }> } | null | undefined };
 
 export type UpdatePasswordMutationVariables = Exact<{
   oldPassword: Scalars['String'];
@@ -2182,6 +2187,16 @@ export type SubscribeToProfileSubscriptionVariables = Exact<{
 
 
 export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+
+export type SubscribeToProfileCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SubscribeToProfileCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined } };
+
+export type SubscribeToProfileDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined } };
 
 export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined };
 
@@ -3057,6 +3072,54 @@ export function useUpdateCtfByIdMutation(options: VueApolloComposable.UseMutatio
   return VueApolloComposable.useMutation<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables>(UpdateCtfByIdDocument, options);
 }
 export type UpdateCtfByIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables>;
+export const SubscribeToCtfCreatedDocument = gql`
+    subscription subscribeToCtfCreated {
+  listen(topic: "ctf-created") {
+    relatedNodeId
+  }
+}
+    `;
+
+/**
+ * __useSubscribeToCtfCreatedSubscription__
+ *
+ * To run a query within a Vue component, call `useSubscribeToCtfCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToCtfCreatedSubscription` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSubscribeToCtfCreatedSubscription();
+ */
+export function useSubscribeToCtfCreatedSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfCreatedSubscription, SubscribeToCtfCreatedSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfCreatedSubscription, SubscribeToCtfCreatedSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfCreatedSubscription, SubscribeToCtfCreatedSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<SubscribeToCtfCreatedSubscription, SubscribeToCtfCreatedSubscriptionVariables>(SubscribeToCtfCreatedDocument, {}, options);
+}
+export type SubscribeToCtfCreatedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToCtfCreatedSubscription, SubscribeToCtfCreatedSubscriptionVariables>;
+export const SubscribeToCtfDeletedDocument = gql`
+    subscription subscribeToCtfDeleted {
+  listen(topic: "ctf-deleted") {
+    relatedNodeId
+  }
+}
+    `;
+
+/**
+ * __useSubscribeToCtfDeletedSubscription__
+ *
+ * To run a query within a Vue component, call `useSubscribeToCtfDeletedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToCtfDeletedSubscription` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSubscribeToCtfDeletedSubscription();
+ */
+export function useSubscribeToCtfDeletedSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfDeletedSubscription, SubscribeToCtfDeletedSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfDeletedSubscription, SubscribeToCtfDeletedSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfDeletedSubscription, SubscribeToCtfDeletedSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<SubscribeToCtfDeletedSubscription, SubscribeToCtfDeletedSubscriptionVariables>(SubscribeToCtfDeletedDocument, {}, options);
+}
+export type SubscribeToCtfDeletedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToCtfDeletedSubscription, SubscribeToCtfDeletedSubscriptionVariables>;
 export const InviteUserToCtfDocument = gql`
     mutation inviteUserToCtf($ctfId: Int!, $profileId: Int!) {
   createInvitation(input: {invitation: {ctfId: $ctfId, profileId: $profileId}}) {
@@ -3119,32 +3182,6 @@ export function useUninviteUserToCtfMutation(options: VueApolloComposable.UseMut
   return VueApolloComposable.useMutation<UninviteUserToCtfMutation, UninviteUserToCtfMutationVariables>(UninviteUserToCtfDocument, options);
 }
 export type UninviteUserToCtfMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UninviteUserToCtfMutation, UninviteUserToCtfMutationVariables>;
-export const GetGuestsDocument = gql`
-    query getGuests {
-  guests {
-    nodes {
-      ...ProfileFragment
-    }
-  }
-}
-    ${ProfileFragmentDoc}`;
-
-/**
- * __useGetGuestsQuery__
- *
- * To run a query within a Vue component, call `useGetGuestsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetGuestsQuery` returns an object from Apollo Client that contains result, loading and error properties
- * you can use to render your UI.
- *
- * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
- *
- * @example
- * const { result, loading, error } = useGetGuestsQuery();
- */
-export function useGetGuestsQuery(options: VueApolloComposable.UseQueryOptions<GetGuestsQuery, GetGuestsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetGuestsQuery, GetGuestsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetGuestsQuery, GetGuestsQueryVariables>> = {}) {
-  return VueApolloComposable.useQuery<GetGuestsQuery, GetGuestsQueryVariables>(GetGuestsDocument, {}, options);
-}
-export type GetGuestsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetGuestsQuery, GetGuestsQueryVariables>;
 export const UpdatePasswordDocument = gql`
     mutation updatePassword($oldPassword: String!, $newPassword: String!) {
   changePassword(input: {oldpassword: $oldPassword, newpassword: $newPassword}) {
@@ -3267,6 +3304,54 @@ export function useSubscribeToProfileSubscription(variables: SubscribeToProfileS
   return VueApolloComposable.useSubscription<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>(SubscribeToProfileDocument, variables, options);
 }
 export type SubscribeToProfileSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>;
+export const SubscribeToProfileCreatedDocument = gql`
+    subscription subscribeToProfileCreated {
+  listen(topic: "profile-created") {
+    relatedNodeId
+  }
+}
+    `;
+
+/**
+ * __useSubscribeToProfileCreatedSubscription__
+ *
+ * To run a query within a Vue component, call `useSubscribeToProfileCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToProfileCreatedSubscription` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSubscribeToProfileCreatedSubscription();
+ */
+export function useSubscribeToProfileCreatedSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileCreatedSubscription, SubscribeToProfileCreatedSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileCreatedSubscription, SubscribeToProfileCreatedSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileCreatedSubscription, SubscribeToProfileCreatedSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<SubscribeToProfileCreatedSubscription, SubscribeToProfileCreatedSubscriptionVariables>(SubscribeToProfileCreatedDocument, {}, options);
+}
+export type SubscribeToProfileCreatedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToProfileCreatedSubscription, SubscribeToProfileCreatedSubscriptionVariables>;
+export const SubscribeToProfileDeletedDocument = gql`
+    subscription subscribeToProfileDeleted {
+  listen(topic: "profile-deleted") {
+    relatedNodeId
+  }
+}
+    `;
+
+/**
+ * __useSubscribeToProfileDeletedSubscription__
+ *
+ * To run a query within a Vue component, call `useSubscribeToProfileDeletedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToProfileDeletedSubscription` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSubscribeToProfileDeletedSubscription();
+ */
+export function useSubscribeToProfileDeletedSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>(SubscribeToProfileDeletedDocument, {}, options);
+}
+export type SubscribeToProfileDeletedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>;
 export const GetCredentialsForCtfIdDocument = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
   ctfSecret(id: $ctfId) {
@@ -3994,6 +4079,20 @@ export const UpdateCtfById = gql`
   }
 }
     ${CtfFragment}`;
+export const SubscribeToCtfCreated = gql`
+    subscription subscribeToCtfCreated {
+  listen(topic: "ctf-created") {
+    relatedNodeId
+  }
+}
+    `;
+export const SubscribeToCtfDeleted = gql`
+    subscription subscribeToCtfDeleted {
+  listen(topic: "ctf-deleted") {
+    relatedNodeId
+  }
+}
+    `;
 export const InviteUserToCtf = gql`
     mutation inviteUserToCtf($ctfId: Int!, $profileId: Int!) {
   createInvitation(input: {invitation: {ctfId: $ctfId, profileId: $profileId}}) {
@@ -4010,15 +4109,6 @@ export const UninviteUserToCtf = gql`
   }
 }
     `;
-export const GetGuests = gql`
-    query getGuests {
-  guests {
-    nodes {
-      ...ProfileFragment
-    }
-  }
-}
-    ${ProfileFragment}`;
 export const UpdatePassword = gql`
     mutation updatePassword($oldPassword: String!, $newPassword: String!) {
   changePassword(input: {oldpassword: $oldPassword, newpassword: $newPassword}) {
@@ -4058,6 +4148,20 @@ export const SubscribeToProfile = gql`
   }
 }
     ${ProfileFragment}`;
+export const SubscribeToProfileCreated = gql`
+    subscription subscribeToProfileCreated {
+  listen(topic: "profile-created") {
+    relatedNodeId
+  }
+}
+    `;
+export const SubscribeToProfileDeleted = gql`
+    subscription subscribeToProfileDeleted {
+  listen(topic: "profile-deleted") {
+    relatedNodeId
+  }
+}
+    `;
 export const GetCredentialsForCtfId = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
   ctfSecret(id: $ctfId) {

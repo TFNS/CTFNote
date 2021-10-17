@@ -4,6 +4,7 @@ import {
   CtfPatch,
   CtfSecretFragment,
   InvitationFragment,
+  SubscribeToCtfCreated,
   TaskFragment,
   useCreateCtfMutation,
   useCtfsQuery,
@@ -13,6 +14,8 @@ import {
   useIncomingCtfsQuery,
   useInviteUserToCtfMutation,
   usePastCtfsQuery,
+  useSubscribeToCtfCreatedSubscription,
+  useSubscribeToCtfDeletedSubscription,
   useSubscribeToCtfSubscription,
   useSubscribeToFullCtfSubscription,
   useUninviteUserToCtfMutation,
@@ -80,13 +83,14 @@ export function buildFullCtf(data: FullCtfResponse): Ctf {
 /* Queries */
 
 export function getIncomingCtfs() {
-  const query = useIncomingCtfsQuery();
+  const query = useIncomingCtfsQuery({fetchPolicy: 'cache-and-network'});
   const wrappedQuery = wrapQuery(query, [], (data) =>
     data.incomingCtf.nodes.map(buildCtf)
   );
   wrappedQuery.onResult((ctfs) => {
     ctfs.forEach((ctf) => watchCtf(ctf));
   });
+  watchCtfList(() => void wrappedQuery.refetch());
   return wrappedQuery;
 }
 
@@ -98,11 +102,12 @@ export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
   wrappedQuery.onResult((ctfs) => {
     ctfs.forEach((ctf) => watchCtf(ctf));
   });
+  watchCtfList(() => void wrappedQuery.refetch());
   return wrappedQuery;
 }
 
 export function getCtf(...args: Parameters<typeof useGetFullCtfQuery>) {
-  const query = useGetFullCtfQuery(...args);
+  const query = useGetFullCtfQuery(...args,);
   const wrappedQuery = wrapQuery(query, null, (data) => buildFullCtf(data));
 
   wrappedQuery.onResult((ctf) => {
@@ -121,6 +126,7 @@ export function getAllCtfs() {
   wrappedQuery.onResult((ctfs) => {
     ctfs.forEach((ctf) => watchCtf(ctf));
   });
+  watchCtfList(() => void wrappedQuery.refetch());
   return wrappedQuery;
 }
 
@@ -162,6 +168,13 @@ export async function uninviteUserToCtf(ctf: Ctf, profile: Profile) {
 }
 
 /* Subscriptions */
+
+export function watchCtfList(refetch: () => void) {
+  const { onResult: ctfCreated } = useSubscribeToCtfCreatedSubscription();
+  const { onResult: ctfDeleted } = useSubscribeToCtfDeletedSubscription();
+  ctfCreated(() => refetch());
+  ctfDeleted(() => refetch());
+}
 
 export function watchCtf(ctf: Ctf) {
   useSubscribeToCtfSubscription({ topic: `update:ctfs:${ctf.id}` });

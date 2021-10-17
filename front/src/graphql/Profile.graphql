@@ -7,13 +7,6 @@ fragment ProfileFragment on Profile {
   nodeId
 }
 
-query getGuests {
-  guests {
-    nodes {
-      ...ProfileFragment
-    }
-  }
-}
 
 mutation updatePassword($oldPassword: String!, $newPassword: String!) {
   changePassword(
@@ -48,5 +41,16 @@ subscription subscribeToProfile($topic: String!) {
         ...ProfileFragment
       }
     }
+  }
+}
+subscription subscribeToProfileCreated {
+  listen(topic: "profile-created") {
+    relatedNodeId
+  }
+}
+
+subscription subscribeToProfileDeleted {
+  listen(topic: "profile-deleted") {
+    relatedNodeId
   }
 }

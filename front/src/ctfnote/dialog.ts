@@ -22,7 +22,7 @@ function parseCtftimeId(s: string): number | null {
   return parseInt(match[1]);
 }
 
-let $q = useQuasar();
+let $q = {} as QVueGlobals;
 
 export function provideQuasar(quasar: QVueGlobals) {
   $q = quasar;

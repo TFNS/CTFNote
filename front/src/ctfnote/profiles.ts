@@ -1,9 +1,10 @@
 import {
   ProfileFragment,
   Role,
-  useGetGuestsQuery,
   useGetTeamQuery,
-  useSubscribeToProfileSubscription,
+  useSubscribeToProfileCreatedSubscription,
+  useSubscribeToProfileDeletedSubscription,
+  useSubscribeToProfileSubscription
 } from 'src/generated/graphql';
 import { makeId, Profile } from '.';
 import { wrapQuery } from './utils';
@@ -21,23 +22,30 @@ export function buildProfile(p: ProfileFragment): Profile {
 
 /* Queries */
 
-export function getGuests() {
-  const q = useGetGuestsQuery();
-  return wrapQuery(q, [], (data) => data.guests.nodes.map(buildProfile));
-}
-
 export function getTeam() {
   const query = useGetTeamQuery();
-  const wrappedQuery = wrapQuery(query, [], (data) =>
-    data.profiles?.nodes.map(buildProfile) ?? []
+  const wrappedQuery = wrapQuery(
+    query,
+    [],
+    (data) => data.profiles?.nodes.map(buildProfile) ?? []
   );
   wrappedQuery.onResult((profiles) => {
     profiles.forEach((p) => watchProfile(p));
   });
+  watchProfileList(() => () => wrappedQuery.refetch);
   return wrappedQuery;
 }
 
 /* Subcriptions  */
+
+export function watchProfileList(refetch: () => void) {
+  const { onResult: profileCreated } =
+    useSubscribeToProfileCreatedSubscription();
+  const { onResult: profileDeleted } =
+    useSubscribeToProfileDeletedSubscription();
+  profileCreated(() => refetch());
+  profileDeleted(() => refetch());
+}
 
 export function watchProfile(profile: Profile) {
   useSubscribeToProfileSubscription({ topic: `update:profiles:${profile.id}` });
