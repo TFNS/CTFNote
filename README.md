@@ -1,81 +1,86 @@
-<p align="center">
-  <img width="100" src="./front/public/favicon.png">
-</p>
-
 # CTFNote
-
-## Welcome
-
+## Introduction
 CTFNote is a collaborative tool aiming to help CTF teams to organise their work.
 
-![main-page](./screenshots/main-page.png)
+[![Screenshot of the task list](screenshots/task_small.webp)](screenshots/task.png)
 
-![main-dark](./screenshots/main-dark.png)
-
-![info](./screenshots/info.png)
-
-![tasks](./screenshots/tasks.png)
-
-![task](./screenshots/task.png)
 
 ## Installation
-
-Use the provided docker configuration to deploy the project:
+If you are new to CTFNote, you can start it with `docker-compose`. The default
+configuration makes it super easy to start a new instance!
 
 ```shell
 $ docker-compose up -d
 ```
 
-Then, visit 127.0.0.1 and create your first account, which will automatically be provided with admin privileges
+The instance will spawn a web server on port 80. The first account created will
+have administrative privileges.
+
+If you already have an instance of CTFNote in a previous version and wish to
+upgrade, you should follow the guide at [MIGRATION.md](MIGRATION.md).
+
 
 ## Privileges
+When other players register on your CTFNote instance, they will not be able to
+see CTF or tasks. This is because CTFNote uses different roles to restrict CTF
 
-We use a cascade privilege system. That means ADMIN users have all the rights MANAGER users have and MANAGER have all the rights MEMBER users have and so on.
-| Role | Privileges |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| USER_GUEST (default) | This is used for irregular guests (ponctually invited user).<br> Can only view CTFs when invited.<br> Guests cannot invite other guests. |
-| USER_MEMBER | A member represents a standard CTF player from your team.<br>Can play all CTFs and invite guests. |
-| USER_MANAGER | Can create and edit CTFs |
-| USER_ADMIN | Can edit users and settings
+You can manage other players' roles in the *Users* tab of the *Admin* panel.
+
+Additionally, you can generate a secret that lets users create an account with a
+different privilege in the *Registration with password* menu in the *Admin*
+panel.
+
+![Screenshot of the Registration with password menu](screenshots/reg_password.png)
+
+### Guest
+Guest is the default role. This role is meant to be used for guests and friends
+helping sporadically on CTF.
+
+You can add a guest to a CTF by ticking their badge in the *Guests* tab on a
+specific CTF.
+
+![Screenshot of the guest menu](screenshots/guests.png)
+
+### Member
+Member is a role that represents a team member. A certain level of trust is
+given to these users: they can see every CTF, future, current and past. They can
+also invite guests to CTF.
+
+### Manager
+Manager is a role that represents a team captain. They can create, import,
+modify and delete CTF.
+
+They can import CTF directly from [CTFtime](https://ctftime.org).
+
+![Screenshot of the Import CTF feature](screenshots/import.png)
+
+### Admin
+Admin is a role with every privileges. They have access to the *Admin* panel
+that lets them delete accounts, change permissions, reset passwords, create
+one-time secrets and, most importantly, change the theme colours.
+
+![Screenshot of the theme menu](screenshots/theme.png)
 
 
-## Development
+## Configuration
+The configuration can be changed in the `.env` file. This file contains
+environment variables for the containers.
 
-The development server includes a simple HTTP proxy allowing the frontend to access the local graphql API (cf [quasar.conf.js](front/quasar.conf.js)).
-Hot reloading is configured on both components as well.
+The value of every variables are explained in this file.
 
-First of all, run the following command to run the required services **hedgedoc** and **postgresql**:
 
-### Start hedgedoc and postgresql
+## Screenshots
+### List of the CTF
+[![Screenshot of the CTF page](screenshots/ctf_small.webp)](screenshots/ctf.png)
 
-```shell
-$ docker-compose -f docker-compose.dev.yml up -d
-```
+### Calendar
+[![Screenshot of the CTF calendar](screenshots/calendar_small.webp)](screenshots/calendar.png)
 
-### Start the API
+### Information of a single CTF
+[![Screenshot of the CTF info](screenshots/info_small.webp)](screenshots/info.png)
 
-```shell
-$ cd api/
-$ yarn install
-$ yarn start
-```
+### Task list for a CTF
+[![Screenshot of the task list](screenshots/task_small.webp)](screenshots/task.png)
 
-### Start the quasar app
-
-```shell
-$ cd front/
-$ yarn
-$ yarn dev
-```
-
-You can now access the application/api through the following endpoints:
-
-| Endpoint                           | Description                                                     |
-| :--------------------------------- | :-------------------------------------------------------------- |
-| [](http://127.0.0.1:5000)          | The Web UI                                                      |
-| [](http://127.0.0.1:3000/graphiql) | The Graphql UI allowing to run the graphql queries/mutation/etc |
-
-## Authors
-
-[BitK](https://twitter.com/bitk_)
-[SakiiR](https://twitter.com/sakiirsecurity/)
+### Shared notepad for a task
+[![Screenshot of pad](screenshots/pad_small.webp)](screenshots/pad.png)
