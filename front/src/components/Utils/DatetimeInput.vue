@@ -1,5 +1,4 @@
 <template>
-  {{ time }}
   <q-input v-model="time" filled :label="label" :mask="inputMask" fill-mask>
     <template #prepend>
       <q-icon name="event" class="cursor-pointer">
