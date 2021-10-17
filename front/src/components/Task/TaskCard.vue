@@ -98,7 +98,8 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Task, MeKey, TeamKey } from 'src/ctfnote';
+import { Ctf, MeKey, Task } from 'src/ctfnote';
+import { getTeam } from 'src/ctfnote/profiles';
 import { colorHash, injectStrict } from 'src/utils';
 import { defineComponent } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
@@ -124,7 +125,7 @@ export default defineComponent({
   ],
   setup() {
     const me = injectStrict(MeKey);
-    const team = injectStrict(TeamKey);
+    const { result: team } = getTeam();
     return { me, team };
   },
   computed: {

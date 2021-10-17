@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="text-h6">Team</div>
       </q-card-section>
-      <q-table :columns="columns" :rows="team" :rows-per-page-options="0">
+      <q-table :columns="columns" :rows="team" hide-pagination :pagination="pagination">
         <template #body-cell-username="props">
           <q-td key="username" :props="props">
             <user-badge :profile="props.row" />
@@ -21,14 +21,19 @@
 </template>
 
 <script lang="ts">
-import { Role, TeamKey } from 'src/ctfnote';
-import { injectStrict } from 'src/utils';
+import { Role } from 'src/ctfnote';
+import { getTeam } from 'src/ctfnote/profiles';
 import { defineComponent } from 'vue';
 import UserBadge from '../components/Profile/UserBadge.vue';
 
 export default defineComponent({
   components: { UserBadge },
   setup() {
+    const { result: team } = getTeam();
+    const pagination = {
+      rowsPerPage: 0,
+
+    }
     const columns = [
       {
         name: 'role',
@@ -55,7 +60,7 @@ export default defineComponent({
         label: 'Description',
       },
     ];
-    return { team: injectStrict(TeamKey), columns };
+    return { team, columns, pagination };
   },
 });
 </script>

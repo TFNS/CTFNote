@@ -33,7 +33,8 @@
 </template>
 
 <script lang="ts">
-import { MeKey, Task, TeamKey } from 'src/ctfnote';
+import { MeKey, Task } from 'src/ctfnote';
+import { getTeam } from 'src/ctfnote/profiles';
 import { colorHash, injectStrict } from 'src/utils';
 import { defineComponent } from 'vue';
 import UserBadge from '../Profile/UserBadge.vue';
@@ -44,7 +45,7 @@ export default defineComponent({
     task: { type: Object as () => Task, required: true },
   },
   setup() {
-    const team = injectStrict(TeamKey);
+    const { result: team } = getTeam();
     const me = injectStrict(MeKey);
     return { team, me };
   },

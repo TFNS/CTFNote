@@ -37,9 +37,10 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Profile, Role, TeamKey } from 'src/ctfnote';
+import { Ctf, Profile, Role } from 'src/ctfnote';
 import { inviteUserToCtf, uninviteUserToCtf } from 'src/ctfnote/ctfs';
-import { colorHash, injectStrict } from 'src/utils';
+import { getTeam } from 'src/ctfnote/profiles';
+import { colorHash } from 'src/utils';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -47,7 +48,7 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const team = injectStrict(TeamKey);
+    const { result: team } = getTeam();
 
     return {
       team,
