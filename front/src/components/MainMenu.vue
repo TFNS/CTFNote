@@ -4,9 +4,9 @@
       <q-toolbar-title class="row items-center q-gutter-md">
         <ctf-note-link name="ctfs-incoming" class="text-white" underline>
           <q-img src="/favicon.svg" width="30px" class="q-mr-md" />
-          <q-btn flat no-caps >CTFNote</q-btn>
+          <q-btn flat no-caps>CTFNote</q-btn>
         </ctf-note-link>
-        <template v-if="ctf">
+        <template v-if="ctf && $q.screen.gt.sm">
           <q-separator dark vertical />
           <div class="row items-center justify-center">
             <q-btn
@@ -20,7 +20,7 @@
               round
             />
             <ctf-note-link name="ctf-tasks" :ctf="ctf">
-              <q-btn flat no-caps >{{ ctf.title }}</q-btn>
+              <q-btn flat no-caps>{{ ctf.title }}</q-btn>
             </ctf-note-link>
           </div>
           <q-separator v-show="ctf.tasks.length" dark vertical />
