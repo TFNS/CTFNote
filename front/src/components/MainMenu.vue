@@ -96,6 +96,7 @@ import CtfNoteLink from 'src/components/Utils/CtfNoteLink.vue';
 import TaskListMenu from 'src/components/Utils/TaskListMenu.vue';
 import { Ctf, Task } from 'src/ctfnote';
 import { logout } from 'src/ctfnote/auth';
+import { onLogout } from 'src/ctfnote/me';
 import { onMenuChange } from 'src/ctfnote/menu';
 import { MeKey } from 'src/ctfnote/symbols';
 import { useStoredSettings } from 'src/extensions/storedSettings';
@@ -130,6 +131,11 @@ export default defineComponent({
       ctf.value = c;
       task.value = t;
     }, true);
+
+    onLogout(() => {
+      ctf.value = null;
+      task.value = null;
+    });
 
     return {
       me,
