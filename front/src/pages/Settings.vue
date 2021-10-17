@@ -19,6 +19,8 @@
               <user-badge :profile="tmpProfile" />
             </q-card-section>
 
+            <q-separator class="q-mx-xl" />
+
             <q-card-section class="q-gutter-lg">
               <div class="col">
                 <q-input
