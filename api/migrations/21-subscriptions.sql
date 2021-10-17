@@ -18,13 +18,13 @@ BEGIN
   CASE TG_OP
   WHEN 'INSERT' THEN
     PERFORM
-      ctfnote_private.notify ('ctf-created', 'ctfs', NEW.id); RETURN NEW;
+      pg_notify('postgraphile:ctf-created', NULL); RETURN NEW;
   WHEN 'UPDATE' THEN
     PERFORM
       ctfnote_private.notify ('update', 'ctfs', NEW.id); RETURN NEW;
   WHEN 'DELETE' THEN
     PERFORM
-      ctfnote_private.notify ('ctf-deleted', 'ctfs', NEW.id); RETURN NEW;
+      pg_notify('postgraphile:ctf-deleted', NULL); RETURN OLD;
   END CASE;
 END
 $$ VOLATILE
@@ -126,13 +126,13 @@ BEGIN
   CASE TG_OP
   WHEN 'INSERT' THEN
     PERFORM
-      ctfnote_private.notify ('profile-created', 'profiles', NEW.id); RETURN NEW;
+      pg_notify('postgraphile:profile-created', NULL); RETURN OLD;
   WHEN 'UPDATE' THEN
     PERFORM
       ctfnote_private.notify ('update', 'profiles', NEW.id); RETURN NEW;
   WHEN 'DELETE' THEN
     PERFORM
-      ctfnote_private.notify ('profile-deleted', 'profiles', OLD.id); RETURN OLD;
+      pg_notify('postgraphile:profile-deleted', NULL); RETURN OLD;
   END CASE;
 END
 $$ VOLATILE
@@ -169,48 +169,21 @@ CREATE TRIGGER _500_gql_update_invitation
   FOR EACH ROW
   EXECUTE PROCEDURE ctfnote_private.notify_invitation_edit ();
 
-CREATE FUNCTION ctfnote_private.can_watch_node (topic text)
-  RETURNS boolean
-  AS $$
-DECLARE
-  watch text[];
-BEGIN
-  SELECT
-    (regexp_match(topic, '^postgraphile:update:([a-z]+):([0-9]+)$')) INTO watch;
-  IF (watch IS NOT NULL) THEN
-    CASE watch[1]
-    WHEN 'ctfs',
-    'ctfsecret' THEN
-      RETURN ctfnote_private.can_play_ctf (watch[2]::int);
-    WHEN 'tasks' THEN
-      RETURN ctfnote_private.can_play_task (watch[2]::int);
-    WHEN 'profiles',
-    'settings' THEN
-      RETURN TRUE;
-    ELSE
-      RETURN FALSE;
-    END CASE;
-    END IF;
-    RETURN FALSE;
-END
-$$
-LANGUAGE plpgsql
-VOLATILE;
 
-CREATE FUNCTION ctfnote_private.validate_subscription (topic text)
+
+/* check auth */
+
+CREATE OR REPLACE FUNCTION ctfnote_private.validate_subscription (topic text)
   RETURNS text
   AS $$
 DECLARE
   ok text := 'e0d7b844-89cd-4d00-9818-47a3e9c3a429';
   ctf_id int;
 BEGIN
-  IF strpos(topic, 'postgraphile') <> 1 THEN
-    RAISE EXCEPTION 'Subscription denied';
+  IF ctfnote_private.is_guest () IS NULL THEN
+    RAISE EXCEPTION 'Please login first';
   END IF;
-  IF topic ~ '^postgraphile:update:' AND ctfnote_private.can_watch_node (topic) THEN
-    RETURN ok;
-  END IF;
-  RAISE EXCEPTION 'Subscription denied';
+  RETURN ok;
 END;
 $$
 LANGUAGE plpgsql

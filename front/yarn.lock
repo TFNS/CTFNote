@@ -1608,9 +1608,9 @@
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
 "@quasar/app@^3.0.0":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-3.1.3.tgz#beed697c283beeab215c9b70ef1bdaa7f3f75bb7"
-  integrity sha512-PVuGMwhgCiY4aX9smw7dCfl8uc4AH1tYqTS/+BFw/0RU64DFYvPMXwwb2WFs3o/CXvuGXssrIrJJ+eMmoZ9ktg==
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@quasar/app/-/app-3.1.4.tgz#19acd9ddab0389b295d79b8ec1fb633921d28ea3"
+  integrity sha512-wVBFvYlPJoNXG/WALF4LpgMH8oLkOx5t9YnE8/UnAa3pH2G0cvjE+hBpv7ZMazXdEL29vdkI51vN8h6KPFMgvw==
   dependencies:
     "@quasar/babel-preset-app" "2.0.1"
     "@quasar/fastclick" "1.1.4"
@@ -1674,7 +1674,7 @@
     url-loader "4.1.1"
     vue "3.2.20"
     vue-loader "16.5.0"
-    vue-router "4.0.11"
+    vue-router "4.0.12"
     vue-style-loader "4.1.3"
     webpack "^5.58.1"
     webpack-bundle-analyzer "4.4.2"
@@ -1928,9 +1928,9 @@
   integrity sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==
 
 "@types/node@*", "@types/node@^16.11.0":
-  version "16.11.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.0.tgz#4b95f2327bacd1ef8f08d8ceda193039c5d7f52e"
-  integrity sha512-8MLkBIYQMuhRBQzGN9875bYsOhPnf/0rgXGo66S2FemHkhbn9qtsz9ywV1iCG+vbjigE4WUNVvw37Dx+L0qsPg==
+  version "16.11.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.1.tgz#2e50a649a50fc403433a14f829eface1a3443e97"
+  integrity sha512-PYGcJHL9mwl1Ek3PLiYgyEKtwTMmkMw4vbiyz/ps3pfdRYLVv+SN7qHVAImrjdAXxgluDEw6Ph4lyv+m9UpRmA==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -2147,7 +2147,7 @@
     "@vue/compiler-dom" "3.2.20"
     "@vue/shared" "3.2.20"
 
-"@vue/devtools-api@^6.0.0-beta.14":
+"@vue/devtools-api@^6.0.0-beta.18":
   version "6.0.0-beta.19"
   resolved "https://registry.yarnpkg.com/@vue/devtools-api/-/devtools-api-6.0.0-beta.19.tgz#f8e88059daa424515992426a0c7ea5cde07e99bf"
   integrity sha512-ObzQhgkoVeoyKv+e8+tB/jQBL2smtk/NmC9OmFK8UqdDpoOdv/Kf9pyDWL+IFyM7qLD2C75rszJujvGSPSpGlw==
@@ -2912,9 +2912,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001264, caniuse-lite@^1.0.30001265:
-  version "1.0.30001267"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001267.tgz#b1cf2937175afc0570e4615fc2d2f9069fa0ed30"
-  integrity sha512-r1mjTzAuJ9W8cPBGbbus8E0SKcUP7gn03R14Wk8FlAlqhH9hroy9nLqmpuXlfKEw/oILW+FGz47ipXV2O7x8lg==
+  version "1.0.30001269"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001269.tgz#3a71bee03df627364418f9fd31adfc7aa1cc2d56"
+  integrity sha512-UOy8okEVs48MyHYgV+RdW1Oiudl1H6KolybD6ZquD0VcrPSgj25omXO1S7rDydjpqaISCwA8Pyx+jUQKZwWO5w==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -3814,9 +3814,9 @@ ejs@^2.3.1:
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
 
 electron-to-chromium@^1.3.867:
-  version "1.3.870"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.870.tgz#c15c921e66a46985181b261f8093b91c2abb6604"
-  integrity sha512-PiJMshfq6PL+i1V+nKLwhHbCKeD8eAz8rvO9Cwk/7cChOHJBtufmjajLyYLsSRHguRFiOCVx3XzJLeZsIAYfSA==
+  version "1.3.871"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.871.tgz#6e87365fd72037a6c898fb46050ad4be3ac9ef62"
+  integrity sha512-qcLvDUPf8DSIMWarHT2ptgcqrYg62n3vPA7vhrOF24d8UNzbUBaHu2CySiENR3nEDzYgaN60071t0F6KLYMQ7Q==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -7057,9 +7057,9 @@ qs@6.7.0:
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
 quasar@^2.0.0:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.1.4.tgz#211e4a662de6b08131742283dbb0abcc0eb15800"
-  integrity sha512-2vw+Hwv66C7nV5pRmWSwjs7Lv7kAXeeuYTk+ukcwO7tud9CwIFCgPBuyQ1R5gXIuWX+epe2qNhZ1grSF5ODutQ==
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.1.5.tgz#636bea9166630af62a93bd378ab29c62995b030c"
+  integrity sha512-eVov2A6cahQP1i//3VF5etN6L9HMinlNMAUY+wnwqiAv3ebsD/Zhefb93rsdjv4bUuPgD6rB0ym/YPF8G5Oq0g==
 
 querystring@0.2.0:
   version "0.2.0"
@@ -8450,12 +8450,12 @@ vue-loader@16.5.0:
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
 
-vue-router@4.0.11:
-  version "4.0.11"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.0.11.tgz#cd649a0941c635281763a20965b599643ddc68ed"
-  integrity sha512-sha6I8fx9HWtvTrFZfxZkiQQBpqSeT+UCwauYjkdOQYRvwsGwimlQQE2ayqUwuuXGzquFpCPoXzYKWlzL4OuXg==
+vue-router@4.0.12:
+  version "4.0.12"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.0.12.tgz#8dc792cddf5bb1abcc3908f9064136de7e13c460"
+  integrity sha512-CPXvfqe+mZLB1kBWssssTiWg4EQERyqJZes7USiqfW9B5N2x+nHlnsM1D3b5CaJ6qgCvMmYJnz+G0iWjNCvXrg==
   dependencies:
-    "@vue/devtools-api" "^6.0.0-beta.14"
+    "@vue/devtools-api" "^6.0.0-beta.18"
 
 vue-style-loader@4.1.3:
   version "4.1.3"
