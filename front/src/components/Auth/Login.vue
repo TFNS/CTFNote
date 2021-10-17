@@ -27,6 +27,7 @@
             name="auth-register"
             class="text-primary"
             label="register"
+            underline
           />.
         </div>
       </q-card-section>

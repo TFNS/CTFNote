@@ -9,7 +9,7 @@
           <q-input
             v-model="form.login"
             filled
-            label="login"
+            label="Login"
             lazy-rules
             :rules="[required]"
           />
@@ -59,6 +59,7 @@
             name="auth-login"
             class="text-primary"
             label="login"
+            underline
           />.
         </div>
       </q-card-section>
