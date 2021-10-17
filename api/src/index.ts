@@ -10,8 +10,7 @@ import {
 import { migrate, MigrateDBConfig } from "postgres-migrations";
 import config from "./config";
 import createTasKPlugin from "./plugins/createTask";
-import importCtfPlugin from "./plugins/importCtf"; /* 
-import { settingsHook, settingsPlugin } from "./plugins/settings"; */
+import importCtfPlugin from "./plugins/importCtf";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
