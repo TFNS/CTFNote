@@ -179,7 +179,9 @@ export default defineComponent({
       return fields.some((name) => checkField(name));
     },
     filterCategory(category: string) {
-      this.categoryFilter.push(category);
+      if (!this.categoryFilter.includes(category)) {
+        this.categoryFilter.push(category);
+      }
     },
     editTask(task: Task) {
       openEditTaskDialog(task);
