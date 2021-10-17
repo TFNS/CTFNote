@@ -76,8 +76,6 @@ import { defineComponent, reactive } from 'vue';
 import DatetimeInput from '../Utils/DatetimeInput.vue';
 import LogoField from '../Utils/LogoField.vue';
 
-
-
 export default defineComponent({
   components: { DatetimeInput, LogoField },
   props: {
@@ -85,9 +83,7 @@ export default defineComponent({
   },
   emits: useDialogPluginComponent.emits,
   setup(props) {
-    
-    const now = new Date().toISOString().slice(0, -5) + 'Z'
-    
+    const now = new Date().toISOString().slice(0, -5) + 'Z';
 
     const form = reactive(
       Object.assign(

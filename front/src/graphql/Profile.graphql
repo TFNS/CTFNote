@@ -7,7 +7,6 @@ fragment ProfileFragment on Profile {
   nodeId
 }
 
-
 mutation updatePassword($oldPassword: String!, $newPassword: String!) {
   changePassword(
     input: { oldpassword: $oldPassword, newpassword: $newPassword }
