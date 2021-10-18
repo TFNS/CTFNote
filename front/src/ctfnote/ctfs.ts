@@ -1,4 +1,4 @@
-import { date } from 'quasar';
+import { date, useQuasar } from 'quasar';
 import slugify from 'slugify';
 import {
   CtfFragment,
@@ -22,11 +22,13 @@ import {
   useInviteUserToCtfMutation,
   usePastCtfsQuery,
   useSubscribeToCtfSubscription,
+  useSubscribeToFlagSubscription,
   useUninviteUserToCtfMutation,
   useUpdateCredentialsForCtfIdMutation,
   useUpdateCtfByIdMutation,
 } from 'src/generated/graphql';
 import { CtfInvitation, makeId } from '.';
+import { notify } from './dialog';
 import { Ctf, Profile, Task } from './models';
 import { wrapNotify, wrapQuery } from './utils';
 
@@ -281,4 +283,14 @@ export function useUninviteUserToCtf() {
 
 export function watchCtfs() {
   useSubscribeToCtfSubscription();
+  const { onResult } = useSubscribeToFlagSubscription();
+  onResult(({ data }) => {
+    const task = data?.listen.relatedNode;
+    if (!task || task.__typename != 'Task') {
+      return;
+    }
+    if (task.solved == true) {
+      notify(`Task ${task.title} flagged!`);
+    }
+  });
 }

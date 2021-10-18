@@ -175,3 +175,14 @@ subscription subscribeToCtfDeleted {
     relatedNodeId
   }
 }
+
+subscription subscribeToFlag {
+  listen(topic: "task-solved:tasks") {
+    relatedNodeId
+    relatedNode {
+      ... on Task {
+        ...TaskFragment
+      }
+    }
+  }
+}

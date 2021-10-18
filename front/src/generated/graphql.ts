@@ -2131,6 +2131,11 @@ export type SubscribeToCtfDeletedSubscriptionVariables = Exact<{ [key: string]: 
 
 export type SubscribeToCtfDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined } };
 
+export type SubscribeToFlagSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SubscribeToFlagSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf' } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | { __typename?: 'WorkOnTask' } | null | undefined } };
+
 export type InvitationFragment = { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number };
 
 export type InviteUserToCtfMutationVariables = Exact<{
@@ -3076,6 +3081,35 @@ export function useSubscribeToCtfDeletedSubscription(options: VueApolloComposabl
   return VueApolloComposable.useSubscription<SubscribeToCtfDeletedSubscription, SubscribeToCtfDeletedSubscriptionVariables>(SubscribeToCtfDeletedDocument, {}, options);
 }
 export type SubscribeToCtfDeletedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToCtfDeletedSubscription, SubscribeToCtfDeletedSubscriptionVariables>;
+export const SubscribeToFlagDocument = gql`
+    subscription subscribeToFlag {
+  listen(topic: "task-solved:tasks") {
+    relatedNodeId
+    relatedNode {
+      ... on Task {
+        ...TaskFragment
+      }
+    }
+  }
+}
+    ${TaskFragmentDoc}`;
+
+/**
+ * __useSubscribeToFlagSubscription__
+ *
+ * To run a query within a Vue component, call `useSubscribeToFlagSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToFlagSubscription` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSubscribeToFlagSubscription();
+ */
+export function useSubscribeToFlagSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToFlagSubscription, SubscribeToFlagSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToFlagSubscription, SubscribeToFlagSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToFlagSubscription, SubscribeToFlagSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<SubscribeToFlagSubscription, SubscribeToFlagSubscriptionVariables>(SubscribeToFlagDocument, {}, options);
+}
+export type SubscribeToFlagSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToFlagSubscription, SubscribeToFlagSubscriptionVariables>;
 export const InviteUserToCtfDocument = gql`
     mutation inviteUserToCtf($ctfId: Int!, $profileId: Int!) {
   createInvitation(input: {invitation: {ctfId: $ctfId, profileId: $profileId}}) {
@@ -4035,6 +4069,18 @@ export const SubscribeToCtfDeleted = gql`
   }
 }
     `;
+export const SubscribeToFlag = gql`
+    subscription subscribeToFlag {
+  listen(topic: "task-solved:tasks") {
+    relatedNodeId
+    relatedNode {
+      ... on Task {
+        ...TaskFragment
+      }
+    }
+  }
+}
+    ${TaskFragment}`;
 export const InviteUserToCtf = gql`
     mutation inviteUserToCtf($ctfId: Int!, $profileId: Int!) {
   createInvitation(input: {invitation: {ctfId: $ctfId, profileId: $profileId}}) {
