@@ -2124,7 +2124,7 @@ export type UpdateCtfByIdMutation = { __typename?: 'Mutation', updateCtf?: { __t
 export type SubscribeToCtfCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined } };
+export type SubscribeToCtfCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null | undefined } };
 
 export type SubscribeToCtfDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -3025,11 +3025,16 @@ export function useUpdateCtfByIdMutation(options: VueApolloComposable.UseMutatio
 export type UpdateCtfByIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables>;
 export const SubscribeToCtfCreatedDocument = gql`
     subscription subscribeToCtfCreated {
-  listen(topic: "ctf-created") {
+  listen(topic: "created:ctfs") {
     relatedNodeId
+    relatedNode {
+      ... on Ctf {
+        ...CtfFragment
+      }
+    }
   }
 }
-    `;
+    ${CtfFragmentDoc}`;
 
 /**
  * __useSubscribeToCtfCreatedSubscription__
@@ -3049,7 +3054,7 @@ export function useSubscribeToCtfCreatedSubscription(options: VueApolloComposabl
 export type SubscribeToCtfCreatedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToCtfCreatedSubscription, SubscribeToCtfCreatedSubscriptionVariables>;
 export const SubscribeToCtfDeletedDocument = gql`
     subscription subscribeToCtfDeleted {
-  listen(topic: "ctf-deleted") {
+  listen(topic: "deleted:ctfs") {
     relatedNodeId
   }
 }
@@ -4013,14 +4018,19 @@ export const UpdateCtfById = gql`
     ${CtfFragment}`;
 export const SubscribeToCtfCreated = gql`
     subscription subscribeToCtfCreated {
-  listen(topic: "ctf-created") {
+  listen(topic: "created:ctfs") {
     relatedNodeId
+    relatedNode {
+      ... on Ctf {
+        ...CtfFragment
+      }
+    }
   }
 }
-    `;
+    ${CtfFragment}`;
 export const SubscribeToCtfDeleted = gql`
     subscription subscribeToCtfDeleted {
-  listen(topic: "ctf-deleted") {
+  listen(topic: "deleted:ctfs") {
     relatedNodeId
   }
 }

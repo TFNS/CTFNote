@@ -18,13 +18,13 @@ BEGIN
   CASE TG_OP
   WHEN 'INSERT' THEN
     PERFORM
-      pg_notify('postgraphile:ctf-created', NULL); RETURN NEW;
+      ctfnote_private.notify ('created', 'ctfs', NEW.id); RETURN NEW;
   WHEN 'UPDATE' THEN
     PERFORM
       ctfnote_private.notify ('update', 'ctfs', NEW.id); RETURN NEW;
   WHEN 'DELETE' THEN
     PERFORM
-      pg_notify('postgraphile:ctf-deleted', NULL); RETURN OLD;
+      ctfnote_private.notify ('deleted', 'ctfs', OLD.id); RETURN OLD;
   END CASE;
 END
 $$ VOLATILE
@@ -126,13 +126,13 @@ BEGIN
   CASE TG_OP
   WHEN 'INSERT' THEN
     PERFORM
-      pg_notify('postgraphile:profile-created', NULL); RETURN OLD;
+      ctfnote_private.notify ('created', 'profiles', NEW.id); RETURN NEW;
   WHEN 'UPDATE' THEN
     PERFORM
       ctfnote_private.notify ('update', 'profiles', NEW.id); RETURN NEW;
   WHEN 'DELETE' THEN
     PERFORM
-      pg_notify('postgraphile:profile-deleted', NULL); RETURN OLD;
+      ctfnote_private.notify ('deleted', 'profiles', OLD.id); RETURN OLD;
   END CASE;
 END
 $$ VOLATILE

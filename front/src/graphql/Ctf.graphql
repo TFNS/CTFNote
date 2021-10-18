@@ -160,13 +160,18 @@ mutation updateCtfById(
 }
 
 subscription subscribeToCtfCreated {
-  listen(topic: "ctf-created") {
+  listen(topic: "created:ctfs") {
     relatedNodeId
+    relatedNode {
+      ... on Ctf {
+        ...CtfFragment
+      }
+    }
   }
 }
 
 subscription subscribeToCtfDeleted {
-  listen(topic: "ctf-deleted") {
+  listen(topic: "deleted:ctfs") {
     relatedNodeId
   }
 }

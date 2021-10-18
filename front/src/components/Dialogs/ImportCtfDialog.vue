@@ -10,6 +10,8 @@
           label="Id"
           hint="ctftime.org url or id"
           :rules="[validate]"
+          autofocus
+          @keypress.enter="submit"
         />
       </q-card-section>
       <q-card-actions align="right" class="q-px-md q-pb-md">
@@ -58,10 +60,11 @@ export default defineComponent({
     };
   },
   methods: {
-    submit() {
+    async submit() {
       const id = parseCtftimeId(this.model);
       if (id === null) return;
-      void this.importCtf(id);
+      await this.importCtf(id);
+      this.onDialogOK();
     },
     validate() {
       return this.model && parseCtftimeId(this.model) === null
@@ -72,5 +75,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

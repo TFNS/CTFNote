@@ -6,6 +6,12 @@ import {
   CtfPatch,
   CtfSecretFragment,
   InvitationFragment,
+  SubscribeToCtfCreatedDocument,
+  SubscribeToCtfCreatedSubscription,
+  SubscribeToCtfCreatedSubscriptionVariables,
+  SubscribeToCtfDeletedDocument,
+  SubscribeToCtfDeletedSubscription,
+  SubscribeToCtfDeletedSubscriptionVariables,
   TaskFragment,
   useCreateCtfMutation,
   useCtfsQuery,
@@ -22,7 +28,7 @@ import {
 } from 'src/generated/graphql';
 import { CtfInvitation, makeId } from '.';
 import { Ctf, Profile, Task } from './models';
-import { wrapQuery } from './utils';
+import { wrapNotify, wrapQuery } from './utils';
 
 type FullCtfResponse = {
   ctf: CtfFragment & {
@@ -114,6 +120,49 @@ export function getIncomingCtfs() {
   const wrappedQuery = wrapQuery(query, [], (data) =>
     data.incomingCtf.nodes.map(buildCtf)
   );
+
+  /* Watch deletion */
+  query.subscribeToMore<
+    SubscribeToCtfDeletedSubscriptionVariables,
+    SubscribeToCtfDeletedSubscription
+  >({
+    document: SubscribeToCtfDeletedDocument,
+    updateQuery(oldResult, { subscriptionData }) {
+      const nodeId = subscriptionData.data.listen.relatedNodeId;
+      if (!nodeId) return oldResult;
+      const nodes = oldResult.incomingCtf?.nodes.slice() ?? [];
+      return {
+        incomingCtf: {
+          __typename: 'CtfsConnection',
+          nodes: nodes.filter((ctf) => ctf.nodeId != nodeId),
+        },
+      };
+    },
+  });
+
+  /* Watch creation */
+  query.subscribeToMore<
+    SubscribeToCtfCreatedSubscriptionVariables,
+    SubscribeToCtfCreatedSubscription
+  >({
+    document: SubscribeToCtfCreatedDocument,
+    updateQuery(oldResult, { subscriptionData }) {
+      const node = subscriptionData.data.listen.relatedNode;
+      if (!node || node.__typename != 'Ctf') return oldResult;
+      const nodes = oldResult.incomingCtf?.nodes.slice() ?? [];
+
+      const endTime = extractDate(node.endTime);
+      if (endTime > new Date()) {
+        nodes.push(node);
+      }
+      return {
+        incomingCtf: {
+          __typename: 'CtfsConnection',
+          nodes,
+        },
+      };
+    },
+  });
   return wrappedQuery;
 }
 
@@ -122,6 +171,52 @@ export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
   const wrappedQuery = wrapQuery(query, [], (data) =>
     data.pastCtf.nodes.map(buildCtf)
   );
+
+  /* Watch deletion */
+  query.subscribeToMore<
+    SubscribeToCtfDeletedSubscriptionVariables,
+    SubscribeToCtfDeletedSubscription
+  >({
+    document: SubscribeToCtfDeletedDocument,
+    updateQuery(oldResult, { subscriptionData }) {
+      const nodeId = subscriptionData.data.listen.relatedNodeId;
+      if (!nodeId) return oldResult;
+      const nodes = oldResult.pastCtf?.nodes.slice() ?? [];
+      const newNodes = nodes.filter((ctf) => ctf.nodeId != nodeId);
+      return {
+        pastCtf: {
+          __typename: 'CtfsConnection',
+          nodes: newNodes,
+          totalCount: (oldResult.pastCtf?.totalCount ?? 0) - 1,
+        },
+      };
+    },
+  });
+
+  /* Watch creation */
+  query.subscribeToMore<
+    SubscribeToCtfCreatedSubscriptionVariables,
+    SubscribeToCtfCreatedSubscription
+  >({
+    document: SubscribeToCtfCreatedDocument,
+    updateQuery(oldResult, { subscriptionData }) {
+      const node = subscriptionData.data.listen.relatedNode;
+      if (!node || node.__typename != 'Ctf') return oldResult;
+      const nodes = oldResult.pastCtf?.nodes.slice() ?? [];
+
+      const endTime = extractDate(node.endTime);
+      if (endTime < new Date()) {
+        nodes.push(node);
+      }
+      return {
+        pastCtf: {
+          __typename: 'CtfsConnection',
+          nodes,
+          totalCount: (oldResult.pastCtf?.totalCount ?? 0) + 1,
+        },
+      };
+    },
+  });
 
   return wrappedQuery;
 }
@@ -166,7 +261,8 @@ export function useUpdateCtfCredentials() {
 
 export function useImportCtf() {
   const { mutate } = useImportctfMutation({});
-  return (id: number) => mutate({ id });
+
+  return async (id: number) => await wrapNotify(mutate({ id }), 'CTF Imported');
 }
 
 export function useInviteUserToCtf() {
