@@ -23,11 +23,10 @@ export default defineComponent({
     const $router = useRouter();
     const $route = useRoute();
 
-    ctfnote.watchUpdates()
+    ctfnote.watchUpdates();
 
     const { result: me } = ctfnote.me.getMe();
     const { result: settings } = ctfnote.settings.getSettings();
-
 
     $router.beforeEach((to, from, next) => {
       if (!to.meta.public && !me.value.profile) {

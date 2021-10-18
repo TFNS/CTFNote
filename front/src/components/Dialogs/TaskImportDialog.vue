@@ -79,7 +79,8 @@ export default defineComponent({
   },
   emits: useDialogPluginComponent.emits,
   setup() {
-    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
+    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
+      useDialogPluginComponent();
     const parserOptions = parsers.map((p) => ({ label: p.name, value: p }));
 
     const columns = [

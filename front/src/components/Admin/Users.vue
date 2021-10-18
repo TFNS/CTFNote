@@ -174,7 +174,7 @@ export default defineComponent({
         await this.refetch();
       };
 
-      const roleStr = role.toString().slice(5)
+      const roleStr = role.toString().slice(5);
 
       if (profile.id == this.me.profile?.id) {
         this.$q

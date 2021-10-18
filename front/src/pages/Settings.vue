@@ -115,9 +115,7 @@ export default defineComponent({
     const username = ref(me.value.profile?.username ?? '');
     const description = ref(me.value.profile?.description ?? '');
 
-    const color = ref(
-      me.value.profile?.color 
-    );
+    const color = ref(me.value.profile?.color);
 
     watch(
       me,
@@ -125,7 +123,7 @@ export default defineComponent({
         if (!v.profile?.username) return;
         username.value = v.profile?.username;
         description.value = v.profile?.description;
-        color.value = v.profile?.color ;
+        color.value = v.profile?.color;
       },
       { deep: true }
     );

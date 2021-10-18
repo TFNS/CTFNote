@@ -107,8 +107,6 @@ import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import TaskBadge from './TaskBadge.vue';
 import TaskMenu from './TaskMenu.vue';
 
-
-
 export default defineComponent({
   components: { TaskBadge, CtfNoteLink, TaskMenu },
   props: {

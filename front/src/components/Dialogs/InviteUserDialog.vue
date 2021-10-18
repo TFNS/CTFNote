@@ -33,9 +33,7 @@
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { Role } from 'src/ctfnote';
-import {
-  useCreateInvitationToken
-} from 'src/ctfnote/admin';
+import { useCreateInvitationToken } from 'src/ctfnote/admin';
 import { defineComponent, ref } from 'vue';
 import CopyLink from '../Utils/CopyLink.vue';
 import SelectRole from '../Utils/SelectRole.vue';

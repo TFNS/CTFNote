@@ -21,7 +21,6 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-
     const { result: me } = getMe();
     return { me, deleteCtf: useDeleteCtf() };
   },

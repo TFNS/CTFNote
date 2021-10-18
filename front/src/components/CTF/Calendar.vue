@@ -87,7 +87,7 @@ import {
   QCalendar,
   QCalendarMonth,
   Timestamp,
-  today
+  today,
 } from '@quasar/quasar-ui-qcalendar';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarMonth.sass';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarTransitions.sass';

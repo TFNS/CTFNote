@@ -27,11 +27,7 @@
         </q-card-section>
         <q-card-actions class="q-gutter-md q-pr-md q-pb-md" align="right">
           <q-btn v-close-popup flat color="warning" label="Cancel" />
-          <q-btn
-            color="positive"
-            type="submit"
-            :label="editText"
-          />
+          <q-btn color="positive" type="submit" :label="editText" />
         </q-card-actions>
       </q-form>
     </q-card>

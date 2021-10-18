@@ -24,13 +24,13 @@ export default defineComponent({
 
     watch(ctf, (ctf) => {
       if (ctf) {
-        document.title = `CTFNote - ${ctf.title}`
+        document.title = `CTFNote - ${ctf.title}`;
       }
     });
 
     $router.afterEach((to) => {
       if (to.name != 'task' && ctf.value) {
-        document.title = `CTFNote - ${ctf.value.title}`
+        document.title = `CTFNote - ${ctf.value.title}`;
       }
     });
     return { ctf, loading };

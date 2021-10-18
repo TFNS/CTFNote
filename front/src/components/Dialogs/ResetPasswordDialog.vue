@@ -10,10 +10,14 @@
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <copy-link :link="link" >
-
+        <copy-link :link="link">
           <template #after>
-            <q-btn icon="lock_reset" color="positive" round @click="createLink"/>
+            <q-btn
+              icon="lock_reset"
+              color="positive"
+              round
+              @click="createLink"
+            />
           </template>
         </copy-link>
       </q-card-section>

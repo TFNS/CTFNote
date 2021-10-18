@@ -39,9 +39,13 @@
 import {
   defaultColorsNames,
   SettingsColor,
-  SettingsColorMap
+  SettingsColorMap,
 } from 'src/ctfnote';
-import { defaultColors, getSettings, updateSettings } from 'src/ctfnote/settings';
+import {
+  defaultColors,
+  getSettings,
+  updateSettings,
+} from 'src/ctfnote/settings';
 import { defineComponent, reactive, watch } from 'vue';
 import ColorPicker from '../Utils/ColorPicker.vue';
 

@@ -47,7 +47,7 @@ export default defineComponent({
         return date.formatDate(this.modelValue, 'YYYY/MM/DD HH:mm');
       },
       set(v: string) {
-        const d =  date.extractDate(v, humanMask);
+        const d = date.extractDate(v, humanMask);
         this.$emit('update:modelValue', d);
       },
     },

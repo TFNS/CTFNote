@@ -15,12 +15,7 @@
         />
       </q-card-section>
       <q-card-actions align="right" class="q-gutter-md q-px-md q-pb-sm">
-        <q-btn
-          color="warning"
-          flat
-          label="cancel"
-          @click="onDialogCancel"
-        />
+        <q-btn color="warning" flat label="cancel" @click="onDialogCancel" />
         <q-btn color="positive" label="import" @click="submit" />
       </q-card-actions>
     </q-card>
