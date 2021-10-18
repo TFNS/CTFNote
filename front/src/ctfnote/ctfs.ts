@@ -1,4 +1,4 @@
-import { date, useQuasar } from 'quasar';
+import { date } from 'quasar';
 import slugify from 'slugify';
 import {
   CtfFragment,
@@ -25,7 +25,7 @@ import {
   useSubscribeToFlagSubscription,
   useUninviteUserToCtfMutation,
   useUpdateCredentialsForCtfIdMutation,
-  useUpdateCtfByIdMutation,
+  useUpdateCtfByIdMutation
 } from 'src/generated/graphql';
 import { CtfInvitation, makeId } from '.';
 import { notify } from './dialog';
