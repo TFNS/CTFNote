@@ -59,7 +59,7 @@
 <script lang="ts">
 import { date } from 'quasar';
 import { Ctf } from 'src/ctfnote/models';
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
 import BtnDelete from '../CTF/BtnDelete.vue';
 import BtnEdit from '../CTF/BtnEdit.vue';
 import CtfTimeLink from '../CTF/CtfTimeLink.vue';
@@ -79,10 +79,23 @@ export default defineComponent({
     CtfNoteLink,
   },
   props: { ctf: { type: Object as () => Ctf, required: true } },
+  setup() {
+    const now = ref(new Date());
+    let interval = 0;
+    const watcher = () => {
+      return (now.value = new Date());
+    };
+    onMounted(() => {
+      interval = window.setInterval(watcher, 1000);
+    });
+    onUnmounted(() => {
+      window.clearInterval(interval);
+    });
+    return { now };
+  },
   computed: {
     running(): boolean {
-      const now = new Date();
-      return this.ctf.startTime < now && this.ctf.endTime > now;
+      return this.ctf.startTime < this.now && this.ctf.endTime > this.now;
     },
     dateRange() {
       const startDate = date.formatDate(this.ctf.startTime, 'YYYY/MM/DD');
@@ -107,8 +120,8 @@ export default defineComponent({
       const start = this.ctf.startTime.getTime();
       const end = this.ctf.endTime.getTime();
       const duration = end - start;
-      const elapsed = Date.now() - start;
-      const progress = (elapsed / duration) * 100;
+      const elapsed = this.now.valueOf() - start;
+      const progress = Math.min((elapsed / duration) * 100, 100);
       return { '--progress-percent': `${progress.toFixed(2)}%` };
     },
   },
