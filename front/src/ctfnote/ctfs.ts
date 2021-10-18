@@ -25,7 +25,7 @@ import {
   useSubscribeToFlagSubscription,
   useUninviteUserToCtfMutation,
   useUpdateCredentialsForCtfIdMutation,
-  useUpdateCtfByIdMutation
+  useUpdateCtfByIdMutation,
 } from 'src/generated/graphql';
 import { CtfInvitation, makeId } from '.';
 import { notify } from './dialog';
@@ -170,9 +170,10 @@ export function getIncomingCtfs() {
 
 export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
   const query = usePastCtfsQuery(...args);
-  const wrappedQuery = wrapQuery(query, [], (data) =>
-    data.pastCtf.nodes.map(buildCtf)
-  );
+  const wrappedQuery = wrapQuery(query, { total: 0, ctfs: [] }, (data) => ({
+    total: data.pastCtf.totalCount,
+    ctfs: data.pastCtf.nodes.map(buildCtf),
+  }));
 
   /* Watch deletion */
   query.subscribeToMore<
