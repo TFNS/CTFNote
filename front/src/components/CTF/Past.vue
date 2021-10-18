@@ -33,7 +33,7 @@
 import { date } from 'quasar';
 import { Ctf } from 'src/ctfnote';
 import { getPastCtfs } from 'src/ctfnote/ctfs';
-import { defineComponent, ref, computed } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import CardAdminMenu from './CardAdminMenu.vue';
 
@@ -51,15 +51,18 @@ export default defineComponent({
     const {
       result: pastCtfs,
       loading,
-      onResult,
     } = getPastCtfs(() => ({
       first: pagination.value.rowsPerPage,
       offset: (pagination.value.page - 1) * pagination.value.rowsPerPage,
     }));
 
-    onResult(({ total }) => {
-      pagination.value.rowsNumber = total;
-    });
+    watch(
+      () => pastCtfs.value.total,
+      (v) => {
+        pagination.value.rowsNumber = v;
+      },
+      { immediate: true }
+    );
 
     return {
       ctfs: computed(() => pastCtfs.value.ctfs),
