@@ -79,13 +79,12 @@
 
 <script lang="ts">
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
-import { SettingsKey } from 'src/ctfnote';
 import {
-  register,
-  registerWithPassword,
-  registerWithToken,
+  useRegister,
+  useRegisterWithPassword,
+  useRegisterWithToken
 } from 'src/ctfnote/auth';
-import { injectStrict } from 'src/ctfnote/utils';
+import { getSettings } from 'src/ctfnote/settings';
 import { defineComponent, reactive, ref } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 
@@ -95,9 +94,12 @@ export default defineComponent({
     token: { type: String, default: '' },
   },
   setup() {
-    const settings = injectStrict(SettingsKey);
+    const { result: settings } = getSettings();
 
     return {
+      register: useRegister(),
+      registerWithToken: useRegisterWithToken(),
+      registerWithPassword: useRegisterWithPassword(),
       settings,
       form: reactive({
         login: '',
@@ -129,7 +131,7 @@ export default defineComponent({
     },
     submit() {
       if (this.token) {
-        return registerWithToken(
+        return this.registerWithToken(
           this.form.login,
           this.form.password,
           this.token
@@ -137,14 +139,14 @@ export default defineComponent({
       }
 
       if (this.registrationPasswordForced || this.usePassword) {
-        return registerWithPassword(
+        return this.registerWithPassword(
           this.form.login,
           this.form.password,
           this.form.ctfnotePassword
         );
       }
 
-      return register(this.form.login, this.form.password);
+      return this.register(this.form.login, this.form.password);
     },
   },
 });

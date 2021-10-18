@@ -21,8 +21,8 @@
 </template>
 
 <script lang="ts">
-import { Ctf, MeKey } from 'src/ctfnote';
-import { injectStrict } from 'src/ctfnote/utils';
+import { Ctf } from 'src/ctfnote';
+import { getMe } from 'src/ctfnote/me';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -30,7 +30,7 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const me = injectStrict(MeKey);
+    const { result: me } = getMe();
     return { me };
   },
 });

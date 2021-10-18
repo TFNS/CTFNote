@@ -103,15 +103,14 @@
 import UserBadge from 'src/components/Profile/UserBadge.vue';
 import ColorPicker from 'src/components/Utils/ColorPicker.vue';
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
-import { MeKey, Profile } from 'src/ctfnote';
-import { updatePassword, updateProfile } from 'src/ctfnote/me';
-import { injectStrict } from 'src/ctfnote/utils';
+import { Profile } from 'src/ctfnote';
+import { getMe, useUpdatePassword, useUpdateProfile } from 'src/ctfnote/me';
 import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
   components: { PasswordInput, ColorPicker, UserBadge },
   setup() {
-    const me = injectStrict(MeKey);
+    const { result: me } = getMe();
 
     const username = ref(me.value.profile?.username ?? '');
     const description = ref(me.value.profile?.description ?? '');
@@ -132,6 +131,8 @@ export default defineComponent({
     );
 
     return {
+      updateProfile: useUpdateProfile(),
+      updatePassword: useUpdatePassword(),
       color,
       username,
       description,
@@ -148,14 +149,14 @@ export default defineComponent({
   methods: {
     changeProfile() {
       if (!this.me.profile) return;
-      void updateProfile(this.me.profile, {
+      void this.updateProfile(this.me.profile, {
         color: this.color,
         description: this.description,
         username: this.username,
       });
     },
     changePassword() {
-      void updatePassword(this.oldPassword, this.newPassword).then(() => {
+      void this.updatePassword(this.oldPassword, this.newPassword).then(() => {
         this.oldPassword = '';
         this.newPassword = '';
       });

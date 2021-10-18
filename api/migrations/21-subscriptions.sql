@@ -3,7 +3,7 @@ CREATE FUNCTION ctfnote_private.notify (event_name text, node_name text, node_id
   AS $$
 BEGIN
   PERFORM
-    pg_notify(concat('postgraphile:', event_name, ':', node_name, ':', node_id), json_build_object('__node__', json_build_array(node_name, node_id))::text);
+    pg_notify(concat('postgraphile:', event_name, ':', node_name), json_build_object('__node__', json_build_array(node_name, node_id))::text);
 END;
 $$ STRICT VOLATILE
 LANGUAGE plpgsql;
@@ -170,9 +170,7 @@ CREATE TRIGGER _500_gql_update_invitation
   EXECUTE PROCEDURE ctfnote_private.notify_invitation_edit ();
 
 
-
 /* check auth */
-
 CREATE OR REPLACE FUNCTION ctfnote_private.validate_subscription (topic text)
   RETURNS text
   AS $$
@@ -180,10 +178,10 @@ DECLARE
   ok text := 'e0d7b844-89cd-4d00-9818-47a3e9c3a429';
   ctf_id int;
 BEGIN
-  IF ctfnote_private.is_guest () IS NULL THEN
-    RAISE EXCEPTION 'Please login first';
+  IF ctfnote_private.is_guest () THEN
+    RETURN ok;
   END IF;
-  RETURN ok;
+  RAISE EXCEPTION 'Please login first';
 END;
 $$
 LANGUAGE plpgsql

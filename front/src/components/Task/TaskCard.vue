@@ -98,9 +98,10 @@
 </template>
 
 <script lang="ts">
-import { Ctf, MeKey, Task } from 'src/ctfnote';
+import { Ctf, Task } from 'src/ctfnote';
+import { getMe } from 'src/ctfnote/me';
 import { getTeam } from 'src/ctfnote/profiles';
-import { colorHash, injectStrict } from 'src/ctfnote/utils';
+import { colorHash } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import TaskBadge from './TaskBadge.vue';
@@ -127,7 +128,7 @@ export default defineComponent({
     'filter-category',
   ],
   setup() {
-    const me = injectStrict(MeKey);
+    const { result: me } = getMe();
     const { result: team } = getTeam();
     return { me, team };
   },

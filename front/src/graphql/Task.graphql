@@ -112,8 +112,8 @@ mutation stopWorkingOn($taskId: Int!) {
 }
 
 # Subscriptions
-subscription subscribeToTask($topic: String!) {
-  listen(topic: $topic) {
+subscription subscribeToTask {
+  listen(topic: "update:tasks") {
     relatedNode {
       nodeId
       ... on Task {

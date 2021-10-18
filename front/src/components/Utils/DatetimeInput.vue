@@ -35,7 +35,7 @@ const isoMask = 'YYYY-MM-DDTHH:mm:ssZ';
 
 export default defineComponent({
   props: {
-    modelValue: { type: String, default: '' },
+    modelValue: { type: Date, default: '' },
     label: { type: String, required: true },
   },
   emits: ['update:modelValue'],
@@ -48,7 +48,7 @@ export default defineComponent({
         return date.formatDate(this.modelValue, 'YYYY/MM/DD HH:mm');
       },
       set(v: string) {
-        const d =  date.formatDate(date.extractDate(v, humanMask), isoMask);
+        const d =  date.extractDate(v, humanMask);
         this.$emit('update:modelValue', d);
       },
     },

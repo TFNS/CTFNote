@@ -25,9 +25,8 @@
 
 <script lang="ts">
 import { Ctf } from 'src/ctfnote';
-import { openEditCtfCredentials } from 'src/ctfnote/dialog';
-import { MeKey } from 'src/ctfnote/symbols';
-import { injectStrict } from 'src/ctfnote/utils';
+import { useUpdateCtfCredentials } from 'src/ctfnote/ctfs';
+import { getMe } from 'src/ctfnote/me';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -36,13 +35,25 @@ export default defineComponent({
   },
 
   setup() {
-    const me = injectStrict(MeKey);
+    const { result: me } = getMe();
 
-    return { me };
+    return { me, updateCtfCredentials: useUpdateCtfCredentials() };
   },
   methods: {
     editCredentials() {
-      openEditCtfCredentials(this.ctf, this.ctf.credentials ?? '');
+      this.$q
+        .dialog({
+          title: 'Edit credentials',
+          color: 'primary',
+          prompt: {
+            model: this.ctf.credentials ?? '',
+            type: 'textarea',
+          },
+          cancel: true,
+        })
+        .onOk((credentials: string) => {
+          void this.updateCtfCredentials(this.ctf, credentials);
+        });
     },
   },
 });

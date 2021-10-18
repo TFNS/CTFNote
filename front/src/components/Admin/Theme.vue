@@ -39,11 +39,9 @@
 import {
   defaultColorsNames,
   SettingsColor,
-  SettingsColorMap,
-  SettingsKey,
+  SettingsColorMap
 } from 'src/ctfnote';
-import { defaultColors, updateSettings } from 'src/ctfnote/settings';
-import { injectStrict } from 'src/ctfnote/utils';
+import { defaultColors, getSettings, updateSettings } from 'src/ctfnote/settings';
 import { defineComponent, reactive, watch } from 'vue';
 import ColorPicker from '../Utils/ColorPicker.vue';
 
@@ -52,7 +50,7 @@ type ColorPairs = [SettingsColor, string][];
 export default defineComponent({
   components: { ColorPicker },
   setup() {
-    const settings = injectStrict(SettingsKey);
+    const { result: settings } = getSettings();
     const colors = reactive(Object.assign({}, defaultColors));
 
     watch(

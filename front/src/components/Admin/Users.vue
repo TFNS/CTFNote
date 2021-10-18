@@ -82,9 +82,8 @@
 
 <script lang="ts">
 import { Role, User } from 'src/ctfnote';
-import { deleteUser, getUsers, updateUserRole } from 'src/ctfnote/admin';
-import { MeKey } from 'src/ctfnote/symbols';
-import { injectStrict } from 'src/ctfnote/utils';
+import { getUsers, useDeleteUser, useUpdateUserRole } from 'src/ctfnote/admin';
+import { getMe } from 'src/ctfnote/me';
 import { defineComponent } from 'vue';
 import InviteUserDialog from '../Dialogs/InviteUserDialog.vue';
 import ResetPasswordDialog from '../Dialogs/ResetPasswordDialog.vue';
@@ -115,8 +114,9 @@ const columns = [
 export default defineComponent({
   components: { SelectRole },
   setup() {
-    const me = injectStrict(MeKey);
-
+    const { result: me } = getMe();
+    const deleteUser = useDeleteUser();
+    const updateUserRole = useUpdateUserRole();
     const { result: users, loading, refetch } = getUsers();
     return {
       me,

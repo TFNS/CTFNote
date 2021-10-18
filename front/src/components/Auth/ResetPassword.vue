@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
-import { resetPassword } from 'src/ctfnote/auth';
+import { useResetPassword } from 'src/ctfnote/auth';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
@@ -30,12 +30,13 @@ export default defineComponent({
   props: { token: { type: String, default: '' } },
   setup() {
     return {
+      resetPassword: useResetPassword(),
       password: ref(''),
     };
   },
   methods: {
     submit() {
-      void resetPassword(this.password, this.token);
+      void this.resetPassword(this.password, this.token);
     },
   },
 });

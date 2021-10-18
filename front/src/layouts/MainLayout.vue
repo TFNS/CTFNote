@@ -12,8 +12,8 @@
 <script lang="ts">
 import { useQuasar } from 'quasar';
 import MainMenu from 'src/components/Menu/MainMenu.vue';
-import { ctfnote, MeKey, SettingsKey } from 'src/ctfnote';
-import { defineComponent, provide, watch, nextTick } from 'vue';
+import { ctfnote } from 'src/ctfnote';
+import { defineComponent, nextTick, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 export default defineComponent({
   name: 'MainLayout',
@@ -23,15 +23,15 @@ export default defineComponent({
     const $router = useRouter();
     const $route = useRoute();
 
+    ctfnote.watchUpdates()
+
     const { result: me } = ctfnote.me.getMe();
     const { result: settings } = ctfnote.settings.getSettings();
 
-    provide(MeKey, me);
-    provide(SettingsKey, settings);
 
     $router.beforeEach((to, from, next) => {
       if (!to.meta.public && !me.value.profile) {
-        next({ name: 'auth-login' });
+        return next({ name: 'auth-login' });
       }
       next();
     });

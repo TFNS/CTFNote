@@ -96,7 +96,6 @@ import { Ctf } from 'src/ctfnote';
 import { getAllCtfs } from 'src/ctfnote/ctfs';
 import { colorHash } from 'src/ctfnote/utils';
 import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 function dateToLocale(s: string, offset = 0): string {
   const [year, month] = s.split('-').map((e) => parseInt(e));
@@ -112,7 +111,6 @@ export default defineComponent({
       calendar: ref<QCalendar>(),
       ctfs,
       loading,
-      $router: useRouter(),
       animated: ref(false),
       selectedDate: ref(today()),
     };

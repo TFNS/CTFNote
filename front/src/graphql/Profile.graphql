@@ -32,8 +32,8 @@ query getTeam {
   }
 }
 
-subscription subscribeToProfile($topic: String!) {
-  listen(topic: $topic) {
+subscription subscribeToProfile {
+  listen(topic: "update:profiles") {
     relatedNode {
       nodeId
       ... on Profile {

@@ -1,3 +1,4 @@
+import { date } from 'quasar';
 import slugify from 'slugify';
 import {
   CtfFragment,
@@ -14,19 +15,14 @@ import {
   useIncomingCtfsQuery,
   useInviteUserToCtfMutation,
   usePastCtfsQuery,
-  useSubscribeToCtfCreatedSubscription,
-  useSubscribeToCtfDeletedSubscription,
   useSubscribeToCtfSubscription,
-  useSubscribeToFullCtfSubscription,
   useUninviteUserToCtfMutation,
   useUpdateCredentialsForCtfIdMutation,
   useUpdateCtfByIdMutation,
 } from 'src/generated/graphql';
 import { CtfInvitation, makeId } from '.';
 import { Ctf, Profile, Task } from './models';
-import { watchTask } from './tasks';
 import { wrapQuery } from './utils';
-import { date } from 'quasar';
 
 type FullCtfResponse = {
   ctf: CtfFragment & {
@@ -60,6 +56,22 @@ export function buildTask(task: TaskFragment): Task {
   };
 }
 
+function extractDate(d: string) {
+  const masks = [
+    'YYYY-MM-DDTHH:mm:ss.SSSZ',
+    'YYYY-MM-DDTHH:mm:ss.SSZ',
+    'YYYY-MM-DDTHH:mm:ss.SZ',
+    'YYYY-MM-DDTHH:mm:ssZ',
+  ];
+  for (const mask of masks) {
+    const r = date.extractDate(d, mask);
+    if (r.valueOf() > 0) {
+      return r;
+    }
+  }
+  throw 'invalid date';
+}
+
 export function buildCtf(ctf: CtfFragment): Ctf {
   const slug = slugify(ctf.title);
   const params = { ctfId: ctf.id, ctfSlug: slug };
@@ -79,8 +91,8 @@ export function buildCtf(ctf: CtfFragment): Ctf {
     infoLink,
     tasksLink,
     guestsLink,
-    startTime: date.extractDate(ctf.startTime, 'YYYY-MM-DDTHH:mm:ssZ'),
-    endTime: date.extractDate(ctf.endTime, 'YYYY-MM-DDTHH:mm:ssZ'),
+    startTime: extractDate(ctf.startTime),
+    endTime: extractDate(ctf.endTime),
     tasks: [],
     invitations: [],
   };
@@ -102,10 +114,6 @@ export function getIncomingCtfs() {
   const wrappedQuery = wrapQuery(query, [], (data) =>
     data.incomingCtf.nodes.map(buildCtf)
   );
-  wrappedQuery.onResult((ctfs) => {
-    ctfs.forEach((ctf) => watchCtf(ctf));
-  });
-  watchCtfList(() => void wrappedQuery.refetch());
   return wrappedQuery;
 }
 
@@ -114,10 +122,7 @@ export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
   const wrappedQuery = wrapQuery(query, [], (data) =>
     data.pastCtf.nodes.map(buildCtf)
   );
-  wrappedQuery.onResult((ctfs) => {
-    ctfs.forEach((ctf) => watchCtf(ctf));
-  });
-  watchCtfList(() => void wrappedQuery.refetch());
+
   return wrappedQuery;
 }
 
@@ -125,11 +130,6 @@ export function getCtf(...args: Parameters<typeof useGetFullCtfQuery>) {
   const query = useGetFullCtfQuery(...args);
   const wrappedQuery = wrapQuery(query, null, (data) => buildFullCtf(data));
 
-  wrappedQuery.onResult((ctf) => {
-    if (ctf) {
-      watchFullCtf(ctf);
-    }
-  });
   return wrappedQuery;
 }
 
@@ -138,64 +138,51 @@ export function getAllCtfs() {
   const wrappedQuery = wrapQuery(query, [], (data) =>
     data.ctfs.nodes.map(buildCtf)
   );
-  wrappedQuery.onResult((ctfs) => {
-    ctfs.forEach((ctf) => watchCtf(ctf));
-  });
-  watchCtfList(() => void wrappedQuery.refetch());
   return wrappedQuery;
 }
 
 /* Mutations */
 
-export async function createCtf(ctf: CtfInput) {
+export function useCreateCtf() {
   const { mutate } = useCreateCtfMutation({});
-  return await mutate(ctf);
+  return (ctf: CtfInput) => mutate(ctf);
 }
 
-export async function deleteCtf(ctf: Ctf) {
+export function useDeleteCtf() {
   const { mutate } = useDeleteCtfbyIdMutation({});
-  return await mutate({ id: ctf.id });
+  return (ctf: Ctf) => mutate({ id: ctf.id });
 }
 
-export async function updateCtf(ctf: Ctf, patch: CtfPatch) {
+export function useUpdateCtf() {
   const { mutate } = useUpdateCtfByIdMutation({});
-  await mutate({ id: ctf.id, ...patch });
+  return (ctf: Ctf, patch: CtfPatch) => mutate({ id: ctf.id, ...patch });
 }
 
-export async function updateCtfCredentials(ctf: Ctf, credentials: string) {
+export function useUpdateCtfCredentials() {
   const { mutate } = useUpdateCredentialsForCtfIdMutation({});
-  await mutate({ ctfId: ctf.id, credentials });
+  return (ctf: Ctf, credentials: string) =>
+    mutate({ ctfId: ctf.id, credentials });
 }
 
-export async function importCtf(id: number) {
+export function useImportCtf() {
   const { mutate } = useImportctfMutation({});
-  await mutate({ id });
+  return (id: number) => mutate({ id });
 }
 
-export async function inviteUserToCtf(ctf: Ctf, profile: Profile) {
+export function useInviteUserToCtf() {
   const { mutate } = useInviteUserToCtfMutation({});
-  await mutate({ ctfId: ctf.id, profileId: profile.id });
+  return (ctf: Ctf, profile: Profile) =>
+    mutate({ ctfId: ctf.id, profileId: profile.id });
 }
 
-export async function uninviteUserToCtf(ctf: Ctf, profile: Profile) {
+export function useUninviteUserToCtf() {
   const { mutate } = useUninviteUserToCtfMutation({});
-  await mutate({ ctfId: ctf.id, profileId: profile.id });
+  return (ctf: Ctf, profile: Profile) =>
+    mutate({ ctfId: ctf.id, profileId: profile.id });
 }
 
 /* Subscriptions */
 
-export function watchCtfList(refetch: () => void) {
-  const { onResult: ctfCreated } = useSubscribeToCtfCreatedSubscription();
-  const { onResult: ctfDeleted } = useSubscribeToCtfDeletedSubscription();
-  ctfCreated(() => refetch());
-  ctfDeleted(() => refetch());
-}
-
-export function watchCtf(ctf: Ctf) {
-  useSubscribeToCtfSubscription({ topic: `update:ctfs:${ctf.id}` });
-}
-
-export function watchFullCtf(ctf: Ctf) {
-  ctf.tasks.forEach((t) => watchTask(t));
-  useSubscribeToFullCtfSubscription({ topic: `update:ctfs:${ctf.id}` });
+export function watchCtfs() {
+  useSubscribeToCtfSubscription();
 }

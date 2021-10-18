@@ -46,13 +46,13 @@ query Ctfs {
   }
 }
 
-subscription subscribeToCtf($topic: String!) {
-  listen(topic: $topic) {
+subscription subscribeToCtf {
+  listen(topic: "update:ctfs") {
     relatedNodeId
     relatedNode {
       nodeId
       ... on Ctf {
-        ...CtfFragment
+        ...FullCtfFragment
       }
     }
   }
@@ -61,18 +61,6 @@ subscription subscribeToCtf($topic: String!) {
 query GetFullCtf($id: Int!) {
   ctf(id: $id) {
     ...FullCtfFragment
-  }
-}
-
-subscription subscribeToFullCtf($topic: String!) {
-  listen(topic: $topic) {
-    relatedNodeId
-    relatedNode {
-      nodeId
-      ... on Ctf {
-        ...FullCtfFragment
-      }
-    }
   }
 }
 

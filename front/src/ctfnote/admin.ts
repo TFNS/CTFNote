@@ -31,28 +31,33 @@ export function getUsers() {
 
 /* Mutations */
 
-export function updateUserRole(user: User, role: Role) {
+export function useUpdateUserRole() {
   const { mutate } = useUpdateRoleForUserIdMutation({});
-  return mutate({ role, userId: user.id });
+  return (user: User, role: Role) => mutate({ role, userId: user.id });
 }
 
-export function deleteUser(userId: number) {
+export function useDeleteUser() {
   const { mutate } = useDeleteUserByIdMutation({});
-  return mutate({ userId });
+  return (userId: number) => mutate({ userId });
 }
 
-export async function createInvitationToken(role: Role) {
+export function useCreateInvitationToken() {
   const { mutate } = useCreateInvitationTokenMutation({});
-  const r = await mutate({ role });
-  const token = r?.data?.createInvitationLink?.invitationLinkResponse?.token;
+  return async (role: Role) => {
+    const r = await mutate({ role });
+    const token = r?.data?.createInvitationLink?.invitationLinkResponse?.token;
 
-  return token;
+    return token;
+  };
 }
 
-export async function createResetPasswordToken(user: User){
+export function useCreateResetPasswordToken() {
   const { mutate } = useCreateResetPasswordTokenMutation({});
-  const r = await mutate({ userId: user.id });
-  const token = r?.data?.createResetPasswordLink?.resetPasswordLinkResponse?.token;
+  return async (user: User) => {
+    const r = await mutate({ userId: user.id });
+    const token =
+      r?.data?.createResetPasswordLink?.resetPasswordLinkResponse?.token;
 
-  return token;
+    return token;
+  };
 }

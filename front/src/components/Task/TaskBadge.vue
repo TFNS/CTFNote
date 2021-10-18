@@ -33,9 +33,9 @@
 </template>
 
 <script lang="ts">
-import { MeKey, Task } from 'src/ctfnote';
+import { Task } from 'src/ctfnote';
+import { getMe } from 'src/ctfnote/me';
 import { getTeam } from 'src/ctfnote/profiles';
-import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
 import UserBadge from '../Profile/UserBadge.vue';
 
@@ -46,7 +46,7 @@ export default defineComponent({
   },
   setup() {
     const { result: team } = getTeam();
-    const me = injectStrict(MeKey);
+    const { result: me } = getMe();
     return { team, me };
   },
   computed: {

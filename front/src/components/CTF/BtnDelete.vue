@@ -11,9 +11,9 @@
 </template>
 
 <script lang="ts">
-import { Ctf, MeKey } from 'src/ctfnote';
-import { openDeleteCtfDialog } from 'src/ctfnote/dialog';
-import { injectStrict } from 'src/ctfnote/utils';
+import { Ctf } from 'src/ctfnote';
+import { useDeleteCtf } from 'src/ctfnote/ctfs';
+import { getMe } from 'src/ctfnote/me';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -21,11 +21,23 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    return { me: injectStrict(MeKey) };
+
+    const { result: me } = getMe();
+    return { me, deleteCtf: useDeleteCtf() };
   },
   methods: {
     openDeleteCtfDialog() {
-      openDeleteCtfDialog(this.ctf);
+      this.$q
+        .dialog({
+          title: `Delete ${this.ctf.title} ?`,
+          color: 'negative',
+          message: 'This will delete all the tasks, but not the pads.',
+          ok: 'Delete',
+          cancel: true,
+        })
+        .onOk(() => {
+          void this.deleteCtf(this.ctf);
+        });
     },
   },
 });

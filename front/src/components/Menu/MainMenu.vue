@@ -74,9 +74,8 @@
 <script lang="ts">
 import { useQuasar } from 'quasar';
 import CtfNoteLink from 'src/components/Utils/CtfNoteLink.vue';
-import { logout } from 'src/ctfnote/auth';
-import { MeKey } from 'src/ctfnote/symbols';
-import { injectStrict } from 'src/ctfnote/utils';
+import { useLogout } from 'src/ctfnote/auth';
+import { getMe } from 'src/ctfnote/me';
 import { useStoredSettings } from 'src/extensions/storedSettings';
 import { defineComponent, ref, watch } from 'vue';
 
@@ -85,7 +84,7 @@ export default defineComponent({
 
   setup() {
     const $q = useQuasar();
-
+    const logout = useLogout();
     const { makePersistant } = useStoredSettings();
     const liveMode = makePersistant('live-mode', ref(true));
     const darkMode = makePersistant('dark-mode', ref(true));
@@ -100,8 +99,7 @@ export default defineComponent({
       { immediate: true }
     );
 
-    const me = injectStrict(MeKey);
-
+    const { result: me } = getMe();
 
     return {
       me,

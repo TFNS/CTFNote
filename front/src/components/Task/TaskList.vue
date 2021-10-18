@@ -57,7 +57,7 @@
           @filter-category="filterCategory"
           @edit-task="editTask(task)"
           @solve-task="solveTask(task)"
-          @delete-task="deleteTask(task)"
+          @delete-task="askDeleteTask(task)"
           @start-work-on-task="startWorkOnTasK(task)"
           @stop-work-on-task="stopWorkOnTasK(task)"
         />
@@ -112,12 +112,15 @@
 import { Ctf, Task } from 'src/ctfnote';
 import {
   openCreateTaskDialog,
-  openDeleteTaskDialog,
   openEditTaskDialog,
-  openFlagTaskDialog,
   openImportTaskDialog,
 } from 'src/ctfnote/dialog';
-import { startWorkingOn, stopWorkingOn } from 'src/ctfnote/tasks';
+import {
+  useDeleteTask,
+  useStartWorkingOn,
+  useStopWorkingOn,
+  useUpdateTask,
+} from 'src/ctfnote/tasks';
 import { useStoredSettings } from 'src/extensions/storedSettings';
 import { defineComponent, ref } from 'vue';
 import TaskCard from './TaskCard.vue';
@@ -129,8 +132,11 @@ export default defineComponent({
   },
   setup() {
     const { makePersistant } = useStoredSettings();
-
     return {
+      deleteTask: useDeleteTask(),
+      updateTask: useUpdateTask(),
+      startWorkingOn: useStartWorkingOn(),
+      stopWorkingOn: useStopWorkingOn(),
       displayMode: makePersistant('task-display-mode', ref('classic')),
       hideSolved: makePersistant('task-hide-solved', ref(false)),
       filter: ref(''),
@@ -187,7 +193,19 @@ export default defineComponent({
       openEditTaskDialog(task);
     },
     solveTask(task: Task) {
-      openFlagTaskDialog(task);
+      this.$q
+        .dialog({
+          title: 'Flag:',
+          cancel: true,
+          prompt: {
+            model: task.flag ?? '',
+            type: 'text',
+          },
+          color: 'primary',
+        })
+        .onOk((flag: string) => {
+          void this.updateTask(task, { flag });
+        });
     },
     openCreateTaskDialog(ctf: Ctf) {
       openCreateTaskDialog(ctf);
@@ -195,14 +213,24 @@ export default defineComponent({
     openImportTaskDialog() {
       openImportTaskDialog(this.ctf, this.tasks);
     },
-    deleteTask(task: Task) {
-      openDeleteTaskDialog(task);
+    askDeleteTask(task: Task) {
+      this.$q
+        .dialog({
+          title: `Delete ${task.title} ?`,
+          color: 'negative',
+          message: 'This will delete all the tasks, but not the pads.',
+          ok: 'Delete',
+          cancel: true,
+        })
+        .onOk(() => {
+          void this.deleteTask(task);
+        });
     },
     startWorkOnTasK(task: Task) {
-      void startWorkingOn(task);
+      void this.startWorkingOn(task);
     },
     stopWorkOnTasK(task: Task) {
-      void stopWorkingOn(task);
+      void this.stopWorkingOn(task);
     },
   },
 });

@@ -39,11 +39,12 @@
 
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { Task } from 'src/ctfnote';
+import { Id, Task, Ctf } from 'src/ctfnote';
+import { useUpdateTask, useCreateTask } from 'src/ctfnote/tasks';
 import { defineComponent, reactive } from 'vue';
 export default defineComponent({
   props: {
-    ctfId: { type: Number as () => number | null, default: null },
+    ctfId: { type: Number as unknown as () => Id<Ctf> | null, default: null },
     task: { type: Object as () => Task | null, default: null },
   },
   emits: useDialogPluginComponent.emits,
@@ -55,17 +56,19 @@ export default defineComponent({
       flag: props.task?.flag ?? '',
     });
     const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
-
+    const updateTask = useUpdateTask();
+    const createTask = useCreateTask();
     return {
       dialogRef,
       form,
       onDialogHide,
       submit() {
         if (props.ctfId) {
-          return onDialogOK({ ...form, ctfId: props.ctfId });
+          void createTask(props.ctfId, form);
         } else if (props.task) {
-          return onDialogOK({ ...form, id: props.task.id });
+          void updateTask(props.task, { ...form });
         }
+        onDialogOK()
       },
     };
   },

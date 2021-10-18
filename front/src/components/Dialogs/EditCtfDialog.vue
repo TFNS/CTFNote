@@ -72,6 +72,7 @@
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { Ctf } from 'src/ctfnote';
+import { useCreateCtf, useUpdateCtf } from 'src/ctfnote/ctfs';
 import { defineComponent, reactive } from 'vue';
 import DatetimeInput from '../Utils/DatetimeInput.vue';
 import LogoField from '../Utils/LogoField.vue';
@@ -83,8 +84,7 @@ export default defineComponent({
   },
   emits: useDialogPluginComponent.emits,
   setup(props) {
-    const now = Date.now();
-
+    const now = new Date();
     const form = reactive(
       Object.assign(
         {
@@ -104,13 +104,13 @@ export default defineComponent({
       useDialogPluginComponent();
 
     return {
+      updateCtf: useUpdateCtf(),
+      createCtf: useCreateCtf(),
       dialogRef,
       form,
       onDialogHide,
+      onDialogOK,
       onCancelClick: onDialogCancel,
-      submit() {
-        onDialogOK(form);
-      },
     };
   },
   computed: {
@@ -119,6 +119,24 @@ export default defineComponent({
     },
     title() {
       return this.ctf ? `Edit ${this.ctf.title}` : 'Create CTF';
+    },
+  },
+  methods: {
+    submit() {
+      if (this.ctf) {
+        void this.updateCtf(this.ctf, {
+          ...this.form,
+          startTime: this.form.startTime.toISOString(),
+          endTime: this.form.endTime.toISOString(),
+        });
+      } else {
+        void this.createCtf({
+          ...this.form,
+          startTime: this.form.startTime.toISOString(),
+          endTime: this.form.endTime.toISOString(),
+        });
+      }
+      this.onDialogOK();
     },
   },
 });

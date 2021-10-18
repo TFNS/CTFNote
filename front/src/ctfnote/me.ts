@@ -3,7 +3,7 @@ import {
   ProfilePatch,
   useMeQuery,
   useUpdatePasswordMutation,
-  useUpdateProfileMutation
+  useUpdateProfileMutation,
 } from 'src/generated/graphql';
 import { Me, Profile, Role } from '.';
 import { buildProfile } from './profiles';
@@ -53,13 +53,16 @@ export function getMe(refresh = false) {
   });
 
   const query = wrapQuery(q, buildMe({}), (data) => {
-    if (!data){
-      localStorage.removeItem('JWT')
-      window.location.reload()
+    if (!data) {
+      localStorage.removeItem('JWT');
+      window.location.reload();
     }
-    return buildMe(data.me)
+    return buildMe(data.me);
   });
   query.onResult((r) => {
+    if (r.jwt) {
+      localStorage.setItem('JWT', r.jwt);
+    }
     if (r.profile) {
       onLoginCallbacks.forEach((cb) => cb());
     } else {
@@ -69,18 +72,28 @@ export function getMe(refresh = false) {
   return query;
 }
 
+
+
 /* Mutations */
 
-export async function updateProfile(profile: Profile, patch: ProfilePatch) {
+export function useUpdateProfile() {
   const { mutate } = useUpdateProfileMutation({});
-  try {
-    await wrapNotify(mutate({ id: profile.id, patch }), 'Profile changed.');
-  } catch {}
+
+  return async (profile: Profile, patch: ProfilePatch) => {
+    try {
+      await wrapNotify(mutate({ id: profile.id, patch }), 'Profile changed.');
+    } catch {}
+  };
 }
 
-export async function updatePassword(oldPassword: string, newPassword: string) {
+export function useUpdatePassword() {
   const { mutate } = useUpdatePasswordMutation({});
-  try {
-    await wrapNotify(mutate({ oldPassword, newPassword }), 'Password changed.');
-  } catch {}
+  return async (oldPassword: string, newPassword: string) => {
+    try {
+      await wrapNotify(
+        mutate({ oldPassword, newPassword }),
+        'Password changed.'
+      );
+    } catch {}
+  };
 }

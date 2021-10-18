@@ -2053,12 +2053,10 @@ export type CtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CtfsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
 
-export type SubscribeToCtfSubscriptionVariables = Exact<{
-  topic: Scalars['String'];
-}>;
+export type SubscribeToCtfSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
 
 export type GetFullCtfQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2066,13 +2064,6 @@ export type GetFullCtfQueryVariables = Exact<{
 
 
 export type GetFullCtfQuery = { __typename?: 'Query', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | null | undefined };
-
-export type SubscribeToFullCtfSubscriptionVariables = Exact<{
-  topic: Scalars['String'];
-}>;
-
-
-export type SubscribeToFullCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
 
 export type IncomingCtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2181,9 +2172,7 @@ export type GetTeamQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetTeamQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string }> } | null | undefined };
 
-export type SubscribeToProfileSubscriptionVariables = Exact<{
-  topic: Scalars['String'];
-}>;
+export type SubscribeToProfileSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
@@ -2298,9 +2287,7 @@ export type StopWorkingOnMutationVariables = Exact<{
 
 export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
 
-export type SubscribeToTaskSubscriptionVariables = Exact<{
-  topic: Scalars['String'];
-}>;
+export type SubscribeToTaskSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
@@ -2782,18 +2769,18 @@ export function useCtfsQuery(options: VueApolloComposable.UseQueryOptions<CtfsQu
 }
 export type CtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtfsQuery, CtfsQueryVariables>;
 export const SubscribeToCtfDocument = gql`
-    subscription subscribeToCtf($topic: String!) {
-  listen(topic: $topic) {
+    subscription subscribeToCtf {
+  listen(topic: "update:ctfs") {
     relatedNodeId
     relatedNode {
       nodeId
       ... on Ctf {
-        ...CtfFragment
+        ...FullCtfFragment
       }
     }
   }
 }
-    ${CtfFragmentDoc}`;
+    ${FullCtfFragmentDoc}`;
 
 /**
  * __useSubscribeToCtfSubscription__
@@ -2802,16 +2789,13 @@ export const SubscribeToCtfDocument = gql`
  * When your component renders, `useSubscribeToCtfSubscription` returns an object from Apollo Client that contains result, loading and error properties
  * you can use to render your UI.
  *
- * @param variables that will be passed into the subscription
  * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
  *
  * @example
- * const { result, loading, error } = useSubscribeToCtfSubscription({
- *   topic: // value for 'topic'
- * });
+ * const { result, loading, error } = useSubscribeToCtfSubscription();
  */
-export function useSubscribeToCtfSubscription(variables: SubscribeToCtfSubscriptionVariables | VueCompositionApi.Ref<SubscribeToCtfSubscriptionVariables> | ReactiveFunction<SubscribeToCtfSubscriptionVariables>, options: VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables>> = {}) {
-  return VueApolloComposable.useSubscription<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables>(SubscribeToCtfDocument, variables, options);
+export function useSubscribeToCtfSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables>(SubscribeToCtfDocument, {}, options);
 }
 export type SubscribeToCtfSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToCtfSubscription, SubscribeToCtfSubscriptionVariables>;
 export const GetFullCtfDocument = gql`
@@ -2841,39 +2825,6 @@ export function useGetFullCtfQuery(variables: GetFullCtfQueryVariables | VueComp
   return VueApolloComposable.useQuery<GetFullCtfQuery, GetFullCtfQueryVariables>(GetFullCtfDocument, variables, options);
 }
 export type GetFullCtfQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetFullCtfQuery, GetFullCtfQueryVariables>;
-export const SubscribeToFullCtfDocument = gql`
-    subscription subscribeToFullCtf($topic: String!) {
-  listen(topic: $topic) {
-    relatedNodeId
-    relatedNode {
-      nodeId
-      ... on Ctf {
-        ...FullCtfFragment
-      }
-    }
-  }
-}
-    ${FullCtfFragmentDoc}`;
-
-/**
- * __useSubscribeToFullCtfSubscription__
- *
- * To run a query within a Vue component, call `useSubscribeToFullCtfSubscription` and pass it any options that fit your needs.
- * When your component renders, `useSubscribeToFullCtfSubscription` returns an object from Apollo Client that contains result, loading and error properties
- * you can use to render your UI.
- *
- * @param variables that will be passed into the subscription
- * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
- *
- * @example
- * const { result, loading, error } = useSubscribeToFullCtfSubscription({
- *   topic: // value for 'topic'
- * });
- */
-export function useSubscribeToFullCtfSubscription(variables: SubscribeToFullCtfSubscriptionVariables | VueCompositionApi.Ref<SubscribeToFullCtfSubscriptionVariables> | ReactiveFunction<SubscribeToFullCtfSubscriptionVariables>, options: VueApolloComposable.UseSubscriptionOptions<SubscribeToFullCtfSubscription, SubscribeToFullCtfSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToFullCtfSubscription, SubscribeToFullCtfSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToFullCtfSubscription, SubscribeToFullCtfSubscriptionVariables>> = {}) {
-  return VueApolloComposable.useSubscription<SubscribeToFullCtfSubscription, SubscribeToFullCtfSubscriptionVariables>(SubscribeToFullCtfDocument, variables, options);
-}
-export type SubscribeToFullCtfSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToFullCtfSubscription, SubscribeToFullCtfSubscriptionVariables>;
 export const IncomingCtfsDocument = gql`
     query IncomingCtfs {
   incomingCtf {
@@ -3273,8 +3224,8 @@ export function useGetTeamQuery(options: VueApolloComposable.UseQueryOptions<Get
 }
 export type GetTeamQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTeamQuery, GetTeamQueryVariables>;
 export const SubscribeToProfileDocument = gql`
-    subscription subscribeToProfile($topic: String!) {
-  listen(topic: $topic) {
+    subscription subscribeToProfile {
+  listen(topic: "update:profiles") {
     relatedNode {
       nodeId
       ... on Profile {
@@ -3292,16 +3243,13 @@ export const SubscribeToProfileDocument = gql`
  * When your component renders, `useSubscribeToProfileSubscription` returns an object from Apollo Client that contains result, loading and error properties
  * you can use to render your UI.
  *
- * @param variables that will be passed into the subscription
  * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
  *
  * @example
- * const { result, loading, error } = useSubscribeToProfileSubscription({
- *   topic: // value for 'topic'
- * });
+ * const { result, loading, error } = useSubscribeToProfileSubscription();
  */
-export function useSubscribeToProfileSubscription(variables: SubscribeToProfileSubscriptionVariables | VueCompositionApi.Ref<SubscribeToProfileSubscriptionVariables> | ReactiveFunction<SubscribeToProfileSubscriptionVariables>, options: VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>> = {}) {
-  return VueApolloComposable.useSubscription<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>(SubscribeToProfileDocument, variables, options);
+export function useSubscribeToProfileSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>(SubscribeToProfileDocument, {}, options);
 }
 export type SubscribeToProfileSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToProfileSubscription, SubscribeToProfileSubscriptionVariables>;
 export const SubscribeToProfileCreatedDocument = gql`
@@ -3717,8 +3665,8 @@ export function useStopWorkingOnMutation(options: VueApolloComposable.UseMutatio
 }
 export type StopWorkingOnMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<StopWorkingOnMutation, StopWorkingOnMutationVariables>;
 export const SubscribeToTaskDocument = gql`
-    subscription subscribeToTask($topic: String!) {
-  listen(topic: $topic) {
+    subscription subscribeToTask {
+  listen(topic: "update:tasks") {
     relatedNode {
       nodeId
       ... on Task {
@@ -3736,16 +3684,13 @@ export const SubscribeToTaskDocument = gql`
  * When your component renders, `useSubscribeToTaskSubscription` returns an object from Apollo Client that contains result, loading and error properties
  * you can use to render your UI.
  *
- * @param variables that will be passed into the subscription
  * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
  *
  * @example
- * const { result, loading, error } = useSubscribeToTaskSubscription({
- *   topic: // value for 'topic'
- * });
+ * const { result, loading, error } = useSubscribeToTaskSubscription();
  */
-export function useSubscribeToTaskSubscription(variables: SubscribeToTaskSubscriptionVariables | VueCompositionApi.Ref<SubscribeToTaskSubscriptionVariables> | ReactiveFunction<SubscribeToTaskSubscriptionVariables>, options: VueApolloComposable.UseSubscriptionOptions<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>> = {}) {
-  return VueApolloComposable.useSubscription<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>(SubscribeToTaskDocument, variables, options);
+export function useSubscribeToTaskSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>(SubscribeToTaskDocument, {}, options);
 }
 export type SubscribeToTaskSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>;
 
@@ -3990,28 +3935,8 @@ export const Ctfs = gql`
 }
     ${CtfFragment}`;
 export const SubscribeToCtf = gql`
-    subscription subscribeToCtf($topic: String!) {
-  listen(topic: $topic) {
-    relatedNodeId
-    relatedNode {
-      nodeId
-      ... on Ctf {
-        ...CtfFragment
-      }
-    }
-  }
-}
-    ${CtfFragment}`;
-export const GetFullCtf = gql`
-    query GetFullCtf($id: Int!) {
-  ctf(id: $id) {
-    ...FullCtfFragment
-  }
-}
-    ${FullCtfFragment}`;
-export const SubscribeToFullCtf = gql`
-    subscription subscribeToFullCtf($topic: String!) {
-  listen(topic: $topic) {
+    subscription subscribeToCtf {
+  listen(topic: "update:ctfs") {
     relatedNodeId
     relatedNode {
       nodeId
@@ -4019,6 +3944,13 @@ export const SubscribeToFullCtf = gql`
         ...FullCtfFragment
       }
     }
+  }
+}
+    ${FullCtfFragment}`;
+export const GetFullCtf = gql`
+    query GetFullCtf($id: Int!) {
+  ctf(id: $id) {
+    ...FullCtfFragment
   }
 }
     ${FullCtfFragment}`;
@@ -4137,8 +4069,8 @@ export const GetTeam = gql`
 }
     ${ProfileFragment}`;
 export const SubscribeToProfile = gql`
-    subscription subscribeToProfile($topic: String!) {
-  listen(topic: $topic) {
+    subscription subscribeToProfile {
+  listen(topic: "update:profiles") {
     relatedNode {
       nodeId
       ... on Profile {
@@ -4269,8 +4201,8 @@ export const StopWorkingOn = gql`
 }
     ${TaskFragment}`;
 export const SubscribeToTask = gql`
-    subscription subscribeToTask($topic: String!) {
-  listen(topic: $topic) {
+    subscription subscribeToTask {
+  listen(topic: "update:tasks") {
     relatedNode {
       nodeId
       ... on Task {

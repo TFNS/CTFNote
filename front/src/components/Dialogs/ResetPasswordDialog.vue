@@ -22,7 +22,7 @@
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { Role, User } from 'src/ctfnote';
-import { createResetPasswordToken } from 'src/ctfnote/admin';
+import { useCreateResetPasswordToken } from 'src/ctfnote/admin';
 import { defineComponent, ref } from 'vue';
 import CopyLink from '../Utils/CopyLink.vue';
 export default defineComponent({
@@ -36,6 +36,7 @@ export default defineComponent({
       useDialogPluginComponent();
 
     return {
+      createResetPasswordToken: useCreateResetPasswordToken(),
       tab: ref('role'),
       link: ref(''),
       role: ref(Role.UserGuest),
@@ -50,7 +51,7 @@ export default defineComponent({
   },
   methods: {
     async createLink() {
-      const token = await createResetPasswordToken(this.user);
+      const token = await this.createResetPasswordToken(this.user);
 
       const path = this.$router.resolve({
         name: 'auth-reset-password',

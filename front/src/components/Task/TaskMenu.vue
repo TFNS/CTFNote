@@ -41,8 +41,8 @@
 </template>
 
 <script lang="ts">
-import { MeKey, Task } from 'src/ctfnote';
-import { injectStrict } from 'src/ctfnote/utils';
+import { Task } from 'src/ctfnote';
+import { getMe } from 'src/ctfnote/me';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -58,7 +58,7 @@ export default defineComponent({
     'filter-category',
   ],
   setup() {
-    const me = injectStrict(MeKey);
+    const { result: me } = getMe();
     return {
       me,
     };

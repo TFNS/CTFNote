@@ -10,72 +10,88 @@ import { wrapNotify } from './utils';
 
 const JWT_KEY = 'JWT';
 
-function checkJWT(jwt: string | null | undefined) {
+export function saveJWT(jwt: string | null | undefined) {
   if (!jwt) {
     localStorage.removeItem(JWT_KEY);
   } else {
     localStorage.setItem(JWT_KEY, jwt);
   }
-  getMe(true);
 }
 
 /* Mutations */
-export async function login(login: string, password: string) {
+export function useLogin() {
   const { mutate } = useLoginMutation({});
-  try {
-    const r = await wrapNotify(
-      mutate({ login, password }),
-      `Logged as ${login}`
-    );
-    checkJWT(r?.data?.login?.jwt);
-  } catch {}
+  const { refetch } = getMe();
+  return async (login: string, password: string) => {
+    try {
+      const r = await wrapNotify(
+        mutate({ login, password }),
+        `Logged as ${login}`
+      );
+      saveJWT(r?.data?.login?.jwt);
+      await refetch();
+    } catch {}
+  };
 }
 
-export async function register(login: string, password: string) {
+export function useRegister() {
   const { mutate } = useRegisterMutation({});
-  try {
-    const r = await wrapNotify(mutate({ login, password }));
-    checkJWT(r?.data?.register?.jwt);
-  } catch {}
+  const { refetch } = getMe();
+  return async (login: string, password: string) => {
+    try {
+      const r = await wrapNotify(mutate({ login, password }));
+      saveJWT(r?.data?.register?.jwt);
+      await refetch();
+    } catch {}
+  };
 }
 
-export async function registerWithToken(
-  login: string,
-  password: string,
-  token: string
-) {
+export function useRegisterWithToken() {
   const { mutate } = useRegisterWithTokenMutation({});
-  try {
-    const r = await wrapNotify(mutate({ login, password, token }));
-    checkJWT(r?.data?.registerWithToken?.jwt);
-  } catch {}
+  const { refetch } = getMe();
+  return async (login: string, password: string, token: string) => {
+    try {
+      const r = await wrapNotify(mutate({ login, password, token }));
+      saveJWT(r?.data?.registerWithToken?.jwt);
+      await refetch();
+    } catch {}
+  };
 }
 
-export async function registerWithPassword(
-  login: string,
-  password: string,
-  ctfnotePassword: string
-) {
+export function useRegisterWithPassword() {
   const { mutate } = useRegisterWithPasswordMutation({});
-  try {
-    const r = await wrapNotify(
-      mutate({
-        login,
-        password,
-        ctfnotePassword,
-      })
-    );
-    checkJWT(r?.data?.registerWithPassword?.jwt);
-  } catch {}
+  const { refetch } = getMe();
+  return async (login: string, password: string, ctfnotePassword: string) => {
+    try {
+      const r = await wrapNotify(
+        mutate({
+          login,
+          password,
+          ctfnotePassword,
+        })
+      );
+      saveJWT(r?.data?.registerWithPassword?.jwt);
+      await refetch();
+    } catch {}
+  };
 }
 
-export async function resetPassword(password: string, token: string) {
+export function useResetPassword() {
   const { mutate } = useResetPasswordMutation({});
-  try {
-    await wrapNotify(mutate({ password, token }));
-  } catch {}
+  const { refetch } = getMe();
+  return async (password: string, token: string) => {
+    try {
+      const r = await wrapNotify(mutate({ password, token }));
+      saveJWT(r?.data?.resetPassword?.jwt);
+      await refetch();
+    } catch {}
+  };
 }
 
-export function logout() {
-  checkJWT(null);
+export function useLogout() {
+  const { refetch } = getMe();
+  return async () => {
+    saveJWT(null);
+    await refetch();
+  };
 }

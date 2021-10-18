@@ -29,10 +29,6 @@ export function getTeam() {
     [],
     (data) => data.profiles?.nodes.map(buildProfile) ?? []
   );
-  wrappedQuery.onResult((profiles) => {
-    profiles.forEach((p) => watchProfile(p));
-  });
-  watchProfileList(() => () => wrappedQuery.refetch);
   return wrappedQuery;
 }
 
@@ -47,6 +43,6 @@ export function watchProfileList(refetch: () => void) {
   profileDeleted(() => refetch());
 }
 
-export function watchProfile(profile: Profile) {
-  useSubscribeToProfileSubscription({ topic: `update:profiles:${profile.id}` });
+export function watchProfiles() {
+  useSubscribeToProfileSubscription();
 }

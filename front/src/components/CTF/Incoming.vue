@@ -27,8 +27,7 @@
 <script lang="ts">
 import { getIncomingCtfs } from 'src/ctfnote/ctfs';
 import { openCreateCtfDialog, openImportCtfDialog } from 'src/ctfnote/dialog';
-import { MeKey } from 'src/ctfnote/symbols';
-import { injectStrict } from 'src/ctfnote/utils';
+import { getMe } from 'src/ctfnote/me';
 import { defineComponent } from 'vue';
 import CardList from './CardList.vue';
 
@@ -37,9 +36,10 @@ export default defineComponent({
   setup() {
     const { result: ctfs, loading } = getIncomingCtfs();
 
+    const { result: me } = getMe();
     return {
       ctfs,
-      me: injectStrict(MeKey),
+      me,
       loading,
     };
   },

@@ -8,40 +8,38 @@ import {
   useSubscribeToTaskSubscription,
   useUpdateTaskMutation,
 } from 'src/generated/graphql';
-import { Ctf, Task } from '.';
+import { Ctf, Id, Task } from '.';
 
 /* Mutations */
-export async function createTask(
-  ctf: Ctf,
-  task: Omit<CreateTaskInput, 'ctfId'>
-) {
+export function useCreateTask() {
   const { mutate: doCreateTask } = useCreateTaskForCtfIdMutation({});
-  return doCreateTask({ ...task, ctfId: ctf.id });
+  return (ctfId: Id<Ctf>, task: Omit<CreateTaskInput, 'ctfId'>) =>
+    doCreateTask({ ...task, ctfId });
 }
 
-export async function deleteTask(task: Task) {
+export function useDeleteTask() {
   const { mutate: doDeleteTask } = useDeleteTaskMutation({});
-  return doDeleteTask({ id: task.id });
+  return (task: Task) => doDeleteTask({ id: task.id });
 }
 
-export async function updateTask(task: Task, patch: TaskPatch) {
+export function useUpdateTask() {
   const { mutate: doUpdateTask } = useUpdateTaskMutation({});
-  return doUpdateTask({ id: task.id, ...patch });
+  return (task: Task, patch: TaskPatch) =>
+    doUpdateTask({ id: task.id, ...patch });
 }
 
-
-export async function startWorkingOn(task:Task){
-  const {mutate: doStartWorking} = useStartWorkingOnMutation({})
-  return doStartWorking({taskId: task.id})
+export function useStartWorkingOn() {
+  const { mutate: doStartWorking } = useStartWorkingOnMutation({});
+  return (task: Task) => doStartWorking({ taskId: task.id });
 }
 
-export async function stopWorkingOn(task:Task){
-  const {mutate: doStopWorking} = useStopWorkingOnMutation({})
-  return doStopWorking({taskId: task.id})
+export function useStopWorkingOn() {
+  const { mutate: doStopWorking } = useStopWorkingOnMutation({});
+  return (task: Task) => doStopWorking({ taskId: task.id });
 }
 
 /* Subscriptions  */
 
-export function watchTask(task: Task) {
-  useSubscribeToTaskSubscription({ topic: `update:tasks:${task.id}` });
+export function watchTasks() {
+  useSubscribeToTaskSubscription();
 }

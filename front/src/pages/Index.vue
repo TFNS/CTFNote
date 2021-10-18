@@ -44,16 +44,15 @@
 </template>
 
 <script lang="ts">
-import { MeKey } from 'src/ctfnote';
 import { openCreateCtfDialog, openImportCtfDialog } from 'src/ctfnote/dialog';
-import { injectStrict } from 'src/ctfnote/utils';
+import { getMe } from 'src/ctfnote/me';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'PageIndex',
   components: {},
   setup() {
-    const me = injectStrict(MeKey);
+    const { result: me } = getMe();
     return {
       openCreateCtfDialog,
       openImportCtfDialog,

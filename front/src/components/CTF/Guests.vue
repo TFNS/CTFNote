@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { Ctf, Profile, Role } from 'src/ctfnote';
-import { inviteUserToCtf, uninviteUserToCtf } from 'src/ctfnote/ctfs';
+import { useInviteUserToCtf, useUninviteUserToCtf } from 'src/ctfnote/ctfs';
 import { getTeam } from 'src/ctfnote/profiles';
 import { defineComponent } from 'vue';
 
@@ -51,6 +51,8 @@ export default defineComponent({
 
     return {
       team,
+      inviteUserToCtf: useInviteUserToCtf(),
+      uninviteUserToCtf: useUninviteUserToCtf(),
     };
   },
   computed: {
@@ -74,10 +76,10 @@ export default defineComponent({
       return { backgroundColor: guest.color };
     },
     async createInvitation(profile: Profile) {
-      await inviteUserToCtf(this.ctf, profile);
+      await this.inviteUserToCtf(this.ctf, profile);
     },
     async deleteInvitation(profile: Profile) {
-      await uninviteUserToCtf(this.ctf, profile);
+      await this.uninviteUserToCtf(this.ctf, profile);
     },
   },
 });

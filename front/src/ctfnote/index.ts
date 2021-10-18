@@ -5,9 +5,8 @@ import * as dialogs from './dialog';
 import * as me from './me';
 import * as settings from './settings';
 import * as tasks from './tasks';
-import * as profiles from './profiles'
+import * as profiles from './profiles';
 export * from './models';
-export * from './symbols';
 
 export const ctfnote = {
   profiles,
@@ -18,6 +17,11 @@ export const ctfnote = {
   ctfs,
   dialogs,
   tasks,
+  watchUpdates() {
+    ctfs.watchCtfs();
+    tasks.watchTasks();
+    profiles.watchProfiles();
+  },
 };
 
 export type Ctfnote = typeof ctfnote;

@@ -47,8 +47,7 @@
 <script lang="ts">
 import { date } from 'quasar';
 import { Ctf } from 'src/ctfnote';
-import { MeKey } from 'src/ctfnote/symbols';
-import { injectStrict } from 'src/ctfnote/utils';
+import { getMe } from 'src/ctfnote/me';
 import { defineComponent } from 'vue';
 import BtnDelete from './BtnDelete.vue';
 import BtnEdit from './BtnEdit.vue';
@@ -70,7 +69,7 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const me = injectStrict(MeKey);
+    const { result: me } = getMe();
     return { me };
   },
   computed: {

@@ -42,9 +42,8 @@
 
 <script lang="ts">
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
-import { SettingsKey } from 'src/ctfnote';
-import { login } from 'src/ctfnote/auth';
-import { injectStrict } from 'src/ctfnote/utils';
+import { useLogin } from 'src/ctfnote/auth';
+import { getSettings } from 'src/ctfnote/settings';
 import { defineComponent, reactive } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 
@@ -54,9 +53,10 @@ export default defineComponent({
     token: { type: String, default: '' },
   },
   setup() {
-    const settings = injectStrict(SettingsKey);
+    const { result: settings } = getSettings();
     return {
       settings,
+      login: useLogin(),
       allowRegistration: true,
       form: reactive({
         login: '',
@@ -79,7 +79,7 @@ export default defineComponent({
       }
     },
     submit() {
-      void login(this.form.login, this.form.password);
+      void this.login(this.form.login, this.form.password);
     },
   },
 });

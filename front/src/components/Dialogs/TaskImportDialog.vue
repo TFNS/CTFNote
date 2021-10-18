@@ -64,7 +64,7 @@
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { Ctf, Task } from 'src/ctfnote';
-import { createTask } from 'src/ctfnote/tasks';
+import { useCreateTask } from 'src/ctfnote/tasks';
 import parsers from 'src/ctfnote/parsers';
 import { defineComponent, ref } from 'vue';
 
@@ -93,6 +93,7 @@ export default defineComponent({
       { name: 'keep', label: 'Import task', field: 'keep' },
     ];
     return {
+      createTask: useCreateTask(),
       model: ref(''),
       currentParser: ref(parserOptions[0]),
       parsedTasks: ref<ParsedTask[]>([]),
@@ -155,7 +156,7 @@ export default defineComponent({
         this.parsedTasks
           .filter((t) => t.keep)
           .map((task) => {
-            void createTask(this.ctf, {
+            void this.createTask(this.ctf.id, {
               title: task.title,
               category: task.category,
             });
