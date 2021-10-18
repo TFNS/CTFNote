@@ -1,0 +1,14 @@
+{
+  "name": "ctfnote",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:TFNS/CTFNote.git",
+  "author": "BitK <bitk@yeswehack.com>",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "husky": "^6.0.0"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}

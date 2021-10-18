@@ -1,0 +1,25 @@
+overwrite: true
+schema: 'http://127.0.0.1:3000/graphql'
+documents: 'src/graphql/**/*.graphql'
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-vue-apollo'
+      - 'fragment-matcher'
+      - 'typescript-document-nodes'
+    config:
+      withMutationFn: true
+      vueCompositionApiImportFrom: vue
+      withCompositionFunctions: true
+      dedupeOperationSuffix: true
+      avoidOptionals: false
+      scalars:
+        UUID: string
+        Datetime: string
+        JSON: string
+        Jwt: string
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'

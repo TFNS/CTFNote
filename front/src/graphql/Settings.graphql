@@ -1,0 +1,35 @@
+fragment SettingsInfo on Setting {
+  nodeId
+  registrationAllowed
+  registrationPasswordAllowed
+  style
+}
+
+fragment AdminSettingsInfo on Setting {
+  nodeId
+  ...SettingsInfo
+  registrationPassword
+  registrationDefaultRole
+}
+
+query getSettings {
+  settings {
+    nodes {
+      ...SettingsInfo
+    }
+  }
+}
+query getAdminSettings {
+  settings {
+    nodes {
+      ...AdminSettingsInfo
+    }
+  }
+}
+mutation updateSettings($nodeId: ID!, $patch: SettingPatch!) {
+  updateSettingByNodeId(input: { nodeId: $nodeId, patch: $patch }) {
+    setting {
+      ...AdminSettingsInfo
+    }
+  }
+}

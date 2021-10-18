@@ -1,0 +1,55 @@
+fragment ProfileFragment on Profile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+
+mutation updatePassword($oldPassword: String!, $newPassword: String!) {
+  changePassword(
+    input: { oldpassword: $oldPassword, newpassword: $newPassword }
+  ) {
+    changePasswordResponse {
+      ok
+    }
+  }
+}
+mutation updateProfile($id: Int!, $patch: ProfilePatch!) {
+  updateProfile(input: { id: $id, patch: $patch }) {
+    profile {
+      ...ProfileFragment
+    }
+  }
+}
+
+query getTeam {
+  profiles {
+    nodes {
+      ...ProfileFragment
+    }
+  }
+}
+
+subscription subscribeToProfile {
+  listen(topic: "update:profiles") {
+    relatedNode {
+      nodeId
+      ... on Profile {
+        ...ProfileFragment
+      }
+    }
+  }
+}
+subscription subscribeToProfileCreated {
+  listen(topic: "profile-created") {
+    relatedNodeId
+  }
+}
+
+subscription subscribeToProfileDeleted {
+  listen(topic: "profile-deleted") {
+    relatedNodeId
+  }
+}

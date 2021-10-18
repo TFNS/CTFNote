@@ -1,0 +1,124 @@
+#import "./Profile.graphql"
+
+fragment WorkingOnFragment on WorkOnTask {
+  nodeId
+  profileId
+  profile {
+    ...ProfileFragment
+  }
+}
+
+# Fragments
+
+fragment TaskFragment on Task {
+  nodeId
+  id
+  title
+  ctfId
+  padUrl
+  description
+  flag
+  solved
+  category
+  workOnTasks {
+    nodes {
+      ...WorkingOnFragment
+    }
+  }
+}
+
+# Queries
+query getTasksForCtfId($ctfId: Int!) {
+  tasks(condition: { ctfId: $ctfId }) {
+    nodes {
+      ...TaskFragment
+    }
+  }
+}
+
+query taskById($id: Int!) {
+  task(id: $id) {
+    ...TaskFragment
+  }
+}
+
+# Mutations
+
+mutation updateTask(
+  $id: Int!
+  $title: String
+  $description: String
+  $category: String
+  $flag: String
+) {
+  updateTask(
+    input: {
+      id: $id
+      patch: {
+        title: $title
+        category: $category
+        description: $description
+        flag: $flag
+      }
+    }
+  ) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+
+mutation createTaskForCtfId(
+  $ctfId: Int!
+  $title: String!
+  $category: String
+  $description: String
+  $flag: String
+) {
+  createTask(
+    input: {
+      ctfId: $ctfId
+      title: $title
+      category: $category
+      description: $description
+      flag: $flag
+    }
+  ) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+
+mutation deleteTask($id: Int!) {
+  deleteTask(input: { id: $id }) {
+    deletedTaskNodeId
+  }
+}
+
+mutation startWorkingOn($taskId: Int!) {
+  startWorkingOn(input: { taskId: $taskId }) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+mutation stopWorkingOn($taskId: Int!) {
+  stopWorkingOn(input: { taskId: $taskId }) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+
+# Subscriptions
+subscription subscribeToTask {
+  listen(topic: "update:tasks") {
+    relatedNode {
+      nodeId
+      ... on Task {
+        ...TaskFragment
+      }
+    }
+  }
+}

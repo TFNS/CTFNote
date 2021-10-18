@@ -1,0 +1,10 @@
+#!/bin/bash
+. "$(dirname "$0")/_/husky.sh"
+
+cd front
+yarn lint-staged
+cd ..
+
+cd api
+yarn lint-staged
+cd ..

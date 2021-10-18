@@ -1,39 +1,51 @@
 {
-  "name": "ctfnote-front",
+  "name": "ctf-note-front",
   "version": "0.0.1",
-  "description": "CTFNote is a collaborative tool aiming to help CTF teams to organise their work. ",
+  "description": "CTFNote is a collaborative tool aiming to help CTF teams to organise their work.",
   "productName": "CTFNote",
   "author": "BitK <bitk@yeswehack.com>",
   "private": true,
-  "prettier": {
-    "printWidth": 120
-  },
   "scripts": {
-    "lint": "eslint --ext .js,.vue ./",
+    "build": "quasar build",
+    "dev": "quasar dev",
+    "format": "prettier --write '**/*.{js,vue,graphql}'",
+    "lint": "eslint --ext .js,.ts,.vue,.graphql ./",
     "test": "echo \"No test specified\" && exit 0",
-    "start": "npx quasar dev",
-    "build": "npx quasar build"
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@apollo/client": "^3.4.15",
     "@quasar/extras": "^1.0.0",
-    "babel-runtime": "^6.26.0",
-    "color-hash": "^1.0.3",
+    "@quasar/quasar-app-extension-apollo": "^2.0.0-beta.3",
+    "@quasar/quasar-ui-qcalendar": "^4.0.0-beta.7",
+    "@vue/apollo-composable": "^4.0.0-alpha.15",
+    "color-hash": "^2.0.1",
     "core-js": "^3.6.5",
-    "quasar": "^1.0.0",
-    "socket.io": "^4.2.0",
-    "vue-markdown": "^2.2.4"
+    "quasar": "^2.0.0",
+    "slugify": "^1.6.1",
+    "ts-essentials": "^9.0.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^7.12.1",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-loader": "^3.0.3",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^7.1.0"
+    "@babel/eslint-parser": "^7.13.14",
+    "@graphql-codegen/cli": "^2.2.0",
+    "@graphql-codegen/fragment-matcher": "^3.1.0",
+    "@graphql-codegen/introspection": "^2.1.0",
+    "@graphql-codegen/typescript": "^2.2.2",
+    "@graphql-codegen/typescript-document-nodes": "^2.1.4",
+    "@graphql-codegen/typescript-operations": "^2.1.6",
+    "@graphql-codegen/typescript-vue-apollo": "^3.1.4",
+    "@quasar/app": "^3.0.0",
+    "@quasar/quasar-app-extension-qmarkdown": "^2.0.0-alpha.8",
+    "@types/color-hash": "^1.0.1",
+    "@types/node": "^16.11.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-graphql": "^4.0.0",
+    "eslint-plugin-vue": "^7.19.1",
+    "lint-staged": "^11.2.3",
+    "prettier": "^2.4.1"
   },
   "browserslist": [
     "last 10 Chrome versions",
@@ -47,7 +59,7 @@
     "last 5 Opera versions"
   ],
   "engines": {
-    "node": ">= 10.18.1",
+    "node": ">= 12.22.1",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   }

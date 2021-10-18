@@ -1,6 +1,6 @@
-# Quasar App (ctfnote)
+# CTFNote (ctf-note-front)
 
-CodiMD overlay for ctf
+CTFNote is a collaborative tool aiming to help CTF teams to organise their work.
 
 ## Install the dependencies
 ```bash
@@ -23,4 +23,4 @@ quasar build
 ```
 
 ### Customize the configuration
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+See [Configuring quasar.conf.js](https://v2.quasar.dev/quasar-cli/quasar-conf-js).

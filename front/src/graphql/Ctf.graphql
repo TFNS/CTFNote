@@ -1,0 +1,188 @@
+#import "./Task.graphql"
+#import "./Secret.graphql"
+#import "./Invitation.graphql"
+
+fragment CtfFragment on Ctf {
+  nodeId
+  id
+  granted
+  ctfUrl
+  ctftimeUrl
+  description
+  endTime
+  logoUrl
+  startTime
+  weight
+  title
+}
+
+fragment FullCtfFragment on Ctf {
+  ...CtfFragment
+
+  tasks {
+    nodes {
+      ...TaskFragment
+    }
+  }
+
+  secrets {
+    ...CtfSecretFragment
+  }
+
+  invitations {
+    nodes {
+      ...InvitationFragment
+    }
+  }
+}
+
+# Queries
+
+query Ctfs {
+  ctfs {
+    nodes {
+      ...CtfFragment
+    }
+  }
+}
+
+subscription subscribeToCtf {
+  listen(topic: "update:ctfs") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Ctf {
+        ...FullCtfFragment
+      }
+    }
+  }
+}
+
+query GetFullCtf($id: Int!) {
+  ctf(id: $id) {
+    ...FullCtfFragment
+  }
+}
+
+query IncomingCtfs {
+  incomingCtf {
+    nodes {
+      ...CtfFragment
+    }
+  }
+}
+
+query PastCtfs($first: Int, $offset: Int) {
+  pastCtf(first: $first, offset: $offset) {
+    nodes {
+      ...CtfFragment
+    }
+    totalCount
+  }
+}
+
+# Mutations
+
+mutation createCtf(
+  $title: String!
+  $startTime: Datetime!
+  $endTime: Datetime!
+  $weight: Float
+  $ctfUrl: String
+  $ctftimeUrl: String
+  $logoUrl: String
+  $description: String
+) {
+  createCtf(
+    input: {
+      ctf: {
+        title: $title
+        weight: $weight
+        ctfUrl: $ctfUrl
+        ctftimeUrl: $ctftimeUrl
+        logoUrl: $logoUrl
+        startTime: $startTime
+        endTime: $endTime
+        description: $description
+      }
+    }
+  ) {
+    ctf {
+      ...CtfFragment
+    }
+  }
+}
+
+mutation deleteCtfbyId($id: Int!) {
+  deleteCtf(input: { id: $id }) {
+    deletedCtfNodeId
+  }
+}
+
+mutation importctf($id: Int!) {
+  importCtf(input: { ctftimeId: $id }) {
+    ctf {
+      ...CtfFragment
+    }
+  }
+}
+
+mutation updateCtfById(
+  $id: Int!
+  $title: String
+  $weight: Float
+  $ctfUrl: String
+  $ctftimeUrl: String
+  $logoUrl: String
+  $startTime: Datetime
+  $endTime: Datetime
+  $description: String
+) {
+  updateCtf(
+    input: {
+      id: $id
+      patch: {
+        title: $title
+        weight: $weight
+        ctfUrl: $ctfUrl
+        ctftimeUrl: $ctftimeUrl
+        logoUrl: $logoUrl
+        startTime: $startTime
+        endTime: $endTime
+        description: $description
+      }
+    }
+  ) {
+    ctf {
+      ...CtfFragment
+    }
+  }
+}
+
+subscription subscribeToCtfCreated {
+  listen(topic: "created:ctfs") {
+    relatedNodeId
+    relatedNode {
+      ... on Ctf {
+        ...CtfFragment
+      }
+    }
+  }
+}
+
+subscription subscribeToCtfDeleted {
+  listen(topic: "deleted:ctfs") {
+    relatedNodeId
+  }
+}
+
+subscription subscribeToFlag {
+  listen(topic: "task-solved:tasks") {
+    relatedNodeId
+    relatedNode {
+      ... on Task {
+        ...TaskFragment
+      }
+    }
+  }
+}

@@ -1,67 +1,86 @@
 # CTFNote
-
-## Welcome
-
+## Introduction
 CTFNote is a collaborative tool aiming to help CTF teams to organise their work.
 
-![main-page](./screenshots/main-page.png)
+[![Screenshot of the task list](screenshots/task_small.webp)](screenshots/task.png)
 
-![main-dark](./screenshots/main-dark.png)
-
-![info](./screenshots/info.png)
-
-![tasks](./screenshots/tasks.png)
-
-![task](./screenshots/task.png)
 
 ## Installation
-
-Use the provided docker configuration to deploy the project:
+If you are new to CTFNote, you can start it with `docker-compose`. The default
+configuration makes it super easy to start a new instance!
 
 ```shell
 $ docker-compose up -d
 ```
 
-Then, visit 127.0.0.1 and create your first account, which will automatically be provided with admin privileges
+The instance will spawn a web server on port 80. The first account created will
+have administrative privileges.
 
-You can optionally edit the API configuration file depending on your needs:
+If you already have an instance of CTFNote in a previous version and wish to
+upgrade, you should follow the guide at [MIGRATION.md](MIGRATION.md).
 
-[API Configuration File](./api/src/config/globals.ts)
 
 ## Privileges
+When other players register on your CTFNote instance, they will not be able to
+see CTF or tasks. This is because CTFNote uses different roles to restrict CTF
 
-* ADMIN_ALL: can create CTFs, tasks, edit users/the config. 
-* EDIT_CTF: can create and modify CTF information; you should grant this right to
-  your captain
-* CTF_ALL: can join every CTF; you should grant this right to your team members.
-* no privileges: can only view CTFs when invited; this is used for irregular guests.
+You can manage other players' roles in the *Users* tab of the *Admin* panel.
 
-CTF guests are allowed to create and edit tasks, but not the CTF information. 
+Additionally, you can generate a secret that lets users create an account with a
+different privilege in the *Registration with password* menu in the *Admin*
+panel.
 
-## Development
+![Screenshot of the Registration with password menu](screenshots/reg_password.png)
 
-The development server includes a simple HTTP proxy allowing the frontend to access the local API (cf [quasar.conf.js](front/quasar.conf.js)).
-Hot reloading is configured on both components as well.
+### Guest
+Guest is the default role. This role is meant to be used for guests and friends
+helping sporadically on CTF.
 
-### Setup and launch the frontend
+You can add a guest to a CTF by ticking their badge in the *Guests* tab on a
+specific CTF.
 
-```shell
-$ cd front/
-$ yarn install
-$ yarn start
-```
+![Screenshot of the guest menu](screenshots/guests.png)
 
-### Setup and launch the API
+### Member
+Member is a role that represents a team member. A certain level of trust is
+given to these users: they can see every CTF, future, current and past. They can
+also invite guests to CTF.
 
-```shell
-$ cd api/
-$ yarn install
-$ yarn start
-$ MD_PROVIDER=https://ur-codimd-instance-full-url yarn start
-```
+### Manager
+Manager is a role that represents a team captain. They can create, import,
+modify and delete CTF.
 
-## Authors
+They can import CTF directly from [CTFtime](https://ctftime.org).
 
-[BitK](https://twitter.com/bitk_)
-[SakiiR](https://twitter.com/sakiirsecurity/)
+![Screenshot of the Import CTF feature](screenshots/import.png)
 
+### Admin
+Admin is a role with every privileges. They have access to the *Admin* panel
+that lets them delete accounts, change permissions, reset passwords, create
+one-time secrets and, most importantly, change the theme colours.
+
+![Screenshot of the theme menu](screenshots/theme.png)
+
+
+## Configuration
+The configuration can be changed in the `.env` file. This file contains
+environment variables for the containers.
+
+The value of every variables are explained in this file.
+
+
+## Screenshots
+### List of the CTF
+[![Screenshot of the CTF page](screenshots/ctf_small.webp)](screenshots/ctf.png)
+
+### Calendar
+[![Screenshot of the CTF calendar](screenshots/calendar_small.webp)](screenshots/calendar.png)
+
+### Information of a single CTF
+[![Screenshot of the CTF info](screenshots/info_small.webp)](screenshots/info.png)
+
+### Task list for a CTF
+[![Screenshot of the task list](screenshots/task_small.webp)](screenshots/task.png)
+
+### Shared notepad for a task
+[![Screenshot of pad](screenshots/pad_small.webp)](screenshots/pad.png)

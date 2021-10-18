@@ -1,0 +1,20 @@
+fragment InvitationFragment on Invitation {
+  nodeId
+  ctfId
+  profileId
+}
+
+mutation inviteUserToCtf($ctfId: Int!, $profileId: Int!) {
+  createInvitation(
+    input: { invitation: { ctfId: $ctfId, profileId: $profileId } }
+  ) {
+    invitation {
+      ...InvitationFragment
+    }
+  }
+}
+mutation uninviteUserToCtf($ctfId: Int!, $profileId: Int!) {
+  deleteInvitation(input: { ctfId: $ctfId, profileId: $profileId }) {
+    deletedInvitationNodeId
+  }
+}

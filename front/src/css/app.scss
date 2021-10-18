@@ -1,1 +1,26 @@
 // app global css in SCSS form
+
+.ctfnote-dialog {
+  width: 800px;
+  max-width: 90vw !important;
+}
+
+body .blur {
+  transition: filter 0.2s;
+}
+
+
+body.live-mode .blur {
+  filter: blur(5px);
+  &:hover {
+    filter: blur(0px);
+    transition-delay: 0.2s;
+  }
+}
+
+.q-markdown--link {
+  color: $primary;
+  &:visited {
+    color: $primary;
+  }
+}
