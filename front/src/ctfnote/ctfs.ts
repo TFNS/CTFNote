@@ -42,6 +42,10 @@ type FullCtfResponse = {
 
 /* Builders */
 
+function safeSlugify(str: string) {
+  return slugify(str) || 'no-slug-for-you';
+}
+
 export function buildInvitation(invitation: InvitationFragment): CtfInvitation {
   return {
     ...invitation,
@@ -51,7 +55,7 @@ export function buildInvitation(invitation: InvitationFragment): CtfInvitation {
 }
 
 export function buildTask(task: TaskFragment): Task {
-  const slug = slugify(task.title);
+  const slug = safeSlugify(task.title);
   return {
     ...task,
     id: makeId(task.id),
@@ -81,7 +85,7 @@ function extractDate(d: string) {
 }
 
 export function buildCtf(ctf: CtfFragment): Ctf {
-  const slug = slugify(ctf.title);
+  const slug = safeSlugify(ctf.title);
   const params = { ctfId: ctf.id, ctfSlug: slug };
   const infoLink = { name: 'ctf-info', params };
   const tasksLink = { name: 'ctf-tasks', params };
