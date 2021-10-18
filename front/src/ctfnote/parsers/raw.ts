@@ -1,4 +1,4 @@
-import { ParsedTask, Parser } from '.';
+import { Parser } from '.';
 
 const RawParser: Parser = {
   name: 'Raw parser',

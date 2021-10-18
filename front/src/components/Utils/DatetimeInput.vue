@@ -31,7 +31,6 @@ import { date } from 'quasar';
 import { defineComponent } from 'vue';
 
 const humanMask = 'YYYY/MM/DD HH:mm';
-const isoMask = 'YYYY-MM-DDTHH:mm:ssZ';
 
 export default defineComponent({
   props: {
