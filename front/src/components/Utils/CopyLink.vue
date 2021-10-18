@@ -7,6 +7,9 @@
     :model-value="link"
     readonly
   >
+    <template #after>
+      <slot name="after" />
+    </template>
     <template #before>
       <q-icon name="lock" />
     </template>

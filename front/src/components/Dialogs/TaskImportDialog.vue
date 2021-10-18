@@ -43,13 +43,8 @@
           </q-tab-panel>
         </q-tab-panels>
       </q-card-section>
-      <q-card-actions class="row justify-end">
-        <q-btn
-          v-if="tab == 'confirm'"
-          color="warning"
-          label="back"
-          @click="tab = 'parse'"
-        />
+      <q-card-actions class="q-pr-md q-pb-md" align="right">
+        <q-btn flat color="warning" :label="backLabel" @click="backClick" />
         <q-btn
           color="positive"
           :disable="btnDisable"
@@ -84,7 +79,7 @@ export default defineComponent({
   },
   emits: useDialogPluginComponent.emits,
   setup() {
-    const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
+    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
     const parserOptions = parsers.map((p) => ({ label: p.name, value: p }));
 
     const columns = [
@@ -103,9 +98,13 @@ export default defineComponent({
       dialogRef,
       onDialogHide,
       onDialogOK,
+      onDialogCancel,
     };
   },
   computed: {
+    backLabel() {
+      return this.tab == 'confirm' ? 'Back' : 'cancel';
+    },
     importCount() {
       return this.parsedTasks.filter((t) => t.keep).length;
     },
@@ -121,6 +120,13 @@ export default defineComponent({
     },
   },
   methods: {
+    backClick() {
+      if (this.tab == 'confirm') {
+        this.tab = 'parse';
+      } else {
+        this.onDialogCancel();
+      }
+    },
     autoDetectParser() {
       for (const parser of parsers) {
         if (parser.isValid(this.model)) {

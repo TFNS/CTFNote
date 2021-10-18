@@ -31,10 +31,8 @@
           />.
         </div>
       </q-card-section>
-      <q-card-actions class="row justify-end q-pa-md">
-        <div class="col col-auto">
-          <q-btn type="submit" label="Login" color="primary" />
-        </div>
+      <q-card-actions class="q-pa-md" align="right">
+        <q-btn type="submit" label="Login" color="primary" />
       </q-card-actions>
     </q-card>
   </q-form>

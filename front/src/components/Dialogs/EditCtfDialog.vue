@@ -60,8 +60,8 @@
             </div>
           </div>
         </q-card-section>
-        <q-card-actions class="q-gutter-md justify-end">
-          <q-btn color="warning" label="Cancel" @click="onCancelClick" />
+        <q-card-actions class="q-gutter-md q-px-md q-pb-md justify-end">
+          <q-btn color="warning" flat label="Cancel" @click="onCancelClick" />
           <q-btn color="positive" type="submit" :label="editText" />
         </q-card-actions>
       </q-form>

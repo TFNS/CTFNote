@@ -19,9 +19,9 @@
           </q-tab-panel>
         </q-tab-panels>
       </q-card-section>
-      <q-card-actions class="row justify-end q-pt-none q-pb-md q-pr-md">
+      <q-card-actions class="q-pr-md q-pb-md" align="right">
         <template v-if="tab == 'role'">
-          <q-btn v-close-popup color="warning" label="Cancel" />
+          <q-btn v-close-popup flat color="warning" label="Cancel" />
           <q-btn color="positive" label="Create" @click="createLink" />
         </template>
         <q-btn v-else v-close-popup color="positive" label="Close" />

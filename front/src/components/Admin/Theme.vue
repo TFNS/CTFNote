@@ -19,9 +19,9 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn label="reset" color="warning" @click="reset" />
+          <q-btn label="reset" color="warning" flat @click="reset" />
           <q-btn
-            icon="save"
+            label="save"
             :disable="!needSave"
             :color="needSave ? 'positive' : 'grey-5'"
             @click="saveStyle"

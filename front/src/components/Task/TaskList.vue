@@ -196,12 +196,20 @@ export default defineComponent({
       this.$q
         .dialog({
           title: 'Flag:',
-          cancel: true,
+          color: 'primary',
+          cancel: {
+            label: 'cancel',
+            color: 'warning',
+            flat: true,
+          },
           prompt: {
             model: task.flag ?? '',
             type: 'text',
           },
-          color: 'primary',
+          ok: {
+            color: 'positive',
+            label: 'save',
+          },
         })
         .onOk((flag: string) => {
           void this.updateTask(task, { flag });

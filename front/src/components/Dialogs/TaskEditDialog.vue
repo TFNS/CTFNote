@@ -1,38 +1,39 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card class="ctfnote-dialog">
-      <q-card-section class="row">
-        <div class="text-h6">
-          {{ title }}
-        </div>
-        <q-space />
-        <q-btn v-close-popup icon="close" flat round dense />
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-input v-model="form.title" label="Title" />
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-input v-model="form.category" label="Category" />
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-input
-          v-model="form.description"
-          label="Description"
-          type="textarea"
-        />
-      </q-card-section>
-      <q-card-section class="q-pt-none">
-        <q-input v-model="form.flag" label="Flag" />
-      </q-card-section>
-      <q-card-actions class="row justify-end">
-        <q-btn v-close-popup color="warning" label="Cancel" />
-        <q-btn
-          color="positive"
-          type="submit"
-          :label="editText"
-          @click="submit"
-        />
-      </q-card-actions>
+      <q-form @submit="submit">
+        <q-card-section class="row">
+          <div class="text-h6">
+            {{ title }}
+          </div>
+          <q-space />
+          <q-btn v-close-popup icon="close" flat round dense />
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-input v-model="form.title" required label="Title" />
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-input v-model="form.category" label="Category" />
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-input
+            v-model="form.description"
+            label="Description"
+            type="textarea"
+          />
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-input v-model="form.flag" label="Flag" />
+        </q-card-section>
+        <q-card-actions class="q-gutter-md q-pr-md q-pb-md" align="right">
+          <q-btn v-close-popup flat color="warning" label="Cancel" />
+          <q-btn
+            color="positive"
+            type="submit"
+            :label="editText"
+          />
+        </q-card-actions>
+      </q-form>
     </q-card>
   </q-dialog>
 </template>
@@ -68,7 +69,7 @@ export default defineComponent({
         } else if (props.task) {
           void updateTask(props.task, { ...form });
         }
-        onDialogOK()
+        onDialogOK();
       },
     };
   },

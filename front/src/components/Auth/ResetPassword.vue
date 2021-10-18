@@ -4,12 +4,11 @@
       <q-card-section>
         <div class="text-h6">Reset password</div>
       </q-card-section>
-      <q-card-section class="q-gutter-sm">
+      <q-card-section class="q-gutter-md">
         <password-input v-model="password" />
-
         <q-input filled readonly :model-value="token" label="Token" />
       </q-card-section>
-      <q-card-actions class="row justify-end q-pa-md">
+      <q-card-actions class="q-pr-md q-pb-md" align="right">
         <div class="col col-auto">
           <q-btn type="submit" label="Reset" color="primary" />
         </div>

@@ -49,7 +49,15 @@ export default defineComponent({
             model: this.ctf.credentials ?? '',
             type: 'textarea',
           },
-          cancel: true,
+          ok: {
+            label: 'save',
+            color: 'positive',
+          },
+          cancel: {
+            label: 'Cancel',
+            color: 'warning',
+            flat: true,
+          },
         })
         .onOk((credentials: string) => {
           void this.updateCtfCredentials(this.ctf, credentials);

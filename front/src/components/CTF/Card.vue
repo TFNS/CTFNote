@@ -49,7 +49,7 @@
           <q-btn color="primary" icon="flag" label="Open Ctf" />
         </ctf-note-link>
         <q-space />
-        <btn-edit suze round :ctf="ctf" />
+        <btn-edit round :ctf="ctf" />
         <btn-delete round :ctf="ctf" />
       </div>
     </q-card-section>

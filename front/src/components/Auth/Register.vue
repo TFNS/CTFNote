@@ -63,15 +63,14 @@
           />.
         </div>
       </q-card-section>
-      <q-card-actions class="row justify-end q-pa-md">
-        <div class="col col-auto">
-          <q-btn
-            type="submit"
-            label="Register"
-            color="primary"
-            :disable="!registrationAnyAllowed"
-          />
-        </div>
+
+      <q-card-actions class="q-pa-md" align="right">
+        <q-btn
+          type="submit"
+          label="Register"
+          color="primary"
+          :disable="!registrationAnyAllowed"
+        />
       </q-card-actions>
     </q-card>
   </q-form>
@@ -82,7 +81,7 @@ import PasswordInput from 'src/components/Utils/PasswordInput.vue';
 import {
   useRegister,
   useRegisterWithPassword,
-  useRegisterWithToken
+  useRegisterWithToken,
 } from 'src/ctfnote/auth';
 import { getSettings } from 'src/ctfnote/settings';
 import { defineComponent, reactive, ref } from 'vue';

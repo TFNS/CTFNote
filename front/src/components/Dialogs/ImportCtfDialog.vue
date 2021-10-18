@@ -14,14 +14,14 @@
           @keypress.enter="submit"
         />
       </q-card-section>
-      <q-card-actions align="right" class="q-px-md q-pb-md">
+      <q-card-actions align="right" class="q-gutter-md q-px-md q-pb-sm">
         <q-btn
-          color="negative"
-          outline
+          color="warning"
+          flat
           label="cancel"
           @click="onDialogCancel"
         />
-        <q-btn color="primary" label="import" @click="submit" />
+        <q-btn color="positive" label="import" @click="submit" />
       </q-card-actions>
     </q-card>
   </q-dialog>

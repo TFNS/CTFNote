@@ -5,15 +5,21 @@
         <div class="row q-gutter-md">
           <div class="text-h6">Reset password link for {{ user.login }}</div>
           <q-space />
-          <q-btn v-close-popup icon="close" flat round dense />
+          <q-btn v-close-popup icon="close" ripple flat round dense />
         </div>
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <copy-link :link="link" />
+        <copy-link :link="link" >
+
+          <template #after>
+            <q-btn icon="lock_reset" color="positive" round @click="createLink"/>
+          </template>
+        </copy-link>
       </q-card-section>
-      <q-card-actions class="row justify-end q-pt-none q-pb-md q-pr-md">
-        <q-btn v-close-popup color="warning" label="Cancel" />
+      <q-card-actions class="q-pr-md q-pb-md" align="right">
+        <q-btn v-if="link" v-close-popup color="positive" label="Close" />
+        <q-btn v-else v-close-popup flat color="warning" label="Cancel" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -45,9 +51,6 @@ export default defineComponent({
       onDialogOK,
       onCancelClick: onDialogCancel,
     };
-  },
-  mounted() {
-    void this.createLink();
   },
   methods: {
     async createLink() {

@@ -143,9 +143,13 @@ export default defineComponent({
         .dialog({
           title: `Delete ${user.login ?? ''} ?`,
           message: 'This operation is irreversible.',
-          cancel: true,
+          cancel: {
+            label: 'Cancel',
+            color: 'warning',
+            flat: true,
+          },
           ok: {
-            label: 'Delete',
+            label: `Delete ${user.login}`,
             color: 'negative',
           },
         })
@@ -170,6 +174,8 @@ export default defineComponent({
         await this.refetch();
       };
 
+      const roleStr = role.toString().slice(5)
+
       if (profile.id == this.me.profile?.id) {
         this.$q
           .dialog({
@@ -177,8 +183,16 @@ export default defineComponent({
             color: 'negative',
             message:
               'You are about to modify your own role, do you want to continue ?',
-            ok: 'Change Role',
-            cancel: true,
+
+            cancel: {
+              label: 'Cancel',
+              color: 'warning',
+              flat: true,
+            },
+            ok: {
+              label: `Change to ${roleStr}`,
+              color: 'negative',
+            },
           })
           .onOk(() => performUpdate());
       } else {
