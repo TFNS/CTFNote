@@ -4,6 +4,8 @@ import { DeepNonNullable, DeepRequired } from 'ts-essentials';
 import { inject, InjectionKey, Ref } from 'vue';
 import { notify, notifyError } from './dialog';
 
+const jwtErrors = ['invalid signature', 'jwt malformed'];
+
 export function wrapQuery<D, T, U>(
   query: UseQueryReturn<T, U>,
   def: D,
@@ -13,7 +15,7 @@ export function wrapQuery<D, T, U>(
 
   const onResult = function (cb: (arg: D) => void) {
     query.onResult((data) => {
-      if (data.error?.message == 'jwt malformed') {
+      if (data.error && jwtErrors.includes(data.error.message)) {
         localStorage.removeItem('JWT');
         window.location.reload();
       }
