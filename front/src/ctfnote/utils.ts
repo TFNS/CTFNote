@@ -13,6 +13,10 @@ export function wrapQuery<D, T, U>(
 
   const onResult = function (cb: (arg: D) => void) {
     query.onResult((data) => {
+      if (data.error?.message == 'jwt malformed') {
+        localStorage.removeItem('JWT');
+        window.location.reload();
+      }
       if (!data.data) return;
       const r = data.data as DeepRequired<DeepNonNullable<T>>;
       return cb(wrapper(r));

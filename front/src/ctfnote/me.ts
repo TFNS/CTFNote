@@ -53,10 +53,6 @@ export function getMe(refresh = false) {
   });
 
   const query = wrapQuery(q, buildMe({}), (data) => {
-    if (!data) {
-      localStorage.removeItem('JWT');
-      window.location.reload();
-    }
     return buildMe(data.me);
   });
   query.onResult((r) => {
