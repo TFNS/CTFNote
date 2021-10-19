@@ -44,26 +44,40 @@ export default makeExtendSchemaPlugin((build) => {
           { pgClient },
           resolveInfo
         ) => {
-          const padPath = await createPad();
-          const padUrl = `${config.pad.showUrl}${padPath.slice(1)}`;
+          const padPathOrUrl = await createPad();
+
+          let padPath: string;
+          if (padPathOrUrl.startsWith("/")) {
+            padPath = padPathOrUrl.slice(1);
+          } else {
+            padPath = new URL(padPathOrUrl).pathname.slice(1);
+          }
+
+          const padUrl = `${config.pad.showUrl}${padPath}`;
 
           return await savepointWrapper(pgClient, async () => {
             const {
               rows: [newTask],
             } = await pgClient.query(
               `SELECT * FROM ctfnote_private.create_task($1, $2, $3, $4, $5, $6)`,
-              [title, description ?? '', category ?? '???', flag ?? '', padUrl, ctfId]
+              [
+                title,
+                description ?? "",
+                category ?? "???",
+                flag ?? "",
+                padUrl,
+                ctfId,
+              ]
             );
-            const [
-              row,
-            ] = await resolveInfo.graphile.selectGraphQLResultFromTable(
-              sql.fragment`ctfnote.task`,
-              (tableAlias, queryBuilder) => {
-                queryBuilder.where(
-                  sql.fragment`${tableAlias}.id = ${sql.value(newTask.id)}`
-                );
-              }
-            );
+            const [row] =
+              await resolveInfo.graphile.selectGraphQLResultFromTable(
+                sql.fragment`ctfnote.task`,
+                (tableAlias, queryBuilder) => {
+                  queryBuilder.where(
+                    sql.fragment`${tableAlias}.id = ${sql.value(newTask.id)}`
+                  );
+                }
+              );
             return {
               data: row,
               query: build.$$isQuery,
