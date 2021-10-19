@@ -48,10 +48,7 @@ export default defineComponent({
       page: 1,
     });
 
-    const {
-      result: pastCtfs,
-      loading,
-    } = getPastCtfs(() => ({
+    const { result: pastCtfs, loading } = getPastCtfs(() => ({
       first: pagination.value.rowsPerPage,
       offset: (pagination.value.page - 1) * pagination.value.rowsPerPage,
     }));
