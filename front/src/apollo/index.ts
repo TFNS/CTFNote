@@ -7,7 +7,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { from, ApolloLink } from '@apollo/client/core';
 import { TypePolicy } from '@apollo/client/core';
 
-const protocol = document.location.protocol == 'https:' ? 'wss:' : 'ws';
+const protocol = document.location.protocol == 'https:' ? 'wss:' : 'ws:';
 
 const wsLink = new WebSocketLink({
   uri: `${protocol}//${document.location.host}/graphql`,
