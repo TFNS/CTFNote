@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 RUN yarn build
 
 # _--------_
-FROM nginx:alpine
+FROM nginx:1.12-alpine
 
 RUN mkdir -p /logs
 
