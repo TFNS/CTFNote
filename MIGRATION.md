@@ -19,19 +19,85 @@ Stop every containers, restart only `db` in background.
 docker-compose stop && docker-compose up db -d
 ```
 
-### Make a backup
-Keep a backup in case something bad were to happen:
+### Make a dump of the database
+This dump is *required* to upgrade to Postgres 14:
 ```sh
 docker-compose exec -u postgres db pg_dumpall -U ctfnote > backup.sql
 ```
 
-### Get in the container
-Most commands are done within the container, join it with:
+Make sure your backup file looks correct before continuing!
+
+
+## Upgrade to Postgres 14
+### Remove current data volume
+Stop the database and remove its volume:
+```sh
+docker-compose down
+docker volume rm ctfnote
+```
+
+### Upgrade CTFNote
+Upgrade CTFNote and go to the `v2.0.0` tag:
+```sh
+git fetch && git rebase
+git checkout v2.0.0
+```
+
+Launch only the database:
+```sh
+docker-compose up --build db
+```
+
+The following message should be printed on your console:
+```
+Multiple database creation requested: hedgedoc
+  Creating user and database 'hedgedoc'
+CREATE ROLE
+CREATE DATABASE
+GRANT
+Multiple databases created
+```
+
+Stop the container with ctrl-c and start it in background:
+```sh
+docker-compose up -d db
+```
+
+### Import data
+Find the name of your container:
+```sh
+docker-compose ps
+```
+
+Here, the name is `tmp-db-1`
+```
+NAME                COMMAND                  SERVICE             STATUS              PORTS
+tmp-db-1            "docker-entrypoint.s…"   db                  running             5432/tcp
+```
+
+Copy the SQL file to this container:
+```sh
+docker cp ./backup.sql tmp-db-1:/backup.sql
+```
+
+Join the container with:
 ```sh
 docker-compose exec -u postgres db bash
 ```
 
+Import the data with:
+```sh
+psql -U ctfnote -d ctfnote < backup.sql
+```
+
 ## Prepare for CTFNote migration
+
+### Change ctfnote's password
+User `ctfnote`'s password changed between version 1 and 2.
+```sh
+psql -U ctfnote -d ctfnote <<< "ALTER USER ctfnote WITH PASSWORD 'ctfnote';"
+```
+
 Create a new schema and put every CTFNote table inside
 ```sql
 psql --username "$POSTGRES_USER" -d "$POSTGRES_USER" <<EOF
@@ -47,23 +113,11 @@ EOF
 ```
 
 ## Migrate Hedgedoc
-### Create Hedgedoc database
-Postgres will not create a new database if there are already databases.
-
-```sh
-database=hedgedoc
-
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-	CREATE USER $database PASSWORD '$database';
-	CREATE DATABASE $database;
-	GRANT ALL PRIVILEGES ON DATABASE $database TO $database;
-EOSQL
-```
-
 ### Dump and restore
 Use `pg_dump` to dump the whole schema and apply it to a different database.
 
 ```sh
+database=hedgedoc
 pg_dump --username "$POSTGRES_USER" -d "$POSTGRES_USER" -n public \
 	| psql --username "$POSTGRES_USER" -d "$database"
 ```
@@ -91,8 +145,10 @@ EOF
 
 ## Run the new version
 The installation is now ready to be upgraded !
+Leave the docker (ctrl-d) and run:
 
 ```sh
-git fetch && git rebase
 docker-compose up --build
 ```
+
+Congratulations ! You're all set ! :-)
