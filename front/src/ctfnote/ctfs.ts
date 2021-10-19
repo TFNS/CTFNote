@@ -12,6 +12,8 @@ import {
   SubscribeToCtfDeletedDocument,
   SubscribeToCtfDeletedSubscription,
   SubscribeToCtfDeletedSubscriptionVariables,
+  SubscribeToCtfDocument,
+  SubscribeToTaskDocument,
   TaskFragment,
   useCreateCtfMutation,
   useCtfsQuery,
@@ -21,14 +23,11 @@ import {
   useIncomingCtfsQuery,
   useInviteUserToCtfMutation,
   usePastCtfsQuery,
-  useSubscribeToCtfSubscription,
-  useSubscribeToFlagSubscription,
   useUninviteUserToCtfMutation,
   useUpdateCredentialsForCtfIdMutation,
   useUpdateCtfByIdMutation,
 } from 'src/generated/graphql';
 import { CtfInvitation, makeId } from '.';
-import { notify } from './dialog';
 import { Ctf, Profile, Task } from './models';
 import { wrapNotify, wrapQuery } from './utils';
 
@@ -169,6 +168,11 @@ export function getIncomingCtfs() {
       };
     },
   });
+
+  /* Watch ctf and task update */
+  query.subscribeToMore({ document: SubscribeToCtfDocument });
+  query.subscribeToMore({ document: SubscribeToTaskDocument });
+
   return wrappedQuery;
 }
 
@@ -225,12 +229,20 @@ export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
     },
   });
 
+  /* Watch ctf and task update */
+  query.subscribeToMore({ document: SubscribeToCtfDocument });
+  query.subscribeToMore({ document: SubscribeToTaskDocument });
+
   return wrappedQuery;
 }
 
 export function getCtf(...args: Parameters<typeof useGetFullCtfQuery>) {
   const query = useGetFullCtfQuery(...args);
   const wrappedQuery = wrapQuery(query, null, (data) => buildFullCtf(data));
+
+  /* Watch ctf and task update */
+  query.subscribeToMore({ document: SubscribeToCtfDocument });
+  query.subscribeToMore({ document: SubscribeToTaskDocument });
 
   return wrappedQuery;
 }
@@ -282,20 +294,4 @@ export function useUninviteUserToCtf() {
   const { mutate } = useUninviteUserToCtfMutation({});
   return (ctf: Ctf, profile: Profile) =>
     mutate({ ctfId: ctf.id, profileId: profile.id });
-}
-
-/* Subscriptions */
-
-export function watchCtfs() {
-  useSubscribeToCtfSubscription();
-  const { onResult } = useSubscribeToFlagSubscription();
-  onResult(({ data }) => {
-    const task = data?.listen.relatedNode;
-    if (!task || task.__typename != 'Task') {
-      return;
-    }
-    if (task.solved == true) {
-      notify(`Task ${task.title} flagged!`);
-    }
-  });
 }

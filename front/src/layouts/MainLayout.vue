@@ -23,7 +23,6 @@ export default defineComponent({
     const $router = useRouter();
     const $route = useRoute();
 
-
     const { result: me } = ctfnote.me.getMe();
     const { result: settings } = ctfnote.settings.getSettings();
 
@@ -41,7 +40,6 @@ export default defineComponent({
     });
 
     ctfnote.me.onLogin(() => {
-      ctfnote.watchUpdates();
       if ($route.meta.public) {
         void $router.push({ name: 'ctfs' });
       }

@@ -5,7 +5,6 @@ import {
   useDeleteTaskMutation,
   useStartWorkingOnMutation,
   useStopWorkingOnMutation,
-  useSubscribeToTaskSubscription,
   useUpdateTaskMutation,
 } from 'src/generated/graphql';
 import { Ctf, Id, Task } from '.';
@@ -36,10 +35,4 @@ export function useStartWorkingOn() {
 export function useStopWorkingOn() {
   const { mutate: doStopWorking } = useStopWorkingOnMutation({});
   return (task: Task) => doStopWorking({ taskId: task.id });
-}
-
-/* Subscriptions  */
-
-export function watchTasks() {
-  useSubscribeToTaskSubscription();
 }

@@ -1,10 +1,10 @@
 import {
   ProfileFragment,
   Role,
+  SubscribeToProfileDocument,
   useGetTeamQuery,
   useSubscribeToProfileCreatedSubscription,
   useSubscribeToProfileDeletedSubscription,
-  useSubscribeToProfileSubscription
 } from 'src/generated/graphql';
 import { makeId, Profile } from '.';
 import { colorHash, wrapQuery } from './utils';
@@ -29,6 +29,8 @@ export function getTeam() {
     [],
     (data) => data.profiles?.nodes.map(buildProfile) ?? []
   );
+
+  query.subscribeToMore({ document: SubscribeToProfileDocument });
   return wrappedQuery;
 }
 
@@ -41,8 +43,4 @@ export function watchProfileList(refetch: () => void) {
     useSubscribeToProfileDeletedSubscription();
   profileCreated(() => refetch());
   profileDeleted(() => refetch());
-}
-
-export function watchProfiles() {
-  useSubscribeToProfileSubscription();
 }

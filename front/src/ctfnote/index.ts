@@ -17,11 +17,6 @@ export const ctfnote = {
   ctfs,
   dialogs,
   tasks,
-  watchUpdates() {
-    ctfs.watchCtfs();
-    tasks.watchTasks();
-    profiles.watchProfiles();
-  },
 };
 
 export type Ctfnote = typeof ctfnote;
