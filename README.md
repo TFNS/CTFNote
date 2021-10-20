@@ -19,11 +19,11 @@ $ docker-compose up -d
 The instance will spawn a web server on port `127.0.0.1:8080`. The first account created will
 have administrative privileges.
 
-Please note that CTFNote is only available from `127.0.0.1:8080`. Please use nginx to make it available over HTTPS.
+Please use nginx to make it available over HTTPS.
 
-### nginx
+### Enable HTTPS with nginx
 
-It is assumed that you want to serve CTFNote over HTTPS. HTTP configuration is not supported.
+It is assumed that you want to serve CTFNote over HTTPS.
 
 An example configuration for `nginx` on the host looks like this:
 
@@ -46,6 +46,13 @@ server {
                 add_header Pragma "no-cache";
         }
 }
+```
+
+Edit the `docker-compose.yml` file to make sure CTFNote only listens on
+localhost:
+```diff
+-      - 8080:80
++      - 127.0.0.1:8080:80
 ```
 
 After deploying this configuration, run `certbot` to make it available over HTTPS. 
