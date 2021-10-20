@@ -6,15 +6,52 @@ CTFNote is a collaborative tool aiming to help CTF teams to organise their work.
 
 
 ## Installation
-If you are new to CTFNote, you can start it with `docker-compose`. The default
+
+Before starting, make sure to fill in the information in the `.env` file.
+
+Then you can start it with `docker-compose`. The default
 configuration makes it super easy to start a new instance!
 
 ```shell
 $ docker-compose up -d
 ```
 
-The instance will spawn a web server on port 80. The first account created will
+The instance will spawn a web server on port `127.0.0.1:8080`. The first account created will
 have administrative privileges.
+
+Please note that CTFNote is only available from `127.0.0.1:8080`. Please use nginx to make it available over HTTPS.
+
+### nginx
+
+It is assumed that you want to serve CTFNote over HTTPS. HTTP configuration is not supported.
+
+An example configuration for `nginx` on the host looks like this:
+
+```
+server {
+        server_name ctfnote.my.domain;
+
+        root /var/www/html;
+        index index.html;
+
+        location / {
+                proxy_pass http://127.0.0.1:8080/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection $http_connection;
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                add_header Pragma "no-cache";
+        }
+}
+```
+
+After deploying this configuration, run `certbot` to make it available over HTTPS. 
+See [this article](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04) for more information.
+
+### Migration
 
 If you already have an instance of CTFNote in a previous version and wish to
 upgrade, you should follow the guide at [MIGRATION.md](MIGRATION.md).
