@@ -43,10 +43,11 @@ ARG NODE_ENV
 EXPOSE 3000
 WORKDIR /app/
 # Copy everything from stage 2, it's already been filtered
-COPY --from=clean --chmod=0555 /app/ /app/
+COPY --from=clean /app/ /app/
 
 # Install yarn ASAP because it's the slowest
 RUN yarn install --frozen-lockfile --production=true --no-progress
+RUN chmod -R 0555 .
 
 # You might want to disable GRAPHILE_TURBO if you have issues
 ENV GRAPHILE_TURBO=1
