@@ -12,8 +12,6 @@ import {
   SubscribeToCtfDeletedDocument,
   SubscribeToCtfDeletedSubscription,
   SubscribeToCtfDeletedSubscriptionVariables,
-  SubscribeToCtfDocument,
-  SubscribeToTaskDocument,
   TaskFragment,
   useCreateCtfMutation,
   useCtfsQuery,
@@ -23,13 +21,18 @@ import {
   useIncomingCtfsQuery,
   useInviteUserToCtfMutation,
   usePastCtfsQuery,
+  useSubscribeToCtfCreatedSubscription,
+  useSubscribeToCtfDeletedSubscription,
+  useSubscribeToCtfSubscription,
+  useSubscribeToFlagSubscription,
+  useSubscribeToTaskSubscription,
   useUninviteUserToCtfMutation,
   useUpdateCredentialsForCtfIdMutation,
   useUpdateCtfByIdMutation,
 } from 'src/generated/graphql';
-import { CtfInvitation, makeId } from '.';
+import { CtfInvitation, makeId } from './models';
 import { Ctf, Profile, Task } from './models';
-import { wrapNotify, wrapQuery } from './utils';
+import { wrapQuery } from './utils';
 
 type FullCtfResponse = {
   ctf: CtfFragment & {
@@ -169,10 +172,6 @@ export function getIncomingCtfs() {
     },
   });
 
-  /* Watch ctf and task update */
-  query.subscribeToMore({ document: SubscribeToCtfDocument });
-  query.subscribeToMore({ document: SubscribeToTaskDocument });
-
   return wrappedQuery;
 }
 
@@ -229,20 +228,12 @@ export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
     },
   });
 
-  /* Watch ctf and task update */
-  query.subscribeToMore({ document: SubscribeToCtfDocument });
-  query.subscribeToMore({ document: SubscribeToTaskDocument });
-
   return wrappedQuery;
 }
 
 export function getCtf(...args: Parameters<typeof useGetFullCtfQuery>) {
   const query = useGetFullCtfQuery(...args);
   const wrappedQuery = wrapQuery(query, null, (data) => buildFullCtf(data));
-
-  /* Watch ctf and task update */
-  query.subscribeToMore({ document: SubscribeToCtfDocument });
-  query.subscribeToMore({ document: SubscribeToTaskDocument });
 
   return wrappedQuery;
 }
@@ -281,7 +272,7 @@ export function useUpdateCtfCredentials() {
 export function useImportCtf() {
   const { mutate } = useImportctfMutation({});
 
-  return async (id: number) => await wrapNotify(mutate({ id }), 'CTF Imported');
+  return async (id: number) => mutate({ id });
 }
 
 export function useInviteUserToCtf() {
@@ -294,4 +285,66 @@ export function useUninviteUserToCtf() {
   const { mutate } = useUninviteUserToCtfMutation({});
   return (ctf: Ctf, profile: Profile) =>
     mutate({ ctfId: ctf.id, profileId: profile.id });
+}
+
+/* Subscription */
+
+export function useOnFlag() {
+  const sub = useSubscribeToFlagSubscription();
+  const onResult = function (cb: (task: Task) => void) {
+    sub.onResult((data) => {
+      const node = data.data?.listen.relatedNode;
+      if (!node || node.__typename != 'Task') return;
+      cb(buildTask(node));
+    });
+  };
+  return { ...sub, onResult };
+}
+
+export function useOnCtfUpdate() {
+  const sub = useSubscribeToCtfSubscription();
+  const onResult = function (cb: (ctf: Ctf) => void) {
+    sub.onResult((data) => {
+      const node = data.data?.listen.relatedNode;
+      if (!node || node.__typename != 'Ctf') return;
+      cb(buildCtf(node));
+    });
+  };
+  return { ...sub, onResult };
+}
+
+export function useOnTaskUpdate() {
+  const sub = useSubscribeToTaskSubscription();
+  const onResult = function (cb: (task: Task) => void) {
+    sub.onResult((data) => {
+      const node = data.data?.listen.relatedNode;
+      if (!node || node.__typename != 'Task') return;
+      cb(buildTask(node));
+    });
+  };
+  return { ...sub, onResult };
+}
+
+export function useOnCtfDeleted() {
+  const sub = useSubscribeToCtfDeletedSubscription();
+  const onResult = function (cb: (ctf: Ctf) => void) {
+    sub.onResult((data) => {
+      const node = data.data?.listen.relatedNode;
+      if (!node || node.__typename != 'Ctf') return;
+      cb(buildCtf(node));
+    });
+  };
+  return { ...sub, onResult };
+}
+
+export function useOnCtfCreated() {
+  const sub = useSubscribeToCtfCreatedSubscription();
+  const onResult = function (cb: (ctf: Ctf) => void) {
+    sub.onResult((data) => {
+      const node = data.data?.listen.relatedNode;
+      if (!node || node.__typename != 'Ctf') return;
+      cb(buildCtf(node));
+    });
+  };
+  return { ...sub, onResult };
 }

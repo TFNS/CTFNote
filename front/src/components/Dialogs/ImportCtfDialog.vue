@@ -24,13 +24,13 @@
 
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { useImportCtf } from 'src/ctfnote/ctfs';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, ref } from 'vue';
 
 function parseCtftimeId(s: string): number | null {
   const url = s.trim();
-  const idReg = new RegExp(/^\d+$/);
-  const urlReg = new RegExp(/^https:\/\/ctftime\.org\/event\/(\d+)\/?$/);
+  const idReg = /^\d+$/;
+  const urlReg = /^(?:https?:\/\/)?ctftime\.org\/event\/(\d+)(?:\/.*)?$/i;
   if (idReg.exec(url)) {
     return parseInt(url);
   }
@@ -46,7 +46,8 @@ export default defineComponent({
       useDialogPluginComponent();
 
     return {
-      importCtf: useImportCtf(),
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      importCtf: ctfnote.ctfs.useImportCtf(),
       dialogRef,
       model: ref(''),
       onDialogHide,
@@ -58,13 +59,14 @@ export default defineComponent({
     async submit() {
       const id = parseCtftimeId(this.model);
       if (id === null) return;
-      await this.importCtf(id);
-      this.onDialogOK();
+      const success = await this.wrapNotify(() => this.importCtf(id));
+      if (success) {
+        this.onDialogOK();
+      }
     },
     validate() {
-      return this.model && parseCtftimeId(this.model) === null
-        ? 'Invalid url or id'
-        : undefined;
+      if (this.model && parseCtftimeId(this.model) === null)
+        return 'Invalid url or id';
     },
   },
 });

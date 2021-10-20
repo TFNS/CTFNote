@@ -109,20 +109,12 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Task } from 'src/ctfnote';
-import {
-  openCreateTaskDialog,
-  openEditTaskDialog,
-  openImportTaskDialog,
-} from 'src/ctfnote/dialog';
-import {
-  useDeleteTask,
-  useStartWorkingOn,
-  useStopWorkingOn,
-  useUpdateTask,
-} from 'src/ctfnote/tasks';
+import { Ctf, Task } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { useStoredSettings } from 'src/extensions/storedSettings';
 import { defineComponent, ref } from 'vue';
+import TaskEditDialogVue from '../Dialogs/TaskEditDialog.vue';
+import TaskImportDialogVue from '../Dialogs/TaskImportDialog.vue';
 import TaskCard from './TaskCard.vue';
 
 export default defineComponent({
@@ -133,10 +125,10 @@ export default defineComponent({
   setup() {
     const { makePersistant } = useStoredSettings();
     return {
-      deleteTask: useDeleteTask(),
-      updateTask: useUpdateTask(),
-      startWorkingOn: useStartWorkingOn(),
-      stopWorkingOn: useStopWorkingOn(),
+      deleteTask: ctfnote.tasks.useDeleteTask(),
+      updateTask: ctfnote.tasks.useUpdateTask(),
+      startWorkingOn: ctfnote.tasks.useStartWorkingOn(),
+      stopWorkingOn: ctfnote.tasks.useStopWorkingOn(),
       displayMode: makePersistant('task-display-mode', ref('classic')),
       hideSolved: makePersistant('task-hide-solved', ref(false)),
       filter: ref(''),
@@ -190,7 +182,12 @@ export default defineComponent({
       }
     },
     editTask(task: Task) {
-      openEditTaskDialog(task);
+      this.$q.dialog({
+        component: TaskEditDialogVue,
+        componentProps: {
+          task,
+        },
+      });
     },
     solveTask(task: Task) {
       this.$q
@@ -216,10 +213,20 @@ export default defineComponent({
         });
     },
     openCreateTaskDialog(ctf: Ctf) {
-      openCreateTaskDialog(ctf);
+      this.$q.dialog({
+        component: TaskEditDialogVue,
+        componentProps: {
+          ctfId: ctf.id,
+        },
+      });
     },
     openImportTaskDialog() {
-      openImportTaskDialog(this.ctf, this.tasks);
+      this.$q.dialog({
+        component: TaskImportDialogVue,
+        componentProps: {
+          ctf: this.ctf,
+        },
+      });
     },
     askDeleteTask(task: Task) {
       this.$q

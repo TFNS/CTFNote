@@ -32,8 +32,8 @@
 
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { Role } from 'src/ctfnote';
-import { useCreateInvitationToken } from 'src/ctfnote/admin';
+import { Role } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, ref } from 'vue';
 import CopyLink from '../Utils/CopyLink.vue';
 import SelectRole from '../Utils/SelectRole.vue';
@@ -45,7 +45,7 @@ export default defineComponent({
       useDialogPluginComponent();
 
     return {
-      createInvitationToken: useCreateInvitationToken(),
+      createInvitationToken: ctfnote.admin.useCreateInvitationToken(),
       tab: ref<'role' | 'link'>('role'),
       link: ref<string | null>(null),
       role: ref<Role>('USER_GUEST' as Role),

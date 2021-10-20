@@ -1,12 +1,12 @@
 import * as admin from './admin';
 import * as auth from './auth';
 import * as ctfs from './ctfs';
-import * as dialogs from './dialog';
 import * as me from './me';
+import * as profiles from './profiles';
 import * as settings from './settings';
 import * as tasks from './tasks';
-import * as profiles from './profiles';
-export * from './models';
+import * as ui from './ui';
+import * as utils from './utils';
 
 export const ctfnote = {
   profiles,
@@ -15,8 +15,11 @@ export const ctfnote = {
   me,
   admin,
   ctfs,
-  dialogs,
+  ui,
   tasks,
+  utils,
 };
 
 export type Ctfnote = typeof ctfnote;
+
+export default ctfnote;

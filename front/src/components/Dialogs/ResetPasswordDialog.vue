@@ -31,8 +31,8 @@
 
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { Role, User } from 'src/ctfnote';
-import { useCreateResetPasswordToken } from 'src/ctfnote/admin';
+import { Role, User } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, ref } from 'vue';
 import CopyLink from '../Utils/CopyLink.vue';
 export default defineComponent({
@@ -46,7 +46,7 @@ export default defineComponent({
       useDialogPluginComponent();
 
     return {
-      createResetPasswordToken: useCreateResetPasswordToken(),
+      createResetPasswordToken: ctfnote.admin.useCreateResetPasswordToken(),
       tab: ref('role'),
       link: ref(''),
       role: ref(Role.UserGuest),

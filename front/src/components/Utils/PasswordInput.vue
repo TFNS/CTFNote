@@ -2,6 +2,7 @@
   <q-input
     v-model="password"
     label="Password"
+    autocomplete="password"
     filled
     :type="hidePwd ? 'password' : 'text'"
   >

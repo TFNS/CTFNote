@@ -43,13 +43,25 @@ subscription subscribeToProfile {
   }
 }
 subscription subscribeToProfileCreated {
-  listen(topic: "profile-created") {
+  listen(topic: "created:profiles") {
     relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Profile {
+        ...ProfileFragment
+      }
+    }
   }
 }
 
 subscription subscribeToProfileDeleted {
-  listen(topic: "profile-deleted") {
+  listen(topic: "deleted:profiles") {
     relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Profile {
+        ...ProfileFragment
+      }
+    }
   }
 }

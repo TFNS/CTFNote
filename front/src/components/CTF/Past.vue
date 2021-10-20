@@ -31,8 +31,8 @@
 
 <script lang="ts">
 import { date } from 'quasar';
-import { Ctf } from 'src/ctfnote';
-import { getPastCtfs } from 'src/ctfnote/ctfs';
+import { Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { computed, defineComponent, ref, watch } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import CardAdminMenu from './CardAdminMenu.vue';
@@ -48,10 +48,7 @@ export default defineComponent({
       page: 1,
     });
 
-    const {
-      result: pastCtfs,
-      loading,
-    } = getPastCtfs(() => ({
+    const { result: pastCtfs, loading } = ctfnote.ctfs.getPastCtfs(() => ({
       first: pagination.value.rowsPerPage,
       offset: (pagination.value.page - 1) * pagination.value.rowsPerPage,
     }));

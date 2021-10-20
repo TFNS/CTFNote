@@ -1,22 +1,22 @@
 <template>
-  <q-form @submit="submit">
-    <q-card>
+  <q-card>
+    <q-form @submit="submit">
       <q-card-section>
-        <div class="text-h6">Register on CTFNote</div>
+        <div class="text-h5">Register</div>
       </q-card-section>
-      <q-card-section class="q-gutter-sm">
+      <q-card-section class="q-gutter-md">
         <template v-if="registrationAnyAllowed">
           <q-input
             v-model="form.login"
             filled
-            label="Login"
-            lazy-rules
-            :rules="[required]"
+            label="Choose a login"
+            required
           />
           <password-input
             v-model="form.password"
+            label="Choose a password"
             clearable
-            :rules="[required]"
+            required
           />
           <q-input
             v-if="!!token"
@@ -48,23 +48,25 @@
               filled
               clearable
               label="CTFNote password"
-              :rules="[required]"
+              required
             />
           </template>
         </template>
         <div v-else>Registration are disabled.</div>
-        <div>
-          I aready have an account:
-          <ctf-note-link
-            name="auth-login"
-            class="text-primary"
-            label="login"
-            underline
-          />.
-        </div>
       </q-card-section>
 
-      <q-card-actions class="q-pa-md" align="right">
+      <q-card-actions class="q-pa-md row justify-between">
+        <div>
+          I already have an account:
+          <b>
+            <ctf-note-link
+              name="auth-login"
+              class="text-primary"
+              label="LOGIN"
+              underline
+            />
+          </b>
+        </div>
         <q-btn
           type="submit"
           label="Register"
@@ -72,18 +74,13 @@
           :disable="!registrationAnyAllowed"
         />
       </q-card-actions>
-    </q-card>
-  </q-form>
+    </q-form>
+  </q-card>
 </template>
 
 <script lang="ts">
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
-import {
-  useRegister,
-  useRegisterWithPassword,
-  useRegisterWithToken,
-} from 'src/ctfnote/auth';
-import { getSettings } from 'src/ctfnote/settings';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, reactive, ref } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 
@@ -93,13 +90,12 @@ export default defineComponent({
     token: { type: String, default: '' },
   },
   setup() {
-    const { result: settings } = getSettings();
-
     return {
-      register: useRegister(),
-      registerWithToken: useRegisterWithToken(),
-      registerWithPassword: useRegisterWithPassword(),
-      settings,
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      register: ctfnote.auth.useRegister(),
+      registerWithToken: ctfnote.auth.useRegisterWithToken(),
+      registerWithPassword: ctfnote.auth.useRegisterWithPassword(),
+      settings: ctfnote.settings.injectSettings(),
       form: reactive({
         login: '',
         password: '',
@@ -123,29 +119,33 @@ export default defineComponent({
     },
   },
   methods: {
-    required(val: string) {
-      if (!val) {
-        return 'Please type something';
-      }
-    },
     submit() {
+      const opts = {
+        message: `Logged as ${this.form.login}!`,
+        icon: 'person',
+      };
+      let registerFunction;
+
       if (this.token) {
-        return this.registerWithToken(
-          this.form.login,
-          this.form.password,
-          this.token
-        );
+        registerFunction = () =>
+          this.registerWithToken(
+            this.form.login,
+            this.form.password,
+            this.token
+          );
+      } else if (this.registrationPasswordForced || this.usePassword) {
+        registerFunction = () =>
+          this.registerWithPassword(
+            this.form.login,
+            this.form.password,
+            this.form.ctfnotePassword
+          );
+      } else {
+        registerFunction = () =>
+          this.register(this.form.login, this.form.password);
       }
 
-      if (this.registrationPasswordForced || this.usePassword) {
-        return this.registerWithPassword(
-          this.form.login,
-          this.form.password,
-          this.form.ctfnotePassword
-        );
-      }
-
-      return this.register(this.form.login, this.form.password);
+      void this.wrapNotify(registerFunction, opts);
     },
   },
 });

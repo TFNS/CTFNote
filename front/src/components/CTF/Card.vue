@@ -18,12 +18,14 @@
         </div>
 
         <q-space />
-        <div class="col-auto">
-          <weight-badge :ctf="ctf" />
-        </div>
-        <div class="col-auto">
-          <ctf-time-link :ctf="ctf" />
-        </div>
+        <template v-if="ctf.ctftimeUrl">
+          <div class="col-auto">
+            <weight-badge :ctf="ctf" />
+          </div>
+          <div class="col-auto">
+            <ctf-time-link :ctf="ctf" />
+          </div>
+        </template>
       </div>
     </q-card-section>
     <q-separator inset />

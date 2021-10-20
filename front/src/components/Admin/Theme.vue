@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading" class="row q-gutter-md">
+  <div class="row q-gutter-md">
     <div class="col">
       <q-card bordered>
         <q-card-section class="text-h6"> Colors </q-card-section>
@@ -30,22 +30,15 @@
       </q-card>
     </div>
   </div>
-  <q-inner-loading :showing="loading">
-    <q-spinner-gears size="50px" color="primary" />
-  </q-inner-loading>
 </template>
 
 <script lang="ts">
+import ctfnote from 'src/ctfnote';
 import {
   defaultColorsNames,
   SettingsColor,
   SettingsColorMap,
-} from 'src/ctfnote';
-import {
-  defaultColors,
-  getSettings,
-  updateSettings,
-} from 'src/ctfnote/settings';
+} from 'src/ctfnote/models';
 import { defineComponent, reactive, watch } from 'vue';
 import ColorPicker from '../Utils/ColorPicker.vue';
 
@@ -54,8 +47,8 @@ type ColorPairs = [SettingsColor, string][];
 export default defineComponent({
   components: { ColorPicker },
   setup() {
-    const { result: settings } = getSettings();
-    const colors = reactive(Object.assign({}, defaultColors));
+    const settings = ctfnote.settings.injectSettings();
+    const colors = reactive(Object.assign({}, ctfnote.settings.defaultColors));
 
     watch(
       () => settings.value.style,
@@ -79,7 +72,8 @@ export default defineComponent({
     );
 
     return {
-      loading: false,
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      updateSettings: ctfnote.settings.useUpdateSettings(),
       settings,
       colors,
     };
@@ -103,14 +97,20 @@ export default defineComponent({
       this.colors[name as SettingsColor] = color;
     },
     reset() {
-      for (const [name, value] of Object.entries(defaultColors) as ColorPairs) {
+      for (const [name, value] of Object.entries(
+        ctfnote.settings.defaultColors
+      ) as ColorPairs) {
         this.colors[name] = value;
       }
     },
     saveStyle() {
-      void updateSettings({
-        style: JSON.stringify(this.colors),
-      });
+      void this.wrapNotify(
+        () =>
+          this.updateSettings({
+            style: JSON.stringify(this.colors),
+          }),
+        { message: 'Theme changed!', icon: 'palette' }
+      );
     },
   },
 });

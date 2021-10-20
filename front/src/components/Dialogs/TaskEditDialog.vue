@@ -36,8 +36,8 @@
 
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { Id, Task, Ctf } from 'src/ctfnote';
-import { useUpdateTask, useCreateTask } from 'src/ctfnote/tasks';
+import { Id, Task, Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, reactive } from 'vue';
 export default defineComponent({
   props: {
@@ -53,20 +53,14 @@ export default defineComponent({
       flag: props.task?.flag ?? '',
     });
     const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
-    const updateTask = useUpdateTask();
-    const createTask = useCreateTask();
+
     return {
       dialogRef,
       form,
       onDialogHide,
-      submit() {
-        if (props.ctfId) {
-          void createTask(props.ctfId, form);
-        } else if (props.task) {
-          void updateTask(props.task, { ...form });
-        }
-        onDialogOK();
-      },
+      onDialogOK,
+      updateTask: ctfnote.tasks.useUpdateTask(),
+      createTask: ctfnote.tasks.useCreateTask(),
     };
   },
   computed: {
@@ -75,6 +69,17 @@ export default defineComponent({
     },
     title() {
       return this.task ? `Edit ${this.task.title}` : 'Create Task';
+    },
+  },
+  methods: {
+    submit() {
+      console.log('SUBMIT', this);
+      if (this.ctfId) {
+        void this.createTask(this.ctfId, this.form);
+      } else if (this.task) {
+        void this.updateTask(this.task, { ...this.form });
+      }
+      this.onDialogOK();
     },
   },
 });

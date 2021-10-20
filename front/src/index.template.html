@@ -3,20 +3,92 @@
   <head>
     <title><%= productName %></title>
 
-    <meta charset="utf-8">
-    <meta name="description" content="<%= productDescription %>">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>">
+    <meta charset="utf-8" />
+    <meta name="description" content="<%= productDescription %>" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta
+      name="viewport"
+      content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
+    />
 
-    <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128x128.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
-    <link rel="icon" type="image/ico" href="favicon.ico">
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="128x128"
+      href="icons/favicon-128x128.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="icons/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="icons/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+    <style>
+      :root {
+        --ctfnote-logo-url: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg fill='none' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform='scale(1.3) translate(-30 -38)'%3E%3Cpath d='m147.26 86.125-16.863-39.888c-19.267 26.896-57.687-3.1051-68.959 25.672l-3.7194-8.6578c-1.3267-3.0892-4.8837-4.4509-7.9116-3.0391-3.028 1.4117-4.4093 5.088-3.0826 8.1772l24.371 56.581 23.841 55.393c1.3268 3.089 4.8837 4.451 7.9115 3.039 3.028-1.412 4.41-5.088 3.083-8.177l-18.897-43.876c6.8459-16.576 23.135-12.835 39.231-12.755 16.288 0.098 27.45-17.207 20.995-32.469z' clip-rule='evenodd' fill='%234caf50' fill-rule='evenodd'/%3E%3C/g%3E%3Cg transform='scale(1.4) translate(-30)'%3E%3Cpath d='m129.03 25.806c0.734-1.5837 2.068-2.811 3.707-3.4119 1.638-0.601 3.449-0.5263 5.033 0.2074l10.922 5.0617c1.584 0.7343 2.811 2.0675 3.412 3.7064 0.601 1.639 0.527 3.4496-0.207 5.0335l-3.105 6.6987-22.866-10.597 3.104-6.6987zm-5.872 12.671-17.616 38.012c-0.734 1.5839-0.81 3.3947-0.209 5.034l2.93 7.992c0.601 1.6392 1.829 2.9726 3.413 3.7068 1.584 0.7341 3.395 0.8089 5.035 0.2079l7.992-2.9303c1.639-0.6014 2.972-1.8292 3.706-3.4133l17.616-38.012-22.867-10.597z' clip-rule='evenodd' fill='%23fff' fill-rule='evenodd'/%3E%3C/g%3E%3C/svg%3E%0A");
+        --ctfnote-loader-url: url("data:image/svg+xml,%3C!-- By Sam Herbert (@sherb), for everyone. More @ http://goo.gl/7AJzbL --%3E%3Csvg width='38' height='38' viewBox='0 0 38 38' xmlns='http://www.w3.org/2000/svg' stroke='rgba(255,255,255,.3)'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(1 1)' stroke-width='2'%3E%3Ccircle stroke-opacity='.5' cx='18' cy='18' r='18'/%3E%3Cpath d='M36 18c0-9.94-8.06-18-18-18'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 18 18' to='360 18 18' dur='1.5s' repeatCount='indefinite'/%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #loadingscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        transition: transform  ease-out .5s .2s;
+        z-index: 100000;
+      }
+
+      #loadingscreen.fadeout {
+        transform: translateY(100vh);
+        pointer-events: none;
+      }
+
+      #loadingscreen:before,
+      #loadingscreen:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+      #loadingscreen:after {
+        background-image: var(--ctfnote-logo-url);
+        background-size: 300px 300px;
+        background-position: 50% 30%;
+        background-repeat: no-repeat;
+      }
+      #loadingscreen::before {
+        background-image: var(--ctfnote-loader-url);
+        background-size: 270px;
+        background-position: calc(50% - 10px) calc(30%);
+        background-repeat: no-repeat;
+        background-color: #333;
+      }
+    </style>
   </head>
   <body>
     <!-- DO NOT touch the following DIV -->
     <div id="q-app"></div>
+    <div id="loadingscreen"></div>
   </body>
 </html>

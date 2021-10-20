@@ -7,7 +7,7 @@ import {
   useStopWorkingOnMutation,
   useUpdateTaskMutation,
 } from 'src/generated/graphql';
-import { Ctf, Id, Task } from '.';
+import { Ctf, Id, Task } from './models';
 
 /* Mutations */
 export function useCreateTask() {

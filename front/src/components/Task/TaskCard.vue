@@ -98,10 +98,8 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Task } from 'src/ctfnote';
-import { getMe } from 'src/ctfnote/me';
-import { getTeam } from 'src/ctfnote/profiles';
-import { colorHash } from 'src/ctfnote/utils';
+import { Ctf, Task } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import TaskBadge from './TaskBadge.vue';
@@ -126,8 +124,8 @@ export default defineComponent({
     'filter-category',
   ],
   setup() {
-    const { result: me } = getMe();
-    const { result: team } = getTeam();
+    const me = ctfnote.me.injectMe();
+    const { result: team } = ctfnote.profiles.getTeam();
     return { me, team };
   },
   computed: {
@@ -156,7 +154,7 @@ export default defineComponent({
   },
   methods: {
     colorHash(s?: string | null) {
-      return { backgroundColor: colorHash(s ?? '') };
+      return { backgroundColor: ctfnote.utils.colorHash(s ?? '') };
     },
     updateOnIt(v: boolean) {
       if (v) {

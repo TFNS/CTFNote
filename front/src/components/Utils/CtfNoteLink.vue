@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Task } from 'src/ctfnote';
+import { Ctf, Task } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
 import { RouteLocationRaw } from 'vue-router';
 

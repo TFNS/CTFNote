@@ -1,16 +1,13 @@
 #import "./Profile.graphql"
 
-fragment MeFragment on MeResponse {
-  jwt
-  profile {
+query Me {
+  me {
     ...ProfileFragment
   }
 }
 
-query Me {
-  me {
-    ...MeFragment
-  }
+query newToken {
+  newToken
 }
 
 mutation Login($login: String!, $password: String!) {
