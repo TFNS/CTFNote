@@ -1,12 +1,13 @@
 import {
   ProfileFragment,
   Role,
+  SubscribeToProfileDocument,
   useGetTeamQuery,
   useSubscribeToProfileCreatedSubscription,
   useSubscribeToProfileDeletedSubscription,
-  useSubscribeToProfileSubscription
+  useSubscribeToProfileSubscription,
 } from 'src/generated/graphql';
-import { makeId, Profile } from '.';
+import { makeId, Profile } from './models';
 import { colorHash, wrapQuery } from './utils';
 
 /* Builders */
@@ -29,20 +30,45 @@ export function getTeam() {
     [],
     (data) => data.profiles?.nodes.map(buildProfile) ?? []
   );
+
+  query.subscribeToMore({ document: SubscribeToProfileDocument });
   return wrappedQuery;
 }
 
 /* Subcriptions  */
 
-export function watchProfileList(refetch: () => void) {
-  const { onResult: profileCreated } =
-    useSubscribeToProfileCreatedSubscription();
-  const { onResult: profileDeleted } =
-    useSubscribeToProfileDeletedSubscription();
-  profileCreated(() => refetch());
-  profileDeleted(() => refetch());
+export function useOnProfileUpdate() {
+  const sub = useSubscribeToProfileSubscription();
+  const onResult = function (cb: (profile: Profile) => void) {
+    sub.onResult((data) => {
+      const node = data.data?.listen.relatedNode;
+      if (!node || node.__typename != 'Profile') return;
+      cb(buildProfile(node));
+    });
+  };
+  return { ...sub, onResult };
 }
 
-export function watchProfiles() {
-  useSubscribeToProfileSubscription();
+export function useOnProfileCreated() {
+  const sub = useSubscribeToProfileCreatedSubscription();
+  const onResult = function (cb: (profile: Profile) => void) {
+    sub.onResult((data) => {
+      const node = data.data?.listen.relatedNode;
+      if (!node || node.__typename != 'Profile') return;
+      cb(buildProfile(node));
+    });
+  };
+  return { ...sub, onResult };
+}
+
+export function useOnProfileDeleted() {
+  const sub = useSubscribeToProfileDeletedSubscription();
+  const onResult = function (cb: (profile: Profile) => void) {
+    sub.onResult((data) => {
+      const node = data.data?.listen.relatedNode;
+      if (!node || node.__typename != 'Profile') return;
+      cb(buildProfile(node));
+    });
+  };
+  return { ...sub, onResult };
 }

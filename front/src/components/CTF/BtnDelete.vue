@@ -11,9 +11,8 @@
 </template>
 
 <script lang="ts">
-import { Ctf } from 'src/ctfnote';
-import { useDeleteCtf } from 'src/ctfnote/ctfs';
-import { getMe } from 'src/ctfnote/me';
+import { Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -21,8 +20,11 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const { result: me } = getMe();
-    return { me, deleteCtf: useDeleteCtf() };
+    return {
+      me: ctfnote.me.injectMe(),
+      deleteCtf: ctfnote.ctfs.useDeleteCtf(),
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+    };
   },
   methods: {
     openDeleteCtfDialog() {
@@ -35,7 +37,11 @@ export default defineComponent({
           cancel: true,
         })
         .onOk(() => {
-          void this.deleteCtf(this.ctf);
+          const title = this.ctf.title;
+          void this.wrapNotify(() => this.deleteCtf(this.ctf), {
+            message: `CTF ${title} deleted!`,
+            icon: 'delete',
+          });
         });
     },
   },

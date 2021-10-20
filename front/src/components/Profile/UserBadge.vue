@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { Profile } from 'src/ctfnote';
+import { Profile } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
 
 export default defineComponent({

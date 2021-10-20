@@ -1,5 +1,7 @@
+import { useApolloClient } from '@vue/apollo-composable';
 import {
   AdminSettingsInfoFragment,
+  GetSettingsDocument,
   Role,
   SettingPatch,
   SettingsInfoFragment,
@@ -7,12 +9,13 @@ import {
   useGetSettingsQuery,
   useUpdateSettingsMutation,
 } from 'src/generated/graphql';
+import { inject, InjectionKey, provide, Ref } from 'vue';
 import {
   AdminSettings,
   defaultColorsNames,
   Settings,
   SettingsColorMap,
-} from '.';
+} from './models';
 import { wrapQuery } from './utils';
 
 function parseStyle(s: string): SettingsColorMap {
@@ -50,6 +53,15 @@ export function buildAdminSettings(
   };
 }
 
+/* Prefetch */
+
+export function prefetchSettings() {
+  const { client } = useApolloClient();
+  return client.query({
+    query: GetSettingsDocument,
+    fetchPolicy: 'network-only',
+  });
+}
 
 /* Queries */
 
@@ -65,8 +77,6 @@ export const defaultColors: SettingsColorMap = {
 };
 
 let settingsNodeId = '';
-
-
 
 export function getSettings() {
   const r = useGetSettingsQuery();
@@ -88,7 +98,27 @@ export function getAdminSettings() {
 
 /* Mutations */
 
-export function updateSettings(patch: SettingPatch) {
+export function useUpdateSettings() {
   const { mutate: doUpdateSettings } = useUpdateSettingsMutation({});
-  return doUpdateSettings({ nodeId: settingsNodeId, patch });
+  return async (patch: SettingPatch) =>
+    doUpdateSettings({ nodeId: settingsNodeId, patch });
+}
+
+/* Global provider  */
+
+const SettingsSymbol: InjectionKey<Ref<Settings>> = Symbol('settings');
+
+export function provideSettings() {
+  const { result: settings } = getSettings();
+  provide(SettingsSymbol, settings);
+  return settings;
+}
+
+export function injectSettings() {
+  const settings = inject(SettingsSymbol);
+  if (!settings) {
+    throw 'ERROR';
+  }
+
+  return settings;
 }

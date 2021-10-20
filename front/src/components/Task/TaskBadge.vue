@@ -33,9 +33,8 @@
 </template>
 
 <script lang="ts">
-import { Task } from 'src/ctfnote';
-import { getMe } from 'src/ctfnote/me';
-import { getTeam } from 'src/ctfnote/profiles';
+import { Task } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import UserBadge from '../Profile/UserBadge.vue';
 
@@ -45,8 +44,8 @@ export default defineComponent({
     task: { type: Object as () => Task, required: true },
   },
   setup() {
-    const { result: team } = getTeam();
-    const { result: me } = getMe();
+    const { result: team } = ctfnote.profiles.getTeam();
+    const me = ctfnote.me.injectMe();
     return { team, me };
   },
   computed: {

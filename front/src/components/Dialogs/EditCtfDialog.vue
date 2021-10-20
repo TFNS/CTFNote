@@ -71,8 +71,8 @@
 
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { Ctf } from 'src/ctfnote';
-import { useCreateCtf, useUpdateCtf } from 'src/ctfnote/ctfs';
+import { Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, reactive } from 'vue';
 import DatetimeInput from '../Utils/DatetimeInput.vue';
 import LogoField from '../Utils/LogoField.vue';
@@ -104,8 +104,9 @@ export default defineComponent({
       useDialogPluginComponent();
 
     return {
-      updateCtf: useUpdateCtf(),
-      createCtf: useCreateCtf(),
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      updateCtf: ctfnote.ctfs.useUpdateCtf(),
+      createCtf: ctfnote.ctfs.useCreateCtf(),
       dialogRef,
       form,
       onDialogHide,
@@ -123,18 +124,29 @@ export default defineComponent({
   },
   methods: {
     submit() {
-      if (this.ctf) {
-        void this.updateCtf(this.ctf, {
-          ...this.form,
-          startTime: this.form.startTime.toISOString(),
-          endTime: this.form.endTime.toISOString(),
-        });
+      const ctf = this.ctf;
+      if (ctf) {
+        const opts = {
+          message: `CTF ${ctf.title} updated!`,
+          icon: 'flag',
+        };
+        void this.wrapNotify(
+          () =>
+            this.updateCtf(ctf, {
+              ...this.form,
+              startTime: this.form.startTime.toISOString(),
+              endTime: this.form.endTime.toISOString(),
+            }),
+          opts
+        );
       } else {
-        void this.createCtf({
-          ...this.form,
-          startTime: this.form.startTime.toISOString(),
-          endTime: this.form.endTime.toISOString(),
-        });
+        void this.wrapNotify(() =>
+          this.createCtf({
+            ...this.form,
+            startTime: this.form.startTime.toISOString(),
+            endTime: this.form.endTime.toISOString(),
+          })
+        );
       }
       this.onDialogOK();
     },

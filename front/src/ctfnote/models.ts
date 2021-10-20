@@ -24,8 +24,7 @@ export type Profile = {
 };
 
 export type Me = {
-  profile: Profile | null;
-  jwt: string | null;
+  profile: Profile;
 
   isLogged: boolean;
   isGuest: boolean;

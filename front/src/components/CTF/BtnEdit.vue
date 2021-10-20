@@ -4,28 +4,32 @@
     v-bind="$attrs"
     icon="edit"
     color="warning"
-    @click="openEditCtfDialog"
+    @click="editCtf"
   >
     <q-tooltip>Edit the CTF</q-tooltip>
   </q-btn>
 </template>
 
 <script lang="ts">
-import { Ctf } from 'src/ctfnote';
-import { openEditCtfDialog } from 'src/ctfnote/dialog';
-import { getMe } from 'src/ctfnote/me';
+import { Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
+import EditCtfDialogVue from '../Dialogs/EditCtfDialog.vue';
 export default defineComponent({
   props: {
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const { result: me } = getMe();
-    return { me };
+    return { me: ctfnote.me.injectMe() };
   },
   methods: {
-    openEditCtfDialog() {
-      openEditCtfDialog(this.ctf);
+    editCtf() {
+      this.$q.dialog({
+        component: EditCtfDialogVue,
+        componentProps: {
+          ctf: this.ctf,
+        },
+      });
     },
   },
 });

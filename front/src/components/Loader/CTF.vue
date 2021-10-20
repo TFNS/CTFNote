@@ -1,24 +1,19 @@
 <template>
   <div>
     <router-view v-if="ctf" :ctf="ctf" />
-    <q-inner-loading :showing="loading">
-      <q-spinner-gears size="50px" color="primary" />
-    </q-inner-loading>
   </div>
 </template>
 
 <script lang="ts">
-import { getCtf } from 'src/ctfnote/ctfs';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, watch } from 'vue';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   props: {
     ctfId: { type: Number, required: true },
   },
   setup(props) {
-    const $router = useRouter();
-    const { result: ctf, loading } = getCtf(() => ({
+    const { result: ctf } = ctfnote.ctfs.getCtf(() => ({
       id: props.ctfId,
     }));
 
@@ -28,12 +23,10 @@ export default defineComponent({
       }
     });
 
-    $router.afterEach((to) => {
-      if (to.name != 'task' && ctf.value) {
-        document.title = `CTFNote - ${ctf.value.title}`;
-      }
-    });
-    return { ctf, loading };
+    return { ctf };
+  },
+  mounted() {
+    if (this.ctf) document.title = `CTFNote - ${this.ctf.title}`;
   },
 });
 </script>

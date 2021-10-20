@@ -14,84 +14,93 @@
       <div class="row q-gutter-md">
         <div class="col">
           <q-card v-if="me" bordered>
-            <q-card-section class="row justify-between">
-              <div class="text-h6">Change Profile</div>
-              <user-badge :profile="tmpProfile" />
-            </q-card-section>
+            <q-form @submit="changeProfile">
+              <q-card-section class="row justify-between">
+                <div class="text-h6">Change Profile</div>
+                <user-badge :profile="tmpProfile" />
+              </q-card-section>
 
-            <q-separator class="q-mx-xl" />
+              <q-separator class="q-mx-xl" />
 
-            <q-card-section class="q-gutter-lg">
-              <div class="col">
-                <q-input
-                  v-model="username"
-                  filled
-                  label="Username"
-                  hint="Displayed name"
-                  lazy-rules
-                  :rules="[
-                    (val) => (val && val.length > 0) || 'Please type something',
-                  ]"
-                  @keyup.enter="changeProfile"
-                >
-                </q-input>
-              </div>
-              <div class="col">
-                <color-picker v-model="color" label="color" />
-              </div>
-              <div class="col">
-                <q-input
-                  v-model="description"
-                  type="textarea"
-                  filled
-                  label="Description"
-                >
-                </q-input>
-              </div>
-            </q-card-section>
-            <q-card-actions align="right" class="q-pa-md">
-              <div>
-                <q-btn
-                  icon="save"
-                  label="save"
-                  color="positive"
-                  title="Change username"
-                  @click="changeProfile"
-                />
-              </div>
-            </q-card-actions>
+              <q-card-section class="q-gutter-lg">
+                <div class="col">
+                  <q-input
+                    v-model="username"
+                    filled
+                    label="Username"
+                    hint="Displayed name"
+                    lazy-rules
+                    :rules="[
+                      (val) =>
+                        (val && val.length > 0) || 'Please type something',
+                    ]"
+                    @keyup.enter="changeProfile"
+                  >
+                  </q-input>
+                </div>
+                <div class="col">
+                  <color-picker v-model="color" label="color" />
+                </div>
+                <div class="col">
+                  <q-input
+                    v-model="description"
+                    type="textarea"
+                    filled
+                    label="Description"
+                  >
+                  </q-input>
+                </div>
+              </q-card-section>
+              <q-card-actions align="right" class="q-pa-md">
+                <div>
+                  <q-btn
+                    icon="save"
+                    label="save"
+                    color="positive"
+                    title="Change username"
+                    type="submit"
+                  />
+                </div>
+              </q-card-actions>
+            </q-form>
           </q-card>
         </div>
         <div class="col">
           <q-card bordered>
-            <q-card-section>
-              <div class="text-h6">Change Password</div>
-            </q-card-section>
-            <q-separator class="q-mx-xl" />
-            <q-card-section class="q-gutter-sm">
-              <password-input
-                v-model="oldPassword"
-                label="Old Password"
-                hint="The password you currently use"
-              />
-              <password-input
-                v-model="newPassword"
-                label="New Password"
-                hint="The new password you want to use"
-                @keyup.enter="changePassword"
-              />
-            </q-card-section>
-            <q-card-actions align="right" class="q-pa-md">
-              <div>
-                <q-btn
-                  icon="save"
-                  label="save"
-                  color="positive"
-                  title="Change username"
-                  @click="changePassword"
+            <q-form @submit="changePassword">
+              <q-card-section>
+                <div class="text-h6">Change Password</div>
+              </q-card-section>
+              <q-separator class="q-mx-xl" />
+              <q-card-section class="q-gutter-sm">
+                <password-input
+                  v-model="oldPassword"
+                  required
+                  autocomplete="current-password"
+                  label="Old Password"
+                  hint="The password you currently use"
                 />
-              </div>
-            </q-card-actions>
+                <password-input
+                  v-model="newPassword"
+                  required
+                  autocomplete="new-password"
+                  label="New Password"
+                  hint="The new password you want to use"
+                  @keyup.enter="changePassword"
+                />
+              </q-card-section>
+              <q-card-actions align="right" class="q-pa-md">
+                <div>
+                  <q-btn
+                    icon="save"
+                    label="save"
+                    color="positive"
+                    title="Change username"
+                    type="submit"
+                  />
+                </div>
+              </q-card-actions>
+            </q-form>
           </q-card>
         </div>
       </div>
@@ -103,14 +112,14 @@
 import UserBadge from 'src/components/Profile/UserBadge.vue';
 import ColorPicker from 'src/components/Utils/ColorPicker.vue';
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
-import { Profile } from 'src/ctfnote';
-import { getMe, useUpdatePassword, useUpdateProfile } from 'src/ctfnote/me';
+import { Profile } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
   components: { PasswordInput, ColorPicker, UserBadge },
   setup() {
-    const { result: me } = getMe();
+    const me = ctfnote.me.injectMe();
 
     const username = ref(me.value.profile?.username ?? '');
     const description = ref(me.value.profile?.description ?? '');
@@ -120,17 +129,18 @@ export default defineComponent({
     watch(
       me,
       (v) => {
-        if (!v.profile?.username) return;
-        username.value = v.profile?.username;
-        description.value = v.profile?.description;
-        color.value = v.profile?.color;
+        if (!v.profile) return;
+        username.value = v.profile.username;
+        description.value = v.profile.description;
+        color.value = v.profile.color;
       },
       { deep: true }
     );
 
     return {
-      updateProfile: useUpdateProfile(),
-      updatePassword: useUpdatePassword(),
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      updateProfile: ctfnote.me.useUpdateProfile(),
+      updatePassword: ctfnote.me.useUpdatePassword(),
       color,
       username,
       description,
@@ -146,18 +156,28 @@ export default defineComponent({
   },
   methods: {
     changeProfile() {
-      if (!this.me.profile) return;
-      void this.updateProfile(this.me.profile, {
-        color: this.color,
-        description: this.description,
-        username: this.username,
-      });
+      const profile = this.me.profile;
+      if (!profile) return;
+
+      void this.wrapNotify(
+        () =>
+          this.updateProfile(profile, {
+            color: this.color,
+            description: this.description,
+            username: this.username,
+          }),
+        { message: 'Profile changed!', icon: 'person' }
+      );
     },
     changePassword() {
-      void this.updatePassword(this.oldPassword, this.newPassword).then(() => {
-        this.oldPassword = '';
-        this.newPassword = '';
-      });
+      void this.wrapNotify(
+        () =>
+          this.updatePassword(this.oldPassword, this.newPassword).then(() => {
+            this.oldPassword = '';
+            this.newPassword = '';
+          }),
+        { message: 'Password changed!', icon: 'lock' }
+      );
     },
   },
 });

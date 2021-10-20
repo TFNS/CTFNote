@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { Role } from 'src/ctfnote';
+import { Role } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
 
 export default defineComponent({

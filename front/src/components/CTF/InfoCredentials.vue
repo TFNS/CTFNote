@@ -24,9 +24,8 @@
 </template>
 
 <script lang="ts">
-import { Ctf } from 'src/ctfnote';
-import { useUpdateCtfCredentials } from 'src/ctfnote/ctfs';
-import { getMe } from 'src/ctfnote/me';
+import { Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -35,9 +34,11 @@ export default defineComponent({
   },
 
   setup() {
-    const { result: me } = getMe();
-
-    return { me, updateCtfCredentials: useUpdateCtfCredentials() };
+    return {
+      me: ctfnote.me.injectMe(),
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      updateCtfCredentials: ctfnote.ctfs.useUpdateCtfCredentials(),
+    };
   },
   methods: {
     editCredentials() {
@@ -60,7 +61,14 @@ export default defineComponent({
           },
         })
         .onOk((credentials: string) => {
-          void this.updateCtfCredentials(this.ctf, credentials);
+          const opts = {
+            message: 'Credentials updated!',
+            icon: 'lock',
+          };
+          void this.wrapNotify(
+            () => this.updateCtfCredentials(this.ctf, credentials),
+            opts
+          );
         });
     },
   },

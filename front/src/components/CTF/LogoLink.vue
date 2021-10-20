@@ -2,10 +2,10 @@
   <q-btn
     :href="ctf.ctfUrl"
     target="_blank"
-    class="logo"
+    class="logo text-white"
     type="a"
     :style="style"
-    icon="icon"
+    :icon="icon"
     round
   >
     <q-tooltip>Browse CTF website</q-tooltip>
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Ctf } from 'src/ctfnote';
+import { Ctf } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -24,7 +24,7 @@ export default defineComponent({
     style() {
       return this.ctf.logoUrl
         ? { '--logo-url': `url(${this.ctf.logoUrl})` }
-        : {};
+        : { 'background-color': 'var(--q-primary)' };
     },
     icon() {
       return this.ctf.logoUrl ? '' : 'language';

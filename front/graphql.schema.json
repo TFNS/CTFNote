@@ -3311,41 +3311,6 @@
       },
       {
         "kind": "OBJECT",
-        "name": "MeResponse",
-        "description": null,
-        "fields": [
-          {
-            "name": "jwt",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Jwt",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "profile",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "Profile",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
         "name": "Mutation",
         "description": "The root mutation type which contains root level fields which mutate data.",
         "fields": [
@@ -5660,7 +5625,19 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "MeResponse",
+              "name": "Profile",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "newToken",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Jwt",
               "ofType": null
             },
             "isDeprecated": false,

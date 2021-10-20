@@ -92,9 +92,8 @@ import {
 import '@quasar/quasar-ui-qcalendar/src/QCalendarMonth.sass';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarTransitions.sass';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarVariables.sass';
-import { Ctf } from 'src/ctfnote';
-import { getAllCtfs } from 'src/ctfnote/ctfs';
-import { colorHash } from 'src/ctfnote/utils';
+import { Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, ref } from 'vue';
 
 function dateToLocale(s: string, offset = 0): string {
@@ -106,7 +105,7 @@ function dateToLocale(s: string, offset = 0): string {
 export default defineComponent({
   components: { QCalendarMonth },
   setup() {
-    const { result: ctfs, loading } = getAllCtfs();
+    const { result: ctfs, loading } = ctfnote.ctfs.getAllCtfs();
     return {
       calendar: ref<QCalendar>(),
       ctfs,
@@ -137,7 +136,7 @@ export default defineComponent({
           events.push({
             ctf,
             style: {
-              backgroundColor: colorHash(ctf.title),
+              backgroundColor: ctfnote.utils.colorHash(ctf.title),
             },
             days: 7,
           });

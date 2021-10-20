@@ -1,48 +1,34 @@
+import { useApolloClient } from '@vue/apollo-composable';
 import {
-  MeFragment,
+  MeDocument,
+  ProfileFragment,
   ProfilePatch,
   useMeQuery,
   useUpdatePasswordMutation,
   useUpdateProfileMutation,
 } from 'src/generated/graphql';
-import { Me, Profile, Role } from '.';
+import { inject, InjectionKey, provide, Ref } from 'vue';
+import { Me, Profile, Role } from './models';
 import { buildProfile } from './profiles';
-import { wrapNotify, wrapQuery } from './utils';
-
+import { wrapQuery } from './utils';
 /* Builders */
 
-export function buildMe(me: MeFragment | null): Me {
-  const jwt = me?.jwt ?? null;
-  const profile = me?.profile ? buildProfile(me.profile) : null;
+export function buildMe(me: ProfileFragment): Me {
+  const profile = buildProfile(me);
   const isLogged = !!profile;
   const isAdmin = profile?.role == Role.UserAdmin;
   const isManager = isAdmin || profile?.role == Role.UserManager;
   const isMember = isManager || profile?.role == Role.UserMember;
   const isGuest = isMember || profile?.role == Role.UserGuest;
+
   return {
     profile,
-    jwt,
     isAdmin,
     isManager,
     isMember,
     isGuest,
     isLogged,
   };
-}
-
-/* Callbacks  */
-
-type Callback = () => void;
-
-const onLoginCallbacks: Callback[] = [];
-const onLogoutCallbacks: Callback[] = [];
-
-export function onLogin(cb: Callback) {
-  onLoginCallbacks.push(cb);
-}
-
-export function onLogout(cb: Callback) {
-  onLogoutCallbacks.push(cb);
 }
 
 /* Queries */
@@ -52,23 +38,11 @@ export function getMe(refresh = false) {
     fetchPolicy: refresh ? 'network-only' : 'cache-first',
   });
 
-  const query = wrapQuery(q, buildMe({}), (data) => {
+  const query = wrapQuery(q, null, (data) => {
     return buildMe(data.me);
-  });
-  query.onResult((r) => {
-    if (r.jwt) {
-      localStorage.setItem('JWT', r.jwt);
-    }
-    if (r.profile) {
-      onLoginCallbacks.forEach((cb) => cb());
-    } else {
-      onLogoutCallbacks.forEach((cb) => cb());
-    }
   });
   return query;
 }
-
-
 
 /* Mutations */
 
@@ -76,20 +50,55 @@ export function useUpdateProfile() {
   const { mutate } = useUpdateProfileMutation({});
 
   return async (profile: Profile, patch: ProfilePatch) => {
-    try {
-      await wrapNotify(mutate({ id: profile.id, patch }), 'Profile changed.');
-    } catch {}
+    return mutate({ id: profile.id, patch });
   };
 }
 
 export function useUpdatePassword() {
   const { mutate } = useUpdatePasswordMutation({});
   return async (oldPassword: string, newPassword: string) => {
-    try {
-      await wrapNotify(
-        mutate({ oldPassword, newPassword }),
-        'Password changed.'
-      );
-    } catch {}
+    return mutate({ oldPassword, newPassword });
   };
+}
+
+/* Global provider  */
+
+const MeSymbol: InjectionKey<Ref<Me>> = Symbol('me');
+
+export function provideMe() {
+  const { result: me } = getMe();
+  provide(MeSymbol, me);
+  return me;
+}
+
+export function injectMe() {
+  const me = inject(MeSymbol);
+  if (!me) {
+    throw 'ERROR';
+  }
+
+  return me;
+}
+
+/* Prefetch */
+
+export function prefetchMe() {
+  const { client } = useApolloClient();
+  return client.query({
+    query: MeDocument,
+    fetchPolicy: 'network-only',
+  });
+}
+
+export async function isLogged() {
+  const { client } = useApolloClient();
+  try {
+    const r = await client.query<{ me: unknown }>({
+      query: MeDocument,
+      fetchPolicy: 'cache-only',
+    });
+    return !!r.data.me;
+  } catch {
+    return false;
+  }
 }

@@ -61,8 +61,8 @@
 </template>
 
 <script lang="ts">
-import { Role } from 'src/ctfnote';
-import { getAdminSettings, updateSettings } from 'src/ctfnote/settings';
+import { Role } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent, ref, watch } from 'vue';
 import PasswordInput from '../Utils/PasswordInput.vue';
 import SelectRole from '../Utils/SelectRole.vue';
@@ -70,7 +70,7 @@ import SelectRole from '../Utils/SelectRole.vue';
 export default defineComponent({
   components: { PasswordInput, SelectRole },
   setup() {
-    const { result: adminSettings } = getAdminSettings();
+    const { result: adminSettings } = ctfnote.settings.getAdminSettings();
 
     const registrationPassword = ref('');
 
@@ -83,6 +83,8 @@ export default defineComponent({
     );
 
     return {
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      updateSettings: ctfnote.settings.useUpdateSettings(),
       adminSettings,
       registrationPassword,
     };
@@ -93,7 +95,17 @@ export default defineComponent({
         return this.adminSettings.registrationAllowed ?? true;
       },
       set(registrationAllowed: boolean) {
-        void updateSettings({ registrationAllowed });
+        const opts = {
+          message: registrationAllowed
+            ? 'Registration enabled'
+            : 'Registration disabled',
+          icon: 'lock',
+        };
+
+        void this.wrapNotify(
+          () => this.updateSettings({ registrationAllowed }),
+          opts
+        );
       },
     },
     registrationPasswordAllowed: {
@@ -101,7 +113,17 @@ export default defineComponent({
         return this.adminSettings.registrationPasswordAllowed ?? true;
       },
       set(registrationPasswordAllowed: boolean) {
-        void updateSettings({ registrationPasswordAllowed });
+        const opts = {
+          message: registrationPasswordAllowed
+            ? 'Registration with password enabled!'
+            : 'Registration with password disabled!',
+          icon: 'lock',
+        };
+
+        void this.wrapNotify(
+          () => this.updateSettings({ registrationPasswordAllowed }),
+          opts
+        );
       },
     },
     registrationDefaultRole: {
@@ -109,16 +131,34 @@ export default defineComponent({
         return this.adminSettings.registrationDefaultRole ?? Role.UserGuest;
       },
       set(registrationDefaultRole: Role) {
-        void updateSettings({ registrationDefaultRole });
+        const roleName = registrationDefaultRole.slice(5).toLowerCase();
+        const opts = {
+          message: `Default role set to ${roleName}!`,
+          icon: 'lock',
+        };
+
+        void this.wrapNotify(
+          () => this.updateSettings({ registrationDefaultRole }),
+          opts
+        );
       },
     },
   },
   watch: {},
   methods: {
     updateRegistrationPassword() {
-      void updateSettings({
-        registrationPassword: this.registrationPassword,
-      });
+      const opts = {
+        message: 'Registration password changed!',
+        icon: 'lock',
+      };
+
+      void this.wrapNotify(
+        () =>
+          this.updateSettings({
+            registrationPassword: this.registrationPassword,
+          }),
+        opts
+      );
     },
   },
 });

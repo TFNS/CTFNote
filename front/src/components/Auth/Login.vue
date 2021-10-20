@@ -1,18 +1,19 @@
 <template>
-  <q-form @submit="submit">
-    <q-card>
+  <q-card>
+    <q-form @submit="submit">
       <q-card-section>
-        <div class="text-h6">Login on CTFNote</div>
+        <div class="text-h5">Login</div>
       </q-card-section>
-      <q-card-section class="q-gutter-sm">
+      <q-card-section class="q-gutter-md">
         <q-input
           v-model="form.login"
           filled
+          autocomplete="username"
+          autocapitalize="none"
           label="Login"
-          lazy-rules
-          :rules="[required]"
+          required
         />
-        <password-input v-model="form.password" :rules="[required]" />
+        <password-input v-model="form.password" required />
 
         <q-input
           v-if="!!token"
@@ -21,27 +22,29 @@
           :model-value="token"
           label="Token"
         />
+      </q-card-section>
+      <q-card-actions class="q-pa-md row justify-between">
         <div v-if="registrationEnabled">
           I don't have an account:
-          <ctf-note-link
-            name="auth-register"
-            class="text-primary"
-            label="register"
-            underline
-          />.
+          <b>
+            <ctf-note-link
+              name="auth-register"
+              class="text-primary"
+              label="REGISTER"
+              underline
+            />
+          </b>
         </div>
-      </q-card-section>
-      <q-card-actions class="q-pa-md" align="right">
+        <div v-else />
         <q-btn type="submit" label="Login" color="primary" />
       </q-card-actions>
-    </q-card>
-  </q-form>
+    </q-form>
+  </q-card>
 </template>
 
 <script lang="ts">
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
-import { useLogin } from 'src/ctfnote/auth';
-import { getSettings } from 'src/ctfnote/settings';
+import { ctfnote } from 'src/ctfnote';
 import { defineComponent, reactive } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 
@@ -51,10 +54,10 @@ export default defineComponent({
     token: { type: String, default: '' },
   },
   setup() {
-    const { result: settings } = getSettings();
     return {
-      settings,
-      login: useLogin(),
+      settings: ctfnote.settings.injectSettings(),
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      login: ctfnote.auth.useLogin(),
       allowRegistration: true,
       form: reactive({
         login: '',
@@ -71,13 +74,15 @@ export default defineComponent({
     },
   },
   methods: {
-    required(val: string) {
-      if (!val) {
-        return 'Please type something';
-      }
-    },
     submit() {
-      void this.login(this.form.login, this.form.password);
+      const login = this.form.login;
+      void this.wrapNotify(
+        () => this.login(this.form.login, this.form.password),
+        {
+          message: `Logged as ${login}!`,
+          icon: 'person',
+        }
+      );
     },
   },
 });

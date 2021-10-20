@@ -85,11 +85,11 @@ const ctfRoute: RouteRecordRaw = {
 };
 
 const authRoute: RouteRecordRaw = {
-  path: 'auth',
+  path: '/auth',
   name: 'auth',
   meta: { public: true },
   redirect: { name: 'auth-login' },
-  component: () => import('pages/Auth.vue'),
+  component: () => import('layouts/PublicLayout.vue'),
   children: [
     {
       path: 'login',
@@ -111,7 +111,7 @@ const authRoute: RouteRecordRaw = {
       component: () => import('components/Auth/Register.vue'),
     },
     {
-      path: 'resetPassword/:token',
+      path: 'reset-password/:token',
       name: 'auth-reset-password',
       meta: { public: true, title: 'Register' },
       props: (route) => ({ token: route.params.token }),
@@ -166,15 +166,9 @@ const routes: RouteRecordRaw[] = [
     name: 'index',
     redirect: { name: 'ctfs' },
     component: () => import('layouts/MainLayout.vue'),
-    children: [
-      authRoute,
-      userRoute,
-      ctfsRoute,
-      ctfRoute,
-      adminRoute,
-      teamRoute,
-    ],
+    children: [userRoute, ctfsRoute, ctfRoute, adminRoute, teamRoute],
   },
+  authRoute,
   {
     path: '/:catchAll(.*)*',
     name: '404',
