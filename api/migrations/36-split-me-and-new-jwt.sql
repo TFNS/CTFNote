@@ -18,7 +18,6 @@ STRICT STABLE;
 GRANT EXECUTE ON FUNCTION ctfnote.me () TO user_anonymous;
 
 
-DROP FUNCTION ctfnote.new_token;
 CREATE OR REPLACE FUNCTION ctfnote.new_token ()
   RETURNS ctfnote.jwt
   AS $$
