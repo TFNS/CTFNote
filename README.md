@@ -1,4 +1,6 @@
+[![CTFNote logo](screenshots/logo_small.webp)](screenshots/logo.png)
 # CTFNote
+
 ## Introduction
 CTFNote is a collaborative tool aiming to help CTF teams to organise their work.
 
