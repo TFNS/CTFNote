@@ -18,6 +18,7 @@ export default defineComponent({
   setup() {
     const options = [
       { label: 'Guest', value: Role.UserGuest },
+      { label: 'Past ctfs', value: Role.UserPastCtfs },
       { label: 'Member', value: Role.UserMember },
       { label: 'Manager', value: Role.UserManager },
       { label: 'Admin', value: Role.UserAdmin },

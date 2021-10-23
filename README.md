@@ -87,6 +87,12 @@ specific CTF.
 
 ![Screenshot of the guest menu](screenshots/guests.png)
 
+### Past CTFs
+Past CTFs is a role between guest and member which allows the player to automatically 
+view old CTFs but not active and upcoming CTFs. They are also not allowed to invite any
+new players to a CTF. You can use this role to grant guests access to your old CTFs
+for them to learn from without granting access to each old CTF individually.
+
 ### Member
 Member is a role that represents a team member. A certain level of trust is
 given to these users: they can see every CTF, future, current and past. They can

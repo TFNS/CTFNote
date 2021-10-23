@@ -1380,7 +1380,8 @@ export enum Role {
   UserAdmin = 'USER_ADMIN',
   UserGuest = 'USER_GUEST',
   UserManager = 'USER_MANAGER',
-  UserMember = 'USER_MEMBER'
+  UserMember = 'USER_MEMBER',
+  UserPastCtfs = 'USER_PAST_CTFS',
 }
 
 export type Setting = Node & {
