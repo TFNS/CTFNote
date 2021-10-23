@@ -46,6 +46,14 @@
         {{ task.description || '...' }}
       </div>
     </q-card-section>
+    <q-card-section v-if="!isDense">
+      <q-flex class="row"
+        ><user-badge
+          :profile="player"
+          :key="player.nodeId"
+          v-for="player in players"
+      /></q-flex>
+    </q-card-section>
     <q-card-section v-show="!isDense">
       <div class="row q-gutter-sm">
         <ctf-note-link name="task" :ctf="ctf" :task="task">
@@ -104,9 +112,10 @@ import { defineComponent } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import TaskBadge from './TaskBadge.vue';
 import TaskMenu from './TaskMenu.vue';
+import UserBadge from '../Profile/UserBadge.vue';
 
 export default defineComponent({
-  components: { TaskBadge, CtfNoteLink, TaskMenu },
+  components: { TaskBadge, CtfNoteLink, TaskMenu, UserBadge },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
     task: { type: Object as () => Task, required: true },
@@ -150,6 +159,9 @@ export default defineComponent({
     },
     showBadge() {
       return this.task.solved || this.task.workOnTasks.length > 0;
+    },
+    players() {
+      return this.team.filter((p) => this.task.workOnTasks.includes(p.id));
     },
   },
   methods: {
