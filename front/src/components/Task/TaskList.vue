@@ -233,7 +233,7 @@ export default defineComponent({
         .dialog({
           title: `Delete ${task.title} ?`,
           color: 'negative',
-          message: 'This will delete all the tasks, but not the pads.',
+          message: 'This will delete the task, but not the pads.',
           ok: 'Delete',
           cancel: true,
         })
