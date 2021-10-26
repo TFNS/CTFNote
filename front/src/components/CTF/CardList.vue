@@ -5,15 +5,23 @@
       :key="idx"
       class="column col q-gutter-lg justify-start align-center"
     >
-      <div v-for="ctf in column" :key="ctf.nodeId">
-        <card :ctf="ctf" />
-      </div>
+      <q-intersection
+        v-for="ctf in column"
+        :key="ctf.nodeId"
+        once
+        style="min-height: 550px;"
+        transition="fade"
+      >
+        <div>
+          <card :ctf="ctf" />
+        </div>
+      </q-intersection>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Ctf } from 'src/ctfnote';
+import { Ctf } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
 import Card from './Card.vue';
 export default defineComponent({
