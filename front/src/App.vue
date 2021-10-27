@@ -12,13 +12,16 @@ export default defineComponent({
     watch(
       loading,
       (isLoading) => {
-        if (!isLoading) {
-          const loadingscreen = document.getElementById('loadingscreen');
-          if (!loadingscreen) return;
+        const loadingscreen = document.getElementById('loadingscreen');
+        if (!loadingscreen) return;
+
+        if (isLoading) {
+          loadingscreen.classList.remove('fadeout');
+        } else {
           loadingscreen.classList.add('fadeout');
-          window.setTimeout(() => (loadingscreen.style.display = 'none'), 1500);
         }
-      }
+      },
+      { immediate: true }
     );
   },
 });

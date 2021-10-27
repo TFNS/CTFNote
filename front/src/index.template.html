@@ -52,12 +52,13 @@
         position: fixed;
         top: 0;
         left: 0;
-        transition: transform  ease-out .5s ;
+        transition: none ;
         z-index: 100000;
       }
 
       #loadingscreen.fadeout {
         transform: translateY(100vh);
+        transition: transform  ease-out .5s .2s ;
         pointer-events: none;
       }
 
@@ -89,6 +90,6 @@
   <body>
     <!-- DO NOT touch the following DIV -->
     <div id="q-app"></div>
-    <div id="loadingscreen"></div>
+    <div id="loadingscreen" ontransitionend="this.style.display='none'"></div>
   </body>
 </html>
