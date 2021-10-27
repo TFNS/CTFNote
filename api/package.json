@@ -25,12 +25,15 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "graphile-utils": "^4.11.2",
+    "graphql": "^15.6.1",
+    "graphql-upload": "^12.0.0",
     "postgraphile": "^4.11.0",
     "postgraphile-plugin-connection-filter": "^2.1.1",
     "postgres-migrations": "^5.3.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
+    "@types/graphql-upload": "^8.0.7",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.24.0",

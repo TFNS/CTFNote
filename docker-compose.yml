@@ -18,6 +18,8 @@ services:
       WEB_PORT: 3000
     depends_on:
       - db
+    volumes:
+      - ctfnote-uploads:/app/uploads
   db:
     build:
       context: "./db"
@@ -57,6 +59,8 @@ services:
 volumes:
   ctfnote-db:
     name: ctfnote
+  ctfnote-uploads:
+    name: ctfnote-uploads
   pad-uploads:
     name: pad-uploads
 networks:

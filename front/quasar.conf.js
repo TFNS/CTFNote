@@ -84,6 +84,9 @@ module.exports = configure(function (ctx) {
           target: 'http://127.0.0.1:3000',
           ws: true,
         },
+        '/uploads': {
+          target: 'http://127.0.0.1:3000',
+        },
         '/pad': {
           target: 'http://127.0.0.1:3001/',
           pathRewrite: {

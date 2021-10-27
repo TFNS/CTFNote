@@ -73,7 +73,6 @@ export default defineComponent({
   },
   methods: {
     submit() {
-      console.log('SUBMIT', this);
       if (this.ctfId) {
         void this.createTask(this.ctfId, this.form);
       } else if (this.task) {
