@@ -48,7 +48,8 @@ COPY --from=clean /app/ /app/
 # Install yarn ASAP because it's the slowest
 RUN yarn install --frozen-lockfile --production=true --no-progress
 RUN chmod -R 0555 .
-
+RUN mkdir /app/uploads
+RUN chown node /app/uploads
 # You might want to disable GRAPHILE_TURBO if you have issues
 ENV GRAPHILE_TURBO=1
 ENV NODE_ENV=$NODE_ENV
