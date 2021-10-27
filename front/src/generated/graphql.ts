@@ -27,6 +27,8 @@ export type Scalars = {
    * which securely represents claims between two parties.
    */
   Jwt: string;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: File;
 };
 
 /** All input for the `changePassword` mutation. */
@@ -700,6 +702,7 @@ export type Mutation = {
   /** Updates a single `Task` using its globally unique id and a patch. */
   updateTaskByNodeId?: Maybe<UpdateTaskPayload>;
   updateUserRole?: Maybe<UpdateUserRolePayload>;
+  uploadCtfLogo: Scalars['String'];
 };
 
 
@@ -892,6 +895,12 @@ export type MutationUpdateTaskByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserRoleArgs = {
   input: UpdateUserRoleInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUploadCtfLogoArgs = {
+  logo: Scalars['Upload'];
 };
 
 /** An object with a globally unique `ID`. */
@@ -2294,6 +2303,13 @@ export type SubscribeToTaskSubscriptionVariables = Exact<{ [key: string]: never;
 
 
 export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+
+export type UploadLogoMutationVariables = Exact<{
+  logo: Scalars['Upload'];
+}>;
+
+
+export type UploadLogoMutation = { __typename?: 'Mutation', uploadCtfLogo: string };
 
 export const ProfileFragmentDoc = gql`
     fragment ProfileFragment on Profile {
@@ -3761,6 +3777,33 @@ export function useSubscribeToTaskSubscription(options: VueApolloComposable.UseS
   return VueApolloComposable.useSubscription<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>(SubscribeToTaskDocument, {}, options);
 }
 export type SubscribeToTaskSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToTaskSubscription, SubscribeToTaskSubscriptionVariables>;
+export const UploadLogoDocument = gql`
+    mutation uploadLogo($logo: Upload!) {
+  uploadCtfLogo(logo: $logo)
+}
+    `;
+
+/**
+ * __useUploadLogoMutation__
+ *
+ * To run a mutation, you first call `useUploadLogoMutation` within a Vue component and pass it any options that fit your needs.
+ * When your component renders, `useUploadLogoMutation` returns an object that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - Several other properties: https://v4.apollo.vuejs.org/api/use-mutation.html#return
+ *
+ * @param options that will be passed into the mutation, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/mutation.html#options;
+ *
+ * @example
+ * const { mutate, loading, error, onDone } = useUploadLogoMutation({
+ *   variables: {
+ *     logo: // value for 'logo'
+ *   },
+ * });
+ */
+export function useUploadLogoMutation(options: VueApolloComposable.UseMutationOptions<UploadLogoMutation, UploadLogoMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UploadLogoMutation, UploadLogoMutationVariables>>) {
+  return VueApolloComposable.useMutation<UploadLogoMutation, UploadLogoMutationVariables>(UploadLogoDocument, options);
+}
+export type UploadLogoMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UploadLogoMutation, UploadLogoMutationVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
@@ -4311,3 +4354,8 @@ export const SubscribeToTask = gql`
   }
 }
     ${TaskFragment}`;
+export const UploadLogo = gql`
+    mutation uploadLogo($logo: Upload!) {
+  uploadCtfLogo(logo: $logo)
+}
+    `;

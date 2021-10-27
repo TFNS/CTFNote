@@ -20,6 +20,7 @@ generates:
         Datetime: string
         JSON: string
         Jwt: string
+        Upload: File
   ./graphql.schema.json:
     plugins:
       - 'introspection'
