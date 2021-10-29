@@ -34,6 +34,16 @@
       </div>
     </q-card-section>
     <q-separator v-show="!isUltraDense" inset />
+    <q-card-section v-if="!isDense">
+      <q-flex class="row">
+        <user-badge
+          :profile="player"
+          :key="player.nodeId"
+          v-for="player in players"
+        />
+        <q-chip style="visibility: hidden"></q-chip>
+      </q-flex>
+    </q-card-section>
     <q-card-section v-show="!isUltraDense" class="q-mb-xs">
       <div
         v-if="task.solved"
@@ -45,14 +55,6 @@
       <div v-else class="task-description">
         {{ task.description || '...' }}
       </div>
-    </q-card-section>
-    <q-card-section v-if="!isDense">
-      <q-flex class="row"
-        ><user-badge
-          :profile="player"
-          :key="player.nodeId"
-          v-for="player in players"
-      /></q-flex>
     </q-card-section>
     <q-card-section v-show="!isDense">
       <div class="row q-gutter-sm">
