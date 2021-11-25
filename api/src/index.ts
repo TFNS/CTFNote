@@ -11,6 +11,7 @@ import {
 import { migrate, MigrateDBConfig } from "postgres-migrations";
 import config from "./config";
 import createTasKPlugin from "./plugins/createTask";
+import hedgedocAuth from "./plugins/hedgedocAuth";
 import importCtfPlugin from "./plugins/importCtf";
 import uploadLogoPlugin from "./plugins/uploadLogo";
 import uploadScalar from "./plugins/uploadScalar";
@@ -43,10 +44,16 @@ function createOptions() {
       importCtfPlugin,
       uploadLogoPlugin,
       createTasKPlugin,
+      hedgedocAuth,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
     legacyRelations: "omit" as const,
+    async additionalGraphQLContextFromRequest(req, res) {
+      return {
+        setHeader: (name: string, value: string | number) => res.setHeader(name, value)
+      };
+    },
   };
 
   if (config.env == "development") {

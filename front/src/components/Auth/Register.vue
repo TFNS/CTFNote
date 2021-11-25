@@ -10,6 +10,12 @@
             v-model="form.login"
             filled
             label="Choose a login"
+            lazy-rules
+            :rules="[
+              val => (val && val.length > 0) || 'Please type something',
+              val => (val && val.indexOf('@') === -1) || 'Please don\'t use @',
+              val => (val && val !== 'ctfnote') || 'ctfnote is resvered for internal use.',
+            ]"
             required
           />
           <password-input

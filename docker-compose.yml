@@ -8,6 +8,8 @@ services:
     environment:
       PAD_CREATE_URL: http://hedgedoc:3000/new
       PAD_SHOW_URL: /
+      # openssl rand -hex 10 (doesn't really have to be unique because login is disabled for outsiders anway)
+      PAD_OWNER_PASS: 14022f541a9aa7631087
       DB_DATABASE: ctfnote
       DB_ADMIN_LOGIN: ctfnote
       DB_ADMIN_PASSWORD: ctfnote
@@ -50,6 +52,8 @@ services:
       - CMD_PROTOCOL_USESSL
       - CMD_CSP_ENABLE=${CMD_CSP_ENABLE:-false}
       - CMD_IMAGE_UPLOAD_TYPE=${CMD_IMAGE_UPLOAD_TYPE:-imgur}
+      - CMD_ALLOW_ANONYMOUS=false
+      - CMD_ALLOW_AgNONYMOUS_EDITS=false
     depends_on:
       - db
     restart: always

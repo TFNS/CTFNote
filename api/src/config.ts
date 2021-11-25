@@ -25,6 +25,7 @@ export type CTFNoteConfig = DeepReadOnly<{
   pad: {
     createUrl: string;
     showUrl: string;
+    ownerPass: string;
   };
 
   web: {
@@ -60,6 +61,7 @@ const config: CTFNoteConfig = {
   pad: {
     createUrl: getEnv("PAD_CREATE_URL"),
     showUrl: getEnv("PAD_SHOW_URL"),
+    ownerPass: getEnv("PAD_OWNER_PASS"),
   },
   web: {
     port: getEnvInt("WEB_PORT"),

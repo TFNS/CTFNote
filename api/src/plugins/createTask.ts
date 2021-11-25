@@ -1,12 +1,17 @@
 import { makeExtendSchemaPlugin, gql } from "graphile-utils";
 import axios from "axios";
 import savepointWrapper from "./savepointWrapper";
+import { HedgedocAuth } from "./hedgedocAuth";
 import config from "../config";
 
 async function createPad(): Promise<string> {
+  const Cookie = await HedgedocAuth.login("ctfnote", config.pad.ownerPass);
   try {
     const res = await axios.get(config.pad.createUrl, {
       maxRedirects: 0,
+      headers: {
+        Cookie,
+      },
       validateStatus: (status) => status === 302,
     });
     return res.headers.location;
