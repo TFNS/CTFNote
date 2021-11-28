@@ -37,9 +37,8 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Profile, Role } from 'src/ctfnote';
-import { useInviteUserToCtf, useUninviteUserToCtf } from 'src/ctfnote/ctfs';
-import { getTeam } from 'src/ctfnote/profiles';
+import { Ctf, Profile, Role } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -47,12 +46,12 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const { result: team } = getTeam();
+    const { result: team } = ctfnote.profiles.getTeam();
 
     return {
       team,
-      inviteUserToCtf: useInviteUserToCtf(),
-      uninviteUserToCtf: useUninviteUserToCtf(),
+      inviteUserToCtf: ctfnote.ctfs.useInviteUserToCtf(),
+      uninviteUserToCtf: ctfnote.ctfs.useUninviteUserToCtf(),
     };
   },
   computed: {

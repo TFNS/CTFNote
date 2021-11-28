@@ -18,6 +18,8 @@ services:
       WEB_PORT: 3000
     depends_on:
       - db
+    volumes:
+      - ctfnote-uploads:/app/uploads
   db:
     build:
       context: "./db"
@@ -38,13 +40,14 @@ services:
     depends_on:
       - hedgedoc
     ports:
-      - 80:80
+      - 8080:80
   hedgedoc:
     image: quay.io/hedgedoc/hedgedoc:1.9.0-alpine
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad
       - CMD_DOMAIN
+      - CMD_PROTOCOL_USESSL
       - CMD_CSP_ENABLE=${CMD_CSP_ENABLE:-false}
       - CMD_IMAGE_UPLOAD_TYPE=${CMD_IMAGE_UPLOAD_TYPE:-imgur}
     depends_on:
@@ -57,6 +60,8 @@ services:
 volumes:
   ctfnote-db:
     name: ctfnote
+  ctfnote-uploads:
+    name: ctfnote-uploads
   pad-uploads:
     name: pad-uploads
 networks:

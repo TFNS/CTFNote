@@ -34,6 +34,16 @@
       </div>
     </q-card-section>
     <q-separator v-show="!isUltraDense" inset />
+    <q-card-section v-if="!isDense">
+      <q-flex class="row">
+        <user-badge
+          :profile="player"
+          :key="player.nodeId"
+          v-for="player in players"
+        />
+        <q-chip style="visibility: hidden"></q-chip>
+      </q-flex>
+    </q-card-section>
     <q-card-section v-show="!isUltraDense" class="q-mb-xs">
       <div
         v-if="task.solved"
@@ -98,17 +108,16 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Task } from 'src/ctfnote';
-import { getMe } from 'src/ctfnote/me';
-import { getTeam } from 'src/ctfnote/profiles';
-import { colorHash } from 'src/ctfnote/utils';
+import { Ctf, Task } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import TaskBadge from './TaskBadge.vue';
 import TaskMenu from './TaskMenu.vue';
+import UserBadge from '../Profile/UserBadge.vue';
 
 export default defineComponent({
-  components: { TaskBadge, CtfNoteLink, TaskMenu },
+  components: { TaskBadge, CtfNoteLink, TaskMenu, UserBadge },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
     task: { type: Object as () => Task, required: true },
@@ -126,8 +135,8 @@ export default defineComponent({
     'filter-category',
   ],
   setup() {
-    const { result: me } = getMe();
-    const { result: team } = getTeam();
+    const me = ctfnote.me.injectMe();
+    const { result: team } = ctfnote.profiles.getTeam();
     return { me, team };
   },
   computed: {
@@ -153,10 +162,13 @@ export default defineComponent({
     showBadge() {
       return this.task.solved || this.task.workOnTasks.length > 0;
     },
+    players() {
+      return this.team.filter((p) => this.task.workOnTasks.includes(p.id));
+    },
   },
   methods: {
     colorHash(s?: string | null) {
-      return { backgroundColor: colorHash(s ?? '') };
+      return { backgroundColor: ctfnote.utils.colorHash(s ?? '') };
     },
     updateOnIt(v: boolean) {
       if (v) {

@@ -23,12 +23,12 @@ module.exports = configure(function (ctx) {
     },
 
     // https://v2.quasar.dev/quasar-cli/prefetch-feature
-    // preFetch: true,
+    preFetch: true,
 
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['apollo'],
+    boot: ['apollo', 'ctfnote'],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ['app.scss'],
@@ -84,6 +84,9 @@ module.exports = configure(function (ctx) {
           target: 'http://127.0.0.1:3000',
           ws: true,
         },
+        '/uploads': {
+          target: 'http://127.0.0.1:3000',
+        },
         '/pad': {
           target: 'http://127.0.0.1:3001/',
           pathRewrite: {
@@ -109,7 +112,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify', 'Dialog'],
+      plugins: ['Notify', 'Dialog', 'LoadingBar'],
     },
 
     // animations: 'all', // --- includes all animations

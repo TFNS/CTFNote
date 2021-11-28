@@ -1,4 +1,4 @@
-import { ApolloClient /*, createHttpLink */ } from '@apollo/client/core';
+import { ApolloClient } from '@apollo/client/core';
 import { ApolloClients, provideApolloClient } from '@vue/apollo-composable';
 import { boot } from 'quasar/wrappers';
 import { getClientOptions } from 'src/apollo';

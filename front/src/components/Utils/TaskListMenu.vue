@@ -1,6 +1,6 @@
 <template>
   <div class="text-h6">
-    <q-btn-dropdown stretch flat round :split="!!task" :to="taskLink(task)">
+    <q-btn-dropdown stretch flat round>
       <template #label>
         <div class="row q-gutter-md items-center">
           <div>{{ title }}</div>
@@ -22,23 +22,30 @@
           >
             <q-item-section>
               <q-item-label>
-                <div>
-                  {{ t.title }}
-                  <q-badge
-                    v-if="t.solved"
-                    color="positive"
-                    class="q-ml-sm"
-                    transparent
-                  >
-                    ⚑
-                  </q-badge>
+                <div class="row" style="max-width: 200px">
+                  <div class="col">
+                    <div class="ellipsis">
+                      {{ t.title }}
+                    </div>
+                  </div>
+                  <div v-show="t.solved" class="col col-auto q-ml-xs">
+                    <q-badge icon="flag" color="green" rounded>
+                      <q-icon name="flag" />
+                    </q-badge>
+                  </div>
                 </div>
               </q-item-label>
             </q-item-section>
             <q-item-section side>
-              <q-chip class="text-white" :style="colorHash(t.category)">{{
-                t.category
-              }}</q-chip>
+              <q-chip
+                class="text-white"
+                style="max-width: 90px"
+                :style="colorHash(t.category)"
+              >
+                <div class="ellipsis">
+                  {{ t.category }}
+                </div>
+              </q-chip>
             </q-item-section>
           </q-item>
         </q-list>
@@ -48,8 +55,8 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Task } from 'src/ctfnote';
-import { colorHash } from 'src/ctfnote/utils';
+import { Ctf, Task } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -97,8 +104,8 @@ export default defineComponent({
       };
     },
 
-    colorHash(s?: string | null) {
-      return { backgroundColor: colorHash(s ?? '') };
+    colorHash(s: string) {
+      return { backgroundColor: ctfnote.utils.colorHash(s) };
     },
   },
 });

@@ -18,37 +18,37 @@
         />
       </div>
     </div>
-    <q-inner-loading :showing="loading">
-      <q-spinner-gears size="50px" color="primary" />
-    </q-inner-loading>
   </div>
 </template>
 
 <script lang="ts">
-import { getIncomingCtfs } from 'src/ctfnote/ctfs';
-import { openCreateCtfDialog, openImportCtfDialog } from 'src/ctfnote/dialog';
-import { getMe } from 'src/ctfnote/me';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
+import EditCtfDialogVue from '../Dialogs/EditCtfDialog.vue';
+import ImportCtfDialogVue from '../Dialogs/ImportCtfDialog.vue';
 import CardList from './CardList.vue';
 
 export default defineComponent({
   components: { CardList },
   setup() {
-    const { result: ctfs, loading } = getIncomingCtfs();
+    const { result: ctfs, loading } = ctfnote.ctfs.getIncomingCtfs();
 
-    const { result: me } = getMe();
     return {
+      me: ctfnote.me.injectMe(),
       ctfs,
-      me,
       loading,
     };
   },
   methods: {
     openCreateCtfDialog() {
-      openCreateCtfDialog();
+      this.$q.dialog({
+        component: EditCtfDialogVue,
+      });
     },
     openImportCtfDialog() {
-      openImportCtfDialog();
+      this.$q.dialog({
+        component: ImportCtfDialogVue,
+      });
     },
   },
 });

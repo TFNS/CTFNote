@@ -20,8 +20,8 @@
 </template>
 
 <script lang="ts">
-import { Id, Ctf } from 'src/ctfnote';
-import { getCtf } from 'src/ctfnote/ctfs';
+import { Id, Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { Task } from 'src/generated/graphql';
 import { defineComponent } from 'vue';
 import TaskListMenu from '../Utils/TaskListMenu.vue';
@@ -33,7 +33,7 @@ export default defineComponent({
     taskId: { type: Number as unknown as () => Id<Task> | null, default: null },
   },
   setup(props) {
-    const { result: ctf } = getCtf(() => ({ id: props.ctfId }));
+    const { result: ctf } = ctfnote.ctfs.getCtf(() => ({ id: props.ctfId }));
     return { ctf };
   },
 });

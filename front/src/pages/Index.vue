@@ -29,14 +29,14 @@
           push
           icon="add"
           label="Create"
-          @click="openCreateCtfDialog()"
+          @click="openCreateCtfDialog"
         />
         <q-fab-action
           color="secondary"
           push
           icon="flag"
           label="Import "
-          @click="openImportCtfDialog()"
+          @click="openImportCtfDialog"
         />
       </q-fab>
     </q-page-sticky>
@@ -44,19 +44,17 @@
 </template>
 
 <script lang="ts">
-import { openCreateCtfDialog, openImportCtfDialog } from 'src/ctfnote/dialog';
-import { getMe } from 'src/ctfnote/me';
+import EditCtfDialogVue from 'src/components/Dialogs/EditCtfDialog.vue';
+import ImportCtfDialogVue from 'src/components/Dialogs/ImportCtfDialog.vue';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'PageIndex',
   components: {},
   setup() {
-    const { result: me } = getMe();
     return {
-      openCreateCtfDialog,
-      openImportCtfDialog,
-      me,
+      me: ctfnote.me.injectMe(),
       tabs: [
         {
           label: 'Incoming',
@@ -75,6 +73,18 @@ export default defineComponent({
         },
       ],
     };
+  },
+  methods: {
+    openCreateCtfDialog() {
+      this.$q.dialog({
+        component: EditCtfDialogVue,
+      });
+    },
+    openImportCtfDialog() {
+      this.$q.dialog({
+        component: ImportCtfDialogVue,
+      });
+    },
   },
 });
 </script>

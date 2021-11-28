@@ -18,26 +18,30 @@
 </template>
 
 <script lang="ts">
-import { Ctf } from 'src/ctfnote';
-import { useDeleteCtf } from 'src/ctfnote/ctfs';
-import { openEditCtfDialog } from 'src/ctfnote/dialog';
-import { getMe } from 'src/ctfnote/me';
+import { Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
+import EditCtfDialogVue from '../Dialogs/EditCtfDialog.vue';
 
 export default defineComponent({
   props: {
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const { result: me } = getMe();
     return {
-      me,
-      deleteCtf: useDeleteCtf(),
+      me: ctfnote.me.injectMe(),
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+      deleteCtf: ctfnote.ctfs.useDeleteCtf(),
     };
   },
   methods: {
     openEditCtfDialog() {
-      openEditCtfDialog(this.ctf);
+      this.$q.dialog({
+        component: EditCtfDialogVue,
+        componentProps: {
+          ctf: this.ctf,
+        },
+      });
     },
     openDeleteCtfDialog() {
       this.$q
@@ -49,7 +53,11 @@ export default defineComponent({
           cancel: true,
         })
         .onOk(() => {
-          void this.deleteCtf(this.ctf);
+          const opts = {
+            message: `CTF ${this.ctf.title} deleted!`,
+            icon: 'delete',
+          };
+          void this.wrapNotify(() => this.deleteCtf(this.ctf), opts);
         });
     },
   },

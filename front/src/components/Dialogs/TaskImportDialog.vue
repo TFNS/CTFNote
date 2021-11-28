@@ -58,8 +58,8 @@
 
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import { Ctf, Task } from 'src/ctfnote';
-import { useCreateTask } from 'src/ctfnote/tasks';
+import ctfnote from 'src/ctfnote';
+import { Ctf } from 'src/ctfnote/models';
 import parsers from 'src/ctfnote/parsers';
 import { defineComponent, ref } from 'vue';
 
@@ -72,10 +72,6 @@ type ParsedTask = {
 export default defineComponent({
   props: {
     ctf: { type: Object as () => Ctf, required: true },
-    tasks: {
-      type: Array as () => Task[],
-      default: () => [],
-    },
   },
   emits: useDialogPluginComponent.emits,
   setup() {
@@ -89,7 +85,7 @@ export default defineComponent({
       { name: 'keep', label: 'Import task', field: 'keep' },
     ];
     return {
-      createTask: useCreateTask(),
+      createTask: ctfnote.tasks.useCreateTask(),
       model: ref(''),
       currentParser: ref(parserOptions[0]),
       parsedTasks: ref<ParsedTask[]>([]),
@@ -146,7 +142,7 @@ export default defineComponent({
       const hashTask = (title: string, category?: string | null) =>
         `${title}${category || 'none'}`;
       const taskSet = new Set();
-      for (const task of this.tasks) {
+      for (const task of this.ctf.tasks) {
         taskSet.add(hashTask(task.title, task.category));
       }
       // mark already existing tasks

@@ -2,6 +2,7 @@ import simplifyPlugin from "@graphile-contrib/pg-simplify-inflector";
 import PgPubsub from "@graphile/pg-pubsub";
 import crypto from "crypto";
 import express from "express";
+import { graphqlUploadExpress } from "graphql-upload";
 import {
   makePluginHook,
   postgraphile,
@@ -11,6 +12,8 @@ import { migrate, MigrateDBConfig } from "postgres-migrations";
 import config from "./config";
 import createTasKPlugin from "./plugins/createTask";
 import importCtfPlugin from "./plugins/importCtf";
+import uploadLogoPlugin from "./plugins/uploadLogo";
+import uploadScalar from "./plugins/uploadScalar";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -34,7 +37,13 @@ function createOptions() {
     jwtPgTypeIdentifier: "ctfnote.jwt",
     pgDefaultRole: "user_anonymous",
     jwtSecret: secret,
-    appendPlugins: [simplifyPlugin, importCtfPlugin, createTasKPlugin],
+    appendPlugins: [
+      simplifyPlugin,
+      uploadScalar,
+      importCtfPlugin,
+      uploadLogoPlugin,
+      createTasKPlugin,
+    ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
     legacyRelations: "omit" as const,
@@ -57,6 +66,15 @@ function createOptions() {
 
 function createApp(postgraphileOptions: PostGraphileOptions) {
   const app = express();
+  app.use(graphqlUploadExpress());
+  app.use(
+    "/uploads",
+    express.static("uploads", {
+      setHeaders: function (res, path, stat) {
+        res.set("Content-Disposition", "attachment");
+      },
+    })
+  );
   app.use(postgraphile(getDbUrl("user"), "ctfnote", postgraphileOptions));
   return app;
 }

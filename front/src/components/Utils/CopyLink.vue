@@ -1,6 +1,5 @@
 <template>
   <q-input
-    ref="linkElement"
     hint="Valid for one hour."
     filled
     bottom-slots
@@ -16,6 +15,7 @@
 
     <template #append>
       <q-btn
+        v-show="link"
         round
         dense
         flat
@@ -28,24 +28,22 @@
 </template>
 
 <script lang="ts">
-import { QInput } from 'quasar';
-import { defineComponent, ref } from 'vue';
+import ctfnote from 'src/ctfnote';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {
-    link: { type: String, required: true },
+    link: { type: String, required: false, default: null },
   },
   setup() {
-    return { linkElement: ref<QInput | null>(null) };
+    return {
+      wrapNotify: ctfnote.ui.useWrapNotify(),
+    };
   },
   methods: {
     clipboardCopy() {
-      if (!this.linkElement) return;
-      this.linkElement.select();
-      document.execCommand('copy');
-      window.getSelection()?.removeAllRanges();
-      this.$q.notify({
-        message: 'Copied!',
+      void this.wrapNotify(() => navigator.clipboard.writeText(this.link), {
+        message: 'Copied to clipboard!',
         color: 'primary',
         actions: [],
         closeBtn: false,

@@ -6,13 +6,13 @@
 </template>
 
 <script lang="ts">
-import { Ctf, Id, Task } from 'src/ctfnote';
+import { Ctf, Id, Task } from 'src/ctfnote/models';
 import { computed, defineComponent, watch } from 'vue';
 
 export default defineComponent({
   props: {
     ctf: { type: Object as () => Ctf, required: true },
-    taskId: { type: Object as () => Id<Task>, required: true },
+    taskId: { type: Number as unknown as () => Id<Task>, required: true },
   },
   setup(props) {
     const task = computed(

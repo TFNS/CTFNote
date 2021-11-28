@@ -41,8 +41,8 @@
 </template>
 
 <script lang="ts">
-import { Task } from 'src/ctfnote';
-import { getMe } from 'src/ctfnote/me';
+import { Task } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -58,9 +58,8 @@ export default defineComponent({
     'filter-category',
   ],
   setup() {
-    const { result: me } = getMe();
     return {
-      me,
+      me: ctfnote.me.injectMe(),
     };
   },
   computed: {

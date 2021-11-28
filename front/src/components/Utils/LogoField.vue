@@ -19,6 +19,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { QFile } from 'quasar';
+import ctfnote from 'src/ctfnote';
 export default defineComponent({
   props: {
     modelValue: { type: String, default: '' },
@@ -26,6 +27,7 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup() {
     return {
+      uploadLogo: ctfnote.uploads.useUploadLogo(),
       picker: ref<QFile | null>(null),
     };
   },
@@ -49,17 +51,13 @@ export default defineComponent({
         qpicker.pickFiles();
       }
     },
-    upload(file: Blob) {
-      if (!file) return;
+    async upload(logo: File) {
+      if (!logo) return;
 
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        if (typeof reader.result === 'string') {
-          this.model = reader.result;
-        }
-      });
-
-      reader.readAsDataURL(file);
+      const r = await this.uploadLogo(logo);
+      if (r) {
+        this.model = r;
+      }
     },
   },
 });

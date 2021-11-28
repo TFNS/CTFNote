@@ -6,7 +6,7 @@ import {
   UserFragment,
   useUpdateRoleForUserIdMutation,
 } from 'src/generated/graphql';
-import { makeId, Role, User } from '.';
+import { makeId, Role, User } from './models';
 import { buildProfile } from './profiles';
 import { wrapQuery } from './utils';
 

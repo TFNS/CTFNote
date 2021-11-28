@@ -81,9 +81,9 @@
 </template>
 
 <script lang="ts">
-import { Role, User } from 'src/ctfnote';
-import { getUsers, useDeleteUser, useUpdateUserRole } from 'src/ctfnote/admin';
-import { getMe } from 'src/ctfnote/me';
+import { Role, User } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
+
 import { defineComponent } from 'vue';
 import InviteUserDialog from '../Dialogs/InviteUserDialog.vue';
 import ResetPasswordDialog from '../Dialogs/ResetPasswordDialog.vue';
@@ -114,14 +114,11 @@ const columns = [
 export default defineComponent({
   components: { SelectRole },
   setup() {
-    const { result: me } = getMe();
-    const deleteUser = useDeleteUser();
-    const updateUserRole = useUpdateUserRole();
-    const { result: users, loading, refetch } = getUsers();
+    const { result: users, loading, refetch } = ctfnote.admin.getUsers();
     return {
-      me,
-      deleteUser: (id: number) => deleteUser(id),
-      updateUserRole: (user: User, role: Role) => updateUserRole(user, role),
+      me: ctfnote.me.injectMe(),
+      deleteUser: ctfnote.admin.useDeleteUser(),
+      updateUserRole: ctfnote.admin.useUpdateUserRole(),
       pagination,
       users,
       columns,

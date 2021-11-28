@@ -10,8 +10,10 @@
           <btn-edit v-if="me.isManager" round :ctf="ctf" />
           <btn-delete v-if="me.isManager" round :ctf="ctf" />
           <q-space />
-          <weight-badge :ctf="ctf" />
-          <ctf-time-link :ctf="ctf" />
+          <template v-if="ctf.ctftimeUrl">
+            <weight-badge :ctf="ctf" />
+            <ctf-time-link :ctf="ctf" />
+          </template>
         </div>
       </div>
       <div class="col q-py-md">
@@ -46,8 +48,8 @@
 
 <script lang="ts">
 import { date } from 'quasar';
-import { Ctf } from 'src/ctfnote';
-import { getMe } from 'src/ctfnote/me';
+import { Ctf } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import BtnDelete from './BtnDelete.vue';
 import BtnEdit from './BtnEdit.vue';
@@ -69,8 +71,9 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const { result: me } = getMe();
-    return { me };
+    return {
+      me: ctfnote.me.injectMe(),
+    };
   },
   computed: {
     style() {

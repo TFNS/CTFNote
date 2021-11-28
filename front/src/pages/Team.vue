@@ -21,15 +21,15 @@
 </template>
 
 <script lang="ts">
-import { Role } from 'src/ctfnote';
-import { getTeam } from 'src/ctfnote/profiles';
+import { Role } from 'src/ctfnote/models';
+import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import UserBadge from '../components/Profile/UserBadge.vue';
 
 export default defineComponent({
   components: { UserBadge },
   setup() {
-    const { result: team } = getTeam();
+    const { result: team } = ctfnote.profiles.getTeam();
     const pagination = {
       rowsPerPage: 0,
     };

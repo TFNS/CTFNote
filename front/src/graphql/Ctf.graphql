@@ -173,6 +173,11 @@ subscription subscribeToCtfCreated {
 subscription subscribeToCtfDeleted {
   listen(topic: "deleted:ctfs") {
     relatedNodeId
+    relatedNode {
+      ... on Ctf {
+        ...CtfFragment
+      }
+    }
   }
 }
 
