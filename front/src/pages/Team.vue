@@ -29,7 +29,7 @@ import UserBadge from '../components/Profile/UserBadge.vue';
 export default defineComponent({
   components: { UserBadge },
   setup() {
-    const { result: team } = ctfnote.profiles.getTeam();
+    const team = ctfnote.profiles.injectTeam();
     const pagination = {
       rowsPerPage: 0,
     };

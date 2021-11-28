@@ -45,7 +45,7 @@ import { Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import { injectStrict } from 'src/ctfnote/utils';
-import keys from './injectionKeys';
+import keys from '../../injectionKeys';
 
 export default defineComponent({
   props: {

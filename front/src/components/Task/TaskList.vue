@@ -104,7 +104,7 @@ import TaskImportDialogVue from '../Dialogs/TaskImportDialog.vue';
 import TaskCards from './TaskCards.vue';
 import TaskTable from './TaskTable.vue';
 import { useQuasar } from 'quasar';
-import keys from './injectionKeys';
+import keys from '../../injectionKeys';
 
 const displayOptions = ['classic', 'dense', 'ultradense', 'table'] as const;
 

@@ -21,7 +21,7 @@
 import { Ctf, Task } from 'src/ctfnote/models';
 import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
-import keys from './injectionKeys';
+import keys from '../../injectionKeys';
 import TaskCard from './TaskCard.vue';
 import { DisplayMode } from './TaskList.vue';
 

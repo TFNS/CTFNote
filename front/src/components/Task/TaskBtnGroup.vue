@@ -40,7 +40,7 @@ import ctfnote from 'src/ctfnote';
 import { Task } from 'src/ctfnote/models';
 import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
-import keys from './injectionKeys';
+import keys from '../../injectionKeys';
 
 export default defineComponent({
   props: {
@@ -48,7 +48,7 @@ export default defineComponent({
   },
   setup() {
     const me = ctfnote.me.injectMe();
-    const { result: team } = ctfnote.profiles.getTeam();
+    const team = ctfnote.profiles.injectTeam();
 
     return {
       me,

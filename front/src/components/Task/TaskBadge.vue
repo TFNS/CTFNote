@@ -44,7 +44,7 @@ export default defineComponent({
     task: { type: Object as () => Task, required: true },
   },
   setup() {
-    const { result: team } = ctfnote.profiles.getTeam();
+    const team = ctfnote.profiles.injectTeam();
     const me = ctfnote.me.injectMe();
     return { team, me };
   },

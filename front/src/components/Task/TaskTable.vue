@@ -57,7 +57,7 @@ import TaskPlayerList from './TaskPlayerList.vue';
 import TaskMenu from './TaskMenu.vue';
 import { injectStrict } from 'src/ctfnote/utils';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
-import keys from './injectionKeys';
+import keys from '../../injectionKeys';
 
 function col(name: string, opt = {}) {
   return {
@@ -96,7 +96,7 @@ export default defineComponent({
       rowsPerPage: 0,
     };
     const me = ctfnote.me.injectMe();
-    const { result: team } = ctfnote.profiles.getTeam();
+    const team = ctfnote.profiles.injectTeam();
     return {
       columns,
       pagination,

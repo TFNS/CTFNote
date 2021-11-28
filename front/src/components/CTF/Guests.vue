@@ -46,7 +46,7 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const { result: team } = ctfnote.profiles.getTeam();
+    const team = ctfnote.profiles.injectTeam();
 
     return {
       team,
