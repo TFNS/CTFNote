@@ -13,15 +13,14 @@
 import ctfnote from 'src/ctfnote';
 import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
-
+import keys from './injectionKeys';
 export default defineComponent({
   props: {
     name: { type: String, default: '?' },
   },
   setup() {
     return {
-      filterCategory:
-        injectStrict<(category: string) => void>('filterCategory'),
+      filterCategory: injectStrict(keys.filterCategory),
     };
   },
   computed: {
