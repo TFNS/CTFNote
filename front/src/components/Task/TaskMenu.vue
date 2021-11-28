@@ -13,14 +13,14 @@
         <q-item-section side top>
           <q-checkbox
             :model-value="task.solved"
-            @update:model-value="$emit('solve-task')"
+            @update:model-value="solveTask(task)"
           />
         </q-item-section>
         <q-item-section>
           <q-item-label class="q-px-md"> Solved </q-item-label>
         </q-item-section>
       </q-item>
-      <q-item v-ripple v-close-popup tag="label" @click="$emit('edit-task')">
+      <q-item v-ripple v-close-popup tag="label" @click="editTask(task)">
         <q-item-section side>
           <q-avatar icon="edit" />
         </q-item-section>
@@ -28,7 +28,7 @@
           <q-item-label class="q-px-md"> Edit </q-item-label>
         </q-item-section>
       </q-item>
-      <q-item v-close-popup clickable @click="$emit('delete-task')">
+      <q-item v-close-popup clickable @click="deleteTask(task)">
         <q-item-section side>
           <q-avatar icon="delete" />
         </q-item-section>
@@ -44,22 +44,21 @@
 import { Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
+import { injectStrict } from 'src/ctfnote/utils';
+import keys from './injectionKeys';
 
 export default defineComponent({
   props: {
     task: { type: Object as () => Task, required: true },
   },
-  emits: [
-    'solve-task',
-    'edit-task',
-    'delete-task',
-    'start-work-on-task',
-    'stop-work-on-task',
-    'filter-category',
-  ],
   setup() {
     return {
       me: ctfnote.me.injectMe(),
+      startWorkingOn: ctfnote.tasks.useStartWorkingOn(),
+      stopWorkingOn: ctfnote.tasks.useStopWorkingOn(),
+      solveTask: injectStrict(keys.solveTaskPopup),
+      deleteTask: injectStrict(keys.deleteTaskPopup),
+      editTask: injectStrict(keys.editTaskPopup),
     };
   },
   computed: {
@@ -73,9 +72,9 @@ export default defineComponent({
   methods: {
     updateOnIt(v: boolean) {
       if (v) {
-        this.$emit('start-work-on-task');
+        void this.startWorkingOn(this.task);
       } else {
-        this.$emit('stop-work-on-task');
+        void this.stopWorkingOn(this.task);
       }
     },
   },
