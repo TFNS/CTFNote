@@ -33,7 +33,7 @@
       <div class="col col-1">
         <q-select
           v-model="displayMode"
-          label="display"
+          label="Display"
           :options="displayOptions"
         />
       </div>
