@@ -67,7 +67,14 @@ function createOptions() {
 function createApp(postgraphileOptions: PostGraphileOptions) {
   const app = express();
   app.use(graphqlUploadExpress());
-  app.use("/uploads", express.static("uploads"));
+  app.use(
+    "/uploads",
+    express.static("uploads", {
+      setHeaders: function (res, path, stat) {
+        res.set("Content-Disposition", "attachment");
+      },
+    })
+  );
   app.use(postgraphile(getDbUrl("user"), "ctfnote", postgraphileOptions));
   return app;
 }

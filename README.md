@@ -57,6 +57,17 @@ localhost:
 +      - 127.0.0.1:8080:80
 ```
 
+Edit the `.env` file to instruct the pad to use TLS:
+```diff
+ # Secure: we're using HTTPS
+-# CMD_PROTOCOL_USESSL=true
++CMD_PROTOCOL_USESSL=true
+
+ # Domain: you need to define this if you wish to enable any options
+-# CMD_DOMAIN=example.org:1337
++CMD_DOMAIN=example.org:1337
+```
+
 After deploying this configuration, run `certbot` to make it available over HTTPS. 
 See [this article](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04) for more information.
 
