@@ -37,9 +37,9 @@
     <q-card-section v-if="!isDense">
       <q-flex class="row">
         <user-badge
-          :profile="player"
-          :key="player.nodeId"
           v-for="player in players"
+          :key="player.nodeId"
+          :profile="player"
         />
         <q-chip style="visibility: hidden"></q-chip>
       </q-flex>

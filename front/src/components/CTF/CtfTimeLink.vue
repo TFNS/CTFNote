@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { Ctf } from 'src/ctfnote';
+import { Ctf } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
 export default defineComponent({
   props: {
