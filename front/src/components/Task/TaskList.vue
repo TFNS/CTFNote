@@ -196,8 +196,6 @@ export default defineComponent({
     });
 
     return {
-      deleteTask: ctfnote.tasks.useDeleteTask(),
-      updateTask: ctfnote.tasks.useUpdateTask(),
       displayMode: makePersistant('task-display-mode', ref('classic')),
       hideSolved,
       filter,
