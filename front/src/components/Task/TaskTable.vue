@@ -4,6 +4,7 @@
     :columns="columns"
     :pagination="pagination"
     hide-pagination
+    flat
   >
     <template #body="props">
       <q-tr v-show="isTaskVisible(props.row)" :props="props">
