@@ -9,7 +9,7 @@
         v-for="ctf in column"
         :key="ctf.nodeId"
         once
-        style="min-height: 550px;"
+        style="min-height: 550px"
         transition="fade"
       >
         <div>
