@@ -22,8 +22,9 @@
               name="cancel"
               class="cursor-pointer"
               @click.stop="categoryFilter = []"
-            /> </template
-        ></q-select>
+            />
+          </template>
+        </q-select>
       </div>
       <div class="col col-auto">
         <q-checkbox v-model="hideSolved" label="Hide solved" />
@@ -32,53 +33,38 @@
       <div class="col col-1">
         <q-select
           v-model="displayMode"
-          label="display"
-          :options="['classic', 'dense', 'ultradense']"
+          label="Display"
+          :options="displayOptions"
         />
       </div>
     </div>
-    <div
-      class="row q-gutter-sm"
-      :class="{ 'q-gutter-md': displayMode == 'classic' }"
-    >
-      <q-intersection
-        v-for="task of filteredTasks"
-        v-show="showTask(task)"
-        :key="task.id"
-        once
-        transition="fade"
-        class="col col-grow item"
-        :class="`display-${displayMode}`"
-      >
-        <task-card
-          :display-mode="displayMode"
-          :task="task"
-          :ctf="ctf"
-          @filter-category="filterCategory"
-          @edit-task="editTask(task)"
-          @solve-task="solveTask(task)"
-          @delete-task="askDeleteTask(task)"
-          @start-work-on-task="startWorkOnTasK(task)"
-          @stop-work-on-task="stopWorkOnTasK(task)"
+
+    <template v-if="sortedTasks.length">
+      <task-cards
+        v-if="useCard"
+        :ctf="ctf"
+        :tasks="sortedTasks"
+        :display-mode="displayMode"
+      />
+      <task-table v-else :ctf="ctf" :tasks="sortedTasks" />
+    </template>
+    <div v-else class="text-center col">
+      <div class="row q-gutter-md justify-center">
+        <q-btn
+          icon="add"
+          label="Create Task"
+          color="positive"
+          @click="openCreateTaskDialog(ctf)"
         />
-      </q-intersection>
-      <div v-if="filteredTasks.length == 0" class="text-center col">
-        <div class="row q-gutter-md justify-center">
-          <q-btn
-            icon="add"
-            label="Create Task"
-            color="positive"
-            @click="openCreateTaskDialog(ctf)"
-          />
-          <q-btn
-            icon="flag"
-            label="Import Task"
-            color="secondary"
-            @click="openImportTaskDialog"
-          />
-        </div>
+        <q-btn
+          icon="flag"
+          label="Import Task"
+          color="secondary"
+          @click="openImportTaskDialog"
+        />
       </div>
     </div>
+
     <q-page-sticky position="top-right" :offset="[18, 8]">
       <q-fab
         class="ctfs-action-btn shadow-2"
@@ -112,37 +98,122 @@
 import { Ctf, Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { useStoredSettings } from 'src/extensions/storedSettings';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, provide } from 'vue';
 import TaskEditDialogVue from '../Dialogs/TaskEditDialog.vue';
 import TaskImportDialogVue from '../Dialogs/TaskImportDialog.vue';
-import TaskCard from './TaskCard.vue';
+import TaskCards from './TaskCards.vue';
+import TaskTable from './TaskTable.vue';
+import { useQuasar } from 'quasar';
+import keys from '../../injectionKeys';
+
+const displayOptions = ['classic', 'dense', 'ultradense', 'table'] as const;
+
+export type DisplayMode = typeof displayOptions[number];
 
 export default defineComponent({
-  components: { TaskCard },
+  components: { TaskCards, TaskTable },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
+    const $q = useQuasar();
     const { makePersistant } = useStoredSettings();
+
+    const updateTask = ctfnote.tasks.useUpdateTask();
+    const deleteTask = ctfnote.tasks.useDeleteTask();
+
+    provide(keys.solveTaskPopup, (task: Task) => {
+      $q.dialog({
+        title: 'Flag:',
+        color: 'primary',
+        cancel: {
+          label: 'cancel',
+          color: 'warning',
+          flat: true,
+        },
+        prompt: {
+          model: task.flag ?? '',
+          type: 'text',
+        },
+        ok: {
+          color: 'positive',
+          label: 'save',
+        },
+      }).onOk((flag: string) => {
+        void updateTask(task, { flag });
+      });
+    });
+
+    provide(keys.deleteTaskPopup, (task: Task) => {
+      $q.dialog({
+        title: `Delete ${task.title} ?`,
+        color: 'negative',
+        message: 'This will delete the task, but not the pads.',
+        ok: 'Delete',
+        cancel: true,
+      }).onOk(() => {
+        void deleteTask(task);
+      });
+    });
+
+    provide(keys.editTaskPopup, (task: Task) => {
+      $q.dialog({
+        component: TaskEditDialogVue,
+        componentProps: {
+          task,
+        },
+      });
+    });
+
+    const filter = ref('');
+    const categoryFilter = ref<string[]>([]);
+    const hideSolved = makePersistant('task-hide-solved', ref(false));
+
+    provide(keys.isTaskVisible, (task: Task) => {
+      const needle = filter.value.toLowerCase();
+      // Hide solved task if hideSolved == true
+      if (hideSolved.value && task.solved) return false;
+
+      // Hide task if there is a filter and category not in filter
+      const catFilter = categoryFilter.value;
+      if (catFilter.length && !catFilter.includes(task.category ?? '')) {
+        return false;
+      }
+
+      // Filter using needle on title, category and description
+      const fields = ['title', 'category', 'description'] as const;
+
+      const checkField = (f: typeof fields[number]): boolean =>
+        task[f]?.toLowerCase().includes(needle) ?? false;
+
+      return fields.some((name) => checkField(name));
+    });
+
+    provide(keys.filterCategory, (category: string) => {
+      if (!categoryFilter.value.includes(category)) {
+        categoryFilter.value.push(category);
+      }
+    });
+
     return {
-      deleteTask: ctfnote.tasks.useDeleteTask(),
-      updateTask: ctfnote.tasks.useUpdateTask(),
-      startWorkingOn: ctfnote.tasks.useStartWorkingOn(),
-      stopWorkingOn: ctfnote.tasks.useStopWorkingOn(),
       displayMode: makePersistant('task-display-mode', ref('classic')),
-      hideSolved: makePersistant('task-hide-solved', ref(false)),
-      filter: ref(''),
-      categoryFilter: ref<string[]>([]),
+      hideSolved,
+      filter,
+      categoryFilter,
+      displayOptions,
     };
   },
   computed: {
     tasks() {
       return this.ctf.tasks;
     },
+    useCard() {
+      return this.displayMode != 'table';
+    },
     categories() {
       return [...new Set(this.tasks.map((t) => t.category))];
     },
-    filteredTasks() {
+    sortedTasks() {
       const tasks = this.tasks;
       return tasks.slice().sort((a, b) => {
         const acat = (a.category ?? '').toLowerCase();
@@ -157,61 +228,6 @@ export default defineComponent({
     },
   },
   methods: {
-    showTask(task: Task) {
-      const needle = this.filter.toLowerCase();
-      // Hide solved task if hideSolved == true
-      if (this.hideSolved && task.solved) return false;
-
-      // Hide task if there is a filter and category not in filter
-      const catFilter = this.categoryFilter;
-      if (catFilter.length && !catFilter.includes(task.category ?? '')) {
-        return false;
-      }
-
-      // Filter using needle on title, category and description
-      const fields = ['title', 'category', 'description'] as const;
-
-      const checkField = (f: typeof fields[number]): boolean =>
-        task[f]?.toLowerCase().includes(needle) ?? false;
-
-      return fields.some((name) => checkField(name));
-    },
-    filterCategory(category: string) {
-      if (!this.categoryFilter.includes(category)) {
-        this.categoryFilter.push(category);
-      }
-    },
-    editTask(task: Task) {
-      this.$q.dialog({
-        component: TaskEditDialogVue,
-        componentProps: {
-          task,
-        },
-      });
-    },
-    solveTask(task: Task) {
-      this.$q
-        .dialog({
-          title: 'Flag:',
-          color: 'primary',
-          cancel: {
-            label: 'cancel',
-            color: 'warning',
-            flat: true,
-          },
-          prompt: {
-            model: task.flag ?? '',
-            type: 'text',
-          },
-          ok: {
-            color: 'positive',
-            label: 'save',
-          },
-        })
-        .onOk((flag: string) => {
-          void this.updateTask(task, { flag });
-        });
-    },
     openCreateTaskDialog(ctf: Ctf) {
       this.$q.dialog({
         component: TaskEditDialogVue,
@@ -228,40 +244,6 @@ export default defineComponent({
         },
       });
     },
-    askDeleteTask(task: Task) {
-      this.$q
-        .dialog({
-          title: `Delete ${task.title} ?`,
-          color: 'negative',
-          message: 'This will delete the task, but not the pads.',
-          ok: 'Delete',
-          cancel: true,
-        })
-        .onOk(() => {
-          void this.deleteTask(task);
-        });
-    },
-    startWorkOnTasK(task: Task) {
-      void this.startWorkingOn(task);
-    },
-    stopWorkOnTasK(task: Task) {
-      void this.stopWorkingOn(task);
-    },
   },
 });
 </script>
-
-<style lang="scss" scoped>
-.item {
-  min-width: 200px;
-  &.display-ultradense {
-    min-height: 68px;
-  }
-  &.display-dense {
-    min-height: 140px;
-  }
-  &.display-classic {
-    min-height: 208px;
-  }
-}
-</style>

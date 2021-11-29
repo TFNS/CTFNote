@@ -9,6 +9,7 @@ import {
 } from 'src/generated/graphql';
 import { makeId, Profile } from './models';
 import { colorHash, wrapQuery } from './utils';
+import { Ref, InjectionKey, provide, inject } from 'vue';
 
 /* Builders */
 
@@ -19,6 +20,25 @@ export function buildProfile(p: ProfileFragment): Profile {
     id: makeId(p.id),
     role: p.role as Role,
   };
+}
+
+/* Global provider  */
+
+const TeamSymbol: InjectionKey<Ref<Profile[]>> = Symbol('team');
+
+export function provideTeam() {
+  const { result: team } = getTeam();
+  provide(TeamSymbol, team);
+  return team;
+}
+
+export function injectTeam() {
+  const team = inject(TeamSymbol);
+  if (!team) {
+    throw 'ERROR';
+  }
+
+  return team;
 }
 
 /* Queries */
