@@ -34,4 +34,16 @@ $$
 LANGUAGE sql
 STABLE;
 
+--Check if current user is guest
+CREATE OR REPLACE FUNCTION ctfnote_private.is_guest ()
+  RETURNS boolean
+  AS $$
+  SELECT
+    ctfnote_private.current_role () = 'user_guest'::ctfnote.role
+    OR ctfnote_private.is_friend ();
+
+$$
+LANGUAGE sql
+STABLE;
+
 GRANT EXECUTE ON FUNCTION ctfnote_private.can_play_ctf TO user_guest;
