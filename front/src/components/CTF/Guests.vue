@@ -39,16 +39,18 @@
 <script lang="ts">
 import { Ctf, Profile, Role } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   props: {
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const { result: team } = ctfnote.profiles.getTeam();
+    const team = ctfnote.profiles.injectTeam();
+    const now = ref(new Date());
 
     return {
+      now,
       team,
       inviteUserToCtf: ctfnote.ctfs.useInviteUserToCtf(),
       uninviteUserToCtf: ctfnote.ctfs.useUninviteUserToCtf(),
@@ -56,7 +58,7 @@ export default defineComponent({
   },
   computed: {
     guests() {
-      return this.team.filter((p) => p.role == Role.UserGuest);
+      return this.team.filter((p) => p.role == Role.UserGuest || (p.role == Role.UserFriend && this.ctf.endTime > this.now));
     },
     guestsWithInvitation() {
       return this.guests.map((g) => {

@@ -21,6 +21,7 @@ export default defineComponent({
   components: { MainMenu, NotificationListener },
   setup() {
     ctfnote.me.provideMe();
+    ctfnote.profiles.provideTeam();
     const settings = ctfnote.settings.provideSettings();
 
     for (const [name, value] of Object.entries(settings.value.style)) {
