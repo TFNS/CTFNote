@@ -1,14 +1,11 @@
 import type { ApolloClientOptions } from '@apollo/client/core';
-import { InMemoryCache, split } from '@apollo/client/core';
+import { ApolloLink, from, InMemoryCache, split, TypePolicy } from '@apollo/client/core';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { createHttpLink } from '@apollo/client';
-import { createUploadLink, UploadLinkOptions } from 'apollo-upload-client';
-
 import { WebSocketLink } from '@apollo/client/link/ws';
-import { from, ApolloLink } from '@apollo/client/core';
-import { TypePolicy } from '@apollo/client/core';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { createUploadLink } from 'apollo-upload-client';
 import { extractFiles } from 'extract-files';
+
 
 const protocol = document.location.protocol == 'https:' ? 'wss:' : 'ws:';
 
@@ -38,7 +35,7 @@ const uploadLink = createUploadLink({
 
 const uploadAndBatchHTTPLink = split(
   (operation) => extractFiles(operation).files.size > 0,
-  uploadLink,
+  uploadLink as unknown as ApolloLink,
   httpLink
 );
 

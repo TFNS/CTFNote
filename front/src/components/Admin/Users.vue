@@ -150,10 +150,11 @@ export default defineComponent({
             color: 'negative',
           },
         })
-        .onOk(async () => {
+        .onOk(() => {
           if (!user.id) return;
-          await this.deleteUser(user.id);
-          await this.refetch();
+          void this.deleteUser(user.id).then(() => {
+            void this.refetch();
+          });
         });
     },
     resetPassword(user: User) {
@@ -191,7 +192,9 @@ export default defineComponent({
               color: 'negative',
             },
           })
-          .onOk(() => performUpdate());
+          .onOk(() => {
+            void performUpdate();
+          });
       } else {
         await performUpdate();
       }
