@@ -1,13 +1,6 @@
 <template>
   <q-card bordered class="task" :class="{ solved: task.solved }">
-    <task-menu
-      :task="task"
-      @edit-task="$emit('edit-task')"
-      @solve-task="$emit('solve-task')"
-      @delete-task="$emit('delete-task')"
-      @start-work-on-task="$emit('start-work-on-task')"
-      @stop-work-on-task="$emit('stop-work-on-task')"
-    />
+    <task-menu :task="task" />
     <q-card-section>
       <task-badge :task="task" />
       <div class="row justify-between">
@@ -20,29 +13,14 @@
           name="task"
           :label="task.title"
         />
-
         <div class="col col-auto">
-          <q-chip
-            class="text-white"
-            clickable
-            :style="colorHash(task.category)"
-            @click="$emit('filter-category', task.category)"
-          >
-            {{ task.category || '?' }}
-          </q-chip>
+          <task-category-chip :name="task.category" />
         </div>
       </div>
     </q-card-section>
     <q-separator v-show="!isUltraDense" inset />
     <q-card-section v-if="!isDense">
-      <q-flex class="row">
-        <user-badge
-          v-for="player in players"
-          :key="player.nodeId"
-          :profile="player"
-        />
-        <q-chip style="visibility: hidden"></q-chip>
-      </q-flex>
+      <task-player-list :task="task" style="min-height: 36px" />
     </q-card-section>
     <q-card-section v-show="!isUltraDense" class="q-mb-xs">
       <div
@@ -53,7 +31,7 @@
         {{ task.flag }}
       </div>
       <div v-else class="task-description">
-        {{ task.description || '...' }}
+        {{ task.description || '…' }}
       </div>
     </q-card-section>
     <q-card-section v-show="!isDense">
@@ -63,44 +41,7 @@
         </ctf-note-link>
         <q-space class="col-md col-grow" />
         <div class="col-auto">
-          <q-btn
-            round
-            size="sm"
-            :title="onItTitle"
-            :icon="onItIcon"
-            :color="onItColor"
-            @click="updateOnIt(!onIt)"
-          />
-        </div>
-        <div class="col-auto">
-          <q-btn
-            round
-            size="sm"
-            title="Enter flag"
-            icon="flag"
-            color="positive"
-            @click="$emit('solve-task')"
-          />
-        </div>
-        <div class="col-auto">
-          <q-btn
-            round
-            size="sm"
-            :title="`Edit ${task.title}`"
-            icon="edit"
-            color="warning"
-            @click="$emit('edit-task')"
-          />
-        </div>
-        <div class="col-auto">
-          <q-btn
-            round
-            size="sm"
-            :title="`Delete ${task.title}`"
-            icon="delete"
-            color="negative"
-            @click="$emit('delete-task')"
-          />
+          <task-btn-group :task="task" />
         </div>
       </div>
     </q-card-section>
@@ -109,15 +50,23 @@
 
 <script lang="ts">
 import { Ctf, Task } from 'src/ctfnote/models';
-import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import TaskBadge from './TaskBadge.vue';
 import TaskMenu from './TaskMenu.vue';
-import UserBadge from '../Profile/UserBadge.vue';
+import TaskBtnGroup from './TaskBtnGroup.vue';
+import TaskCategoryChip from './TaskCategoryChip.vue';
+import TaskPlayerList from './TaskPlayerList.vue';
 
 export default defineComponent({
-  components: { TaskBadge, CtfNoteLink, TaskMenu, UserBadge },
+  components: {
+    TaskBadge,
+    CtfNoteLink,
+    TaskMenu,
+    TaskPlayerList,
+    TaskBtnGroup,
+    TaskCategoryChip,
+  },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
     task: { type: Object as () => Task, required: true },
@@ -126,18 +75,8 @@ export default defineComponent({
       default: 'classic',
     },
   },
-  emits: [
-    'solve-task',
-    'edit-task',
-    'delete-task',
-    'start-work-on-task',
-    'stop-work-on-task',
-    'filter-category',
-  ],
   setup() {
-    const me = ctfnote.me.injectMe();
-    const { result: team } = ctfnote.profiles.getTeam();
-    return { me, team };
+    return {};
   },
   computed: {
     isUltraDense() {
@@ -146,36 +85,8 @@ export default defineComponent({
     isDense() {
       return this.displayMode != 'classic';
     },
-    onItColor() {
-      return this.onIt ? 'secondary' : 'primary';
-    },
-    onIt() {
-      if (!this.me.profile?.id) return false;
-      return this.task.workOnTasks.includes(this.me.profile.id);
-    },
-    onItIcon() {
-      return this.onIt ? 'person_remove' : 'person_add_alt_1';
-    },
-    onItTitle() {
-      return `${this.onIt ? 'Stop' : 'Start'} working on ${this.task.title}`;
-    },
     showBadge() {
       return this.task.solved || this.task.workOnTasks.length > 0;
-    },
-    players() {
-      return this.team.filter((p) => this.task.workOnTasks.includes(p.id));
-    },
-  },
-  methods: {
-    colorHash(s?: string | null) {
-      return { backgroundColor: ctfnote.utils.colorHash(s ?? '') };
-    },
-    updateOnIt(v: boolean) {
-      if (v) {
-        this.$emit('start-work-on-task');
-      } else {
-        this.$emit('stop-work-on-task');
-      }
     },
   },
 });
