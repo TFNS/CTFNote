@@ -70,7 +70,7 @@ function createApp(postgraphileOptions: PostGraphileOptions) {
   app.use(
     "/uploads",
     express.static("uploads", {
-      setHeaders: function (res, path, stat) {
+      setHeaders: function (res) {
         res.set("Content-Disposition", "attachment");
       },
     })
