@@ -8,7 +8,7 @@
     "start": "NODE_ENV=production node dist/index.js",
     "build": "tsc",
     "lint": "eslint --fix 'src/**/*.ts'",
-    "format": "prettier --write 'src/*.ts'",
+    "format": "prettier --write 'src/**/*.ts'",
     "dev": "NODE_ENV=development nodemon src/index.ts",
     "dev:migrate": "DATABASE_URL= yarn run db-migrate -e dev up"
   },
