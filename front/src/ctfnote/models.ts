@@ -100,6 +100,7 @@ export type Settings = {
 export type AdminSettings = Settings & {
   registrationPassword: string;
   registrationDefaultRole: Role;
+  icalPassword: string;
 };
 
 export type User = {
