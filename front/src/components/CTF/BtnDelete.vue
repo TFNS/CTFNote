@@ -23,7 +23,7 @@ export default defineComponent({
     return {
       me: ctfnote.me.injectMe(),
       deleteCtf: ctfnote.ctfs.useDeleteCtf(),
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
     };
   },
   methods: {
@@ -38,7 +38,7 @@ export default defineComponent({
         })
         .onOk(() => {
           const title = this.ctf.title;
-          void this.wrapNotify(() => this.deleteCtf(this.ctf), {
+          void this.resolveAndNotify(this.deleteCtf(this.ctf), {
             message: `CTF ${title} deleted!`,
             icon: 'delete',
           });

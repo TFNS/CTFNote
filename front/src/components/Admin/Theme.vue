@@ -72,7 +72,7 @@ export default defineComponent({
     );
 
     return {
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       updateSettings: ctfnote.settings.useUpdateSettings(),
       settings,
       colors,
@@ -104,11 +104,10 @@ export default defineComponent({
       }
     },
     saveStyle() {
-      void this.wrapNotify(
-        () =>
-          this.updateSettings({
-            style: JSON.stringify(this.colors),
-          }),
+      void this.resolveAndNotify(
+        this.updateSettings({
+          style: JSON.stringify(this.colors),
+        }),
         { message: 'Theme changed!', icon: 'palette' }
       );
     },

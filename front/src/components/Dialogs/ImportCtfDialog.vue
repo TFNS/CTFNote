@@ -46,7 +46,7 @@ export default defineComponent({
       useDialogPluginComponent();
 
     return {
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       importCtf: ctfnote.ctfs.useImportCtf(),
       dialogRef,
       model: ref(''),
@@ -59,7 +59,7 @@ export default defineComponent({
     async submit() {
       const id = parseCtftimeId(this.model);
       if (id === null) return;
-      const success = await this.wrapNotify(() => this.importCtf(id));
+      const success = await this.resolveAndNotify(this.importCtf(id));
       if (success) {
         this.onDialogOK();
       }

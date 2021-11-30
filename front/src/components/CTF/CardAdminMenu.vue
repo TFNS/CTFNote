@@ -30,7 +30,7 @@ export default defineComponent({
   setup() {
     return {
       me: ctfnote.me.injectMe(),
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       deleteCtf: ctfnote.ctfs.useDeleteCtf(),
     };
   },
@@ -57,7 +57,7 @@ export default defineComponent({
             message: `CTF ${this.ctf.title} deleted!`,
             icon: 'delete',
           };
-          void this.wrapNotify(() => this.deleteCtf(this.ctf), opts);
+          void this.resolveAndNotify(this.deleteCtf(this.ctf), opts);
         });
     },
   },
