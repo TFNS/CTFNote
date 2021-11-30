@@ -58,7 +58,11 @@ export default defineComponent({
   },
   computed: {
     guests() {
-      return this.team.filter((p) => p.role == Role.UserGuest || (p.role == Role.UserFriend && this.ctf.endTime > this.now));
+      return this.team.filter(
+        (p) =>
+          p.role == Role.UserGuest ||
+          (p.role == Role.UserFriend && this.ctf.endTime > this.now)
+      );
     },
     guestsWithInvitation() {
       return this.guests.map((g) => {
