@@ -36,7 +36,7 @@ export default defineComponent({
   setup() {
     return {
       me: ctfnote.me.injectMe(),
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       updateCtfCredentials: ctfnote.ctfs.useUpdateCtfCredentials(),
     };
   },
@@ -65,8 +65,8 @@ export default defineComponent({
             message: 'Credentials updated!',
             icon: 'lock',
           };
-          void this.wrapNotify(
-            () => this.updateCtfCredentials(this.ctf, credentials),
+          void this.resolveAndNotify(
+            this.updateCtfCredentials(this.ctf, credentials),
             opts
           );
         });

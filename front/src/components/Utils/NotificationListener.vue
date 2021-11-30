@@ -3,14 +3,11 @@
 </template>
 
 <script lang="ts">
-import { useQuasar } from 'quasar';
-
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   setup() {
-    const $q = useQuasar();
     const { onResult: onFlag } = ctfnote.ctfs.useOnFlag();
     const { onResult: onCtfCreated } = ctfnote.ctfs.useOnCtfCreated();
     const { onResult: onProfileCreated } =
@@ -20,21 +17,20 @@ export default defineComponent({
     ctfnote.ctfs.useOnCtfUpdate();
     ctfnote.ctfs.useOnTaskUpdate();
 
-    const notify = (message: string, icon?: string) => {
-      $q.notify({
-        position: 'top-right',
-        color: 'positive',
-        icon,
-        timeout: 2500,
-        message,
-      });
-    };
+    const { globalNotify } = ctfnote.ui.useNotify();
 
     onProfileCreated((profile) =>
-      notify(`${profile.username} joined CTFNote!`, 'person')
+      globalNotify({
+        message: `${profile.username} joined CTFNote!`,
+        icon: 'person',
+      })
     );
-    onCtfCreated((ctf) => notify(`CTF ${ctf.title} created!`, 'flag'));
-    onFlag((task) => notify(`Task ${task.title} solved!`, 'flag'));
+    onCtfCreated((ctf) =>
+      globalNotify({ message: `CTF ${ctf.title} created!`, icon: 'flag' })
+    );
+    onFlag((task) =>
+      globalNotify({ message: `Task ${task.title} solved!`, icon: 'flag' })
+    );
 
     return {};
   },

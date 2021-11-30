@@ -104,7 +104,7 @@ export default defineComponent({
       useDialogPluginComponent();
 
     return {
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       updateCtf: ctfnote.ctfs.useUpdateCtf(),
       createCtf: ctfnote.ctfs.useCreateCtf(),
       dialogRef,
@@ -130,17 +130,16 @@ export default defineComponent({
           message: `CTF ${ctf.title} updated!`,
           icon: 'flag',
         };
-        void this.wrapNotify(
-          () =>
-            this.updateCtf(ctf, {
-              ...this.form,
-              startTime: this.form.startTime.toISOString(),
-              endTime: this.form.endTime.toISOString(),
-            }),
+        void this.resolveAndNotify(
+          this.updateCtf(ctf, {
+            ...this.form,
+            startTime: this.form.startTime.toISOString(),
+            endTime: this.form.endTime.toISOString(),
+          }),
           opts
         );
       } else {
-        void this.wrapNotify(() =>
+        void this.resolveAndNotify(
           this.createCtf({
             ...this.form,
             startTime: this.form.startTime.toISOString(),
