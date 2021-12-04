@@ -235,7 +235,7 @@ export default defineComponent({
           }
           return acat < bcat ? -1 : 1;
         })
-        .sort((a, b) => {
+        .sort((a) => {
           return a.solved ? 1 : -1;
         });
     },
