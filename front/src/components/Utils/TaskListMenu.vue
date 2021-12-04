@@ -76,16 +76,21 @@ export default defineComponent({
       return 'Open task';
     },
     sortedTasks() {
-      return this.ctf.tasks.slice().sort((a, b) => {
-        const acat = (a.category ?? '').toLowerCase();
-        const bcat = (b.category ?? '').toLowerCase();
-        if (acat == bcat) {
-          const atitle = a.title.toLowerCase();
-          const btitle = a.title.toLowerCase();
-          return atitle == btitle ? 0 : atitle < btitle ? -1 : 1;
-        }
-        return acat < bcat ? -1 : 1;
-      });
+      return this.ctf.tasks
+        .slice()
+        .sort((a, b) => {
+          const acat = (a.category ?? '').toLowerCase();
+          const bcat = (b.category ?? '').toLowerCase();
+          if (acat == bcat) {
+            const atitle = a.title.toLowerCase();
+            const btitle = a.title.toLowerCase();
+            return atitle == btitle ? 0 : atitle < btitle ? -1 : 1;
+          }
+          return acat < bcat ? -1 : 1;
+        })
+        .sort((a, b) => {
+          return a.solved ? 1 : -1;
+        });
     },
   },
   methods: {
