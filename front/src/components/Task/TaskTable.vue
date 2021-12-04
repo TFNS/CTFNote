@@ -9,7 +9,7 @@
     <template #body="props">
       <q-tr v-show="isTaskVisible(props.row)" :props="props">
         <task-menu :task="props.row" />
-        <q-td key="category" :props="props" auto-width class="no-click">
+        <q-td key="category" :props="props" class="no-click" auto-width>
           <task-category-chip :name="props.row.category" />
         </q-td>
 
@@ -19,17 +19,17 @@
           </q-badge>
         </q-td>
 
-        <q-td key="title" :props="props" auto-width align="left">
+        <q-td key="title" :props="props" align="left">
           <ctf-note-link name="task" :ctf="ctf" :task="props.row">
             {{ props.row.title }}
           </ctf-note-link>
         </q-td>
 
         <q-td key="description" :props="props">
-          <pre v-if="props.row.solved" class="blur">{{ props.row.flag }}</pre>
-          <pre v-else>{{ props.row.description || '…' }}</pre>
+          <div v-if="props.row.solved" class="blur">{{ props.row.flag }}</div>
+          <div v-else>{{ props.row.description || '…' }}</div>
         </q-td>
-        <q-td key="players" :props="props" auto-width>
+        <q-td key="players" :props="props">
           <task-player-list :task="props.row" />
         </q-td>
         <q-td key="open" :props="props" auto-width>
@@ -39,7 +39,7 @@
             </q-btn>
           </ctf-note-link>
         </q-td>
-        <q-td key="actions" :props="props" auto-width class="no-click">
+        <q-td key="actions" :props="props" class="no-click" auto-width>
           <task-btn-group :task="props.row" />
         </q-td>
       </q-tr>
@@ -89,8 +89,8 @@ export default defineComponent({
       col('title', { sortable: true }),
       col('description', { label: 'description / flag' }),
       col('players', { align: 'center' }),
-      col('open', { label: '' }),
-      col('actions', { label: '' }),
+      col('open', { label: '', align: 'right', style: 'width:120px;max-width:120px;'}),
+      col('actions', { label: '', align: 'right', style: 'width:120px;max-width:120px;' }),
     ];
     const pagination = {
       rowsPerPage: 0,
@@ -108,4 +108,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.q-table td, .q-table th {
+      white-space: normal !important;
+}
+</style>
