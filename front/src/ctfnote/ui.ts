@@ -104,5 +104,6 @@ export function useNotify() {
     notifySuccess,
     globalNotify,
     isSystemNotificationEnabled,
+    disableSystemNotification,
   };
 }

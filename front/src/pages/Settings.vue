@@ -148,8 +148,11 @@ export default defineComponent({
       },
       { deep: true }
     );
-    const { isSystemNotificationEnabled, askForNotificationPrivilege } =
-      ctfnote.ui.useNotify();
+    const {
+      isSystemNotificationEnabled,
+      askForNotificationPrivilege,
+      disableSystemNotification,
+    } = ctfnote.ui.useNotify();
 
     const systemNotificationEnabled = ref(isSystemNotificationEnabled());
 
@@ -163,6 +166,7 @@ export default defineComponent({
       me,
       systemNotificationEnabled,
       askForNotificationPrivilege,
+      disableSystemNotification,
       oldPassword: ref(''),
       newPassword: ref(''),
     };
@@ -179,6 +183,7 @@ export default defineComponent({
           await this.askForNotificationPrivilege();
       } else {
         this.systemNotificationEnabled = false;
+        this.disableSystemNotification();
       }
     },
     changeProfile() {
