@@ -1,4 +1,4 @@
-DROP FUNCTION me;
+DROP FUNCTION ctfnote.me;
 
 CREATE OR REPLACE FUNCTION ctfnote.me ()
   RETURNS ctfnote.profile
