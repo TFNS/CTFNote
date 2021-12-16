@@ -1,0 +1,19 @@
+query SearchCTFs($search: String!) {
+  searchCtfs(search: $search) {
+    edges {
+      node {
+        ...CtfFragment
+      }
+    }
+  }
+}
+
+query SearchTasks($search: String!) {
+  searchTasks(search: $search) {
+    edges {
+      node {
+        ...TaskFragment
+      }
+    }
+  }
+}

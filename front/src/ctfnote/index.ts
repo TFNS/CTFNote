@@ -8,6 +8,7 @@ import * as tasks from './tasks';
 import * as ui from './ui';
 import * as utils from './utils';
 import * as uploads from './uploads';
+import * as search from './search';
 
 export const ctfnote = {
   profiles,
@@ -20,6 +21,7 @@ export const ctfnote = {
   tasks,
   utils,
   uploads,
+  search,
 };
 
 export type Ctfnote = typeof ctfnote;
