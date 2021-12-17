@@ -37,6 +37,9 @@
           </q-item>
         </q-list>
       </q-card-section>
+      <q-card-section>
+        <span>This search bar can also be opened by using CTRL+K</span>
+      </q-card-section>
     </q-card>
   </q-dialog>
 </template>
