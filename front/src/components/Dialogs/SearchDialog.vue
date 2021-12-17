@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide">
-    <q-card style="min-width: 400px">
+    <q-card style="min-width: 80%">
       <q-card-section class="text-h6"> Search for CTF/Task </q-card-section>
       <q-separator />
       <q-card-section>
@@ -17,7 +17,7 @@
         />
       </q-card-section>
 
-      <q-card-section>
+      <q-card-section v-if="!!items.length">
         <q-list bordered separator>
           <q-item
             v-for="(item, i) in items"
@@ -37,10 +37,6 @@
           </q-item>
         </q-list>
       </q-card-section>
-      <q-card-actions align="right" class="q-gutter-md q-px-md q-pb-sm">
-        <q-btn color="warning" flat label="cancel" @click="onDialogCancel" />
-        <q-btn color="positive" label="import" @click="submit" />
-      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -82,10 +78,9 @@ export default defineComponent({
       }
 
       if (this.selectedItemIndex >= this.items.length)
-        this.selectedItemIndex = 0;
-
-      if (this.selectedItemIndex < 0)
         this.selectedItemIndex = this.items.length - 1;
+
+      if (this.selectedItemIndex < 0) this.selectedItemIndex = 0;
     },
     async onSearchChange() {
       if (!this.searchText) {
@@ -110,6 +105,7 @@ export default defineComponent({
       if (type === 'ctf') {
         params = {
           ctfId: item.id,
+          ctfSlug: safeSlugify(item.title),
         };
       }
 
