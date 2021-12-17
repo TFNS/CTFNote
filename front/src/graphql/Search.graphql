@@ -13,6 +13,9 @@ query SearchTasks($search: String!) {
     edges {
       node {
         ...TaskFragment
+        ctf {
+          ...CtfFragment
+        }
       }
     }
   }

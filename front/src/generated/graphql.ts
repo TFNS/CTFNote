@@ -2239,7 +2239,7 @@ export type SearchTasksQueryVariables = Exact<{
 }>;
 
 
-export type SearchTasksQuery = { __typename?: 'Query', searchTasks?: { __typename?: 'TasksConnection', edges: Array<{ __typename?: 'TasksEdge', node: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } }> } | null | undefined };
+export type SearchTasksQuery = { __typename?: 'Query', searchTasks?: { __typename?: 'TasksConnection', edges: Array<{ __typename?: 'TasksEdge', node: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } }> } | null | undefined };
 
 export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined };
 
@@ -3463,11 +3463,15 @@ export const SearchTasksDocument = gql`
     edges {
       node {
         ...TaskFragment
+        ctf {
+          ...CtfFragment
+        }
       }
     }
   }
 }
-    ${TaskFragmentDoc}`;
+    ${TaskFragmentDoc}
+${CtfFragmentDoc}`;
 
 /**
  * __useSearchTasksQuery__
@@ -4357,11 +4361,15 @@ export const SearchTasks = gql`
     edges {
       node {
         ...TaskFragment
+        ctf {
+          ...CtfFragment
+        }
       }
     }
   }
 }
-    ${TaskFragment}`;
+    ${TaskFragment}
+${CtfFragment}`;
 export const GetCredentialsForCtfId = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
   ctfSecret(id: $ctfId) {
