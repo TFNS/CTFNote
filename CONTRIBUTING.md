@@ -9,6 +9,26 @@ When contributing to this repository, please first discuss the change you wish t
 - [Install docker](https://docs.docker.com/get-docker/)
 - [Install yarn](https://classic.yarnpkg.com/lang/en/docs/install/)
 
+### Install the git hooks
+
+Go at the root folder and install the dependencies and install the git hooks:
+
+```shell
+$ yarn
+```
+
+This should run the prepare script and install the linting pre-commit hooks:
+
+```
+[1/4] 🔍  Resolving packages...
+[2/4] 🚚  Fetching packages...
+[3/4] 🔗  Linking dependencies...
+[4/4] 🔨  Building fresh packages...
+$ husky install
+[##] 2/2husky - Git hooks installed
+✨  Done in 0.40s.
+```
+
 ### Start the third party containers
 
 ```shell
