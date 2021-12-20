@@ -147,6 +147,3 @@ The value of every variables are explained in this file.
 
 ### Shared notepad for a task
 [![Screenshot of pad](screenshots/pad_small.webp)](screenshots/pad.png)
-
-## Contributing
-A contribution guide is available here: [CONTRIBUTING.md](CONTRIBUTING.md)
