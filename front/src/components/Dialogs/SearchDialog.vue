@@ -27,9 +27,11 @@
             @click="onItemSelected(item)"
           >
             <q-item-section>
-              {{ !!item.ctf ? item.ctf.title + '/' : '' }}
-              <b>{{ item.title }}</b></q-item-section
-            >
+              <span>
+                {{ !!item.ctf ? item.ctf.title + ' / ' : '' }}
+                <b>{{ item.title }}</b>
+              </span>
+            </q-item-section>
 
             <q-item-section side top>
               <q-badge color="teal" :label="item.__typename" />
@@ -72,11 +74,11 @@ export default defineComponent({
   },
   methods: {
     searchInputKeyDown(e: KeyboardEvent) {
-      if (e.key === 'ArrowDown') {
+      if (e.key === 'ArrowDown' || (e.ctrlKey && e.key === 'n')) {
         this.selectedItemIndex += 1;
       }
 
-      if (e.key === 'ArrowUp') {
+      if (e.key === 'ArrowUp' || (e.ctrlKey && e.key === 'p')) {
         this.selectedItemIndex += -1;
       }
 
