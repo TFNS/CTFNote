@@ -3,20 +3,34 @@ import axios from "axios";
 import savepointWrapper from "./savepointWrapper";
 import config from "../config";
 
+function buildNoteContent(
+  title: string,
+  description?: string,
+  category?: string
+): string {
+  let note = "";
+
+  note += `# ${title}`;
+
+  if (category) {
+    note += ` - ${category}`;
+  }
+
+  note += "\n";
+
+  if (description) {
+    note += `## Description\n`;
+    note += `${description}\n`;
+  }
+
+  return note;
+}
+
 async function createPad(
   title: string,
-  description: string,
-  category: string
+  description?: string,
+  category?: string
 ): Promise<string> {
-  const body = `# ${title} - ${category}
-
-## Description
-
-${description}
-
-----
-`;
-
   const options = {
     headers: {
       "Content-Type": "text/markdown",
@@ -27,7 +41,11 @@ ${description}
   };
 
   try {
-    const res = await axios.post(config.pad.createUrl, body, options);
+    const res = await axios.post(
+      config.pad.createUrl,
+      buildNoteContent(title, description, category),
+      options
+    );
     return res.headers.location;
   } catch (e) {
     throw Error(`Call to ${config.pad.createUrl} during task creation failed.`);
