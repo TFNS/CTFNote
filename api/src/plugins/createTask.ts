@@ -16,12 +16,16 @@ function buildNoteContent(
     note += ` - ${category}`;
   }
 
-  note += "\n";
+  note += "\n\n";
 
   if (description) {
     note += `## Description\n`;
+    note += "\n";
     note += `${description}\n`;
   }
+
+  note += "\n";
+  note += "----\n";
 
   return note;
 }
