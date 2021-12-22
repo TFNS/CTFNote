@@ -22,10 +22,10 @@ function buildNoteContent(
     note += `## Description\n`;
     note += "\n";
     note += `${description}\n`;
-  }
 
-  note += "\n";
-  note += "----\n";
+    note += "\n";
+    note += "----\n";
+  }
 
   return note;
 }
