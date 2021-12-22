@@ -26,7 +26,6 @@ function buildNoteContent(
     note += "\n";
     note += "----\n";
   }
-
   return note;
 }
 
