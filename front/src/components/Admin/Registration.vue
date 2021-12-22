@@ -83,7 +83,7 @@ export default defineComponent({
     );
 
     return {
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       updateSettings: ctfnote.settings.useUpdateSettings(),
       adminSettings,
       registrationPassword,
@@ -102,8 +102,8 @@ export default defineComponent({
           icon: 'lock',
         };
 
-        void this.wrapNotify(
-          () => this.updateSettings({ registrationAllowed }),
+        void this.resolveAndNotify(
+          this.updateSettings({ registrationAllowed }),
           opts
         );
       },
@@ -120,8 +120,8 @@ export default defineComponent({
           icon: 'lock',
         };
 
-        void this.wrapNotify(
-          () => this.updateSettings({ registrationPasswordAllowed }),
+        void this.resolveAndNotify(
+          this.updateSettings({ registrationPasswordAllowed }),
           opts
         );
       },
@@ -137,8 +137,8 @@ export default defineComponent({
           icon: 'lock',
         };
 
-        void this.wrapNotify(
-          () => this.updateSettings({ registrationDefaultRole }),
+        void this.resolveAndNotify(
+          this.updateSettings({ registrationDefaultRole }),
           opts
         );
       },
@@ -152,11 +152,10 @@ export default defineComponent({
         icon: 'lock',
       };
 
-      void this.wrapNotify(
-        () =>
-          this.updateSettings({
-            registrationPassword: this.registrationPassword,
-          }),
+      void this.resolveAndNotify(
+        this.updateSettings({
+          registrationPassword: this.registrationPassword,
+        }),
         opts
       );
     },

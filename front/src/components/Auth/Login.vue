@@ -56,7 +56,7 @@ export default defineComponent({
   setup() {
     return {
       settings: ctfnote.settings.injectSettings(),
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       login: ctfnote.auth.useLogin(),
       allowRegistration: true,
       form: reactive({
@@ -76,8 +76,8 @@ export default defineComponent({
   methods: {
     submit() {
       const login = this.form.login;
-      void this.wrapNotify(
-        () => this.login(this.form.login, this.form.password),
+      void this.resolveAndNotify(
+        this.login(this.form.login, this.form.password),
         {
           message: `Logged as ${login}!`,
           icon: 'person',

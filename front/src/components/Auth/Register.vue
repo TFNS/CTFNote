@@ -91,7 +91,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       register: ctfnote.auth.useRegister(),
       registerWithToken: ctfnote.auth.useRegisterWithToken(),
       registerWithPassword: ctfnote.auth.useRegisterWithPassword(),
@@ -124,28 +124,25 @@ export default defineComponent({
         message: `Logged as ${this.form.login}!`,
         icon: 'person',
       };
-      let registerFunction;
+      let registerPromise;
 
       if (this.token) {
-        registerFunction = () =>
-          this.registerWithToken(
-            this.form.login,
-            this.form.password,
-            this.token
-          );
+        registerPromise = this.registerWithToken(
+          this.form.login,
+          this.form.password,
+          this.token
+        );
       } else if (this.registrationPasswordForced || this.usePassword) {
-        registerFunction = () =>
-          this.registerWithPassword(
-            this.form.login,
-            this.form.password,
-            this.form.ctfnotePassword
-          );
+        registerPromise = this.registerWithPassword(
+          this.form.login,
+          this.form.password,
+          this.form.ctfnotePassword
+        );
       } else {
-        registerFunction = () =>
-          this.register(this.form.login, this.form.password);
+        registerPromise = this.register(this.form.login, this.form.password);
       }
 
-      void this.wrapNotify(registerFunction, opts);
+      void this.resolveAndNotify(registerPromise, opts);
     },
   },
 });
