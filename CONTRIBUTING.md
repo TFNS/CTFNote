@@ -1,6 +1,6 @@
 # CTFNote - Contribution Guide
 
-When contributing to this repository, please first discuss the change you wish to make via issue with the owners/moderators of this repository before making a change.
+When contributing to this repository, please first discuss the change you wish to make via issue with the collaborators of this repository before making a change.
 
 ## Git process
 
@@ -24,7 +24,7 @@ Examples of branch name:
 
 Once you think the job is done, issue the pull request and target the **dev** branch of the official CTFNote repository.
 
-You can also create the pull request before finishing the job but don't forget to add "WiP: " as a suffix in the title to let the moderators know you are still working on the request.
+You can also create the pull request before finishing the job but don't forget to add "WiP: " as a suffix in the title to let the collaborators know you are still working on the request.
 
 ## Deploying the dev version
 
@@ -87,6 +87,6 @@ The following endpoint are exposed and can be used in the developpement environm
 - [Quasar APP](http://localhost:8088/)
 - [Adminer](http://localhost:3002/?pgsql=db&username=ctfnote&db=ctfnote)
 
-### Review
+## Review
 
-To merge a pull request, two distinct reviews from two different developpers are required.
+To merge a pull request, two distinct reviews from two different collaborators are required.
