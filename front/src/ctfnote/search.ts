@@ -13,9 +13,9 @@ export async function searchCtfs(search: string): Promise<Ctf[]> {
         }
     });
 
-    if (!result.data.searchCtfs) return [];
+    if (!result.data.ctfs) return [];
 
-    return result.data.searchCtfs?.edges.map(c => buildCtf(c.node));
+    return result.data.ctfs?.nodes.map(c => buildCtf(c));
 }
 
 export async function searchTasks(search: string): Promise<Task[]> {
@@ -28,7 +28,7 @@ export async function searchTasks(search: string): Promise<Task[]> {
         }
     });
 
-    if (!result.data.searchTasks) return [];
+    if (!result.data.tasks) return [];
 
-    return result.data.searchTasks?.edges.map(c => buildTask(c.node));
+    return result.data.tasks?.nodes.map(t => buildTask(t));
 }

@@ -14,6 +14,7 @@ import createTasKPlugin from "./plugins/createTask";
 import importCtfPlugin from "./plugins/importCtf";
 import uploadLogoPlugin from "./plugins/uploadLogo";
 import uploadScalar from "./plugins/uploadScalar";
+import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -43,6 +44,7 @@ function createOptions() {
       importCtfPlugin,
       uploadLogoPlugin,
       createTasKPlugin,
+      ConnectionFilterPlugin,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
