@@ -40,7 +40,7 @@ services:
     depends_on:
       - hedgedoc
     ports:
-      - 8080:80
+      - 127.0.0.1:8080:80
   hedgedoc:
     image: quay.io/hedgedoc/hedgedoc:1.9.2-alpine
     environment:
