@@ -11,6 +11,13 @@
         <div class="row items-center q-gutter-md">
           <q-btn round flat icon="today" title="Today" @click="showToday" />
           <div class="text-h5">{{ currentMonth }}</div>
+          <q-btn
+            round
+            flat
+            icon="link"
+            title="Today"
+            @click="showIcalLink = true"
+          />
         </div>
         <q-btn
           icon-right="arrow_forward_ios"
@@ -69,6 +76,29 @@
       </q-calendar-month>
     </q-card-section>
   </q-card>
+  <q-dialog v-model="showIcalLink" seamless position="top">
+    <q-card style="width: 450px">
+      <q-card-section class="row items-center q-gutter-sm q-px-sm">
+        <div class="col-auto">
+          <q-icon name="link" size="md" />
+        </div>
+        <div class="col">
+          <q-input
+            ref="icalEl"
+            label="ICAL URL"
+            :model-value="icalLink"
+            readonly
+            outlined
+            class="bg-dark"
+          />
+        </div>
+
+        <div class="col-auto">
+          <q-btn v-close-popup flat round icon="close" />
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts">
@@ -85,7 +115,9 @@ import '@quasar/quasar-ui-qcalendar/src/QCalendarTransitions.sass';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarVariables.sass';
 import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { QInput } from 'quasar';
 
 function dateToLocale(s: string, offset = 0): string {
   const [year, month] = s.split('-').map((e) => parseInt(e));
@@ -96,13 +128,28 @@ function dateToLocale(s: string, offset = 0): string {
 export default defineComponent({
   components: { QCalendarMonth },
   setup() {
+    const $router = useRouter();
+    const icalEl = ref<QInput>();
     const { result: ctfs, loading } = ctfnote.ctfs.getAllCtfs();
+    const { result: icalPassword } = ctfnote.settings.getIcalPassword();
+
+    const icalLink = computed(() => {
+      const route = $router.resolve({
+        path: '/calendar.ics',
+        query: { key: icalPassword.value },
+      });
+      icalEl.value?.select();
+      return document.location.origin + route.href;
+    });
     return {
       calendar: ref<QCalendar>(),
       ctfs,
       loading,
       animated: ref(false),
       selectedDate: ref(today()),
+      showIcalLink: ref(false),
+      icalLink,
+      icalEl,
     };
   },
   computed: {

@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import * as VueApolloComposable from '@vue/apollo-composable';
 import * as VueCompositionApi from 'vue';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -37,7 +38,7 @@ export type ChangePasswordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   newpassword: Scalars['String'];
   oldpassword: Scalars['String'];
 };
@@ -66,7 +67,7 @@ export type CreateCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Ctf` to be created by this mutation. */
   ctf: CtfInput;
 };
@@ -92,7 +93,7 @@ export type CreateCtfPayload = {
 
 /** The output of our create `Ctf` mutation. */
 export type CreateCtfPayloadCtfEdgeArgs = {
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 /** All input for the create `Invitation` mutation. */
@@ -101,7 +102,7 @@ export type CreateInvitationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Invitation` to be created by this mutation. */
   invitation: InvitationInput;
 };
@@ -112,8 +113,8 @@ export type CreateInvitationLinkInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  role?: Maybe<Role>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<Role>;
 };
 
 /** The output of our `createInvitationLink` mutation. */
@@ -152,7 +153,7 @@ export type CreateInvitationPayload = {
 
 /** The output of our create `Invitation` mutation. */
 export type CreateInvitationPayloadInvitationEdgeArgs = {
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 /** All input for the `createResetPasswordLink` mutation. */
@@ -161,8 +162,8 @@ export type CreateResetPasswordLinkInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `createResetPasswordLink` mutation. */
@@ -179,10 +180,10 @@ export type CreateResetPasswordLinkPayload = {
 };
 
 export type CreateTaskInput = {
-  category?: Maybe<Scalars['String']>;
+  category?: InputMaybe<Scalars['String']>;
   ctfId: Scalars['Int'];
-  description?: Maybe<Scalars['String']>;
-  flag?: Maybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  flag?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
 };
 
@@ -217,60 +218,60 @@ export type Ctf = Node & {
 
 
 export type CtfInvitationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InvitationCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InvitationCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
 export type CtfTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<TaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<TasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<TaskCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 /** A condition to be used against `Ctf` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type CtfCondition = {
   /** Checks for equality with the object’s `endTime` field. */
-  endTime?: Maybe<Scalars['Datetime']>;
+  endTime?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `secretsId` field. */
-  secretsId?: Maybe<Scalars['Int']>;
+  secretsId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `startTime` field. */
-  startTime?: Maybe<Scalars['Datetime']>;
+  startTime?: InputMaybe<Scalars['Datetime']>;
 };
 
 /** An input for mutations affecting `Ctf` */
 export type CtfInput = {
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  ctfUrl?: InputMaybe<Scalars['String']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   endTime: Scalars['Datetime'];
-  logoUrl?: Maybe<Scalars['String']>;
+  logoUrl?: InputMaybe<Scalars['String']>;
   startTime: Scalars['Datetime'];
   title: Scalars['String'];
-  weight?: Maybe<Scalars['Float']>;
+  weight?: InputMaybe<Scalars['Float']>;
 };
 
 /** Represents an update to a `Ctf`. Fields that are set will be updated. */
 export type CtfPatch = {
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  endTime?: Maybe<Scalars['Datetime']>;
-  logoUrl?: Maybe<Scalars['String']>;
-  startTime?: Maybe<Scalars['Datetime']>;
-  title?: Maybe<Scalars['String']>;
-  weight?: Maybe<Scalars['Float']>;
+  ctfUrl?: InputMaybe<Scalars['String']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  endTime?: InputMaybe<Scalars['Datetime']>;
+  logoUrl?: InputMaybe<Scalars['String']>;
+  startTime?: InputMaybe<Scalars['Datetime']>;
+  title?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Float']>;
 };
 
 export type CtfSecret = Node & {
@@ -285,13 +286,13 @@ export type CtfSecret = Node & {
 
 
 export type CtfSecretCtfsBySecretsIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<CtfCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<CtfCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 /**
@@ -300,12 +301,12 @@ export type CtfSecretCtfsBySecretsIdArgs = {
  */
 export type CtfSecretCondition = {
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** Represents an update to a `CtfSecret`. Fields that are set will be updated. */
 export type CtfSecretPatch = {
-  credentials?: Maybe<Scalars['String']>;
+  credentials?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `CtfSecret` values. */
@@ -382,7 +383,7 @@ export type DeleteCtfByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Ctf` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -393,7 +394,7 @@ export type DeleteCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -419,7 +420,7 @@ export type DeleteCtfPayload = {
 
 /** The output of our delete `Ctf` mutation. */
 export type DeleteCtfPayloadCtfEdgeArgs = {
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 /** All input for the `deleteInvitationByNodeId` mutation. */
@@ -428,7 +429,7 @@ export type DeleteInvitationByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Invitation` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -439,7 +440,7 @@ export type DeleteInvitationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   ctfId: Scalars['Int'];
   profileId: Scalars['Int'];
 };
@@ -468,7 +469,7 @@ export type DeleteInvitationPayload = {
 
 /** The output of our delete `Invitation` mutation. */
 export type DeleteInvitationPayloadInvitationEdgeArgs = {
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 /** All input for the `deleteTaskByNodeId` mutation. */
@@ -477,7 +478,7 @@ export type DeleteTaskByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Task` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -488,7 +489,7 @@ export type DeleteTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -514,7 +515,7 @@ export type DeleteTaskPayload = {
 
 /** The output of our delete `Task` mutation. */
 export type DeleteTaskPayloadTaskEdgeArgs = {
-  orderBy?: Maybe<Array<TasksOrderBy>>;
+  orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 /** All input for the `deleteUser` mutation. */
@@ -523,8 +524,8 @@ export type DeleteUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `deleteUser` mutation. */
@@ -568,9 +569,9 @@ export type Invitation = Node & {
  */
 export type InvitationCondition = {
   /** Checks for equality with the object’s `ctfId` field. */
-  ctfId?: Maybe<Scalars['Int']>;
+  ctfId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `profileId` field. */
-  profileId?: Maybe<Scalars['Int']>;
+  profileId?: InputMaybe<Scalars['Int']>;
 };
 
 /** An input for mutations affecting `Invitation` */
@@ -631,7 +632,7 @@ export type LoginInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   login: Scalars['String'];
   password: Scalars['String'];
 };
@@ -738,7 +739,7 @@ export type MutationCreateResetPasswordLinkArgs = {
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateTaskArgs = {
-  input?: Maybe<CreateTaskInput>;
+  input?: InputMaybe<CreateTaskInput>;
 };
 
 
@@ -786,7 +787,7 @@ export type MutationDeleteUserArgs = {
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationImportCtfArgs = {
-  input?: Maybe<ImportCtfInput>;
+  input?: InputMaybe<ImportCtfInput>;
 };
 
 
@@ -939,39 +940,39 @@ export type Profile = Node & {
 
 
 export type ProfileInvitationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InvitationCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InvitationCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
 export type ProfileWorkOnTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<WorkOnTaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<WorkOnTaskCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** A condition to be used against `Profile` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type ProfileCondition = {
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `username` field. */
-  username?: Maybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 /** Represents an update to a `Profile`. Fields that are set will be updated. */
 export type ProfilePatch = {
-  color?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  color?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Profile` values. */
@@ -1093,45 +1094,45 @@ export type QueryCtfSecretByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfSecretsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<CtfSecretCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<CtfSecretsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<CtfSecretCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CtfSecretsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<CtfCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<CtfCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGuestsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryIncomingCtfArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1150,13 +1151,13 @@ export type QueryInvitationByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryInvitationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InvitationCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InvitationCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
@@ -1168,11 +1169,11 @@ export type QueryNodeArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPastCtfArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1196,13 +1197,13 @@ export type QueryProfileByUsernameArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryProfilesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ProfileCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ProfilesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ProfileCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
 };
 
 
@@ -1214,12 +1215,12 @@ export type QuerySettingByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QuerySettingsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<SettingsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SettingsOrderBy>>;
 };
 
 
@@ -1237,24 +1238,24 @@ export type QueryTaskByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<TaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<TasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<TaskCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
@@ -1273,13 +1274,13 @@ export type QueryWorkOnTaskByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryWorkOnTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<WorkOnTaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<WorkOnTaskCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** All input for the `register` mutation. */
@@ -1288,7 +1289,7 @@ export type RegisterInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   login: Scalars['String'];
   password: Scalars['String'];
 };
@@ -1312,7 +1313,7 @@ export type RegisterWithPasswordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   ctfnotePassword: Scalars['String'];
   login: Scalars['String'];
   password: Scalars['String'];
@@ -1337,10 +1338,10 @@ export type RegisterWithTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  login?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  login?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our `registerWithToken` mutation. */
@@ -1362,9 +1363,9 @@ export type ResetPasswordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
 };
 
 export type ResetPasswordLinkResponse = {
@@ -1387,14 +1388,15 @@ export type ResetPasswordPayload = {
 
 export enum Role {
   UserAdmin = 'USER_ADMIN',
+  UserFriend = 'USER_FRIEND',
   UserGuest = 'USER_GUEST',
   UserManager = 'USER_MANAGER',
-  UserMember = 'USER_MEMBER',
-  UserFriend = 'USER_FRIEND',
+  UserMember = 'USER_MEMBER'
 }
 
 export type Setting = Node & {
   __typename?: 'Setting';
+  icalPassword?: Maybe<Scalars['String']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   registrationAllowed: Scalars['Boolean'];
@@ -1406,11 +1408,12 @@ export type Setting = Node & {
 
 /** Represents an update to a `Setting`. Fields that are set will be updated. */
 export type SettingPatch = {
-  registrationAllowed?: Maybe<Scalars['Boolean']>;
-  registrationDefaultRole?: Maybe<Role>;
-  registrationPassword?: Maybe<Scalars['String']>;
-  registrationPasswordAllowed?: Maybe<Scalars['Boolean']>;
-  style?: Maybe<Scalars['JSON']>;
+  icalPassword?: InputMaybe<Scalars['String']>;
+  registrationAllowed?: InputMaybe<Scalars['Boolean']>;
+  registrationDefaultRole?: InputMaybe<Role>;
+  registrationPassword?: InputMaybe<Scalars['String']>;
+  registrationPasswordAllowed?: InputMaybe<Scalars['Boolean']>;
+  style?: InputMaybe<Scalars['JSON']>;
 };
 
 /** A connection to a list of `Setting` values. */
@@ -1448,8 +1451,8 @@ export type StartWorkingOnInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  taskId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  taskId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `startWorkingOn` mutation. */
@@ -1474,7 +1477,7 @@ export type StartWorkingOnPayload = {
 
 /** The output of our `startWorkingOn` mutation. */
 export type StartWorkingOnPayloadWorkOnTaskEdgeArgs = {
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** All input for the `stopWorkingOn` mutation. */
@@ -1483,8 +1486,8 @@ export type StopWorkingOnInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  taskId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  taskId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `stopWorkingOn` mutation. */
@@ -1509,7 +1512,7 @@ export type StopWorkingOnPayload = {
 
 /** The output of our `stopWorkingOn` mutation. */
 export type StopWorkingOnPayloadWorkOnTaskEdgeArgs = {
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
@@ -1544,29 +1547,29 @@ export type Task = Node & {
 
 
 export type TaskWorkOnTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<WorkOnTaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<WorkOnTaskCondition>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** A condition to be used against `Task` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type TaskCondition = {
   /** Checks for equality with the object’s `ctfId` field. */
-  ctfId?: Maybe<Scalars['Int']>;
+  ctfId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** Represents an update to a `Task`. Fields that are set will be updated. */
 export type TaskPatch = {
-  category?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  flag?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+  category?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  flag?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Task` values. */
@@ -1608,7 +1611,7 @@ export type UpdateCtfByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Ctf` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Ctf` being updated. */
@@ -1621,7 +1624,7 @@ export type UpdateCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Ctf` being updated. */
   patch: CtfPatch;
@@ -1648,7 +1651,7 @@ export type UpdateCtfPayload = {
 
 /** The output of our update `Ctf` mutation. */
 export type UpdateCtfPayloadCtfEdgeArgs = {
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 /** All input for the `updateCtfSecretByNodeId` mutation. */
@@ -1657,7 +1660,7 @@ export type UpdateCtfSecretByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `CtfSecret` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `CtfSecret` being updated. */
@@ -1670,7 +1673,7 @@ export type UpdateCtfSecretInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `CtfSecret` being updated. */
   patch: CtfSecretPatch;
@@ -1695,7 +1698,7 @@ export type UpdateCtfSecretPayload = {
 
 /** The output of our update `CtfSecret` mutation. */
 export type UpdateCtfSecretPayloadCtfSecretEdgeArgs = {
-  orderBy?: Maybe<Array<CtfSecretsOrderBy>>;
+  orderBy?: InputMaybe<Array<CtfSecretsOrderBy>>;
 };
 
 /** All input for the `updateProfileByNodeId` mutation. */
@@ -1704,7 +1707,7 @@ export type UpdateProfileByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Profile` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Profile` being updated. */
@@ -1717,7 +1720,7 @@ export type UpdateProfileByUsernameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Profile` being updated. */
   patch: ProfilePatch;
   username: Scalars['String'];
@@ -1729,7 +1732,7 @@ export type UpdateProfileInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Profile` being updated. */
   patch: ProfilePatch;
@@ -1754,7 +1757,7 @@ export type UpdateProfilePayload = {
 
 /** The output of our update `Profile` mutation. */
 export type UpdateProfilePayloadProfileEdgeArgs = {
-  orderBy?: Maybe<Array<ProfilesOrderBy>>;
+  orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
 };
 
 /** All input for the `updateSettingByNodeId` mutation. */
@@ -1763,7 +1766,7 @@ export type UpdateSettingByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Setting` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Setting` being updated. */
@@ -1789,7 +1792,7 @@ export type UpdateSettingPayload = {
 
 /** The output of our update `Setting` mutation. */
 export type UpdateSettingPayloadSettingEdgeArgs = {
-  orderBy?: Maybe<Array<SettingsOrderBy>>;
+  orderBy?: InputMaybe<Array<SettingsOrderBy>>;
 };
 
 /** All input for the `updateTaskByNodeId` mutation. */
@@ -1798,7 +1801,7 @@ export type UpdateTaskByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Task` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Task` being updated. */
@@ -1811,7 +1814,7 @@ export type UpdateTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Task` being updated. */
   patch: TaskPatch;
@@ -1838,7 +1841,7 @@ export type UpdateTaskPayload = {
 
 /** The output of our update `Task` mutation. */
 export type UpdateTaskPayloadTaskEdgeArgs = {
-  orderBy?: Maybe<Array<TasksOrderBy>>;
+  orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 /** All input for the `updateUserRole` mutation. */
@@ -1847,9 +1850,9 @@ export type UpdateUserRoleInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  role?: Maybe<Role>;
-  userId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<Role>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `updateUserRole` mutation. */
@@ -1926,9 +1929,9 @@ export type WorkOnTask = Node & {
  */
 export type WorkOnTaskCondition = {
   /** Checks for equality with the object’s `profileId` field. */
-  profileId?: Maybe<Scalars['Int']>;
+  profileId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `taskId` field. */
-  taskId?: Maybe<Scalars['Int']>;
+  taskId?: InputMaybe<Scalars['Int']>;
 };
 
 /** A connection to a list of `WorkOnTask` values. */
@@ -2079,8 +2082,8 @@ export type IncomingCtfsQueryVariables = Exact<{ [key: string]: never; }>;
 export type IncomingCtfsQuery = { __typename?: 'Query', incomingCtf?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
 
 export type PastCtfsQueryVariables = Exact<{
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -2090,11 +2093,11 @@ export type CreateCtfMutationVariables = Exact<{
   title: Scalars['String'];
   startTime: Scalars['Datetime'];
   endTime: Scalars['Datetime'];
-  weight?: Maybe<Scalars['Float']>;
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  logoUrl?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Float']>;
+  ctfUrl?: InputMaybe<Scalars['String']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']>;
+  logoUrl?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2116,14 +2119,14 @@ export type ImportctfMutation = { __typename?: 'Mutation', importCtf?: { __typen
 
 export type UpdateCtfByIdMutationVariables = Exact<{
   id: Scalars['Int'];
-  title?: Maybe<Scalars['String']>;
-  weight?: Maybe<Scalars['Float']>;
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  logoUrl?: Maybe<Scalars['String']>;
-  startTime?: Maybe<Scalars['Datetime']>;
-  endTime?: Maybe<Scalars['Datetime']>;
-  description?: Maybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Float']>;
+  ctfUrl?: InputMaybe<Scalars['String']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']>;
+  logoUrl?: InputMaybe<Scalars['String']>;
+  startTime?: InputMaybe<Scalars['Datetime']>;
+  endTime?: InputMaybe<Scalars['Datetime']>;
+  description?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2211,7 +2214,7 @@ export type GetCredentialsForCtfIdQuery = { __typename?: 'Query', ctfSecret?: { 
 
 export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
-  credentials?: Maybe<Scalars['String']>;
+  credentials?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2219,17 +2222,22 @@ export type UpdateCredentialsForCtfIdMutation = { __typename?: 'Mutation', updat
 
 export type SettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
 
-export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
+export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null | undefined, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
 
 export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null | undefined };
 
+export type GetIcalPasswordQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetIcalPasswordQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, icalPassword?: string | null | undefined }> } | null | undefined };
+
 export type GetAdminSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null | undefined };
+export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null | undefined, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null | undefined };
 
 export type UpdateSettingsMutationVariables = Exact<{
   nodeId: Scalars['ID'];
@@ -2237,7 +2245,7 @@ export type UpdateSettingsMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string } | null | undefined } | null | undefined };
+export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null | undefined, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string } | null | undefined } | null | undefined };
 
 export type WorkingOnFragment = { __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined };
 
@@ -2259,10 +2267,10 @@ export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task'
 
 export type UpdateTaskMutationVariables = Exact<{
   id: Scalars['Int'];
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  category?: Maybe<Scalars['String']>;
-  flag?: Maybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  category?: InputMaybe<Scalars['String']>;
+  flag?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2271,9 +2279,9 @@ export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typ
 export type CreateTaskForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
   title: Scalars['String'];
-  category?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  flag?: Maybe<Scalars['String']>;
+  category?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  flag?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2423,6 +2431,7 @@ export const AdminSettingsInfoFragmentDoc = gql`
   ...SettingsInfo
   registrationPassword
   registrationDefaultRole
+  icalPassword
 }
     ${SettingsInfoFragmentDoc}`;
 export const GetUsersDocument = gql`
@@ -3470,6 +3479,33 @@ export function useGetSettingsQuery(options: VueApolloComposable.UseQueryOptions
   return VueApolloComposable.useQuery<GetSettingsQuery, GetSettingsQueryVariables>(GetSettingsDocument, {}, options);
 }
 export type GetSettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetSettingsQuery, GetSettingsQueryVariables>;
+export const GetIcalPasswordDocument = gql`
+    query getIcalPassword {
+  settings {
+    nodes {
+      nodeId
+      icalPassword
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetIcalPasswordQuery__
+ *
+ * To run a query within a Vue component, call `useGetIcalPasswordQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetIcalPasswordQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useGetIcalPasswordQuery();
+ */
+export function useGetIcalPasswordQuery(options: VueApolloComposable.UseQueryOptions<GetIcalPasswordQuery, GetIcalPasswordQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetIcalPasswordQuery, GetIcalPasswordQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetIcalPasswordQuery, GetIcalPasswordQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<GetIcalPasswordQuery, GetIcalPasswordQueryVariables>(GetIcalPasswordDocument, {}, options);
+}
+export type GetIcalPasswordQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetIcalPasswordQuery, GetIcalPasswordQueryVariables>;
 export const GetAdminSettingsDocument = gql`
     query getAdminSettings {
   settings {
@@ -3938,6 +3974,7 @@ export const AdminSettingsInfo = gql`
   ...SettingsInfo
   registrationPassword
   registrationDefaultRole
+  icalPassword
 }
     ${SettingsInfo}`;
 export const GetUsers = gql`
@@ -4262,6 +4299,16 @@ export const GetSettings = gql`
   }
 }
     ${SettingsInfo}`;
+export const GetIcalPassword = gql`
+    query getIcalPassword {
+  settings {
+    nodes {
+      nodeId
+      icalPassword
+    }
+  }
+}
+    `;
 export const GetAdminSettings = gql`
     query getAdminSettings {
   settings {
