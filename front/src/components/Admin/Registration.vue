@@ -192,11 +192,10 @@ export default defineComponent({
         icon: 'today',
       };
 
-      void this.wrapNotify(
-        () =>
-          this.updateSettings({
-            icalPassword: this.icalPassword,
-          }),
+      void this.resolveAndNotify(
+        this.updateSettings({
+          icalPassword: this.icalPassword,
+        }),
         opts
       );
     },
