@@ -140,11 +140,14 @@ export default defineComponent({
 
     const icalLink = computed(() => {
       icalEl.value?.select();
-      return (
-        document.location.origin +
-        '/calendar.ics?key=' +
-        encodeURIComponent(icalPassword.value)
-      );
+      if(icalPassword.value != ''){
+        return (
+          document.location.origin +
+          '/calendar.ics?key=' +
+          encodeURIComponent(icalPassword.value)
+        );
+      }
+      return document.location.origin + "/calendar.ics";
     });
     return {
       calendar: ref<QCalendar>(),

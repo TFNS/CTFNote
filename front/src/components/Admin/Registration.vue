@@ -21,7 +21,12 @@
         </q-card-section>
         <q-card-section>
           <div>
-            <q-input v-model="icalPassword">
+            <q-toggle
+              v-model="icalPasswordRequired"
+              left-label
+              label="Require password to access iCalendar"
+            />
+            <q-input :disable="!icalPasswordRequired" v-model="icalPassword">
               <template #after>
                 <q-btn
                   icon="save"
@@ -168,6 +173,18 @@ export default defineComponent({
           this.updateSettings({ registrationDefaultRole }),
           opts
         );
+      },
+    },
+    icalPasswordRequired: {
+      get(): boolean {
+        return this.icalPassword != '';
+      },
+      set(icalPasswordRequired: boolean) {
+        if (icalPasswordRequired) {
+          this.icalPassword = Math.random().toString(16).slice(2);
+        } else {
+          this.icalPassword = '';
+        }
       },
     },
   },
