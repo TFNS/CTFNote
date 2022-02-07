@@ -1,7 +1,7 @@
 <template>
   <div class="row q-gutter-md">
     <div class="col">
-      <q-card bordered>
+      <q-card bordered class="q-mb-md">
         <q-card-section>
           <div class="text-h6">Registration</div>
         </q-card-section>
@@ -12,6 +12,30 @@
               left-label
               label="Allow registration on CTFNote"
             />
+          </div>
+        </q-card-section>
+      </q-card>
+      <q-card bordered>
+        <q-card-section>
+          <div class="text-h6">Calendar Password</div>
+        </q-card-section>
+        <q-card-section>
+          <div>
+            <q-input v-model="icalPassword">
+              <template #after>
+                <q-btn
+                  icon="save"
+                  round
+                  :color="
+                    icalPassword == adminSettings.icalPassword
+                      ? 'grey-5'
+                      : 'positive'
+                  "
+                  :disabled="icalPassword == adminSettings.icalPassword"
+                  @click="updateIcalPassword"
+                />
+              </template>
+            </q-input>
           </div>
         </q-card-section>
       </q-card>
@@ -73,11 +97,13 @@ export default defineComponent({
     const { result: adminSettings } = ctfnote.settings.getAdminSettings();
 
     const registrationPassword = ref('');
+    const icalPassword = ref('');
 
     watch(
       adminSettings,
       (s) => {
-        registrationPassword.value = s.registrationPassword ?? '';
+        registrationPassword.value = s.registrationPassword;
+        icalPassword.value = s.icalPassword;
       },
       { immediate: true }
     );
@@ -87,6 +113,7 @@ export default defineComponent({
       updateSettings: ctfnote.settings.useUpdateSettings(),
       adminSettings,
       registrationPassword,
+      icalPassword,
     };
   },
   computed: {
@@ -156,6 +183,20 @@ export default defineComponent({
         this.updateSettings({
           registrationPassword: this.registrationPassword,
         }),
+        opts
+      );
+    },
+    updateIcalPassword() {
+      const opts = {
+        message: 'Calendar password changed!',
+        icon: 'today',
+      };
+
+      void this.wrapNotify(
+        () =>
+          this.updateSettings({
+            icalPassword: this.icalPassword,
+          }),
         opts
       );
     },
