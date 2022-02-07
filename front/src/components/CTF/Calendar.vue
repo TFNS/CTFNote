@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section>
-      <div v-if="$q.screen.gt.md" class="row justify-between items-center">
+      <div v-if="$q.screen.gt.sm" class="row justify-between items-center">
         <q-btn
           icon="arrow_back_ios"
           flat
@@ -15,7 +15,7 @@
             round
             flat
             icon="link"
-            title="Today"
+            title="iCalendar"
             @click="showIcalLink = true"
           />
         </div>
@@ -30,6 +30,13 @@
         <div class="row col col-12 items-center justify-center q-gutter-md">
           <q-btn round flat icon="today" title="Today" @click="showToday" />
           <div class="text-h5">{{ currentMonth }}</div>
+          <q-btn
+            round
+            flat
+            icon="link"
+            title="iCalendar"
+            @click="showIcalLink = true"
+          />
         </div>
         <q-btn
           icon="arrow_back_ios"
@@ -85,7 +92,7 @@
         <div class="col">
           <q-input
             ref="icalEl"
-            label="ICAL URL"
+            label="iCalendar"
             :model-value="icalLink"
             readonly
             outlined
@@ -116,7 +123,6 @@ import '@quasar/quasar-ui-qcalendar/src/QCalendarVariables.sass';
 import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent, ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import { QInput } from 'quasar';
 
 function dateToLocale(s: string, offset = 0): string {
@@ -128,18 +134,17 @@ function dateToLocale(s: string, offset = 0): string {
 export default defineComponent({
   components: { QCalendarMonth },
   setup() {
-    const $router = useRouter();
     const icalEl = ref<QInput>();
     const { result: ctfs, loading } = ctfnote.ctfs.getAllCtfs();
     const { result: icalPassword } = ctfnote.settings.getIcalPassword();
 
     const icalLink = computed(() => {
-      const route = $router.resolve({
-        path: '/calendar.ics',
-        query: { key: icalPassword.value },
-      });
       icalEl.value?.select();
-      return document.location.origin + route.href;
+      return (
+        document.location.origin +
+        '/calendar.ics?key=' +
+        encodeURIComponent(icalPassword.value)
+      );
     });
     return {
       calendar: ref<QCalendar>(),

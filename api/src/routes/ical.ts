@@ -1,8 +1,10 @@
 import { ICalCalendar } from "ical-generator";
 import { Request, Response, Handler } from "express";
 import { Pool } from "pg";
+import slugify from "slugify";
 
 type CtfRow = {
+  id: number;
   title: string;
   start_time: string;
   end_time: string;
@@ -29,7 +31,7 @@ export function icalRoute(pool: Pool): Handler {
 
   async function getCtfs(): Promise<CtfRow[]> {
     const r = await pool.query<CtfRow>(
-      "SELECT title, start_time, end_time, ctf_url, description FROM ctfnote.ctf"
+      "SELECT id, title, start_time, end_time, ctf_url, description FROM ctfnote.ctf"
     );
 
     return r.rows;
@@ -51,12 +53,22 @@ export function icalRoute(pool: Pool): Handler {
     const ctfs = await getCtfs();
 
     for (const ctf of ctfs) {
+      // I'm not sure if this works in all cases
+      // e.g. if ctfs aren't at /#/ctf/<id> but at /ctfnote/#/ctf/<id>
+      // or if the API is at a different URL.
+      // The alternative would be to link to the CTF website, but that's
+      // not really great either.
+      const ctf_url = new URL(
+        `/#/ctf/${ctf.id}-${slugify(ctf.title)}/info`,
+        `${req.protocol}://${req.headers.host}`
+      );
+
       cal.createEvent({
         start: ctf.start_time,
         end: ctf.end_time,
         description: ctf.description,
         summary: ctf.title,
-        url: ctf.ctf_url,
+        url: ctf_url.href,
       });
     }
 

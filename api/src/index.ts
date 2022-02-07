@@ -71,8 +71,8 @@ function createApp(postgraphileOptions: PostGraphileOptions) {
     host: config.db.host,
     database: config.db.database,
     port: config.db.port,
-    user: config.db.admin.login,
-    password: config.db.admin.password,
+    user: config.db.user.login,
+    password: config.db.user.password,
   });
 
   const app = express();
@@ -85,7 +85,7 @@ function createApp(postgraphileOptions: PostGraphileOptions) {
       },
     })
   );
-  app.use(postgraphile(getDbUrl("user"), "ctfnote", postgraphileOptions));
+  app.use(postgraphile(pool, "ctfnote", postgraphileOptions));
   app.use("/calendar.ics", icalRoute(pool));
   return app;
 }
