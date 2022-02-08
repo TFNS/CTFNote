@@ -27,9 +27,11 @@
     "graphile-utils": "^4.11.2",
     "graphql": "^15.6.1",
     "graphql-upload": "^12.0.0",
+    "ical-generator": "^3.2.1",
     "postgraphile": "^4.11.0",
     "postgraphile-plugin-connection-filter": "^2.1.1",
-    "postgres-migrations": "^5.3.0"
+    "postgres-migrations": "^5.3.0",
+    "slugify": "^1.6.5"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
