@@ -26,7 +26,7 @@
               left-label
               label="Require password to access iCalendar"
             />
-            <q-input :disable="!icalPasswordRequired" v-model="icalPassword">
+            <q-input v-model="icalPassword" :disable="!icalPasswordRequired">
               <template #after>
                 <q-btn
                   icon="save"
@@ -181,7 +181,11 @@ export default defineComponent({
       },
       set(icalPasswordRequired: boolean) {
         if (icalPasswordRequired) {
-          this.icalPassword = Math.random().toString(16).slice(2);
+          var buf = new Uint8Array(16);
+          window.crypto.getRandomValues(buf);
+          this.icalPassword = Array.prototype.map
+            .call(buf, (x: number) => x.toString(16).padStart(2, '0'))
+            .join('');
         } else {
           this.icalPassword = '';
         }

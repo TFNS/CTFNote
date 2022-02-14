@@ -100,9 +100,7 @@ export function getAdminSettings() {
 
 export function getIcalPassword() {
   const r = useGetIcalPasswordQuery();
-  r.onResult((r) => console.log('RESULT', r))
   return wrapQuery(r, 'no pass', (data) => {
-    console.log('data', data)
     return data.settings.nodes[0].icalPassword;
   });
 }

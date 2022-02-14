@@ -53,11 +53,7 @@ export function icalRoute(pool: Pool): Handler {
     const ctfs = await getCtfs();
 
     for (const ctf of ctfs) {
-      // I'm not sure if this works in all cases
-      // e.g. if ctfs aren't at /#/ctf/<id> but at /ctfnote/#/ctf/<id>
-      // or if the API is at a different URL.
-      // The alternative would be to link to the CTF website, but that's
-      // not really great either.
+      // Assumes that CTFNote is hosted at the root of the domain
       const ctf_url = new URL(
         `/#/ctf/${ctf.id}-${slugify(ctf.title)}/info`,
         `${req.protocol}://${req.headers.host}`
