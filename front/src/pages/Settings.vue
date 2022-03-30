@@ -102,6 +102,18 @@
               </q-card-actions>
             </q-form>
           </q-card>
+          <q-card bordered class="q-mt-md">
+            <q-card-section>
+              <div class="text-h6">Notification</div>
+            </q-card-section>
+            <q-card-section>
+              <q-toggle
+                :model-value="systemNotificationEnabled"
+                label="Use system notification"
+                @click="toggleNotification"
+              />
+            </q-card-section>
+          </q-card>
         </div>
       </div>
     </div>
@@ -136,15 +148,25 @@ export default defineComponent({
       },
       { deep: true }
     );
+    const {
+      isSystemNotificationEnabled,
+      askForNotificationPrivilege,
+      disableSystemNotification,
+    } = ctfnote.ui.useNotify();
+
+    const systemNotificationEnabled = ref(isSystemNotificationEnabled());
 
     return {
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       updateProfile: ctfnote.me.useUpdateProfile(),
       updatePassword: ctfnote.me.useUpdatePassword(),
       color,
       username,
       description,
       me,
+      systemNotificationEnabled,
+      askForNotificationPrivilege,
+      disableSystemNotification,
       oldPassword: ref(''),
       newPassword: ref(''),
     };
@@ -155,27 +177,34 @@ export default defineComponent({
     },
   },
   methods: {
+    async toggleNotification() {
+      if (!this.systemNotificationEnabled) {
+        this.systemNotificationEnabled =
+          await this.askForNotificationPrivilege();
+      } else {
+        this.systemNotificationEnabled = false;
+        this.disableSystemNotification();
+      }
+    },
     changeProfile() {
       const profile = this.me.profile;
       if (!profile) return;
 
-      void this.wrapNotify(
-        () =>
-          this.updateProfile(profile, {
-            color: this.color,
-            description: this.description,
-            username: this.username,
-          }),
+      void this.resolveAndNotify(
+        this.updateProfile(profile, {
+          color: this.color,
+          description: this.description,
+          username: this.username,
+        }),
         { message: 'Profile changed!', icon: 'person' }
       );
     },
     changePassword() {
-      void this.wrapNotify(
-        () =>
-          this.updatePassword(this.oldPassword, this.newPassword).then(() => {
-            this.oldPassword = '';
-            this.newPassword = '';
-          }),
+      void this.resolveAndNotify(
+        this.updatePassword(this.oldPassword, this.newPassword).then(() => {
+          this.oldPassword = '';
+          this.newPassword = '';
+        }),
         { message: 'Password changed!', icon: 'lock' }
       );
     },

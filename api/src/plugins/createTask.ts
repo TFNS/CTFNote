@@ -3,12 +3,52 @@ import axios from "axios";
 import savepointWrapper from "./savepointWrapper";
 import config from "../config";
 
-async function createPad(): Promise<string> {
+function buildNoteContent(
+  title: string,
+  description?: string,
+  category?: string
+): string {
+  let note = "";
+
+  note += `# ${title}`;
+
+  if (category) {
+    note += ` - ${category}`;
+  }
+
+  note += "\n\n";
+
+  if (description) {
+    note += `## Description\n`;
+    note += "\n";
+    note += `${description}\n`;
+
+    note += "\n";
+    note += "----\n";
+  }
+  return note;
+}
+
+async function createPad(
+  title: string,
+  description?: string,
+  category?: string
+): Promise<string> {
+  const options = {
+    headers: {
+      "Content-Type": "text/markdown",
+    },
+
+    maxRedirects: 0,
+    validateStatus: (status: number) => status === 302,
+  };
+
   try {
-    const res = await axios.get(config.pad.createUrl, {
-      maxRedirects: 0,
-      validateStatus: (status) => status === 302,
-    });
+    const res = await axios.post(
+      config.pad.createUrl,
+      buildNoteContent(title, description, category),
+      options
+    );
     return res.headers.location;
   } catch (e) {
     throw Error(`Call to ${config.pad.createUrl} during task creation failed.`);
@@ -44,7 +84,7 @@ export default makeExtendSchemaPlugin((build) => {
           { pgClient },
           resolveInfo
         ) => {
-          const padPathOrUrl = await createPad();
+          const padPathOrUrl = await createPad(title, description, category);
 
           let padPath: string;
           if (padPathOrUrl.startsWith("/")) {

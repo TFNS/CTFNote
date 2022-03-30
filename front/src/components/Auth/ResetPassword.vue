@@ -29,15 +29,15 @@ export default defineComponent({
   props: { token: { type: String, default: '' } },
   setup() {
     return {
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       resetPassword: ctfnote.auth.useResetPassword(),
       password: ref(''),
     };
   },
   methods: {
     submit() {
-      void this.wrapNotify(
-        () => this.resetPassword(this.password, this.token),
+      void this.resolveAndNotify(
+        this.resetPassword(this.password, this.token),
         {
           message: 'Password changed!',
           icon: 'person',

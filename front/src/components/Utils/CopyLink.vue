@@ -37,12 +37,12 @@ export default defineComponent({
   },
   setup() {
     return {
-      wrapNotify: ctfnote.ui.useWrapNotify(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
     };
   },
   methods: {
     clipboardCopy() {
-      void this.wrapNotify(() => navigator.clipboard.writeText(this.link), {
+      void this.resolveAndNotify(navigator.clipboard.writeText(this.link), {
         message: 'Copied to clipboard!',
         color: 'primary',
         actions: [],
