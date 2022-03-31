@@ -70,19 +70,22 @@ export default defineComponent({
       if (selectedItemIndex.value < 0) selectedItemIndex.value = 0;
     };
 
+    const previousShortcut = 'command+p, ctrl+p, up';
+    const nextShortcut = 'command+p, ctrl+p, up';
+
     onMounted(() => {
       hotkeys.filter = function () {
         return true;
       };
 
-      hotkeys('command+p, ctrl+p, up', (event) => {
+      hotkeys(previousShortcut, (event) => {
         event.stopImmediatePropagation();
         event.preventDefault();
         selectedItemIndex.value += -1;
         updateSelectedIndex();
       });
 
-      hotkeys('command+n, ctrl+n, down', (event) => {
+      hotkeys(nextShortcut, (event) => {
         event.stopImmediatePropagation();
         event.preventDefault();
         selectedItemIndex.value += 1;
