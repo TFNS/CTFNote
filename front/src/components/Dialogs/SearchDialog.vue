@@ -7,13 +7,12 @@
         <q-input
           v-model="searchText"
           filled
-          label="What are you searching for ?"
-          hint="search for title or description"
+          label="What are you searching for?"
+          hint="Search for title or description"
           autofocus
           :loading="loading"
           @update:model-value="onSearchChange"
           @keypress.enter="submit"
-          @keydown="searchInputKeyDown"
         />
       </q-card-section>
 
@@ -47,11 +46,12 @@
 </template>
 
 <script lang="ts">
+import hotkeys from 'hotkeys-js';
 import { useDialogPluginComponent } from 'quasar';
 import ctfnote from 'src/ctfnote';
 import { safeSlugify } from 'src/ctfnote/ctfs';
 import { Ctf, Task } from 'src/ctfnote/models';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, Ref, ref } from 'vue';
 
 export default defineComponent({
   emits: useDialogPluginComponent.emits,
@@ -59,34 +59,49 @@ export default defineComponent({
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
 
-    const items: Array<Ctf | Task> = [];
+    const items: Ref<Array<Ctf | Task>> = ref([]);
+    const selectedItemIndex = ref(0);
+    const searchText = ref('');
+
+    const updateSelectedIndex = () => {
+      if (selectedItemIndex.value >= items.value.length)
+        selectedItemIndex.value = items.value.length - 1;
+
+      if (selectedItemIndex.value < 0) selectedItemIndex.value = 0;
+    };
+
+    onMounted(() => {
+      hotkeys.filter = function () {
+        return true;
+      };
+
+      hotkeys('command+p, ctrl+p, up', (event) => {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        selectedItemIndex.value += -1;
+        updateSelectedIndex();
+      });
+
+      hotkeys('command+n, ctrl+n, down', (event) => {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        selectedItemIndex.value += 1;
+        updateSelectedIndex();
+      });
+    });
 
     return {
       dialogRef,
       loading: false,
-      searchText: ref(''),
-      selectedItemIndex: ref(0),
-      items: ref(items),
+      searchText,
+      selectedItemIndex,
+      items,
       onDialogHide,
       onDialogOK,
       onDialogCancel,
     };
   },
   methods: {
-    searchInputKeyDown(e: KeyboardEvent) {
-      if (e.key === 'ArrowDown' || (e.ctrlKey && e.key === 'n')) {
-        this.selectedItemIndex += 1;
-      }
-
-      if (e.key === 'ArrowUp' || (e.ctrlKey && e.key === 'p')) {
-        this.selectedItemIndex += -1;
-      }
-
-      if (this.selectedItemIndex >= this.items.length)
-        this.selectedItemIndex = this.items.length - 1;
-
-      if (this.selectedItemIndex < 0) this.selectedItemIndex = 0;
-    },
     async onSearchChange() {
       if (!this.searchText) {
         this.items = [];
