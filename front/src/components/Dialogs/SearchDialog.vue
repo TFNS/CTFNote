@@ -71,7 +71,7 @@ export default defineComponent({
     };
 
     const previousShortcut = 'command+p, ctrl+p, up';
-    const nextShortcut = 'command+p, ctrl+p, up';
+    const nextShortcut = 'command+n, ctrl+n, down';
 
     onMounted(() => {
       hotkeys.filter = function () {
