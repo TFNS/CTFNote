@@ -24,7 +24,9 @@
     "core-js": "^3.6.5",
     "quasar": "^2.0.0",
     "slugify": "^1.6.1",
-    "ts-essentials": "^9.0.0"
+    "ts-essentials": "^9.0.0",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
