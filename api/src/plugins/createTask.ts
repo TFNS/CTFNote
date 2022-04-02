@@ -44,6 +44,16 @@ export default makeExtendSchemaPlugin((build) => {
           { pgClient },
           resolveInfo
         ) => {
+          const {
+            rows: [isAllowed],
+          } = await pgClient.query(`SELECT ctfnote_private.can_play_ctf($1)`, [
+            ctfId,
+          ]);
+
+          if (isAllowed.can_play_ctf !== true) {
+            return {};
+          }
+
           const padPathOrUrl = await createPad();
 
           let padPath: string;
