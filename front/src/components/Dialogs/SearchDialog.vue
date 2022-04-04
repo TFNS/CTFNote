@@ -153,6 +153,9 @@ export default defineComponent({
     },
     submit() {
       const selectedItem = this.items[this.selectedItemIndex];
+
+      if (!selectedItem) return;
+
       this.onItemSelected(selectedItem);
     },
   },

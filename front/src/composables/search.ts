@@ -1,6 +1,5 @@
 import hotkeys from 'hotkeys-js';
-import { ref, onMounted } from 'vue';
-
+import { ref, onMounted, computed } from 'vue';
 import { useQuasar } from 'quasar';
 import SearchDialog from 'src/components/Dialogs/SearchDialog.vue';
 
@@ -10,6 +9,10 @@ export default function useSearchDialog() {
   // Used to force opening one dialog at a time
   const openedSearch = ref(false);
 
+  const lock = () => (openedSearch.value = true);
+  const unlock = () => (openedSearch.value = false);
+  const locked = computed(() => openedSearch.value);
+
   // Handle search shortcuts
   onMounted(() => {
     hotkeys('ctrl+k, command+k', function (event) {
@@ -17,16 +20,16 @@ export default function useSearchDialog() {
       event.preventDefault();
 
       // If the dialog is already opened, don't do anything
-      if (openedSearch.value) return;
+      if (locked.value) return;
 
-      openedSearch.value = true;
+      lock();
 
       $q.dialog({
         component: SearchDialog,
       })
-        .onCancel(() => (openedSearch.value = false))
-        .onDismiss(() => (openedSearch.value = false))
-        .onOk(() => (openedSearch.value = false));
+        .onCancel(unlock)
+        .onDismiss(unlock)
+        .onOk(unlock);
     });
   });
 
