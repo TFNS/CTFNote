@@ -3703,7 +3703,7 @@ export function useSubscribeToProfileDeletedSubscription(options: VueApolloCompo
 export type SubscribeToProfileDeletedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>;
 export const SearchCtFsDocument = gql`
     query SearchCTFs($search: String!) {
-  ctfs(filter: {title: {includes: $search}}) {
+  ctfs(filter: {title: {includesInsensitive: $search}}) {
     nodes {
       ...CtfFragment
     }
@@ -3732,7 +3732,7 @@ export function useSearchCtFsQuery(variables: SearchCtFsQueryVariables | VueComp
 export type SearchCtFsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchCtFsQuery, SearchCtFsQueryVariables>;
 export const SearchTasksDocument = gql`
     query SearchTasks($search: String!) {
-  tasks(filter: {title: {includes: $search}}) {
+  tasks(filter: {title: {includesInsensitive: $search}}) {
     nodes {
       ...TaskFragment
       ctf {
@@ -4617,7 +4617,7 @@ export const SubscribeToProfileDeleted = gql`
     ${ProfileFragment}`;
 export const SearchCtFs = gql`
     query SearchCTFs($search: String!) {
-  ctfs(filter: {title: {includes: $search}}) {
+  ctfs(filter: {title: {includesInsensitive: $search}}) {
     nodes {
       ...CtfFragment
     }
@@ -4626,7 +4626,7 @@ export const SearchCtFs = gql`
     ${CtfFragment}`;
 export const SearchTasks = gql`
     query SearchTasks($search: String!) {
-  tasks(filter: {title: {includes: $search}}) {
+  tasks(filter: {title: {includesInsensitive: $search}}) {
     nodes {
       ...TaskFragment
       ctf {

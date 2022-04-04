@@ -1,5 +1,5 @@
 query SearchCTFs($search: String!) {
-  ctfs(filter: { title: { includes: $search } }) {
+  ctfs(filter: { title: { includesInsensitive: $search } }) {
     nodes {
       ...CtfFragment
     }
@@ -7,7 +7,7 @@ query SearchCTFs($search: String!) {
 }
 
 query SearchTasks($search: String!) {
-  tasks(filter: { title: { includes: $search } }) {
+  tasks(filter: { title: { includesInsensitive: $search } }) {
     nodes {
       ...TaskFragment
       ctf {
