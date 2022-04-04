@@ -62,6 +62,14 @@ function createOptions() {
     postgraphileOptions.jwtSecret = "DEV";
     postgraphileOptions.showErrorStack = "json" as const;
     postgraphileOptions.extendedErrors = ["hint", "detail", "errcode"];
+
+    postgraphileOptions.graphileBuildOptions = {
+      connectionFilterAllowedOperators: ["includesInsensitive"],
+      connectionFilterAllowedFieldTypes: ["String"],
+      connectionFilterComputedColumns: false,
+      connectionFilterSetofFunctions: false,
+      connectionFilterArrays: false,
+    };
   }
   return postgraphileOptions;
 }
