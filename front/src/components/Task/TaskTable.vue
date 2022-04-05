@@ -89,8 +89,16 @@ export default defineComponent({
       col('title', { sortable: true }),
       col('description', { label: 'description / flag' }),
       col('players', { align: 'center' }),
-      col('open', { label: '', align: 'right', style: 'width:120px;max-width:120px;'}),
-      col('actions', { label: '', align: 'right', style: 'width:120px;max-width:120px;' }),
+      col('open', {
+        label: '',
+        align: 'right',
+        style: 'width:120px;max-width:120px;',
+      }),
+      col('actions', {
+        label: '',
+        align: 'right',
+        style: 'width:120px;max-width:120px;',
+      }),
     ];
     const pagination = {
       rowsPerPage: 0,
@@ -109,7 +117,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.q-table td, .q-table th {
-      white-space: normal !important;
+.q-table td,
+.q-table th {
+  white-space: normal;
 }
 </style>
