@@ -8,7 +8,7 @@
           v-model="searchText"
           filled
           label="What are you searching for?"
-          hint="Search for title or description"
+          hint="Search for title of CTF or task"
           autofocus
           :loading="loading"
           @update:model-value="onSearchChange"
@@ -51,7 +51,7 @@ import { useDialogPluginComponent } from 'quasar';
 import ctfnote from 'src/ctfnote';
 import { safeSlugify } from 'src/ctfnote/ctfs';
 import { Ctf, Task } from 'src/ctfnote/models';
-import { defineComponent, onMounted, Ref, ref } from 'vue';
+import { defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue';
 
 export default defineComponent({
   emits: useDialogPluginComponent.emits,
@@ -72,6 +72,11 @@ export default defineComponent({
 
     const previousShortcut = 'command+p, ctrl+p, up';
     const nextShortcut = 'command+n, ctrl+n, down';
+
+    onUnmounted(() => {
+      hotkeys.unbind(previousShortcut);
+      hotkeys.unbind(nextShortcut);
+    });
 
     onMounted(() => {
       hotkeys.filter = function () {
