@@ -22,6 +22,7 @@
     "apollo-upload-client": "^16.0.0",
     "color-hash": "^2.0.1",
     "core-js": "^3.6.5",
+    "hotkeys-js": "^3.8.7",
     "quasar": "^2.0.0",
     "slugify": "^1.6.1",
     "ts-essentials": "^9.0.0",

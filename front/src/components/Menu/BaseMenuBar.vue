@@ -7,6 +7,15 @@
           <q-btn flat no-caps>CTFNote</q-btn>
         </ctf-note-link>
         <slot name="after-title" />
+        <q-btn
+          v-if="showSearch"
+          flat
+          round
+          dense
+          icon="search"
+          class="q-mr-xs"
+          @click="openSearchDialog()"
+        />
       </q-toolbar-title>
       <q-btn-dropdown
         flat
@@ -44,6 +53,7 @@
               </div>
             </q-item-section>
           </q-item>
+
           <q-separator v-if="showLogout" inset spaced />
 
           <q-item v-if="showLogout" clickable @click="logout">
@@ -63,6 +73,7 @@ import CtfNoteLink from 'src/components/Utils/CtfNoteLink.vue';
 import ctfnote from 'src/ctfnote';
 import { useStoredSettings } from 'src/extensions/storedSettings';
 import { defineComponent, ref, watch } from 'vue';
+import SearchDialogVue from '../Dialogs/SearchDialog.vue';
 
 export default defineComponent({
   components: { CtfNoteLink },
@@ -70,6 +81,7 @@ export default defineComponent({
     dropDownLabel: { type: String, required: true },
     dropDownLink: { type: String, required: true },
     showLogout: { type: Boolean, default: false },
+    showSearch: { type: Boolean, default: false },
   },
 
   setup() {
@@ -94,6 +106,13 @@ export default defineComponent({
       darkMode,
       logout,
     };
+  },
+  methods: {
+    openSearchDialog() {
+      this.$q.dialog({
+        component: SearchDialogVue,
+      });
+    },
   },
 });
 </script>

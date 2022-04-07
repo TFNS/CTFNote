@@ -16,17 +16,22 @@ import NotificationListener from 'src/components/Utils/NotificationListener.vue'
 import { ctfnote } from 'src/ctfnote';
 import { defineComponent } from 'vue';
 
+import useSearchDialog from 'src/composables/search';
+
 export default defineComponent({
   name: 'MainLayout',
   components: { MainMenu, NotificationListener },
   setup() {
     ctfnote.me.provideMe();
     ctfnote.profiles.provideTeam();
+
     const settings = ctfnote.settings.provideSettings();
 
     for (const [name, value] of Object.entries(settings.value.style)) {
       document.documentElement.style.setProperty(`--q-${name}`, value);
     }
+
+    useSearchDialog();
 
     return {};
   },

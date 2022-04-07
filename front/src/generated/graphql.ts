@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import * as VueApolloComposable from '@vue/apollo-composable';
 import * as VueCompositionApi from 'vue';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -31,13 +32,39 @@ export type Scalars = {
   Upload: File;
 };
 
+/** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
+export type BooleanFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['Boolean']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['Boolean']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['Boolean']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['Boolean']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['Boolean']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['Boolean']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['Boolean']>>;
+};
+
 /** All input for the `changePassword` mutation. */
 export type ChangePasswordInput = {
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   newpassword: Scalars['String'];
   oldpassword: Scalars['String'];
 };
@@ -66,7 +93,7 @@ export type CreateCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Ctf` to be created by this mutation. */
   ctf: CtfInput;
 };
@@ -92,7 +119,7 @@ export type CreateCtfPayload = {
 
 /** The output of our create `Ctf` mutation. */
 export type CreateCtfPayloadCtfEdgeArgs = {
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 /** All input for the create `Invitation` mutation. */
@@ -101,7 +128,7 @@ export type CreateInvitationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The `Invitation` to be created by this mutation. */
   invitation: InvitationInput;
 };
@@ -112,8 +139,8 @@ export type CreateInvitationLinkInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  role?: Maybe<Role>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<Role>;
 };
 
 /** The output of our `createInvitationLink` mutation. */
@@ -152,7 +179,7 @@ export type CreateInvitationPayload = {
 
 /** The output of our create `Invitation` mutation. */
 export type CreateInvitationPayloadInvitationEdgeArgs = {
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 /** All input for the `createResetPasswordLink` mutation. */
@@ -161,8 +188,8 @@ export type CreateResetPasswordLinkInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `createResetPasswordLink` mutation. */
@@ -179,10 +206,10 @@ export type CreateResetPasswordLinkPayload = {
 };
 
 export type CreateTaskInput = {
-  category?: Maybe<Scalars['String']>;
+  category?: InputMaybe<Scalars['String']>;
   ctfId: Scalars['Int'];
-  description?: Maybe<Scalars['String']>;
-  flag?: Maybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  flag?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
 };
 
@@ -217,60 +244,86 @@ export type Ctf = Node & {
 
 
 export type CtfInvitationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InvitationCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InvitationCondition>;
+  filter?: InputMaybe<InvitationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
 export type CtfTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<TaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<TasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<TaskCondition>;
+  filter?: InputMaybe<TaskFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 /** A condition to be used against `Ctf` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type CtfCondition = {
   /** Checks for equality with the object’s `endTime` field. */
-  endTime?: Maybe<Scalars['Datetime']>;
+  endTime?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `secretsId` field. */
-  secretsId?: Maybe<Scalars['Int']>;
+  secretsId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `startTime` field. */
-  startTime?: Maybe<Scalars['Datetime']>;
+  startTime?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `title` field. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `Ctf` object types. All fields are combined with a logical ‘and.’ */
+export type CtfFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<CtfFilter>>;
+  /** Filter by the object’s `endTime` field. */
+  endTime?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `granted` field. */
+  granted?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<CtfFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<CtfFilter>>;
+  /** Filter by the object’s `secretsId` field. */
+  secretsId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `startTime` field. */
+  startTime?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `title` field. */
+  title?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `Ctf` */
 export type CtfInput = {
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  ctfUrl?: InputMaybe<Scalars['String']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   endTime: Scalars['Datetime'];
-  logoUrl?: Maybe<Scalars['String']>;
+  logoUrl?: InputMaybe<Scalars['String']>;
   startTime: Scalars['Datetime'];
   title: Scalars['String'];
-  weight?: Maybe<Scalars['Float']>;
+  weight?: InputMaybe<Scalars['Float']>;
 };
 
 /** Represents an update to a `Ctf`. Fields that are set will be updated. */
 export type CtfPatch = {
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  endTime?: Maybe<Scalars['Datetime']>;
-  logoUrl?: Maybe<Scalars['String']>;
-  startTime?: Maybe<Scalars['Datetime']>;
-  title?: Maybe<Scalars['String']>;
-  weight?: Maybe<Scalars['Float']>;
+  ctfUrl?: InputMaybe<Scalars['String']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  endTime?: InputMaybe<Scalars['Datetime']>;
+  logoUrl?: InputMaybe<Scalars['String']>;
+  startTime?: InputMaybe<Scalars['Datetime']>;
+  title?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Float']>;
 };
 
 export type CtfSecret = Node & {
@@ -285,13 +338,14 @@ export type CtfSecret = Node & {
 
 
 export type CtfSecretCtfsBySecretsIdArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<CtfCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<CtfCondition>;
+  filter?: InputMaybe<CtfFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 /**
@@ -300,12 +354,24 @@ export type CtfSecretCtfsBySecretsIdArgs = {
  */
 export type CtfSecretCondition = {
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `CtfSecret` object types. All fields are combined with a logical ‘and.’ */
+export type CtfSecretFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<CtfSecretFilter>>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<CtfSecretFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<CtfSecretFilter>>;
 };
 
 /** Represents an update to a `CtfSecret`. Fields that are set will be updated. */
 export type CtfSecretPatch = {
-  credentials?: Maybe<Scalars['String']>;
+  credentials?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `CtfSecret` values. */
@@ -373,8 +439,36 @@ export enum CtfsOrderBy {
   SecretsIdAsc = 'SECRETS_ID_ASC',
   SecretsIdDesc = 'SECRETS_ID_DESC',
   StartTimeAsc = 'START_TIME_ASC',
-  StartTimeDesc = 'START_TIME_DESC'
+  StartTimeDesc = 'START_TIME_DESC',
+  TitleAsc = 'TITLE_ASC',
+  TitleDesc = 'TITLE_DESC'
 }
+
+/** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
+export type DatetimeFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['Datetime']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['Datetime']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['Datetime']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['Datetime']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['Datetime']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['Datetime']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['Datetime']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['Datetime']>>;
+};
 
 /** All input for the `deleteCtfByNodeId` mutation. */
 export type DeleteCtfByNodeIdInput = {
@@ -382,7 +476,7 @@ export type DeleteCtfByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Ctf` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -393,7 +487,7 @@ export type DeleteCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -419,7 +513,7 @@ export type DeleteCtfPayload = {
 
 /** The output of our delete `Ctf` mutation. */
 export type DeleteCtfPayloadCtfEdgeArgs = {
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 /** All input for the `deleteInvitationByNodeId` mutation. */
@@ -428,7 +522,7 @@ export type DeleteInvitationByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Invitation` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -439,7 +533,7 @@ export type DeleteInvitationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   ctfId: Scalars['Int'];
   profileId: Scalars['Int'];
 };
@@ -468,7 +562,7 @@ export type DeleteInvitationPayload = {
 
 /** The output of our delete `Invitation` mutation. */
 export type DeleteInvitationPayloadInvitationEdgeArgs = {
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 /** All input for the `deleteTaskByNodeId` mutation. */
@@ -477,7 +571,7 @@ export type DeleteTaskByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Task` to be deleted. */
   nodeId: Scalars['ID'];
 };
@@ -488,7 +582,7 @@ export type DeleteTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
@@ -514,7 +608,7 @@ export type DeleteTaskPayload = {
 
 /** The output of our delete `Task` mutation. */
 export type DeleteTaskPayloadTaskEdgeArgs = {
-  orderBy?: Maybe<Array<TasksOrderBy>>;
+  orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 /** All input for the `deleteUser` mutation. */
@@ -523,8 +617,8 @@ export type DeleteUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `deleteUser` mutation. */
@@ -550,6 +644,32 @@ export type ImportCtfPayload = {
   query?: Maybe<Query>;
 };
 
+/** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
+export type IntFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['Int']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['Int']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['Int']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Int']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['Int']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['Int']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['Int']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['Int']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['Int']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['Int']>>;
+};
+
 export type Invitation = Node & {
   __typename?: 'Invitation';
   /** Reads a single `Ctf` that is related to this `Invitation`. */
@@ -568,9 +688,23 @@ export type Invitation = Node & {
  */
 export type InvitationCondition = {
   /** Checks for equality with the object’s `ctfId` field. */
-  ctfId?: Maybe<Scalars['Int']>;
+  ctfId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `profileId` field. */
-  profileId?: Maybe<Scalars['Int']>;
+  profileId?: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `Invitation` object types. All fields are combined with a logical ‘and.’ */
+export type InvitationFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<InvitationFilter>>;
+  /** Filter by the object’s `ctfId` field. */
+  ctfId?: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<InvitationFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<InvitationFilter>>;
+  /** Filter by the object’s `profileId` field. */
+  profileId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `Invitation` */
@@ -631,7 +765,7 @@ export type LoginInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   login: Scalars['String'];
   password: Scalars['String'];
 };
@@ -738,7 +872,7 @@ export type MutationCreateResetPasswordLinkArgs = {
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateTaskArgs = {
-  input?: Maybe<CreateTaskInput>;
+  input?: InputMaybe<CreateTaskInput>;
 };
 
 
@@ -786,7 +920,7 @@ export type MutationDeleteUserArgs = {
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationImportCtfArgs = {
-  input?: Maybe<ImportCtfInput>;
+  input?: InputMaybe<ImportCtfInput>;
 };
 
 
@@ -939,39 +1073,57 @@ export type Profile = Node & {
 
 
 export type ProfileInvitationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InvitationCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InvitationCondition>;
+  filter?: InputMaybe<InvitationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
 export type ProfileWorkOnTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<WorkOnTaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<WorkOnTaskCondition>;
+  filter?: InputMaybe<WorkOnTaskFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** A condition to be used against `Profile` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type ProfileCondition = {
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `username` field. */
-  username?: Maybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `Profile` object types. All fields are combined with a logical ‘and.’ */
+export type ProfileFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<ProfileFilter>>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<ProfileFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<ProfileFilter>>;
+  /** Filter by the object’s `role` field. */
+  role?: InputMaybe<RoleFilter>;
+  /** Filter by the object’s `username` field. */
+  username?: InputMaybe<StringFilter>;
 };
 
 /** Represents an update to a `Profile`. Fields that are set will be updated. */
 export type ProfilePatch = {
-  color?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  username?: Maybe<Scalars['String']>;
+  color?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Profile` values. */
@@ -1093,45 +1245,49 @@ export type QueryCtfSecretByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfSecretsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<CtfSecretCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<CtfSecretsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<CtfSecretCondition>;
+  filter?: InputMaybe<CtfSecretFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CtfSecretsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<CtfCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<CtfCondition>;
+  filter?: InputMaybe<CtfFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGuestsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<ProfileFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryIncomingCtfArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<CtfFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1150,13 +1306,14 @@ export type QueryInvitationByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryInvitationsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<InvitationCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<InvitationsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<InvitationCondition>;
+  filter?: InputMaybe<InvitationFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
@@ -1168,11 +1325,12 @@ export type QueryNodeArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPastCtfArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<CtfFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -1196,13 +1354,14 @@ export type QueryProfileByUsernameArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryProfilesArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<ProfileCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<ProfilesOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ProfileCondition>;
+  filter?: InputMaybe<ProfileFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
 };
 
 
@@ -1214,12 +1373,12 @@ export type QuerySettingByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QuerySettingsArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<SettingsOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<SettingsOrderBy>>;
 };
 
 
@@ -1237,24 +1396,25 @@ export type QueryTaskByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<TaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<TasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<TaskCondition>;
+  filter?: InputMaybe<TaskFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUsersArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<UsersOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
@@ -1273,13 +1433,14 @@ export type QueryWorkOnTaskByNodeIdArgs = {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryWorkOnTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<WorkOnTaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<WorkOnTaskCondition>;
+  filter?: InputMaybe<WorkOnTaskFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** All input for the `register` mutation. */
@@ -1288,7 +1449,7 @@ export type RegisterInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   login: Scalars['String'];
   password: Scalars['String'];
 };
@@ -1312,7 +1473,7 @@ export type RegisterWithPasswordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   ctfnotePassword: Scalars['String'];
   login: Scalars['String'];
   password: Scalars['String'];
@@ -1337,10 +1498,10 @@ export type RegisterWithTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  login?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  login?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
 };
 
 /** The output of our `registerWithToken` mutation. */
@@ -1362,9 +1523,9 @@ export type ResetPasswordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
 };
 
 export type ResetPasswordLinkResponse = {
@@ -1387,11 +1548,37 @@ export type ResetPasswordPayload = {
 
 export enum Role {
   UserAdmin = 'USER_ADMIN',
+  UserFriend = 'USER_FRIEND',
   UserGuest = 'USER_GUEST',
   UserManager = 'USER_MANAGER',
-  UserMember = 'USER_MEMBER',
-  UserFriend = 'USER_FRIEND',
+  UserMember = 'USER_MEMBER'
 }
+
+/** A filter to be used against Role fields. All fields are combined with a logical ‘and.’ */
+export type RoleFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Role>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Role>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Role>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Role>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Role>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Role>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Role>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Role>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Role>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Role>>;
+};
 
 export type Setting = Node & {
   __typename?: 'Setting';
@@ -1406,11 +1593,11 @@ export type Setting = Node & {
 
 /** Represents an update to a `Setting`. Fields that are set will be updated. */
 export type SettingPatch = {
-  registrationAllowed?: Maybe<Scalars['Boolean']>;
-  registrationDefaultRole?: Maybe<Role>;
-  registrationPassword?: Maybe<Scalars['String']>;
-  registrationPasswordAllowed?: Maybe<Scalars['Boolean']>;
-  style?: Maybe<Scalars['JSON']>;
+  registrationAllowed?: InputMaybe<Scalars['Boolean']>;
+  registrationDefaultRole?: InputMaybe<Role>;
+  registrationPassword?: InputMaybe<Scalars['String']>;
+  registrationPasswordAllowed?: InputMaybe<Scalars['Boolean']>;
+  style?: InputMaybe<Scalars['JSON']>;
 };
 
 /** A connection to a list of `Setting` values. */
@@ -1448,8 +1635,8 @@ export type StartWorkingOnInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  taskId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  taskId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `startWorkingOn` mutation. */
@@ -1474,7 +1661,7 @@ export type StartWorkingOnPayload = {
 
 /** The output of our `startWorkingOn` mutation. */
 export type StartWorkingOnPayloadWorkOnTaskEdgeArgs = {
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** All input for the `stopWorkingOn` mutation. */
@@ -1483,8 +1670,8 @@ export type StopWorkingOnInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  taskId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  taskId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `stopWorkingOn` mutation. */
@@ -1509,7 +1696,85 @@ export type StopWorkingOnPayload = {
 
 /** The output of our `stopWorkingOn` mutation. */
 export type StopWorkingOnPayloadWorkOnTaskEdgeArgs = {
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
+};
+
+/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
+export type StringFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  distinctFromInsensitive?: InputMaybe<Scalars['String']>;
+  /** Ends with the specified string (case-sensitive). */
+  endsWith?: InputMaybe<Scalars['String']>;
+  /** Ends with the specified string (case-insensitive). */
+  endsWithInsensitive?: InputMaybe<Scalars['String']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['String']>;
+  /** Equal to the specified value (case-insensitive). */
+  equalToInsensitive?: InputMaybe<Scalars['String']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['String']>;
+  /** Greater than the specified value (case-insensitive). */
+  greaterThanInsensitive?: InputMaybe<Scalars['String']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['String']>;
+  /** Greater than or equal to the specified value (case-insensitive). */
+  greaterThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['String']>>;
+  /** Included in the specified list (case-insensitive). */
+  inInsensitive?: InputMaybe<Array<Scalars['String']>>;
+  /** Contains the specified string (case-sensitive). */
+  includes?: InputMaybe<Scalars['String']>;
+  /** Contains the specified string (case-insensitive). */
+  includesInsensitive?: InputMaybe<Scalars['String']>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['String']>;
+  /** Less than the specified value (case-insensitive). */
+  lessThanInsensitive?: InputMaybe<Scalars['String']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['String']>;
+  /** Less than or equal to the specified value (case-insensitive). */
+  lessThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  like?: InputMaybe<Scalars['String']>;
+  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  likeInsensitive?: InputMaybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  notDistinctFromInsensitive?: InputMaybe<Scalars['String']>;
+  /** Does not end with the specified string (case-sensitive). */
+  notEndsWith?: InputMaybe<Scalars['String']>;
+  /** Does not end with the specified string (case-insensitive). */
+  notEndsWithInsensitive?: InputMaybe<Scalars['String']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['String']>;
+  /** Not equal to the specified value (case-insensitive). */
+  notEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+  /** Not included in the specified list (case-insensitive). */
+  notInInsensitive?: InputMaybe<Array<Scalars['String']>>;
+  /** Does not contain the specified string (case-sensitive). */
+  notIncludes?: InputMaybe<Scalars['String']>;
+  /** Does not contain the specified string (case-insensitive). */
+  notIncludesInsensitive?: InputMaybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLike?: InputMaybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLikeInsensitive?: InputMaybe<Scalars['String']>;
+  /** Does not start with the specified string (case-sensitive). */
+  notStartsWith?: InputMaybe<Scalars['String']>;
+  /** Does not start with the specified string (case-insensitive). */
+  notStartsWithInsensitive?: InputMaybe<Scalars['String']>;
+  /** Starts with the specified string (case-sensitive). */
+  startsWith?: InputMaybe<Scalars['String']>;
+  /** Starts with the specified string (case-insensitive). */
+  startsWithInsensitive?: InputMaybe<Scalars['String']>;
 };
 
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
@@ -1544,29 +1809,50 @@ export type Task = Node & {
 
 
 export type TaskWorkOnTasksArgs = {
-  after?: Maybe<Scalars['Cursor']>;
-  before?: Maybe<Scalars['Cursor']>;
-  condition?: Maybe<WorkOnTaskCondition>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<WorkOnTasksOrderBy>>;
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<WorkOnTaskCondition>;
+  filter?: InputMaybe<WorkOnTaskFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** A condition to be used against `Task` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type TaskCondition = {
   /** Checks for equality with the object’s `ctfId` field. */
-  ctfId?: Maybe<Scalars['Int']>;
+  ctfId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: Maybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `title` field. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `Task` object types. All fields are combined with a logical ‘and.’ */
+export type TaskFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<TaskFilter>>;
+  /** Filter by the object’s `ctfId` field. */
+  ctfId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<IntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<TaskFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<TaskFilter>>;
+  /** Filter by the object’s `solved` field. */
+  solved?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `title` field. */
+  title?: InputMaybe<StringFilter>;
 };
 
 /** Represents an update to a `Task`. Fields that are set will be updated. */
 export type TaskPatch = {
-  category?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  flag?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+  category?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  flag?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 /** A connection to a list of `Task` values. */
@@ -1599,7 +1885,9 @@ export enum TasksOrderBy {
   IdDesc = 'ID_DESC',
   Natural = 'NATURAL',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  TitleAsc = 'TITLE_ASC',
+  TitleDesc = 'TITLE_DESC'
 }
 
 /** All input for the `updateCtfByNodeId` mutation. */
@@ -1608,7 +1896,7 @@ export type UpdateCtfByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Ctf` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Ctf` being updated. */
@@ -1621,7 +1909,7 @@ export type UpdateCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Ctf` being updated. */
   patch: CtfPatch;
@@ -1648,7 +1936,7 @@ export type UpdateCtfPayload = {
 
 /** The output of our update `Ctf` mutation. */
 export type UpdateCtfPayloadCtfEdgeArgs = {
-  orderBy?: Maybe<Array<CtfsOrderBy>>;
+  orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 /** All input for the `updateCtfSecretByNodeId` mutation. */
@@ -1657,7 +1945,7 @@ export type UpdateCtfSecretByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `CtfSecret` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `CtfSecret` being updated. */
@@ -1670,7 +1958,7 @@ export type UpdateCtfSecretInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `CtfSecret` being updated. */
   patch: CtfSecretPatch;
@@ -1695,7 +1983,7 @@ export type UpdateCtfSecretPayload = {
 
 /** The output of our update `CtfSecret` mutation. */
 export type UpdateCtfSecretPayloadCtfSecretEdgeArgs = {
-  orderBy?: Maybe<Array<CtfSecretsOrderBy>>;
+  orderBy?: InputMaybe<Array<CtfSecretsOrderBy>>;
 };
 
 /** All input for the `updateProfileByNodeId` mutation. */
@@ -1704,7 +1992,7 @@ export type UpdateProfileByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Profile` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Profile` being updated. */
@@ -1717,7 +2005,7 @@ export type UpdateProfileByUsernameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** An object where the defined keys will be set on the `Profile` being updated. */
   patch: ProfilePatch;
   username: Scalars['String'];
@@ -1729,7 +2017,7 @@ export type UpdateProfileInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Profile` being updated. */
   patch: ProfilePatch;
@@ -1754,7 +2042,7 @@ export type UpdateProfilePayload = {
 
 /** The output of our update `Profile` mutation. */
 export type UpdateProfilePayloadProfileEdgeArgs = {
-  orderBy?: Maybe<Array<ProfilesOrderBy>>;
+  orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
 };
 
 /** All input for the `updateSettingByNodeId` mutation. */
@@ -1763,7 +2051,7 @@ export type UpdateSettingByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Setting` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Setting` being updated. */
@@ -1789,7 +2077,7 @@ export type UpdateSettingPayload = {
 
 /** The output of our update `Setting` mutation. */
 export type UpdateSettingPayloadSettingEdgeArgs = {
-  orderBy?: Maybe<Array<SettingsOrderBy>>;
+  orderBy?: InputMaybe<Array<SettingsOrderBy>>;
 };
 
 /** All input for the `updateTaskByNodeId` mutation. */
@@ -1798,7 +2086,7 @@ export type UpdateTaskByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   /** The globally unique `ID` which will identify a single `Task` to be updated. */
   nodeId: Scalars['ID'];
   /** An object where the defined keys will be set on the `Task` being updated. */
@@ -1811,7 +2099,7 @@ export type UpdateTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
   /** An object where the defined keys will be set on the `Task` being updated. */
   patch: TaskPatch;
@@ -1838,7 +2126,7 @@ export type UpdateTaskPayload = {
 
 /** The output of our update `Task` mutation. */
 export type UpdateTaskPayloadTaskEdgeArgs = {
-  orderBy?: Maybe<Array<TasksOrderBy>>;
+  orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 /** All input for the `updateUserRole` mutation. */
@@ -1847,9 +2135,9 @@ export type UpdateUserRoleInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  role?: Maybe<Role>;
-  userId?: Maybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  role?: InputMaybe<Role>;
+  userId?: InputMaybe<Scalars['Int']>;
 };
 
 /** The output of our `updateUserRole` mutation. */
@@ -1926,9 +2214,23 @@ export type WorkOnTask = Node & {
  */
 export type WorkOnTaskCondition = {
   /** Checks for equality with the object’s `profileId` field. */
-  profileId?: Maybe<Scalars['Int']>;
+  profileId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `taskId` field. */
-  taskId?: Maybe<Scalars['Int']>;
+  taskId?: InputMaybe<Scalars['Int']>;
+};
+
+/** A filter to be used against `WorkOnTask` object types. All fields are combined with a logical ‘and.’ */
+export type WorkOnTaskFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<WorkOnTaskFilter>>;
+  /** Negates the expression. */
+  not?: InputMaybe<WorkOnTaskFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<WorkOnTaskFilter>>;
+  /** Filter by the object’s `profileId` field. */
+  profileId?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `taskId` field. */
+  taskId?: InputMaybe<IntFilter>;
 };
 
 /** A connection to a list of `WorkOnTask` values. */
@@ -2079,8 +2381,8 @@ export type IncomingCtfsQueryVariables = Exact<{ [key: string]: never; }>;
 export type IncomingCtfsQuery = { __typename?: 'Query', incomingCtf?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
 
 export type PastCtfsQueryVariables = Exact<{
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 }>;
 
 
@@ -2090,11 +2392,11 @@ export type CreateCtfMutationVariables = Exact<{
   title: Scalars['String'];
   startTime: Scalars['Datetime'];
   endTime: Scalars['Datetime'];
-  weight?: Maybe<Scalars['Float']>;
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  logoUrl?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Float']>;
+  ctfUrl?: InputMaybe<Scalars['String']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']>;
+  logoUrl?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2116,14 +2418,14 @@ export type ImportctfMutation = { __typename?: 'Mutation', importCtf?: { __typen
 
 export type UpdateCtfByIdMutationVariables = Exact<{
   id: Scalars['Int'];
-  title?: Maybe<Scalars['String']>;
-  weight?: Maybe<Scalars['Float']>;
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  logoUrl?: Maybe<Scalars['String']>;
-  startTime?: Maybe<Scalars['Datetime']>;
-  endTime?: Maybe<Scalars['Datetime']>;
-  description?: Maybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['Float']>;
+  ctfUrl?: InputMaybe<Scalars['String']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']>;
+  logoUrl?: InputMaybe<Scalars['String']>;
+  startTime?: InputMaybe<Scalars['Datetime']>;
+  endTime?: InputMaybe<Scalars['Datetime']>;
+  description?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2200,6 +2502,20 @@ export type SubscribeToProfileDeletedSubscriptionVariables = Exact<{ [key: strin
 
 export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
 
+export type SearchCtFsQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchCtFsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+
+export type SearchTasksQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> } | null | undefined };
+
 export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined };
 
 export type GetCredentialsForCtfIdQueryVariables = Exact<{
@@ -2211,7 +2527,7 @@ export type GetCredentialsForCtfIdQuery = { __typename?: 'Query', ctfSecret?: { 
 
 export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
-  credentials?: Maybe<Scalars['String']>;
+  credentials?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2259,10 +2575,10 @@ export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task'
 
 export type UpdateTaskMutationVariables = Exact<{
   id: Scalars['Int'];
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  category?: Maybe<Scalars['String']>;
-  flag?: Maybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  category?: InputMaybe<Scalars['String']>;
+  flag?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -2271,9 +2587,9 @@ export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typ
 export type CreateTaskForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
   title: Scalars['String'];
-  category?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  flag?: Maybe<Scalars['String']>;
+  category?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  flag?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -3385,6 +3701,68 @@ export function useSubscribeToProfileDeletedSubscription(options: VueApolloCompo
   return VueApolloComposable.useSubscription<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>(SubscribeToProfileDeletedDocument, {}, options);
 }
 export type SubscribeToProfileDeletedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>;
+export const SearchCtFsDocument = gql`
+    query SearchCTFs($search: String!) {
+  ctfs(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${CtfFragmentDoc}`;
+
+/**
+ * __useSearchCtFsQuery__
+ *
+ * To run a query within a Vue component, call `useSearchCtFsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCtFsQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSearchCtFsQuery({
+ *   search: // value for 'search'
+ * });
+ */
+export function useSearchCtFsQuery(variables: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<SearchCtFsQuery, SearchCtFsQueryVariables>(SearchCtFsDocument, variables, options);
+}
+export type SearchCtFsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchCtFsQuery, SearchCtFsQueryVariables>;
+export const SearchTasksDocument = gql`
+    query SearchTasks($search: String!) {
+  tasks(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...TaskFragment
+      ctf {
+        ...CtfFragment
+      }
+    }
+  }
+}
+    ${TaskFragmentDoc}
+${CtfFragmentDoc}`;
+
+/**
+ * __useSearchTasksQuery__
+ *
+ * To run a query within a Vue component, call `useSearchTasksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchTasksQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSearchTasksQuery({
+ *   search: // value for 'search'
+ * });
+ */
+export function useSearchTasksQuery(variables: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
+}
+export type SearchTasksQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchTasksQuery, SearchTasksQueryVariables>;
 export const GetCredentialsForCtfIdDocument = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
   ctfSecret(id: $ctfId) {
@@ -4237,6 +4615,28 @@ export const SubscribeToProfileDeleted = gql`
   }
 }
     ${ProfileFragment}`;
+export const SearchCtFs = gql`
+    query SearchCTFs($search: String!) {
+  ctfs(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${CtfFragment}`;
+export const SearchTasks = gql`
+    query SearchTasks($search: String!) {
+  tasks(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...TaskFragment
+      ctf {
+        ...CtfFragment
+      }
+    }
+  }
+}
+    ${TaskFragment}
+${CtfFragment}`;
 export const GetCredentialsForCtfId = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
   ctfSecret(id: $ctfId) {

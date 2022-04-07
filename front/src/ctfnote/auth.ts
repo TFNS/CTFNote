@@ -11,7 +11,7 @@ import { useRouter } from 'vue-router';
 import { prefetchMe } from './me';
 
 
-const JWT_KEY = 'JWT';
+export const JWT_KEY = 'JWT';
 
 export function saveJWT(jwt: string | null | undefined) {
   if (!jwt) {
@@ -33,11 +33,11 @@ export async function refreshJWT(): Promise<boolean> {
   const token = result.data.newToken;
 
   if (token) {
-    localStorage.setItem('JWT', token);
+    localStorage.setItem(JWT_KEY, token);
     return true;
   } else {
     return false;
-}
+  }
 }
 
 /* Mutations */
