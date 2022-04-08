@@ -232,6 +232,7 @@ export type CtfTasksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<TaskCondition>;
+  filter?: InputMaybe<TaskFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -248,6 +249,20 @@ export type CtfCondition = {
   secretsId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `startTime` field. */
   startTime?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `title` field. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `Ctf` object types. All fields are combined with a logical ‘and.’ */
+export type CtfFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<CtfFilter>>;
+  /** Negates the expression. */
+  not?: InputMaybe<CtfFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<CtfFilter>>;
+  /** Filter by the object’s `title` field. */
+  title?: InputMaybe<StringFilter>;
 };
 
 /** An input for mutations affecting `Ctf` */
@@ -289,6 +304,7 @@ export type CtfSecretCtfsBySecretsIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<CtfCondition>;
+  filter?: InputMaybe<CtfFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -374,7 +390,9 @@ export enum CtfsOrderBy {
   SecretsIdAsc = 'SECRETS_ID_ASC',
   SecretsIdDesc = 'SECRETS_ID_DESC',
   StartTimeAsc = 'START_TIME_ASC',
-  StartTimeDesc = 'START_TIME_DESC'
+  StartTimeDesc = 'START_TIME_DESC',
+  TitleAsc = 'TITLE_ASC',
+  TitleDesc = 'TITLE_DESC'
 }
 
 /** All input for the `deleteCtfByNodeId` mutation. */
@@ -968,6 +986,18 @@ export type ProfileCondition = {
   username?: InputMaybe<Scalars['String']>;
 };
 
+/** A filter to be used against `Profile` object types. All fields are combined with a logical ‘and.’ */
+export type ProfileFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<ProfileFilter>>;
+  /** Negates the expression. */
+  not?: InputMaybe<ProfileFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<ProfileFilter>>;
+  /** Filter by the object’s `username` field. */
+  username?: InputMaybe<StringFilter>;
+};
+
 /** Represents an update to a `Profile`. Fields that are set will be updated. */
 export type ProfilePatch = {
   color?: InputMaybe<Scalars['String']>;
@@ -1109,6 +1139,7 @@ export type QueryCtfsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<CtfCondition>;
+  filter?: InputMaybe<CtfFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1200,6 +1231,7 @@ export type QueryProfilesArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<ProfileCondition>;
+  filter?: InputMaybe<ProfileFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1241,6 +1273,7 @@ export type QueryTasksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<TaskCondition>;
+  filter?: InputMaybe<TaskFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1515,6 +1548,12 @@ export type StopWorkingOnPayloadWorkOnTaskEdgeArgs = {
   orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
+/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
+export type StringFilter = {
+  /** Contains the specified string (case-insensitive). */
+  includesInsensitive?: InputMaybe<Scalars['String']>;
+};
+
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
 export type Subscription = {
   __typename?: 'Subscription';
@@ -1562,6 +1601,20 @@ export type TaskCondition = {
   ctfId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `title` field. */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `Task` object types. All fields are combined with a logical ‘and.’ */
+export type TaskFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<TaskFilter>>;
+  /** Negates the expression. */
+  not?: InputMaybe<TaskFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<TaskFilter>>;
+  /** Filter by the object’s `title` field. */
+  title?: InputMaybe<StringFilter>;
 };
 
 /** Represents an update to a `Task`. Fields that are set will be updated. */
@@ -1602,7 +1655,9 @@ export enum TasksOrderBy {
   IdDesc = 'ID_DESC',
   Natural = 'NATURAL',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  TitleAsc = 'TITLE_ASC',
+  TitleDesc = 'TITLE_DESC'
 }
 
 /** All input for the `updateCtfByNodeId` mutation. */
@@ -2202,6 +2257,20 @@ export type SubscribeToProfileDeletedSubscriptionVariables = Exact<{ [key: strin
 
 
 export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+
+export type SearchCtFsQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchCtFsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+
+export type SearchTasksQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> } | null | undefined };
 
 export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined };
 
@@ -3394,6 +3463,68 @@ export function useSubscribeToProfileDeletedSubscription(options: VueApolloCompo
   return VueApolloComposable.useSubscription<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>(SubscribeToProfileDeletedDocument, {}, options);
 }
 export type SubscribeToProfileDeletedSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToProfileDeletedSubscription, SubscribeToProfileDeletedSubscriptionVariables>;
+export const SearchCtFsDocument = gql`
+    query SearchCTFs($search: String!) {
+  ctfs(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${CtfFragmentDoc}`;
+
+/**
+ * __useSearchCtFsQuery__
+ *
+ * To run a query within a Vue component, call `useSearchCtFsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCtFsQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSearchCtFsQuery({
+ *   search: // value for 'search'
+ * });
+ */
+export function useSearchCtFsQuery(variables: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<SearchCtFsQuery, SearchCtFsQueryVariables>(SearchCtFsDocument, variables, options);
+}
+export type SearchCtFsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchCtFsQuery, SearchCtFsQueryVariables>;
+export const SearchTasksDocument = gql`
+    query SearchTasks($search: String!) {
+  tasks(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...TaskFragment
+      ctf {
+        ...CtfFragment
+      }
+    }
+  }
+}
+    ${TaskFragmentDoc}
+${CtfFragmentDoc}`;
+
+/**
+ * __useSearchTasksQuery__
+ *
+ * To run a query within a Vue component, call `useSearchTasksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchTasksQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSearchTasksQuery({
+ *   search: // value for 'search'
+ * });
+ */
+export function useSearchTasksQuery(variables: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
+}
+export type SearchTasksQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchTasksQuery, SearchTasksQueryVariables>;
 export const GetCredentialsForCtfIdDocument = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
   ctfSecret(id: $ctfId) {
@@ -4274,6 +4405,28 @@ export const SubscribeToProfileDeleted = gql`
   }
 }
     ${ProfileFragment}`;
+export const SearchCtFs = gql`
+    query SearchCTFs($search: String!) {
+  ctfs(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${CtfFragment}`;
+export const SearchTasks = gql`
+    query SearchTasks($search: String!) {
+  tasks(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...TaskFragment
+      ctf {
+        ...CtfFragment
+      }
+    }
+  }
+}
+    ${TaskFragment}
+${CtfFragment}`;
 export const GetCredentialsForCtfId = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
   ctfSecret(id: $ctfId) {

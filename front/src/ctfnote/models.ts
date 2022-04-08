@@ -46,6 +46,7 @@ export type Task = {
   solved: boolean;
   category: string;
   workOnTasks: Id<Profile>[];
+  ctf?: Ctf | string;
 };
 
 export type CtfInvitation = {

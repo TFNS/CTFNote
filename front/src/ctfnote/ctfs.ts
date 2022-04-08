@@ -44,7 +44,7 @@ type FullCtfResponse = {
 
 /* Builders */
 
-function safeSlugify(str: string) {
+export function safeSlugify(str: string) {
   return slugify(str) || 'no-slug-for-you';
 }
 

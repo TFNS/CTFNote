@@ -28,8 +28,8 @@
     "graphql": "^15.6.1",
     "graphql-upload": "^12.0.0",
     "ical-generator": "^3.2.1",
-    "postgraphile": "^4.11.0",
-    "postgraphile-plugin-connection-filter": "^2.1.1",
+    "postgraphile": "^4.12.8",
+    "postgraphile-plugin-connection-filter": "^2.2.2",
     "postgres-migrations": "^5.3.0"
   },
   "devDependencies": {

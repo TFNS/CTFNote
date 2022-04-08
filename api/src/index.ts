@@ -16,6 +16,7 @@ import uploadLogoPlugin from "./plugins/uploadLogo";
 import uploadScalar from "./plugins/uploadScalar";
 import { Pool } from "pg";
 import { icalRoute } from "./routes/ical";
+import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -45,6 +46,7 @@ function createOptions() {
       importCtfPlugin,
       uploadLogoPlugin,
       createTasKPlugin,
+      ConnectionFilterPlugin,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
@@ -62,6 +64,14 @@ function createOptions() {
     postgraphileOptions.jwtSecret = "DEV";
     postgraphileOptions.showErrorStack = "json" as const;
     postgraphileOptions.extendedErrors = ["hint", "detail", "errcode"];
+
+    postgraphileOptions.graphileBuildOptions = {
+      connectionFilterAllowedOperators: ["includesInsensitive"],
+      connectionFilterAllowedFieldTypes: ["String"],
+      connectionFilterComputedColumns: false,
+      connectionFilterSetofFunctions: false,
+      connectionFilterArrays: false,
+    };
   }
   return postgraphileOptions;
 }

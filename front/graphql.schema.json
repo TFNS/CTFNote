@@ -1008,6 +1008,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "filter",
+                "description": "A filter to be used in determining which values should be returned by the collection.",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "TaskFilter",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "first",
                 "description": "Only read the first `n` values of the set.",
                 "type": {
@@ -1168,6 +1180,93 @@
             "type": {
               "kind": "SCALAR",
               "name": "Datetime",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "Checks for equality with the object’s `title` field.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "CtfFilter",
+        "description": "A filter to be used against `Ctf` object types. All fields are combined with a logical ‘and.’",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "and",
+            "description": "Checks for all expressions in this list.",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "CtfFilter",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "not",
+            "description": "Negates the expression.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CtfFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "or",
+            "description": "Checks for any expressions in this list.",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "CtfFilter",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "Filter by the object’s `title` field.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
               "ofType": null
             },
             "defaultValue": null,
@@ -1456,6 +1555,18 @@
                 "type": {
                   "kind": "INPUT_OBJECT",
                   "name": "CtfCondition",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "filter",
+                "description": "A filter to be used in determining which values should be returned by the collection.",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "CtfFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -1992,6 +2103,18 @@
           },
           {
             "name": "START_TIME_DESC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TITLE_ASC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TITLE_DESC",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -4768,6 +4891,81 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "ProfileFilter",
+        "description": "A filter to be used against `Profile` object types. All fields are combined with a logical ‘and.’",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "and",
+            "description": "Checks for all expressions in this list.",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "ProfileFilter",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "not",
+            "description": "Negates the expression.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ProfileFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "or",
+            "description": "Checks for any expressions in this list.",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "ProfileFilter",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "username",
+            "description": "Filter by the object’s `username` field.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "ProfilePatch",
         "description": "Represents an update to a `Profile`. Fields that are set will be updated.",
         "fields": null,
@@ -5256,6 +5454,18 @@
                 "type": {
                   "kind": "INPUT_OBJECT",
                   "name": "CtfCondition",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "filter",
+                "description": "A filter to be used in determining which values should be returned by the collection.",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "CtfFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -5922,6 +6132,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "filter",
+                "description": "A filter to be used in determining which values should be returned by the collection.",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "ProfileFilter",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "first",
                 "description": "Only read the first `n` values of the set.",
                 "type": {
@@ -6216,6 +6438,18 @@
                 "type": {
                   "kind": "INPUT_OBJECT",
                   "name": "TaskCondition",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "filter",
+                "description": "A filter to be used in determining which values should be returned by the collection.",
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "TaskFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -7711,6 +7945,29 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "StringFilter",
+        "description": "A filter to be used against String fields. All fields are combined with a logical ‘and.’",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "includesInsensitive",
+            "description": "Contains the specified string (case-insensitive).",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "Subscription",
         "description": "The root subscription type: contains realtime events you can subscribe to with the `subscription` operation.",
@@ -8061,6 +8318,93 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "Checks for equality with the object’s `title` field.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "TaskFilter",
+        "description": "A filter to be used against `Task` object types. All fields are combined with a logical ‘and.’",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "and",
+            "description": "Checks for all expressions in this list.",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "TaskFilter",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "not",
+            "description": "Negates the expression.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "TaskFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "or",
+            "description": "Checks for any expressions in this list.",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "TaskFilter",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "Filter by the object’s `title` field.",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringFilter",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "interfaces": null,
@@ -8302,6 +8646,18 @@
           },
           {
             "name": "PRIMARY_KEY_DESC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TITLE_ASC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TITLE_DESC",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

@@ -5,6 +5,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createUploadLink } from 'apollo-upload-client';
 import { extractFiles } from 'extract-files';
+import { JWT_KEY } from 'src/ctfnote/auth';
 
 
 const protocol = document.location.protocol == 'https:' ? 'wss:' : 'ws:';
@@ -15,7 +16,7 @@ const wsLink = new WebSocketLink({
     reconnect: true,
     lazy: true,
     connectionParams: () => {
-      const token = localStorage.getItem('JWT');
+      const token = localStorage.getItem(JWT_KEY);
       return {
         Authorization: token ? `Bearer ${token}` : '',
       };
@@ -54,7 +55,7 @@ const splitLink = split(
 
 const link = from([
   new ApolloLink((operation, forward) => {
-    const token = localStorage.getItem('JWT');
+    const token = localStorage.getItem(JWT_KEY);
     if (token) {
       operation.setContext(
         ({ headers }: { headers: { [key: string]: string } }) => ({
