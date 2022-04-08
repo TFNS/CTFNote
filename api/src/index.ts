@@ -14,6 +14,8 @@ import createTasKPlugin from "./plugins/createTask";
 import importCtfPlugin from "./plugins/importCtf";
 import uploadLogoPlugin from "./plugins/uploadLogo";
 import uploadScalar from "./plugins/uploadScalar";
+import { Pool } from "pg";
+import { icalRoute } from "./routes/ical";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 
 function getDbUrl(role: "user" | "admin") {
@@ -75,6 +77,10 @@ function createOptions() {
 }
 
 function createApp(postgraphileOptions: PostGraphileOptions) {
+  const pool = new Pool({
+    connectionString: getDbUrl("user"),
+  });
+
   const app = express();
   app.use(graphqlUploadExpress());
   app.use(
@@ -85,7 +91,8 @@ function createApp(postgraphileOptions: PostGraphileOptions) {
       },
     })
   );
-  app.use(postgraphile(getDbUrl("user"), "ctfnote", postgraphileOptions));
+  app.use(postgraphile(pool, "ctfnote", postgraphileOptions));
+  app.use("/calendar.ics", icalRoute(pool));
   return app;
 }
 

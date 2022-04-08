@@ -35,6 +35,7 @@ const ctfsRoute: RouteRecordRaw = {
 
 const ctfRoute: RouteRecordRaw = {
   path: 'ctf/:ctfId(\\d+)-:ctfSlug',
+  alias: ['ctf/:ctfId(\\d+)'],
   name: 'ctf',
   redirect: { name: 'ctf-info' },
   props: {
@@ -54,6 +55,7 @@ const ctfRoute: RouteRecordRaw = {
   children: [
     {
       path: 'task/:taskId(\\d+)-:taskSlug',
+      alias: ['task/:taskId(\\d+)'],
       name: 'task',
       props: (route) => ({ taskId: parseInt(route.params.taskId as string) }),
       component: () => import('pages/Task.vue'),

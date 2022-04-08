@@ -87,6 +87,9 @@ module.exports = configure(function (ctx) {
         '/uploads': {
           target: 'http://127.0.0.1:3000',
         },
+        '/calendar.ics': {
+          target: 'http://127.0.0.1:3000',
+        },
         '/pad': {
           target: 'http://127.0.0.1:3001/',
           pathRewrite: {

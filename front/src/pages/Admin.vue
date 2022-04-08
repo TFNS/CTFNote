@@ -9,7 +9,7 @@
     >
       <q-route-tab
         :to="{ name: 'admin-registration' }"
-        label="Registration"
+        label="Authentication"
         icon="lock"
       />
       <q-route-tab :to="{ name: 'admin-theme' }" label="theme" icon="palette" />

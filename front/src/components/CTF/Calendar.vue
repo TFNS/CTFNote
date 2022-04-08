@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section>
-      <div v-if="$q.screen.gt.md" class="row justify-between items-center">
+      <div v-if="$q.screen.gt.sm" class="row justify-between items-center">
         <q-btn
           icon="arrow_back_ios"
           flat
@@ -11,6 +11,13 @@
         <div class="row items-center q-gutter-md">
           <q-btn round flat icon="today" title="Today" @click="showToday" />
           <div class="text-h5">{{ currentMonth }}</div>
+          <q-btn
+            round
+            flat
+            icon="link"
+            title="iCalendar"
+            @click="showIcalLink = true"
+          />
         </div>
         <q-btn
           icon-right="arrow_forward_ios"
@@ -23,6 +30,13 @@
         <div class="row col col-12 items-center justify-center q-gutter-md">
           <q-btn round flat icon="today" title="Today" @click="showToday" />
           <div class="text-h5">{{ currentMonth }}</div>
+          <q-btn
+            round
+            flat
+            icon="link"
+            title="iCalendar"
+            @click="showIcalLink = true"
+          />
         </div>
         <q-btn
           icon="arrow_back_ios"
@@ -69,6 +83,29 @@
       </q-calendar-month>
     </q-card-section>
   </q-card>
+  <q-dialog v-model="showIcalLink" seamless position="top">
+    <q-card style="width: 450px">
+      <q-card-section class="row items-center q-gutter-sm q-px-sm">
+        <div class="col-auto">
+          <q-icon name="link" size="md" />
+        </div>
+        <div class="col">
+          <q-input
+            ref="icalEl"
+            label="iCalendar"
+            :model-value="icalLink"
+            readonly
+            outlined
+            class="bg-dark"
+          />
+        </div>
+
+        <div class="col-auto">
+          <q-btn v-close-popup flat round icon="close" />
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts">
@@ -85,7 +122,8 @@ import '@quasar/quasar-ui-qcalendar/src/QCalendarTransitions.sass';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarVariables.sass';
 import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import { QInput } from 'quasar';
 
 function dateToLocale(s: string, offset = 0): string {
   const [year, month] = s.split('-').map((e) => parseInt(e));
@@ -96,13 +134,30 @@ function dateToLocale(s: string, offset = 0): string {
 export default defineComponent({
   components: { QCalendarMonth },
   setup() {
+    const icalEl = ref<QInput>();
     const { result: ctfs, loading } = ctfnote.ctfs.getAllCtfs();
+    const { result: icalPassword } = ctfnote.settings.getIcalPassword();
+
+    const icalLink = computed(() => {
+      icalEl.value?.select();
+      if (icalPassword.value != '') {
+        return (
+          document.location.origin +
+          '/calendar.ics?key=' +
+          encodeURIComponent(icalPassword.value)
+        );
+      }
+      return document.location.origin + '/calendar.ics';
+    });
     return {
       calendar: ref<QCalendar>(),
       ctfs,
       loading,
       animated: ref(false),
       selectedDate: ref(today()),
+      showIcalLink: ref(false),
+      icalLink,
+      icalEl,
     };
   },
   computed: {
