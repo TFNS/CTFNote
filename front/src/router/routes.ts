@@ -35,6 +35,7 @@ const ctfsRoute: RouteRecordRaw = {
 
 const ctfRoute: RouteRecordRaw = {
   path: 'ctf/:ctfId(\\d+)-:ctfSlug',
+  alias: ['ctf/:ctfId(\\d+)'],
   name: 'ctf',
   redirect: { name: 'ctf-info' },
   props: {
