@@ -1,7 +1,6 @@
 import { ICalCalendar } from "ical-generator";
 import { Request, Response, Handler } from "express";
 import { Pool } from "pg";
-import slugify from "slugify";
 
 type CtfRow = {
   id: number;
@@ -56,7 +55,7 @@ export function icalRoute(pool: Pool): Handler {
       
       const proto = req.headers["x-forwarded-proto"] || req.protocol;
       const host = req.headers["x-forwarded-host"] || req.headers.host;
-      const ctf_url = `${proto}://${host}/#/ctf/${ctf.id}-${slugify(ctf.title)}/info`;
+      const ctf_url = `${proto}://${host}/#/ctf/${ctf.id}/info`;
 
       console.log(ctf_url);
       cal.createEvent({
