@@ -3,6 +3,7 @@
     :drop-down-label="me.profile.username"
     drop-down-link="settings"
     :show-logout="true"
+    :show-search="true"
   >
     <template #after-title>
       <slot />
