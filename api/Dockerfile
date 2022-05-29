@@ -2,11 +2,12 @@
 
 # Global args, set before the first FROM, shared by all stages
 ARG NODE_ENV="production"
+ARG NODE_DIGEST="sha256:1a9a71ea86aad332aa7740316d4111ee1bd4e890df47d3b5eff3e5bded3b3d10"
 
 ################################################################################
 # Build stage 1 - `yarn build`
 
-FROM node@sha256:1a9a71ea86aad332aa7740316d4111ee1bd4e890df47d3b5eff3e5bded3b3d10 as builder
+FROM node@${NODE_DIGEST} as builder
 # Import our shared args
 ARG NODE_ENV
 
@@ -24,7 +25,7 @@ RUN yarn run build
 ################################################################################
 # Build stage 2 - COPY the relevant things (multiple steps)
 
-FROM node@sha256:1a9a71ea86aad332aa7740316d4111ee1bd4e890df47d3b5eff3e5bded3b3d10 as clean
+FROM node@${NODE_DIGEST} as clean
 # Import our shared args
 ARG NODE_ENV
 
@@ -36,7 +37,7 @@ COPY --from=builder /app/migrations/ /app/migrations/
 ################################################################################
 # Build stage FINAL - COPY everything, once, and then do a clean `yarn install`
 
-FROM node@sha256:1a9a71ea86aad332aa7740316d4111ee1bd4e890df47d3b5eff3e5bded3b3d10
+FROM node@${NODE_DIGEST}
 # Import our shared args
 ARG NODE_ENV
 
