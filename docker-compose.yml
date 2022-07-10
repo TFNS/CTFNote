@@ -42,7 +42,7 @@ services:
     ports:
       - 8080:80
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc@sha256:766663fea4e3f55cd5c1cfd12c71d5ccb258809b2b74eedd035efe0883bf0970
+    image: quay.io/hedgedoc/hedgedoc@sha256:db2891f275abde7c571b87b4ab9abc3ce08fe48c6c411972dbdaab8e49234904
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad
