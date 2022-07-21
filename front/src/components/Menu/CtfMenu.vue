@@ -1,19 +1,21 @@
 <template>
-  <template v-if="ctf && $q.screen.gt.sm">
-    <q-separator dark vertical />
-    <div class="row items-center justify-center">
-      <q-btn
-        class="q-mr-sm"
-        type="a"
-        target="_blank"
-        :href="ctf.ctfUrl"
-        flat
-        icon="language"
-        size="sm"
-        round
-      />
-      <q-btn flat no-caps :to="ctf.tasksLink">{{ ctf.title }}</q-btn>
-    </div>
+  <template v-if="ctf && $q.screen.gt.xs">
+    <template v-if="$q.screen.gt.sm">
+      <q-separator dark vertical />
+      <div class="row items-center justify-center">
+        <q-btn
+          class="q-mr-sm"
+          type="a"
+          target="_blank"
+          :href="ctf.ctfUrl"
+          flat
+          icon="language"
+          size="sm"
+          round
+        />
+        <q-btn flat no-caps :to="ctf.tasksLink">{{ ctf.title }}</q-btn>
+      </div>
+    </template>
     <q-separator v-show="ctf.tasks.length" dark vertical />
     <task-list-menu v-show="ctf.tasks.length" :ctf="ctf" :task-id="taskId" />
   </template>
