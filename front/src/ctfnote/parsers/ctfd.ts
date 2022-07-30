@@ -3,7 +3,7 @@ import { parseJson, parseJsonStrict } from '../utils';
 
 const CTFDParser: Parser = {
   name: 'CTFd parser',
-  hint: 'paste ctfd /api/v1/challenge',
+  hint: 'paste ctfd /api/v1/challenges',
 
   parse(s: string): ParsedTask[] {
     const tasks = [];
