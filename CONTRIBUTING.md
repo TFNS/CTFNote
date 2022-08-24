@@ -22,7 +22,7 @@ Examples of branch name:
 - `37-leak-flag-to-TFNS`
 - `0-contribution-guide`
 
-Once you think the job is done, issue the pull request and target the **dev** branch of the official CTFNote repository.
+Once you think the job is done, issue the pull request and target the **main** branch of the official CTFNote repository.
 
 You can also create the pull request before finishing the job but don't forget to add "WiP: " as a suffix in the title to let the collaborators know you are still working on the request.
 
