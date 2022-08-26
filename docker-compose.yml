@@ -5,6 +5,7 @@ services:
       context: "./api"
     networks:
       - ctfnote
+    restart: always
     environment:
       PAD_CREATE_URL: http://hedgedoc:3000/new
       PAD_SHOW_URL: /
@@ -35,6 +36,7 @@ services:
   front:
     networks:
       - ctfnote
+    restart: always
     build:
       context: "./front"
     depends_on:
