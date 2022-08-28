@@ -1,4 +1,5 @@
 import CTFDParser from './ctfd';
+import ECSCParser from './ecsc';
 import RawParser from './raw';
 
 export type ParsedTask = {
@@ -13,4 +14,4 @@ export type Parser = {
   parse(s: string): ParsedTask[];
 };
 
-export default [RawParser, CTFDParser];
+export default [RawParser, CTFDParser, ECSCParser];
