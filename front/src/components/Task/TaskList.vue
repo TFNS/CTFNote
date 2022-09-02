@@ -90,6 +90,13 @@
           label="Import "
           @click="openImportTaskDialog"
         />
+        <q-fab-action
+          color="accent"
+          push
+          icon="file_download"
+          label="Export "
+          @click="openExportTasksDialog"
+        />
       </q-fab>
     </q-page-sticky>
   </div>
@@ -102,6 +109,7 @@ import { useStoredSettings } from 'src/extensions/storedSettings';
 import { defineComponent, ref, provide } from 'vue';
 import TaskEditDialogVue from '../Dialogs/TaskEditDialog.vue';
 import TaskImportDialogVue from '../Dialogs/TaskImportDialog.vue';
+import TaskExportDialogVue from '../Dialogs/TaskExportDialog.vue';
 import TaskCards from './TaskCards.vue';
 import TaskTable from './TaskTable.vue';
 import { useQuasar } from 'quasar';
@@ -252,6 +260,14 @@ export default defineComponent({
     openImportTaskDialog() {
       this.$q.dialog({
         component: TaskImportDialogVue,
+        componentProps: {
+          ctf: this.ctf,
+        },
+      });
+    },
+    openExportTasksDialog() {
+      this.$q.dialog({
+        component: TaskExportDialogVue,
         componentProps: {
           ctf: this.ctf,
         },
