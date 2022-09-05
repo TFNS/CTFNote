@@ -71,11 +71,6 @@ export default defineComponent({
     async exportTasks(tasks: Task[]) {
       let template = '';
 
-      // Add logo
-      if (this.ctf.logoUrl != null) {
-        template += `![CTF logo](${this.ctf.logoUrl})\n\n`;
-      }
-
       // Add CTF title
       template += `${this.ctf.title}\n===\n\n`;
       // Add CTF date
