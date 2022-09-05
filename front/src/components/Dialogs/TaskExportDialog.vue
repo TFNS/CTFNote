@@ -100,7 +100,7 @@ export default defineComponent({
 
       // download
       const blob = new Blob([template], {
-        type: 'application/markdown',
+        type: 'text/markdown',
       });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
