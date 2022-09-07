@@ -74,7 +74,7 @@ export default defineComponent({
       // Add CTF title
       template += `${this.ctf.title}\n===\n\n`;
       // Add CTF date
-      template += `${this.ctf.startTime.toUTCString()} - ${this.ctf.endTime.toUTCString()}\n`;
+      template += `${this.ctf.startTime.toUTCString()} - ${this.ctf.endTime.toUTCString()}  \n`;
       // Add team name
       if (this.teamName != '') {
         template += `Team: ${this.teamName}\n`;
