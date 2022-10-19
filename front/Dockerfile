@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 RUN yarn build
 
 # _--------_
-FROM nginx@sha256:f335d7436887b39393409261603fb248e0c385ec18997d866dd44f7e9b621096
+FROM nginx@sha256:5ba534070ae1e5e83d52141b11ddced689b476c0001e7205f50979dc0cbdde3d
 
 RUN mkdir -p /logs
 
