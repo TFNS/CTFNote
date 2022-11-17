@@ -71,6 +71,10 @@
   },
   "resolutions": {
     "eslint-plugin-graphql/graphql-config/@graphql-tools/url-loader/cross-fetch": "3.1.5",
-    "eslint-plugin-graphql/graphql-config/@graphql-tools/url-loader/ws": "7.4.6"
+    "eslint-plugin-graphql/graphql-config/@graphql-tools/url-loader/ws": "7.4.6",
+    "@quasar/app-webpack/loader-utils": "2.0.4",
+    "@quasar/app-webpack/css-loader/loader-utils": "2.0.4",
+    "@quasar/app-webpack/vue-style-loader/loader-utils": "1.4.2",
+    "eslint-plugin-graphql/graphql-config/minimatch": "3.0.5"
   }
 }
