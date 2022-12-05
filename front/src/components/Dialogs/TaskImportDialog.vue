@@ -49,6 +49,7 @@
           color="positive"
           :disable="btnDisable"
           :label="btnLabel"
+          :loading="loading"
           @click="btnClick"
         />
       </q-card-actions>
@@ -60,14 +61,8 @@
 import { useDialogPluginComponent } from 'quasar';
 import ctfnote from 'src/ctfnote';
 import { Ctf } from 'src/ctfnote/models';
-import parsers from 'src/ctfnote/parsers';
+import parsers, { ParsedTask } from 'src/ctfnote/parsers';
 import { defineComponent, ref } from 'vue';
-
-type ParsedTask = {
-  title: string;
-  category: string;
-  keep: boolean;
-};
 
 export default defineComponent({
   props: {
@@ -96,6 +91,7 @@ export default defineComponent({
       onDialogHide,
       onDialogOK,
       onDialogCancel,
+      loading: ref<boolean>(false),
     };
   },
   computed: {
@@ -151,19 +147,19 @@ export default defineComponent({
         return { ...task, keep: !taskSet.has(hash) };
       });
     },
-    btnClick() {
+    async btnClick() {
       if (this.tab == 'parse') {
         this.parsedTasks = this.parseTasks(this.model);
         this.tab = 'confirm';
       } else {
-        this.parsedTasks
+        this.loading = true;
+        const result = this.parsedTasks
           .filter((t) => t.keep)
           .map((task) => {
-            void this.createTask(this.ctf.id, {
-              title: task.title,
-              category: task.category,
-            });
+            return this.createTask(this.ctf.id, task);
           });
+        await Promise.all(result);
+        this.loading = false;
         this.onDialogOK();
       }
     },
