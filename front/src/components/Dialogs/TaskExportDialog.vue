@@ -19,7 +19,12 @@
       </q-card-section>
       <q-card-actions class="q-pr-md q-pb-md" align="right">
         <q-btn flat color="warning" label="Cancel" @click="backClick" />
-        <q-btn color="positive" label="Export" @click="btnClick" />
+        <q-btn
+          color="positive"
+          label="Export"
+          :loading="loading"
+          @click="btnClick"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -50,6 +55,7 @@ export default defineComponent({
       onDialogHide,
       onDialogOK,
       onDialogCancel,
+      loading: ref<boolean>(false),
     };
   },
   computed: {},
@@ -109,13 +115,13 @@ export default defineComponent({
       URL.revokeObjectURL(link.href);
     },
 
-    btnClick() {
+    async btnClick() {
       let tasks = this.ctf.tasks;
       if (this.currentOption == 'Solved tasks only') {
         tasks = tasks.filter((t) => t.solved);
       }
-
-      return this.exportTasks(
+      this.loading = true;
+      await this.exportTasks(
         tasks
           .sort((a, b) =>
             a.title.toLowerCase().localeCompare(b.title.toLowerCase())
@@ -124,6 +130,8 @@ export default defineComponent({
             a.category.toLowerCase().localeCompare(b.category.toLowerCase())
           )
       );
+      this.loading = false;
+      this.onDialogOK();
     },
   },
 });
