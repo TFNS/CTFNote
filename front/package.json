@@ -75,6 +75,8 @@
     "@quasar/app-webpack/loader-utils": "2.0.4",
     "@quasar/app-webpack/css-loader/loader-utils": "2.0.4",
     "@quasar/app-webpack/vue-style-loader/loader-utils": "1.4.2",
-    "eslint-plugin-graphql/graphql-config/minimatch": "3.0.5"
+    "eslint-plugin-graphql/graphql-config/minimatch": "3.0.5",
+    "@quasar/cli/download-git-repo/download/got": "11.8.5",
+    "@quasar/cli/update-notifier/latest-version/package-json/got": "11.8.5"
   }
 }
