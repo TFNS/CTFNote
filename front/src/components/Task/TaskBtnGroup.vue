@@ -38,9 +38,7 @@
 <script lang="ts">
 import ctfnote from 'src/ctfnote';
 import { Task } from 'src/ctfnote/models';
-import { injectStrict } from 'src/ctfnote/utils';
 import { defineComponent } from 'vue';
-import keys from '../../injectionKeys';
 
 export default defineComponent({
   props: {
@@ -55,9 +53,9 @@ export default defineComponent({
       team,
       startWorkingOn: ctfnote.tasks.useStartWorkingOn(),
       stopWorkingOn: ctfnote.tasks.useStopWorkingOn(),
-      solveTask: injectStrict(keys.solveTaskPopup),
-      deleteTask: injectStrict(keys.deleteTaskPopup),
-      editTask: injectStrict(keys.editTaskPopup),
+      solveTask: ctfnote.tasks.useSolveTaskPopup(),
+      deleteTask: ctfnote.tasks.useDeleteTaskPopup(),
+      editTask: ctfnote.tasks.useEditTaskPopup(),
     };
   },
 

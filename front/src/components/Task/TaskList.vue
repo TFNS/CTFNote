@@ -125,55 +125,9 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const $q = useQuasar();
     const { makePersistant } = useStoredSettings();
 
-    const updateTask = ctfnote.tasks.useUpdateTask();
-    const deleteTask = ctfnote.tasks.useDeleteTask();
     const me = ctfnote.me.injectMe();
-
-    provide(keys.solveTaskPopup, (task: Task) => {
-      $q.dialog({
-        title: 'Flag:',
-        color: 'primary',
-        cancel: {
-          label: 'cancel',
-          color: 'warning',
-          flat: true,
-        },
-        prompt: {
-          model: task.flag ?? '',
-          type: 'text',
-        },
-        ok: {
-          color: 'positive',
-          label: 'save',
-        },
-      }).onOk((flag: string) => {
-        void updateTask(task, { flag });
-      });
-    });
-
-    provide(keys.deleteTaskPopup, (task: Task) => {
-      $q.dialog({
-        title: `Delete ${task.title} ?`,
-        color: 'negative',
-        message: 'This will delete the task, but not the pads.',
-        ok: 'Delete',
-        cancel: true,
-      }).onOk(() => {
-        void deleteTask(task);
-      });
-    });
-
-    provide(keys.editTaskPopup, (task: Task) => {
-      $q.dialog({
-        component: TaskEditDialogVue,
-        componentProps: {
-          task,
-        },
-      });
-    });
 
     const filter = ref('');
     const categoryFilter = ref<string[]>([]);

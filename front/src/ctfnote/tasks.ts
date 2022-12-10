@@ -8,6 +8,8 @@ import {
   useUpdateTaskMutation,
 } from 'src/generated/graphql';
 import { Ctf, Id, Task } from './models';
+import { Dialog } from 'quasar';
+import TaskEditDialogVue from '../components/Dialogs/TaskEditDialog.vue';
 
 /* Mutations */
 export function useCreateTask() {
@@ -35,4 +37,55 @@ export function useStartWorkingOn() {
 export function useStopWorkingOn() {
   const { mutate: doStopWorking } = useStopWorkingOnMutation({});
   return (task: Task) => doStopWorking({ taskId: task.id });
+}
+
+export function useSolveTaskPopup() {
+  const updateTask = useUpdateTask();
+  return (task: Task) => {
+    Dialog.create({
+      title: 'Flag:',
+      color: 'primary',
+      cancel: {
+        label: 'cancel',
+        color: 'warning',
+        flat: true,
+      },
+      prompt: {
+        model: task.flag ?? '',
+        type: 'text',
+      },
+      ok: {
+        color: 'positive',
+        label: 'save',
+      },
+    }).onOk((flag: string) => {
+      void updateTask(task, { flag });
+    });
+  };
+}
+
+export function useDeleteTaskPopup() {
+  const deleteTask = useDeleteTask();
+  return (task: Task) => {
+    Dialog.create({
+      title: `Delete ${task.title}?`,
+      color: 'negative',
+      message: 'This will delete the task, but not the pads.',
+      ok: 'Delete',
+      cancel: true,
+    }).onOk(() => {
+      void deleteTask(task);
+    });
+  };
+}
+
+export function useEditTaskPopup() {
+  return (task: Task) => {
+    Dialog.create({
+      component: TaskEditDialogVue,
+      componentProps: {
+        task,
+      },
+    });
+  };
 }
