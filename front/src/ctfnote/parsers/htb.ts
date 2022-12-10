@@ -72,7 +72,7 @@ const HTBParser: Parser = {
         challenge_category_id: number;
       }>;
     }>(s);
-    return data != null;
+    return Array.isArray(data?.challenges);
   },
 };
 
