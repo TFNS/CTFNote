@@ -23,6 +23,7 @@ const challengeCategories: { [index: number]: string } = {
   18: 'Defence',
   20: 'Cloud',
   21: 'Scada',
+  23: 'ML',
 };
 
 const HTBParser: Parser = {
