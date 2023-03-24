@@ -7,8 +7,9 @@ const PicoParser: Parser = {
 
   parse(s: string): ParsedTask[] {
     const tasks = [];
-    const data =
-      parseJsonStrict<{ results: Array<{ name: string; category: { name: string } }> }>(s);
+    const data = parseJsonStrict<{
+      results: Array<{ name: string; category: { name: string } }>;
+    }>(s);
     if (!Array.isArray(data?.results)) {
       return [];
     }
