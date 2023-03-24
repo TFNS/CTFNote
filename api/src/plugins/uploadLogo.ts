@@ -1,8 +1,7 @@
 import crypto from "crypto";
 import fs from "fs";
-import { ReadStream } from "fs-capacitor";
 import { gql, makeExtendSchemaPlugin } from "graphile-utils";
-import { FileUpload } from "graphql-upload";
+import { FileUpload } from "graphql-upload-ts";
 import path from "path";
 import { Client } from "pg";
 
@@ -30,7 +29,7 @@ interface Context {
 }
 
 function saveLocal(
-  stream: ReadStream,
+  stream: fs.ReadStream,
   filename: string,
   folder = ""
 ): Promise<string> {
@@ -45,9 +44,7 @@ function saveLocal(
   return new Promise((resolve, reject) =>
     stream
       .on("error", (error) => {
-        if (stream.truncated)
-          // Delete the truncated file
-          fs.unlinkSync(fsPath);
+        fs.unlinkSync(fsPath);
         reject(error);
       })
       .on("end", () => resolve(filePath))
