@@ -26,7 +26,7 @@
           <q-toggle
             :model-value="!!guest.invitation"
             checked-icon="check"
-            @update:modelValue="
+            @update:model-value="
               (v) => (v ? createInvitation(guest) : deleteInvitation(guest))
             "
           />

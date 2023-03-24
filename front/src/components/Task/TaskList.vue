@@ -116,7 +116,7 @@ import keys from '../../injectionKeys';
 
 const displayOptions = ['classic', 'dense', 'ultradense', 'table'] as const;
 
-export type DisplayMode = typeof displayOptions[number];
+export type DisplayMode = (typeof displayOptions)[number];
 
 export default defineComponent({
   components: { TaskCards, TaskTable },
@@ -150,7 +150,7 @@ export default defineComponent({
       // Filter using needle on title, category and description
       const fields = ['title', 'category', 'description'] as const;
 
-      const checkField = (f: typeof fields[number]): boolean =>
+      const checkField = (f: (typeof fields)[number]): boolean =>
         task[f]?.toLowerCase().includes(needle) ?? false;
 
       return fields.some((name) => checkField(name));
