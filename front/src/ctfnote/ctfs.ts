@@ -217,6 +217,13 @@ export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
       const endTime = extractDate(node.endTime);
       if (endTime < new Date()) {
         nodes.push(node);
+        nodes.sort((a, b) =>
+          Number(new Date(a.startTime)) > Number(new Date(b.startTime))
+            ? -1
+            : Number(new Date(a.startTime)) < Number(new Date(b.startTime))
+            ? 1
+            : 0
+        );
       }
       return {
         pastCtf: {
