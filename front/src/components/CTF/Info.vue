@@ -91,7 +91,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 .background-logo {
   padding-bottom: 5px;
   &::before {
