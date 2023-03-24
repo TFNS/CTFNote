@@ -59,7 +59,7 @@ export default defineComponent({
       if (this.task.solved) return 'flag';
       const count = this.task.workOnTasks.length;
       if (count == 0) {
-        return null;
+        return undefined;
       }
       if (count == 1) {
         return 'person';
