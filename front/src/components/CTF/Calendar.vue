@@ -96,7 +96,6 @@
             :model-value="icalLink"
             readonly
             outlined
-            class="bg-dark"
           />
         </div>
 
