@@ -1419,6 +1419,7 @@ export enum Role {
 
 export type Setting = Node & {
   __typename?: 'Setting';
+  icalPassword?: Maybe<Scalars['String']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   registrationAllowed: Scalars['Boolean'];
@@ -1430,6 +1431,7 @@ export type Setting = Node & {
 
 /** Represents an update to a `Setting`. Fields that are set will be updated. */
 export type SettingPatch = {
+  icalPassword?: InputMaybe<Scalars['String']>;
   registrationAllowed?: InputMaybe<Scalars['Boolean']>;
   registrationDefaultRole?: InputMaybe<Role>;
   registrationPassword?: InputMaybe<Scalars['String']>;
@@ -2279,12 +2281,17 @@ export type UpdateCredentialsForCtfIdMutation = { __typename?: 'Mutation', updat
 
 export type SettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
 
-export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
+export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null | undefined, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
 
 export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null };
+
+export type GetIcalPasswordQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetIcalPasswordQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, icalPassword?: string | null | undefined }> } | null | undefined };
 
 export type GetAdminSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2484,6 +2491,7 @@ export const AdminSettingsInfoFragmentDoc = gql`
   ...SettingsInfo
   registrationPassword
   registrationDefaultRole
+  icalPassword
 }
     ${SettingsInfoFragmentDoc}`;
 export const GetUsersDocument = gql`
@@ -3629,6 +3637,33 @@ export function useGetSettingsLazyQuery(options: VueApolloComposable.UseQueryOpt
   return VueApolloComposable.useLazyQuery<GetSettingsQuery, GetSettingsQueryVariables>(GetSettingsDocument, {}, options);
 }
 export type GetSettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetSettingsQuery, GetSettingsQueryVariables>;
+export const GetIcalPasswordDocument = gql`
+    query getIcalPassword {
+  settings {
+    nodes {
+      nodeId
+      icalPassword
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetIcalPasswordQuery__
+ *
+ * To run a query within a Vue component, call `useGetIcalPasswordQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetIcalPasswordQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useGetIcalPasswordQuery();
+ */
+export function useGetIcalPasswordQuery(options: VueApolloComposable.UseQueryOptions<GetIcalPasswordQuery, GetIcalPasswordQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetIcalPasswordQuery, GetIcalPasswordQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetIcalPasswordQuery, GetIcalPasswordQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<GetIcalPasswordQuery, GetIcalPasswordQueryVariables>(GetIcalPasswordDocument, {}, options);
+}
+export type GetIcalPasswordQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetIcalPasswordQuery, GetIcalPasswordQueryVariables>;
 export const GetAdminSettingsDocument = gql`
     query getAdminSettings {
   settings {
@@ -4107,6 +4142,7 @@ export const AdminSettingsInfo = gql`
   ...SettingsInfo
   registrationPassword
   registrationDefaultRole
+  icalPassword
 }
     ${SettingsInfo}`;
 export const GetUsers = gql`
@@ -4453,6 +4489,16 @@ export const GetSettings = gql`
   }
 }
     ${SettingsInfo}`;
+export const GetIcalPassword = gql`
+    query getIcalPassword {
+  settings {
+    nodes {
+      nodeId
+      icalPassword
+    }
+  }
+}
+    `;
 export const GetAdminSettings = gql`
     query getAdminSettings {
   settings {

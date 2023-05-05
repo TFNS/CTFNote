@@ -42,10 +42,32 @@
 
             <div class="row q-col-gutter-md">
               <div class="col">
-                <datetime-input v-model="form.startTime" label="Start on" />
+                <datetime-input
+                  v-model="form.startTime"
+                  label="Start on"
+                  @update:modelValue="
+                    () => {
+                      if (form.endTime < form.startTime) {
+                        form.endTime = new Date(
+                          form.startTime.getTime() +
+                            1000 * 60 * 60 * 24 /* 24 hours in milliseconds */
+                        );
+                      }
+                    }
+                  "
+                />
               </div>
               <div class="col">
-                <datetime-input v-model="form.endTime" label="End on" />
+                <datetime-input
+                  v-model="form.endTime"
+                  label="End on"
+                  lazy-rules
+                  :rules="[
+                    () =>
+                      (form.endTime && form.endTime >= form.startTime) ||
+                      'End time must be after start time',
+                  ]"
+                />
               </div>
             </div>
             <div class="row q-col-gutter-md">
@@ -91,7 +113,7 @@ export default defineComponent({
           title: '',
           description: '',
           startTime: now,
-          endTime: now,
+          endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24),
           weight: 0,
           ctfUrl: null,
           ctftimeUrl: null,

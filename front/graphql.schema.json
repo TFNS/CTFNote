@@ -7311,6 +7311,18 @@
         "description": null,
         "fields": [
           {
+            "name": "icalPassword",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "nodeId",
             "description": "A globally unique identifier. Can be used in various places throughout the system to identify this single value.",
             "args": [],
@@ -7424,6 +7436,18 @@
         "description": "Represents an update to a `Setting`. Fields that are set will be updated.",
         "fields": null,
         "inputFields": [
+          {
+            "name": "icalPassword",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "registrationAllowed",
             "description": null,

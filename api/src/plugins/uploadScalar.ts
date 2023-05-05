@@ -1,5 +1,5 @@
 import { SchemaBuilder } from "graphile-build";
-import { Upload } from "graphql-upload";
+import { Upload } from "graphql-upload-ts";
 
 export default function (builder: SchemaBuilder): void {
   builder.hook("build", (_, build) => {
