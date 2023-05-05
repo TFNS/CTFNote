@@ -1,6 +1,7 @@
 fragment ProfileFragment on Profile {
   id
   username
+  lastactive
   color
   description
   role

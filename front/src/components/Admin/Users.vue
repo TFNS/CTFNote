@@ -36,6 +36,11 @@
             {{ value }}
           </q-td>
         </template>
+        <template #body-cell-lastactive="{ value }">
+          <q-td class="text-right">
+            {{ value }}
+          </q-td>
+        </template>
         <template #body-cell-username="{ value }">
           <q-td class="text-right">
             {{ value }}
@@ -81,6 +86,7 @@
 </template>
 
 <script lang="ts">
+import { date } from 'quasar';
 import { Role, User } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 
@@ -101,6 +107,14 @@ const columns = [
     sortable: true,
   },
   { name: 'login', label: 'Login', field: 'login', sortable: true },
+  {
+    name: 'lastactive',
+    label: 'Last active',
+    field: (u: User) => {
+      return date.formatDate(u.profile.lastactive, 'YYYY-MM-DD HH:mm:ss');
+    },
+    sortable: true,
+  },
   {
     name: 'username',
     label: 'Username',

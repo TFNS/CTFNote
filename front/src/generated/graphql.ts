@@ -14,48 +14,11 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A location in a connection that can be used for resuming pagination. */
   Cursor: any;
-  /**
-   * A point in time as described by the [ISO
-   * 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
-   */
   Datetime: string;
-  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: string;
-  /**
-   * A JSON Web Token defined by [RFC 7519](https://tools.ietf.org/html/rfc7519)
-   * which securely represents claims between two parties.
-   */
   Jwt: string;
-  /** The `Upload` scalar type represents a file upload. */
   Upload: File;
-};
-
-/** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
-export type BooleanFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Boolean']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Boolean']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Boolean']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Boolean']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Boolean']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Boolean']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Boolean']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Boolean']>>;
 };
 
 /** All input for the `changePassword` mutation. */
@@ -247,7 +210,6 @@ export type CtfInvitationsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<InvitationCondition>;
-  filter?: InputMaybe<InvitationFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -284,20 +246,10 @@ export type CtfCondition = {
 export type CtfFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<CtfFilter>>;
-  /** Filter by the object’s `endTime` field. */
-  endTime?: InputMaybe<DatetimeFilter>;
-  /** Filter by the object’s `granted` field. */
-  granted?: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not?: InputMaybe<CtfFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<CtfFilter>>;
-  /** Filter by the object’s `secretsId` field. */
-  secretsId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `startTime` field. */
-  startTime?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `title` field. */
   title?: InputMaybe<StringFilter>;
 };
@@ -355,18 +307,6 @@ export type CtfSecretCtfsBySecretsIdArgs = {
 export type CtfSecretCondition = {
   /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['Int']>;
-};
-
-/** A filter to be used against `CtfSecret` object types. All fields are combined with a logical ‘and.’ */
-export type CtfSecretFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<CtfSecretFilter>>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
-  /** Negates the expression. */
-  not?: InputMaybe<CtfSecretFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<CtfSecretFilter>>;
 };
 
 /** Represents an update to a `CtfSecret`. Fields that are set will be updated. */
@@ -443,32 +383,6 @@ export enum CtfsOrderBy {
   TitleAsc = 'TITLE_ASC',
   TitleDesc = 'TITLE_DESC'
 }
-
-/** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
-export type DatetimeFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Datetime']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Datetime']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Datetime']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Datetime']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Datetime']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Datetime']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Datetime']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Datetime']>>;
-};
 
 /** All input for the `deleteCtfByNodeId` mutation. */
 export type DeleteCtfByNodeIdInput = {
@@ -644,32 +558,6 @@ export type ImportCtfPayload = {
   query?: Maybe<Query>;
 };
 
-/** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
-export type IntFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Int']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Int']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Int']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Int']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Int']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Int']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Int']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Int']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Int']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Int']>>;
-};
-
 export type Invitation = Node & {
   __typename?: 'Invitation';
   /** Reads a single `Ctf` that is related to this `Invitation`. */
@@ -691,20 +579,6 @@ export type InvitationCondition = {
   ctfId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `profileId` field. */
   profileId?: InputMaybe<Scalars['Int']>;
-};
-
-/** A filter to be used against `Invitation` object types. All fields are combined with a logical ‘and.’ */
-export type InvitationFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<InvitationFilter>>;
-  /** Filter by the object’s `ctfId` field. */
-  ctfId?: InputMaybe<IntFilter>;
-  /** Negates the expression. */
-  not?: InputMaybe<InvitationFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<InvitationFilter>>;
-  /** Filter by the object’s `profileId` field. */
-  profileId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `Invitation` */
@@ -1063,6 +937,7 @@ export type Profile = Node & {
   id: Scalars['Int'];
   /** Reads and enables pagination through a set of `Invitation`. */
   invitations: InvitationsConnection;
+  lastactive: Scalars['Datetime'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   role?: Maybe<Role>;
@@ -1076,7 +951,6 @@ export type ProfileInvitationsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<InvitationCondition>;
-  filter?: InputMaybe<InvitationFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1088,7 +962,6 @@ export type ProfileWorkOnTasksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
-  filter?: InputMaybe<WorkOnTaskFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1107,14 +980,10 @@ export type ProfileCondition = {
 export type ProfileFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<ProfileFilter>>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not?: InputMaybe<ProfileFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<ProfileFilter>>;
-  /** Filter by the object’s `role` field. */
-  role?: InputMaybe<RoleFilter>;
   /** Filter by the object’s `username` field. */
   username?: InputMaybe<StringFilter>;
 };
@@ -1248,7 +1117,6 @@ export type QueryCtfSecretsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<CtfSecretCondition>;
-  filter?: InputMaybe<CtfSecretFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1273,7 +1141,6 @@ export type QueryCtfsArgs = {
 export type QueryGuestsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
-  filter?: InputMaybe<ProfileFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1284,7 +1151,6 @@ export type QueryGuestsArgs = {
 export type QueryIncomingCtfArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
-  filter?: InputMaybe<CtfFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1309,7 +1175,6 @@ export type QueryInvitationsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<InvitationCondition>;
-  filter?: InputMaybe<InvitationFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1327,7 +1192,6 @@ export type QueryNodeArgs = {
 export type QueryPastCtfArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
-  filter?: InputMaybe<CtfFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1436,7 +1300,6 @@ export type QueryWorkOnTasksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
-  filter?: InputMaybe<WorkOnTaskFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1553,32 +1416,6 @@ export enum Role {
   UserManager = 'USER_MANAGER',
   UserMember = 'USER_MEMBER'
 }
-
-/** A filter to be used against Role fields. All fields are combined with a logical ‘and.’ */
-export type RoleFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Role>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Role>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Role>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Role>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Role>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Role>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Role>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Role>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Role>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Role>>;
-};
 
 export type Setting = Node & {
   __typename?: 'Setting';
@@ -1701,80 +1538,8 @@ export type StopWorkingOnPayloadWorkOnTaskEdgeArgs = {
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
 export type StringFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['String']>;
-  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  distinctFromInsensitive?: InputMaybe<Scalars['String']>;
-  /** Ends with the specified string (case-sensitive). */
-  endsWith?: InputMaybe<Scalars['String']>;
-  /** Ends with the specified string (case-insensitive). */
-  endsWithInsensitive?: InputMaybe<Scalars['String']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['String']>;
-  /** Equal to the specified value (case-insensitive). */
-  equalToInsensitive?: InputMaybe<Scalars['String']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['String']>;
-  /** Greater than the specified value (case-insensitive). */
-  greaterThanInsensitive?: InputMaybe<Scalars['String']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['String']>;
-  /** Greater than or equal to the specified value (case-insensitive). */
-  greaterThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['String']>>;
-  /** Included in the specified list (case-insensitive). */
-  inInsensitive?: InputMaybe<Array<Scalars['String']>>;
-  /** Contains the specified string (case-sensitive). */
-  includes?: InputMaybe<Scalars['String']>;
   /** Contains the specified string (case-insensitive). */
   includesInsensitive?: InputMaybe<Scalars['String']>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['String']>;
-  /** Less than the specified value (case-insensitive). */
-  lessThanInsensitive?: InputMaybe<Scalars['String']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['String']>;
-  /** Less than or equal to the specified value (case-insensitive). */
-  lessThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
-  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  like?: InputMaybe<Scalars['String']>;
-  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  likeInsensitive?: InputMaybe<Scalars['String']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['String']>;
-  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  notDistinctFromInsensitive?: InputMaybe<Scalars['String']>;
-  /** Does not end with the specified string (case-sensitive). */
-  notEndsWith?: InputMaybe<Scalars['String']>;
-  /** Does not end with the specified string (case-insensitive). */
-  notEndsWithInsensitive?: InputMaybe<Scalars['String']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['String']>;
-  /** Not equal to the specified value (case-insensitive). */
-  notEqualToInsensitive?: InputMaybe<Scalars['String']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['String']>>;
-  /** Not included in the specified list (case-insensitive). */
-  notInInsensitive?: InputMaybe<Array<Scalars['String']>>;
-  /** Does not contain the specified string (case-sensitive). */
-  notIncludes?: InputMaybe<Scalars['String']>;
-  /** Does not contain the specified string (case-insensitive). */
-  notIncludesInsensitive?: InputMaybe<Scalars['String']>;
-  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLike?: InputMaybe<Scalars['String']>;
-  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLikeInsensitive?: InputMaybe<Scalars['String']>;
-  /** Does not start with the specified string (case-sensitive). */
-  notStartsWith?: InputMaybe<Scalars['String']>;
-  /** Does not start with the specified string (case-insensitive). */
-  notStartsWithInsensitive?: InputMaybe<Scalars['String']>;
-  /** Starts with the specified string (case-sensitive). */
-  startsWith?: InputMaybe<Scalars['String']>;
-  /** Starts with the specified string (case-insensitive). */
-  startsWithInsensitive?: InputMaybe<Scalars['String']>;
 };
 
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
@@ -1812,7 +1577,6 @@ export type TaskWorkOnTasksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
-  filter?: InputMaybe<WorkOnTaskFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1833,16 +1597,10 @@ export type TaskCondition = {
 export type TaskFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<TaskFilter>>;
-  /** Filter by the object’s `ctfId` field. */
-  ctfId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not?: InputMaybe<TaskFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<TaskFilter>>;
-  /** Filter by the object’s `solved` field. */
-  solved?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `title` field. */
   title?: InputMaybe<StringFilter>;
 };
@@ -2219,20 +1977,6 @@ export type WorkOnTaskCondition = {
   taskId?: InputMaybe<Scalars['Int']>;
 };
 
-/** A filter to be used against `WorkOnTask` object types. All fields are combined with a logical ‘and.’ */
-export type WorkOnTaskFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<WorkOnTaskFilter>>;
-  /** Negates the expression. */
-  not?: InputMaybe<WorkOnTaskFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<WorkOnTaskFilter>>;
-  /** Filter by the object’s `profileId` field. */
-  profileId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `taskId` field. */
-  taskId?: InputMaybe<IntFilter>;
-};
-
 /** A connection to a list of `WorkOnTask` values. */
 export type WorkOnTasksConnection = {
   __typename?: 'WorkOnTasksConnection';
@@ -2266,33 +2010,33 @@ export enum WorkOnTasksOrderBy {
   TaskIdDesc = 'TASK_ID_DESC'
 }
 
-export type UserFragment = { __typename?: 'User', nodeId?: string | null | undefined, login?: string | null | undefined, role?: Role | null | undefined, id?: number | null | undefined, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined };
+export type UserFragment = { __typename?: 'User', nodeId?: string | null, login?: string | null, role?: Role | null, id?: number | null, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UsersConnection', nodes: Array<{ __typename?: 'User', nodeId?: string | null | undefined, login?: string | null | undefined, role?: Role | null | undefined, id?: number | null | undefined, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } | null | undefined };
+export type GetUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UsersConnection', nodes: Array<{ __typename?: 'User', nodeId?: string | null, login?: string | null, role?: Role | null, id?: number | null, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } | null };
 
 export type CreateInvitationTokenMutationVariables = Exact<{
   role: Role;
 }>;
 
 
-export type CreateInvitationTokenMutation = { __typename?: 'Mutation', createInvitationLink?: { __typename?: 'CreateInvitationLinkPayload', invitationLinkResponse?: { __typename?: 'InvitationLinkResponse', token?: string | null | undefined } | null | undefined } | null | undefined };
+export type CreateInvitationTokenMutation = { __typename?: 'Mutation', createInvitationLink?: { __typename?: 'CreateInvitationLinkPayload', invitationLinkResponse?: { __typename?: 'InvitationLinkResponse', token?: string | null } | null } | null };
 
 export type CreateResetPasswordTokenMutationVariables = Exact<{
   userId: Scalars['Int'];
 }>;
 
 
-export type CreateResetPasswordTokenMutation = { __typename?: 'Mutation', createResetPasswordLink?: { __typename?: 'CreateResetPasswordLinkPayload', resetPasswordLinkResponse?: { __typename?: 'ResetPasswordLinkResponse', token?: string | null | undefined } | null | undefined } | null | undefined };
+export type CreateResetPasswordTokenMutation = { __typename?: 'Mutation', createResetPasswordLink?: { __typename?: 'CreateResetPasswordLinkPayload', resetPasswordLinkResponse?: { __typename?: 'ResetPasswordLinkResponse', token?: string | null } | null } | null };
 
 export type DeleteUserByIdMutationVariables = Exact<{
   userId: Scalars['Int'];
 }>;
 
 
-export type DeleteUserByIdMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'DeleteUserPayload', userResponse?: { __typename?: 'UserResponse', id?: number | null | undefined, login?: string | null | undefined, role?: Role | null | undefined } | null | undefined } | null | undefined };
+export type DeleteUserByIdMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'DeleteUserPayload', userResponse?: { __typename?: 'UserResponse', id?: number | null, login?: string | null, role?: Role | null } | null } | null };
 
 export type UpdateRoleForUserIdMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -2300,17 +2044,17 @@ export type UpdateRoleForUserIdMutationVariables = Exact<{
 }>;
 
 
-export type UpdateRoleForUserIdMutation = { __typename?: 'Mutation', updateUserRole?: { __typename?: 'UpdateUserRolePayload', role?: Role | null | undefined } | null | undefined };
+export type UpdateRoleForUserIdMutation = { __typename?: 'Mutation', updateUserRole?: { __typename?: 'UpdateUserRolePayload', role?: Role | null } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null };
 
 export type NewTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NewTokenQuery = { __typename?: 'Query', newToken?: string | null | undefined };
+export type NewTokenQuery = { __typename?: 'Query', newToken?: string | null };
 
 export type LoginMutationVariables = Exact<{
   login: Scalars['String'];
@@ -2318,7 +2062,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'LoginPayload', jwt?: string | null | undefined } | null | undefined };
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'LoginPayload', jwt?: string | null } | null };
 
 export type RegisterMutationVariables = Exact<{
   login: Scalars['String'];
@@ -2326,7 +2070,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'RegisterPayload', jwt?: string | null | undefined } | null | undefined };
+export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'RegisterPayload', jwt?: string | null } | null };
 
 export type RegisterWithTokenMutationVariables = Exact<{
   login: Scalars['String'];
@@ -2335,7 +2079,7 @@ export type RegisterWithTokenMutationVariables = Exact<{
 }>;
 
 
-export type RegisterWithTokenMutation = { __typename?: 'Mutation', registerWithToken?: { __typename?: 'RegisterWithTokenPayload', jwt?: string | null | undefined } | null | undefined };
+export type RegisterWithTokenMutation = { __typename?: 'Mutation', registerWithToken?: { __typename?: 'RegisterWithTokenPayload', jwt?: string | null } | null };
 
 export type RegisterWithPasswordMutationVariables = Exact<{
   login: Scalars['String'];
@@ -2344,7 +2088,7 @@ export type RegisterWithPasswordMutationVariables = Exact<{
 }>;
 
 
-export type RegisterWithPasswordMutation = { __typename?: 'Mutation', registerWithPassword?: { __typename?: 'RegisterWithPasswordPayload', jwt?: string | null | undefined } | null | undefined };
+export type RegisterWithPasswordMutation = { __typename?: 'Mutation', registerWithPassword?: { __typename?: 'RegisterWithPasswordPayload', jwt?: string | null } | null };
 
 export type ResetPasswordMutationVariables = Exact<{
   password: Scalars['String'];
@@ -2352,33 +2096,33 @@ export type ResetPasswordMutationVariables = Exact<{
 }>;
 
 
-export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: { __typename?: 'ResetPasswordPayload', jwt?: string | null | undefined } | null | undefined };
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: { __typename?: 'ResetPasswordPayload', jwt?: string | null } | null };
 
-export type CtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string };
+export type CtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string };
 
-export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
+export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
 
 export type CtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CtfsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+export type CtfsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type SubscribeToCtfSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type GetFullCtfQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetFullCtfQuery = { __typename?: 'Query', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | null | undefined };
+export type GetFullCtfQuery = { __typename?: 'Query', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | null };
 
 export type IncomingCtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IncomingCtfsQuery = { __typename?: 'Query', incomingCtf?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+export type IncomingCtfsQuery = { __typename?: 'Query', incomingCtf?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type PastCtfsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -2386,7 +2130,7 @@ export type PastCtfsQueryVariables = Exact<{
 }>;
 
 
-export type PastCtfsQuery = { __typename?: 'Query', pastCtf?: { __typename?: 'CtfsConnection', totalCount: number, nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+export type PastCtfsQuery = { __typename?: 'Query', pastCtf?: { __typename?: 'CtfsConnection', totalCount: number, nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type CreateCtfMutationVariables = Exact<{
   title: Scalars['String'];
@@ -2400,21 +2144,21 @@ export type CreateCtfMutationVariables = Exact<{
 }>;
 
 
-export type CreateCtfMutation = { __typename?: 'Mutation', createCtf?: { __typename?: 'CreateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined } | null | undefined };
+export type CreateCtfMutation = { __typename?: 'Mutation', createCtf?: { __typename?: 'CreateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null } | null };
 
 export type DeleteCtfbyIdMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteCtfbyIdMutation = { __typename?: 'Mutation', deleteCtf?: { __typename?: 'DeleteCtfPayload', deletedCtfNodeId?: string | null | undefined } | null | undefined };
+export type DeleteCtfbyIdMutation = { __typename?: 'Mutation', deleteCtf?: { __typename?: 'DeleteCtfPayload', deletedCtfNodeId?: string | null } | null };
 
 export type ImportctfMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type ImportctfMutation = { __typename?: 'Mutation', importCtf?: { __typename?: 'ImportCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined } | null | undefined };
+export type ImportctfMutation = { __typename?: 'Mutation', importCtf?: { __typename?: 'ImportCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null } | null };
 
 export type UpdateCtfByIdMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2429,22 +2173,22 @@ export type UpdateCtfByIdMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCtfByIdMutation = { __typename?: 'Mutation', updateCtf?: { __typename?: 'UpdateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined } | null | undefined };
+export type UpdateCtfByIdMutation = { __typename?: 'Mutation', updateCtf?: { __typename?: 'UpdateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null } | null };
 
 export type SubscribeToCtfCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null | undefined } };
+export type SubscribeToCtfCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null } };
 
 export type SubscribeToCtfDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null | undefined } };
+export type SubscribeToCtfDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null } };
 
 export type SubscribeToFlagSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToFlagSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf' } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | { __typename?: 'WorkOnTask' } | null | undefined } };
+export type SubscribeToFlagSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf' } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | { __typename?: 'WorkOnTask' } | null } };
 
 export type InvitationFragment = { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number };
 
@@ -2454,7 +2198,7 @@ export type InviteUserToCtfMutationVariables = Exact<{
 }>;
 
 
-export type InviteUserToCtfMutation = { __typename?: 'Mutation', createInvitation?: { __typename?: 'CreateInvitationPayload', invitation?: { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number } | null | undefined } | null | undefined };
+export type InviteUserToCtfMutation = { __typename?: 'Mutation', createInvitation?: { __typename?: 'CreateInvitationPayload', invitation?: { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number } | null } | null };
 
 export type UninviteUserToCtfMutationVariables = Exact<{
   ctfId: Scalars['Int'];
@@ -2462,9 +2206,9 @@ export type UninviteUserToCtfMutationVariables = Exact<{
 }>;
 
 
-export type UninviteUserToCtfMutation = { __typename?: 'Mutation', deleteInvitation?: { __typename?: 'DeleteInvitationPayload', deletedInvitationNodeId?: string | null | undefined } | null | undefined };
+export type UninviteUserToCtfMutation = { __typename?: 'Mutation', deleteInvitation?: { __typename?: 'DeleteInvitationPayload', deletedInvitationNodeId?: string | null } | null };
 
-export type ProfileFragment = { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string };
+export type ProfileFragment = { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string };
 
 export type UpdatePasswordMutationVariables = Exact<{
   oldPassword: Scalars['String'];
@@ -2472,7 +2216,7 @@ export type UpdatePasswordMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePasswordMutation = { __typename?: 'Mutation', changePassword?: { __typename?: 'ChangePasswordPayload', changePasswordResponse?: { __typename?: 'ChangePasswordResponse', ok?: boolean | null | undefined } | null | undefined } | null | undefined };
+export type UpdatePasswordMutation = { __typename?: 'Mutation', changePassword?: { __typename?: 'ChangePasswordPayload', changePasswordResponse?: { __typename?: 'ChangePasswordResponse', ok?: boolean | null } | null } | null };
 
 export type UpdateProfileMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2480,50 +2224,50 @@ export type UpdateProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'UpdateProfilePayload', profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined } | null | undefined };
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'UpdateProfilePayload', profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null } | null };
 
 export type GetTeamQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTeamQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string }> } | null | undefined };
+export type GetTeamQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string }> } | null };
 
 export type SubscribeToProfileSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SubscribeToProfileCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToProfileCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SubscribeToProfileDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SearchCtFsQueryVariables = Exact<{
   search: Scalars['String'];
 }>;
 
 
-export type SearchCtFsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+export type SearchCtFsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type SearchTasksQueryVariables = Exact<{
   search: Scalars['String'];
 }>;
 
 
-export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> } | null | undefined };
+export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> } | null };
 
-export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined };
+export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null };
 
 export type GetCredentialsForCtfIdQueryVariables = Exact<{
   ctfId: Scalars['Int'];
 }>;
 
 
-export type GetCredentialsForCtfIdQuery = { __typename?: 'Query', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined };
+export type GetCredentialsForCtfIdQuery = { __typename?: 'Query', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null };
 
 export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
@@ -2531,7 +2275,7 @@ export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCredentialsForCtfIdMutation = { __typename?: 'Mutation', updateCtfSecret?: { __typename?: 'UpdateCtfSecretPayload', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined } | null | undefined };
+export type UpdateCredentialsForCtfIdMutation = { __typename?: 'Mutation', updateCtfSecret?: { __typename?: 'UpdateCtfSecretPayload', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null } | null };
 
 export type SettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
 
@@ -2540,12 +2284,12 @@ export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string
 export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null | undefined };
+export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null };
 
 export type GetAdminSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null | undefined };
+export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null };
 
 export type UpdateSettingsMutationVariables = Exact<{
   nodeId: Scalars['ID'];
@@ -2553,25 +2297,25 @@ export type UpdateSettingsMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string } | null | undefined } | null | undefined };
+export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string } | null } | null };
 
-export type WorkingOnFragment = { __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined };
+export type WorkingOnFragment = { __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null };
 
-export type TaskFragment = { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } };
+export type TaskFragment = { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } };
 
 export type GetTasksForCtfIdQueryVariables = Exact<{
   ctfId: Scalars['Int'];
 }>;
 
 
-export type GetTasksForCtfIdQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> } | null | undefined };
+export type GetTasksForCtfIdQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> } | null };
 
 export type TaskByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined };
+export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null };
 
 export type UpdateTaskMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2582,7 +2326,7 @@ export type UpdateTaskMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'UpdateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
+export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'UpdateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null } | null };
 
 export type CreateTaskForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
@@ -2593,33 +2337,33 @@ export type CreateTaskForCtfIdMutationVariables = Exact<{
 }>;
 
 
-export type CreateTaskForCtfIdMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
+export type CreateTaskForCtfIdMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null } | null };
 
 export type DeleteTaskMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', deletedTaskNodeId?: string | null | undefined } | null | undefined };
+export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', deletedTaskNodeId?: string | null } | null };
 
 export type StartWorkingOnMutationVariables = Exact<{
   taskId: Scalars['Int'];
 }>;
 
 
-export type StartWorkingOnMutation = { __typename?: 'Mutation', startWorkingOn?: { __typename?: 'StartWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
+export type StartWorkingOnMutation = { __typename?: 'Mutation', startWorkingOn?: { __typename?: 'StartWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null } | null };
 
 export type StopWorkingOnMutationVariables = Exact<{
   taskId: Scalars['Int'];
 }>;
 
 
-export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
+export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null } | null };
 
 export type SubscribeToTaskSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type UploadLogoMutationVariables = Exact<{
   logo: Scalars['Upload'];
@@ -2632,6 +2376,7 @@ export const ProfileFragmentDoc = gql`
     fragment ProfileFragment on Profile {
   id
   username
+  lastactive
   color
   description
   role
@@ -2765,6 +2510,9 @@ export const GetUsersDocument = gql`
  */
 export function useGetUsersQuery(options: VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, {}, options);
+}
+export function useGetUsersLazyQuery(options: VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, {}, options);
 }
 export type GetUsersQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetUsersQuery, GetUsersQueryVariables>;
 export const CreateInvitationTokenDocument = gql`
@@ -2915,6 +2663,9 @@ export const MeDocument = gql`
 export function useMeQuery(options: VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<MeQuery, MeQueryVariables>(MeDocument, {}, options);
 }
+export function useMeLazyQuery(options: VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, {}, options);
+}
 export type MeQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<MeQuery, MeQueryVariables>;
 export const NewTokenDocument = gql`
     query newToken {
@@ -2936,6 +2687,9 @@ export const NewTokenDocument = gql`
  */
 export function useNewTokenQuery(options: VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<NewTokenQuery, NewTokenQueryVariables>(NewTokenDocument, {}, options);
+}
+export function useNewTokenLazyQuery(options: VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<NewTokenQuery, NewTokenQueryVariables>(NewTokenDocument, {}, options);
 }
 export type NewTokenQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<NewTokenQuery, NewTokenQueryVariables>;
 export const LoginDocument = gql`
@@ -3117,6 +2871,9 @@ export const CtfsDocument = gql`
 export function useCtfsQuery(options: VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<CtfsQuery, CtfsQueryVariables>(CtfsDocument, {}, options);
 }
+export function useCtfsLazyQuery(options: VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<CtfsQuery, CtfsQueryVariables>(CtfsDocument, {}, options);
+}
 export type CtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtfsQuery, CtfsQueryVariables>;
 export const SubscribeToCtfDocument = gql`
     subscription subscribeToCtf {
@@ -3174,6 +2931,9 @@ export const GetFullCtfDocument = gql`
 export function useGetFullCtfQuery(variables: GetFullCtfQueryVariables | VueCompositionApi.Ref<GetFullCtfQueryVariables> | ReactiveFunction<GetFullCtfQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetFullCtfQuery, GetFullCtfQueryVariables>(GetFullCtfDocument, variables, options);
 }
+export function useGetFullCtfLazyQuery(variables: GetFullCtfQueryVariables | VueCompositionApi.Ref<GetFullCtfQueryVariables> | ReactiveFunction<GetFullCtfQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetFullCtfQuery, GetFullCtfQueryVariables>(GetFullCtfDocument, variables, options);
+}
 export type GetFullCtfQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetFullCtfQuery, GetFullCtfQueryVariables>;
 export const IncomingCtfsDocument = gql`
     query IncomingCtfs {
@@ -3199,6 +2959,9 @@ export const IncomingCtfsDocument = gql`
  */
 export function useIncomingCtfsQuery(options: VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<IncomingCtfsQuery, IncomingCtfsQueryVariables>(IncomingCtfsDocument, {}, options);
+}
+export function useIncomingCtfsLazyQuery(options: VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<IncomingCtfsQuery, IncomingCtfsQueryVariables>(IncomingCtfsDocument, {}, options);
 }
 export type IncomingCtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<IncomingCtfsQuery, IncomingCtfsQueryVariables>;
 export const PastCtfsDocument = gql`
@@ -3230,6 +2993,9 @@ export const PastCtfsDocument = gql`
  */
 export function usePastCtfsQuery(variables: PastCtfsQueryVariables | VueCompositionApi.Ref<PastCtfsQueryVariables> | ReactiveFunction<PastCtfsQueryVariables> = {}, options: VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<PastCtfsQuery, PastCtfsQueryVariables>(PastCtfsDocument, variables, options);
+}
+export function usePastCtfsLazyQuery(variables: PastCtfsQueryVariables | VueCompositionApi.Ref<PastCtfsQueryVariables> | ReactiveFunction<PastCtfsQueryVariables> = {}, options: VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<PastCtfsQuery, PastCtfsQueryVariables>(PastCtfsDocument, variables, options);
 }
 export type PastCtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<PastCtfsQuery, PastCtfsQueryVariables>;
 export const CreateCtfDocument = gql`
@@ -3611,6 +3377,9 @@ export const GetTeamDocument = gql`
 export function useGetTeamQuery(options: VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetTeamQuery, GetTeamQueryVariables>(GetTeamDocument, {}, options);
 }
+export function useGetTeamLazyQuery(options: VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetTeamQuery, GetTeamQueryVariables>(GetTeamDocument, {}, options);
+}
 export type GetTeamQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTeamQuery, GetTeamQueryVariables>;
 export const SubscribeToProfileDocument = gql`
     subscription subscribeToProfile {
@@ -3729,6 +3498,9 @@ export const SearchCtFsDocument = gql`
 export function useSearchCtFsQuery(variables: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<SearchCtFsQuery, SearchCtFsQueryVariables>(SearchCtFsDocument, variables, options);
 }
+export function useSearchCtFsLazyQuery(variables: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<SearchCtFsQuery, SearchCtFsQueryVariables>(SearchCtFsDocument, variables, options);
+}
 export type SearchCtFsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchCtFsQuery, SearchCtFsQueryVariables>;
 export const SearchTasksDocument = gql`
     query SearchTasks($search: String!) {
@@ -3762,6 +3534,9 @@ ${CtfFragmentDoc}`;
 export function useSearchTasksQuery(variables: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
 }
+export function useSearchTasksLazyQuery(variables: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
+}
 export type SearchTasksQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchTasksQuery, SearchTasksQueryVariables>;
 export const GetCredentialsForCtfIdDocument = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
@@ -3788,6 +3563,9 @@ export const GetCredentialsForCtfIdDocument = gql`
  */
 export function useGetCredentialsForCtfIdQuery(variables: GetCredentialsForCtfIdQueryVariables | VueCompositionApi.Ref<GetCredentialsForCtfIdQueryVariables> | ReactiveFunction<GetCredentialsForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>(GetCredentialsForCtfIdDocument, variables, options);
+}
+export function useGetCredentialsForCtfIdLazyQuery(variables: GetCredentialsForCtfIdQueryVariables | VueCompositionApi.Ref<GetCredentialsForCtfIdQueryVariables> | ReactiveFunction<GetCredentialsForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>(GetCredentialsForCtfIdDocument, variables, options);
 }
 export type GetCredentialsForCtfIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>;
 export const UpdateCredentialsForCtfIdDocument = gql`
@@ -3847,6 +3625,9 @@ export const GetSettingsDocument = gql`
 export function useGetSettingsQuery(options: VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetSettingsQuery, GetSettingsQueryVariables>(GetSettingsDocument, {}, options);
 }
+export function useGetSettingsLazyQuery(options: VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetSettingsQuery, GetSettingsQueryVariables>(GetSettingsDocument, {}, options);
+}
 export type GetSettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetSettingsQuery, GetSettingsQueryVariables>;
 export const GetAdminSettingsDocument = gql`
     query getAdminSettings {
@@ -3872,6 +3653,9 @@ export const GetAdminSettingsDocument = gql`
  */
 export function useGetAdminSettingsQuery(options: VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>(GetAdminSettingsDocument, {}, options);
+}
+export function useGetAdminSettingsLazyQuery(options: VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>(GetAdminSettingsDocument, {}, options);
 }
 export type GetAdminSettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>;
 export const UpdateSettingsDocument = gql`
@@ -3934,6 +3718,9 @@ export const GetTasksForCtfIdDocument = gql`
 export function useGetTasksForCtfIdQuery(variables: GetTasksForCtfIdQueryVariables | VueCompositionApi.Ref<GetTasksForCtfIdQueryVariables> | ReactiveFunction<GetTasksForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>(GetTasksForCtfIdDocument, variables, options);
 }
+export function useGetTasksForCtfIdLazyQuery(variables: GetTasksForCtfIdQueryVariables | VueCompositionApi.Ref<GetTasksForCtfIdQueryVariables> | ReactiveFunction<GetTasksForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>(GetTasksForCtfIdDocument, variables, options);
+}
 export type GetTasksForCtfIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>;
 export const TaskByIdDocument = gql`
     query taskById($id: Int!) {
@@ -3960,6 +3747,9 @@ export const TaskByIdDocument = gql`
  */
 export function useTaskByIdQuery(variables: TaskByIdQueryVariables | VueCompositionApi.Ref<TaskByIdQueryVariables> | ReactiveFunction<TaskByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<TaskByIdQuery, TaskByIdQueryVariables>(TaskByIdDocument, variables, options);
+}
+export function useTaskByIdLazyQuery(variables: TaskByIdQueryVariables | VueCompositionApi.Ref<TaskByIdQueryVariables> | ReactiveFunction<TaskByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<TaskByIdQuery, TaskByIdQueryVariables>(TaskByIdDocument, variables, options);
 }
 export type TaskByIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<TaskByIdQuery, TaskByIdQueryVariables>;
 export const UpdateTaskDocument = gql`
@@ -4209,6 +3999,7 @@ export const ProfileFragment = gql`
     fragment ProfileFragment on Profile {
   id
   username
+  lastactive
   color
   description
   role
