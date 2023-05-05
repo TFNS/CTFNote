@@ -2,7 +2,7 @@ import simplifyPlugin from "@graphile-contrib/pg-simplify-inflector";
 import PgPubsub from "@graphile/pg-pubsub";
 import crypto from "crypto";
 import express from "express";
-import { graphqlUploadExpress } from "graphql-upload";
+import { graphqlUploadExpress } from "graphql-upload-ts";
 import {
   makePluginHook,
   postgraphile,

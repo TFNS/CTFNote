@@ -5,6 +5,7 @@ services:
       context: "./api"
     networks:
       - ctfnote
+    restart: always
     environment:
       PAD_CREATE_URL: http://hedgedoc:3000/new
       PAD_SHOW_URL: /
@@ -35,6 +36,7 @@ services:
   front:
     networks:
       - ctfnote
+    restart: always
     build:
       context: "./front"
     depends_on:
@@ -42,7 +44,7 @@ services:
     ports:
       - 8080:80
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:1.9.2-alpine
+    image: quay.io/hedgedoc/hedgedoc:1.9.4
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad

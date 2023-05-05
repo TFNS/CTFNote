@@ -1,4 +1,4 @@
-FROM node:16-alpine AS build-deps
+FROM node@sha256:1a9a71ea86aad332aa7740316d4111ee1bd4e890df47d3b5eff3e5bded3b3d10 AS build-deps
 
 RUN mkdir -p /usr/src/app
 COPY package.json quasar.conf.js .eslintrc.js .eslintignore tsconfig.json .postcssrc.js yarn.lock babel.config.js quasar.extensions.json /usr/src/app/
@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 RUN yarn build
 
 # _--------_
-FROM nginx:1.21.6-alpine
+FROM nginx@sha256:5ba534070ae1e5e83d52141b11ddced689b476c0001e7205f50979dc0cbdde3d
 
 RUN mkdir -p /logs
 

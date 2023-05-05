@@ -37,7 +37,13 @@ import { computed, defineComponent, ref, watch } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 import CardAdminMenu from './CardAdminMenu.vue';
 
-type OnRequestProps = { pagination: { rowsPerPage: number; page: number } };
+type OnRequestProps = {
+  pagination: {
+    rowsPerPage: number;
+    page: number;
+    rowsNumber: number;
+  };
+};
 
 export default defineComponent({
   components: { CardAdminMenu, CtfNoteLink },
@@ -56,7 +62,7 @@ export default defineComponent({
     watch(
       () => pastCtfs.value.total,
       (v) => {
-        pagination.value.rowsNumber = v;
+        if (v !== 0) pagination.value.rowsNumber = v;
       },
       { immediate: true }
     );
@@ -71,13 +77,11 @@ export default defineComponent({
           name: 'title',
           classes: 'text-center',
           align: 'center',
-          sortable: true,
           label: 'Title',
         },
         {
           name: 'date',
           align: 'right',
-          sortable: true,
           label: 'Date',
         },
       ],
@@ -88,9 +92,10 @@ export default defineComponent({
       return date.formatDate(ctf.startTime, 'YYYY-MM-DD');
     },
     onRequest(props: OnRequestProps) {
-      const { rowsPerPage, page } = props.pagination;
+      const { rowsPerPage, page, rowsNumber } = props.pagination;
       this.pagination.rowsPerPage = rowsPerPage;
       this.pagination.page = page;
+      this.pagination.rowsNumber = rowsNumber;
     },
   },
 });

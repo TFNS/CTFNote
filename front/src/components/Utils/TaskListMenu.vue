@@ -3,6 +3,7 @@
     <q-btn-dropdown stretch flat round>
       <template #label>
         <div class="row q-gutter-md items-center">
+          <task-menu v-if="task" :task="task" />
           <div>{{ title }}</div>
           <div class="col">
             <q-badge v-if="task" :style="colorHash(task.category)">
@@ -20,6 +21,7 @@
             clickable
             :to="taskLink(t)"
           >
+            <task-menu :task="t" />
             <q-item-section>
               <q-item-label>
                 <div class="row" style="max-width: 200px">
@@ -58,9 +60,10 @@
 import { Ctf, Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
+import TaskMenu from '../Task/TaskMenu.vue';
 
 export default defineComponent({
-  components: {},
+  components: { TaskMenu },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
     taskId: { type: Number, default: null },

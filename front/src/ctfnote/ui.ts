@@ -27,6 +27,7 @@ export function useNotify() {
       position: 'top-right',
       color: 'positive',
       timeout: 2500,
+      actions: [{ icon: 'close', color: 'white', dense: true, round: true }],
       ...opts,
     });
     return true;
@@ -36,7 +37,7 @@ export function useNotify() {
     $q.notify({
       position: 'top',
       color: 'negative',
-      actions: [{ icon: 'close', color: 'white', dense: true }],
+      actions: [{ icon: 'close', color: 'white', dense: true, round: true }],
       icon: 'error',
       timeout: 2500,
       message,
@@ -66,7 +67,7 @@ export function useNotify() {
       try {
         new Notification(opts.message, {
           icon: `${document.location.origin}/favicon.ico`,
-        }); 
+        });
         return;
       } catch {
         disableSystemNotification();

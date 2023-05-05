@@ -90,6 +90,13 @@
           label="Import "
           @click="openImportTaskDialog"
         />
+        <q-fab-action
+          color="accent"
+          push
+          icon="file_download"
+          label="Export "
+          @click="openExportTasksDialog"
+        />
       </q-fab>
     </q-page-sticky>
   </div>
@@ -102,14 +109,14 @@ import { useStoredSettings } from 'src/extensions/storedSettings';
 import { defineComponent, ref, provide } from 'vue';
 import TaskEditDialogVue from '../Dialogs/TaskEditDialog.vue';
 import TaskImportDialogVue from '../Dialogs/TaskImportDialog.vue';
+import TaskExportDialogVue from '../Dialogs/TaskExportDialog.vue';
 import TaskCards from './TaskCards.vue';
 import TaskTable from './TaskTable.vue';
-import { useQuasar } from 'quasar';
 import keys from '../../injectionKeys';
 
 const displayOptions = ['classic', 'dense', 'ultradense', 'table'] as const;
 
-export type DisplayMode = typeof displayOptions[number];
+export type DisplayMode = (typeof displayOptions)[number];
 
 export default defineComponent({
   components: { TaskCards, TaskTable },
@@ -117,55 +124,9 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
   },
   setup() {
-    const $q = useQuasar();
     const { makePersistant } = useStoredSettings();
 
-    const updateTask = ctfnote.tasks.useUpdateTask();
-    const deleteTask = ctfnote.tasks.useDeleteTask();
     const me = ctfnote.me.injectMe();
-
-    provide(keys.solveTaskPopup, (task: Task) => {
-      $q.dialog({
-        title: 'Flag:',
-        color: 'primary',
-        cancel: {
-          label: 'cancel',
-          color: 'warning',
-          flat: true,
-        },
-        prompt: {
-          model: task.flag ?? '',
-          type: 'text',
-        },
-        ok: {
-          color: 'positive',
-          label: 'save',
-        },
-      }).onOk((flag: string) => {
-        void updateTask(task, { flag });
-      });
-    });
-
-    provide(keys.deleteTaskPopup, (task: Task) => {
-      $q.dialog({
-        title: `Delete ${task.title} ?`,
-        color: 'negative',
-        message: 'This will delete the task, but not the pads.',
-        ok: 'Delete',
-        cancel: true,
-      }).onOk(() => {
-        void deleteTask(task);
-      });
-    });
-
-    provide(keys.editTaskPopup, (task: Task) => {
-      $q.dialog({
-        component: TaskEditDialogVue,
-        componentProps: {
-          task,
-        },
-      });
-    });
 
     const filter = ref('');
     const categoryFilter = ref<string[]>([]);
@@ -189,7 +150,7 @@ export default defineComponent({
       // Filter using needle on title, category and description
       const fields = ['title', 'category', 'description'] as const;
 
-      const checkField = (f: typeof fields[number]): boolean =>
+      const checkField = (f: (typeof fields)[number]): boolean =>
         task[f]?.toLowerCase().includes(needle) ?? false;
 
       return fields.some((name) => checkField(name));
@@ -252,6 +213,14 @@ export default defineComponent({
     openImportTaskDialog() {
       this.$q.dialog({
         component: TaskImportDialogVue,
+        componentProps: {
+          ctf: this.ctf,
+        },
+      });
+    },
+    openExportTasksDialog() {
+      this.$q.dialog({
+        component: TaskExportDialogVue,
         componentProps: {
           ctf: this.ctf,
         },

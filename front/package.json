@@ -14,33 +14,35 @@
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/client": "^3.4.15",
-    "@quasar/extras": "^1.0.0",
-    "@quasar/quasar-app-extension-apollo": "^2.0.0-beta.3",
-    "@quasar/quasar-ui-qcalendar": "^4.0.0-beta.7",
+    "@apollo/client": "^3.7.10",
+    "@quasar/cli": "^2.0.0",
+    "@quasar/extras": "^1.15.11",
+    "@quasar/quasar-app-extension-apollo": "^2.0.0-beta.5",
+    "@quasar/quasar-ui-qcalendar": "^4.0.0-beta.16",
     "@vue/apollo-composable": "^4.0.0-alpha.15",
-    "apollo-upload-client": "^16.0.0",
+    "apollo-upload-client": "^17.0.0",
     "color-hash": "^2.0.1",
     "core-js": "^3.6.5",
     "hotkeys-js": "^3.8.7",
-    "quasar": "^2.0.0",
+    "jszip": "^3.10.1",
+    "quasar": "^2.11.7",
     "slugify": "^1.6.1",
     "ts-essentials": "^9.0.0",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0"
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
-    "@graphql-codegen/cli": "^2.2.0",
-    "@graphql-codegen/fragment-matcher": "^3.1.0",
-    "@graphql-codegen/introspection": "^2.1.0",
-    "@graphql-codegen/typescript": "^2.2.2",
-    "@graphql-codegen/typescript-document-nodes": "^2.1.4",
-    "@graphql-codegen/typescript-operations": "^2.1.6",
+    "@graphql-codegen/cli": "^3.2.2",
+    "@graphql-codegen/fragment-matcher": "^4.0.1",
+    "@graphql-codegen/introspection": "^3.0.1",
+    "@graphql-codegen/typescript": "^3.0.2",
+    "@graphql-codegen/typescript-document-nodes": "^3.0.2",
+    "@graphql-codegen/typescript-operations": "^3.0.2",
     "@graphql-codegen/typescript-vue-apollo": "^3.1.4",
-    "@quasar/app": "^3.0.0",
+    "@quasar/app-webpack": "^3.7.2",
     "@quasar/quasar-app-extension-qmarkdown": "^2.0.0-alpha.8",
-    "@types/apollo-upload-client": "^14.1.0",
+    "@types/apollo-upload-client": "^17.0.2",
     "@types/color-hash": "^1.0.1",
     "@types/node": "^16.11.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
@@ -48,8 +50,8 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-graphql": "^4.0.0",
-    "eslint-plugin-vue": "^7.19.1",
-    "lint-staged": "^11.2.3",
+    "eslint-plugin-vue": "^9.10.0",
+    "lint-staged": "^13.2.0",
     "prettier": "^2.4.1"
   },
   "browserslist": [
@@ -67,5 +69,10 @@
     "node": ">= 12.22.1",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
+  },
+  "resolutions": {
+    "eslint-plugin-graphql/graphql-config/@graphql-tools/url-loader/cross-fetch": "3.1.5",
+    "eslint-plugin-graphql/graphql-config/@graphql-tools/url-loader/ws": "7.4.6",
+    "eslint-plugin-graphql/graphql-config/minimatch": "3.0.5"
   }
 }
