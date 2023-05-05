@@ -52,18 +52,12 @@ export function icalRoute(pool: Pool): Handler {
     const ctfs = await getCtfs();
 
     for (const ctf of ctfs) {
-      
-      const proto = req.headers["x-forwarded-proto"] || req.protocol;
-      const host = req.headers["x-forwarded-host"] || req.headers.host;
-      const ctf_url = `${proto}://${host}/#/ctf/${ctf.id}/info`;
-
-      console.log(ctf_url);
       cal.createEvent({
         start: ctf.start_time,
         end: ctf.end_time,
         description: ctf.description,
         summary: ctf.title,
-        url: ctf_url,
+        url: ctf.ctf_url,
       });
     }
 
