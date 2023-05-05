@@ -4690,6 +4690,22 @@
             "deprecationReason": null
           },
           {
+            "name": "lastactive",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Datetime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "nodeId",
             "description": "A globally unique identifier. Can be used in various places throughout the system to identify this single value.",
             "args": [],

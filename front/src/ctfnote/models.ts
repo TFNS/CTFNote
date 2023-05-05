@@ -17,6 +17,7 @@ export type Maybe<T> = T | null;
 export type Profile = {
   id: Id<Profile>;
   username: string;
+  lastactive: string;
   role: Role;
   description: string;
   color: string;
@@ -90,7 +91,7 @@ export const defaultColorsNames = [
   'warning',
 ] as const;
 
-export type SettingsColor = typeof defaultColorsNames[number];
+export type SettingsColor = (typeof defaultColorsNames)[number];
 export type SettingsColorMap = Record<SettingsColor, string>;
 export type Settings = {
   registrationAllowed: boolean;
