@@ -14,10 +14,12 @@
           <q-btn
             round
             flat
-            icon="link"
+            :icon="icalLinkIcon"
             title="iCalendar"
-            @click="showIcalLink = true"
-          />
+            @click="clickIcalLink()"
+          >
+            <q-tooltip> Copy iCalendar link </q-tooltip>
+          </q-btn>
         </div>
         <q-btn
           icon-right="arrow_forward_ios"
@@ -33,10 +35,12 @@
           <q-btn
             round
             flat
-            icon="link"
+            :icon="icalLinkIcon"
             title="iCalendar"
-            @click="showIcalLink = true"
-          />
+            @click="clickIcalLink()"
+          >
+            <q-tooltip> Copy iCalendar link </q-tooltip>
+          </q-btn>
         </div>
         <q-btn
           icon="arrow_back_ios"
@@ -83,28 +87,6 @@
       </q-calendar-month>
     </q-card-section>
   </q-card>
-  <q-dialog v-model="showIcalLink" seamless position="top">
-    <q-card style="width: 450px">
-      <q-card-section class="row items-center q-gutter-sm q-px-sm">
-        <div class="col-auto">
-          <q-icon name="link" size="md" />
-        </div>
-        <div class="col">
-          <q-input
-            ref="icalEl"
-            label="iCalendar"
-            :model-value="icalLink"
-            readonly
-            outlined
-          />
-        </div>
-
-        <div class="col-auto">
-          <q-btn v-close-popup flat round icon="close" />
-        </div>
-      </q-card-section>
-    </q-card>
-  </q-dialog>
 </template>
 
 <script lang="ts">
@@ -122,7 +104,7 @@ import '@quasar/quasar-ui-qcalendar/src/QCalendarVariables.sass';
 import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent, ref, computed } from 'vue';
-import { QInput } from 'quasar';
+import { copyToClipboard, QInput } from 'quasar';
 
 function dateToLocale(s: string, offset = 0): string {
   const [year, month] = s.split('-').map((e) => parseInt(e));
@@ -154,7 +136,7 @@ export default defineComponent({
       loading,
       animated: ref(false),
       selectedDate: ref(today()),
-      showIcalLink: ref(false),
+      icalLinkIcon: ref('link'),
       icalLink,
       icalEl,
     };
@@ -203,6 +185,13 @@ export default defineComponent({
     },
     clickCtf(ctf: Ctf) {
       void this.$router.push(ctf.infoLink);
+    },
+    async clickIcalLink() {
+      await copyToClipboard(this.icalLink);
+      this.icalLinkIcon = 'done';
+      setTimeout(() => {
+        this.icalLinkIcon = 'link';
+      }, 1500);
     },
   },
 });
