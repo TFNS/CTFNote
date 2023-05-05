@@ -26,7 +26,10 @@
               left-label
               label="Require password to access iCalendar"
             />
-            <q-input v-model="icalPassword" :disable="!icalPasswordRequired">
+            <password-input
+              v-model="icalPassword"
+              :disable="!icalPasswordRequired"
+            >
               <template #after>
                 <q-btn
                   icon="save"
@@ -40,7 +43,7 @@
                   @click="updateIcalPassword"
                 />
               </template>
-            </q-input>
+            </password-input>
           </div>
         </q-card-section>
       </q-card>
