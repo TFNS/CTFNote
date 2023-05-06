@@ -45,7 +45,7 @@
                 <datetime-input
                   v-model="form.startTime"
                   label="Start on"
-                  @update:modelValue="
+                  @update:model-value="
                     () => {
                       if (form.endTime < form.startTime) {
                         form.endTime = new Date(
