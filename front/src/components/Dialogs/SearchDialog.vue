@@ -8,7 +8,7 @@
           v-model="searchText"
           filled
           label="What are you searching for?"
-          hint="Search for title of CTF or task"
+          hint="Search for tag or title of CTF or task"
           autofocus
           :loading="loading"
           @update:model-value="onSearchChange"
