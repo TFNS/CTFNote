@@ -63,7 +63,6 @@ export function getTags() {
 /* Mutations */
 export function useAddTagsForTask() {
   const { mutate: addTagsForTask } = useAddTagsForTaskMutation({});
-  return (tags: Array<string>, taskId: Id<Task>) => {
-    if (tags.length > 0) return addTagsForTask({ tags: tags, taskId: taskId });
-  };
+  return (tags: Array<string>, taskId: Id<Task>) =>
+    addTagsForTask({ tags: tags, taskId: taskId });
 }
