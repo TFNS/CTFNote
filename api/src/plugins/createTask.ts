@@ -96,19 +96,6 @@ export default makeExtendSchemaPlugin((build) => {
             return {};
           }
 
-          // collect string values of tags
-          // const stringTags = [];
-          // for (const tag of tags) {
-          //   const {
-          //     rows: [existingTag],
-          //   } = await pgClient.query(
-          //     `SELECT tag FROM ctfnote.tag WHERE id = $1 LIMIT 1`,
-          //     [tag]
-          //   );
-
-          //   stringTags.push(existingTag.tag);
-          // }
-
           const padPathOrUrl = await createPad(title, description, tags);
 
           let padPath: string;
@@ -136,13 +123,6 @@ export default makeExtendSchemaPlugin((build) => {
                   );
                 }
               );
-
-            // for (const tag of tags) {
-            //   await pgClient.query(
-            //     `INSERT INTO ctfnote.assigned_tags VALUES ($1, $2)`,
-            //     [newTask.id, tag.id]
-            //   );
-            // }
 
             return {
               data: row,
