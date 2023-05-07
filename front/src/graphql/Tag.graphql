@@ -38,15 +38,6 @@ fragment TaskForTagsFragement on AssignedTag {
 }
 
 # Mutations
-
-# mutation createTag($tag: String!) {
-#   createTag(input: { tag: $tag }) {
-#     tag {
-#       ...TagFragment
-#     }
-#   }
-# }
-
 mutation addTagsForTask($tags: [String!], $taskId: Int!) {
   addTagsForTask(input: { tags: $tags, taskid: $taskId }) {
     clientMutationId
@@ -88,13 +79,3 @@ subscription subscribeToTagDeleted {
     }
   }
 }
-
-# mutation createAssignedTag($tagId: Int!, $taskId: Int!) {
-#   createAssignedTag(
-#     input: { assignedTag: { tagId: $tagId, taskId: $taskId } }
-#   ) {
-#     assignedTag {
-#       ...AssignedTagsFragment
-#     }
-#   }
-# }
