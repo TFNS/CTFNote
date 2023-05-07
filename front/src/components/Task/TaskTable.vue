@@ -9,7 +9,7 @@
     <template #body="props">
       <q-tr v-show="isTaskVisible(props.row)" :props="props">
         <task-menu :task="props.row" :context-menu="true" />
-        <q-td key="category" :props="props" class="no-click" auto-width>
+        <q-td key="tags" :props="props" class="no-click">
           <task-tags-list :tags="props.row.assignedTags" />
         </q-td>
 
@@ -84,7 +84,7 @@ export default defineComponent({
   },
   setup() {
     const columns = [
-      col('category', { sortable: true }),
+      col('tags', { sortable: true }),
       col('solved', { sortable: true }),
       col('title', { sortable: true }),
       col('description', { label: 'description / flag' }),
