@@ -28,7 +28,7 @@
             </q-item-section>
             <q-item-section side>
               <q-btn icon="settings" flat round>
-                <task-menu v-if="task" :task="task" :context-menu="false" />
+                <task-menu v-if="t" :task="t" :context-menu="false" />
               </q-btn>
             </q-item-section>
           </q-item>
