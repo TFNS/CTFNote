@@ -16,7 +16,9 @@
           <q-select
             v-model="form.tags"
             label="Tags"
-            :options="tags.map((t) => t.tag)"
+            :options="suggestions"
+            @filter="filterFn"
+            input-debounce="0"
             use-input
             use-chips
             multiple
@@ -46,7 +48,7 @@
 import { useDialogPluginComponent } from 'quasar';
 import { Id, Task, Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, reactive } from 'vue';
+import { Ref, defineComponent, reactive, ref } from 'vue';
 import { makeId } from 'src/ctfnote/models';
 
 export default defineComponent({
@@ -62,6 +64,26 @@ export default defineComponent({
       description: props.task?.description ?? '',
       flag: props.task?.flag ?? '',
     });
+
+    const tags = ctfnote.tags.provideTags();
+    let suggestions: Ref<string[]> = ref(tags.value.map((t) => t.tag));
+
+    const filterFn = function (
+      val: string,
+      doneFn: (callBackFn: () => void, afterFn: () => void) => void,
+      _abortFn: () => void
+    ) {
+      doneFn(
+        () => {
+          const needle = val.toLocaleLowerCase();
+          suggestions.value = tags.value
+            .map((t) => t.tag)
+            .filter((v) => v.toLocaleLowerCase().indexOf(needle) > -1);
+        },
+        () => void 0
+      );
+    };
+
     const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 
     return {
@@ -72,7 +94,9 @@ export default defineComponent({
       updateTask: ctfnote.tasks.useUpdateTask(),
       createTask: ctfnote.tasks.useCreateTask(),
       addTagsForTask: ctfnote.tags.useAddTagsForTask(),
-      tags: ctfnote.tags.provideTags(),
+      tags,
+      suggestions,
+      filterFn,
     };
   },
   computed: {
