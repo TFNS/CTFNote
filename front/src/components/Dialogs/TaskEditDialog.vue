@@ -13,7 +13,15 @@
           <q-input v-model="form.title" required label="Title" />
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input v-model="form.category" label="Category" />
+          <q-select
+            v-model="form.tags"
+            label="Tags"
+            :options="tags.map((t) => t.tag)"
+            use-input
+            use-chips
+            multiple
+            new-value-mode="add-unique"
+          />
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-input
@@ -39,6 +47,8 @@ import { useDialogPluginComponent } from 'quasar';
 import { Id, Task, Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent, reactive } from 'vue';
+import { makeId } from 'src/ctfnote/models';
+
 export default defineComponent({
   props: {
     ctfId: { type: Number as unknown as () => Id<Ctf> | null, default: null },
@@ -48,7 +58,7 @@ export default defineComponent({
   setup(props) {
     const form = reactive({
       title: props.task?.title ?? '',
-      category: props.task?.category ?? '',
+      tags: props.task?.assignedTags.map((t) => t.tag) ?? [],
       description: props.task?.description ?? '',
       flag: props.task?.flag ?? '',
     });
@@ -61,6 +71,8 @@ export default defineComponent({
       onDialogOK,
       updateTask: ctfnote.tasks.useUpdateTask(),
       createTask: ctfnote.tasks.useCreateTask(),
+      addTagsForTask: ctfnote.tags.useAddTagsForTask(),
+      tags: ctfnote.tags.provideTags(),
     };
   },
   computed: {
@@ -72,12 +84,20 @@ export default defineComponent({
     },
   },
   methods: {
-    submit() {
+    async submit() {
+      let task = null;
       if (this.ctfId) {
-        void this.createTask(this.ctfId, this.form);
+        const r = await this.createTask(this.ctfId, this.form);
+
+        task = r?.data?.createTask?.task;
+        if (task) {
+          await this.addTagsForTask(this.form.tags, makeId(task.id));
+        }
       } else if (this.task) {
-        void this.updateTask(this.task, { ...this.form });
+        await this.addTagsForTask(this.form.tags, makeId(this.task.id));
+        await this.updateTask(this.task, this.form);
       }
+
       this.onDialogOK();
     },
   },

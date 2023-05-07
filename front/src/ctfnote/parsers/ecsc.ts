@@ -16,7 +16,7 @@ const ECSCParser: Parser = {
       if (!task.task || !task.contract) {
         continue;
       }
-      tasks.push({ title: task.task, category: task.contract });
+      tasks.push({ title: task.task, tags: [task.contract] });
     }
     return tasks;
   },

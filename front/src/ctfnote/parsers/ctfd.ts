@@ -7,8 +7,9 @@ const CTFDParser: Parser = {
 
   parse(s: string): ParsedTask[] {
     const tasks = [];
-    const data =
-      parseJsonStrict<{ data: { name: string; category: string }[] }>(s);
+    const data = parseJsonStrict<{
+      data: { name: string; category: string }[];
+    }>(s);
     if (!Array.isArray(data?.data)) {
       return [];
     }
@@ -16,7 +17,7 @@ const CTFDParser: Parser = {
       if (!task.name || !task.category) {
         continue;
       }
-      tasks.push({ title: task.name, category: task.category });
+      tasks.push({ title: task.name, tags: [task.category] });
     }
     return tasks;
   },

@@ -1,0 +1,94 @@
+fragment TagFragment on Tag {
+  nodeId
+  id
+  tag
+}
+
+query getTags {
+  tags {
+    nodes {
+      ...TagFragment
+    }
+  }
+}
+
+query getTagById($id: Int!) {
+  tag(id: $id) {
+    tag
+    id
+  }
+}
+
+fragment AssignedTagsFragment on AssignedTag {
+  nodeId
+  taskId
+  tagId
+  tag {
+    ...TagFragment
+  }
+  task {
+    ...TaskFragment
+  }
+}
+
+# Mutations
+
+# mutation createTag($tag: String!) {
+#   createTag(input: { tag: $tag }) {
+#     tag {
+#       ...TagFragment
+#     }
+#   }
+# }
+
+mutation addTagsForTask($tags: [String!], $taskId: Int!) {
+  addTagsForTask(input: { tags: $tags, taskid: $taskId }) {
+    clientMutationId
+  }
+}
+
+subscription subscribeToTag {
+  listen(topic: "update:tag") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Tag {
+        ...TagFragment
+      }
+    }
+  }
+}
+
+subscription subscribeToTagCreated {
+  listen(topic: "created:tag") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Tag {
+        ...TagFragment
+      }
+    }
+  }
+}
+
+subscription subscribeToTagDeleted {
+  listen(topic: "deleted:tag") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Tag {
+        ...TagFragment
+      }
+    }
+  }
+}
+
+# mutation createAssignedTag($tagId: Int!, $taskId: Int!) {
+#   createAssignedTag(
+#     input: { assignedTag: { tagId: $tagId, taskId: $taskId } }
+#   ) {
+#     assignedTag {
+#       ...AssignedTagsFragment
+#     }
+#   }
+# }

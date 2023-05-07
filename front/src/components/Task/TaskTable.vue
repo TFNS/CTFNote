@@ -8,9 +8,9 @@
   >
     <template #body="props">
       <q-tr v-show="isTaskVisible(props.row)" :props="props">
-        <task-menu :task="props.row" />
+        <task-menu :task="props.row" :context-menu="true" />
         <q-td key="category" :props="props" class="no-click" auto-width>
-          <task-category-chip :name="props.row.category" />
+          <task-tags-list :tags="props.row.assignedTags" />
         </q-td>
 
         <q-td key="solved" :props="props" auto-width>
@@ -52,7 +52,7 @@ import { defineComponent } from 'vue';
 import { Ctf, Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import TaskBtnGroup from './TaskBtnGroup.vue';
-import TaskCategoryChip from './TaskCategoryChip.vue';
+import TaskTagsList from './TaskTagsList.vue';
 import TaskPlayerList from './TaskPlayerList.vue';
 import TaskMenu from './TaskMenu.vue';
 import { injectStrict } from 'src/ctfnote/utils';
@@ -73,7 +73,7 @@ function col(name: string, opt = {}) {
 export default defineComponent({
   components: {
     TaskBtnGroup,
-    TaskCategoryChip,
+    TaskTagsList,
     TaskPlayerList,
     TaskMenu,
     CtfNoteLink,

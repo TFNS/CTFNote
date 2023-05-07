@@ -9,7 +9,7 @@
     "build": "tsc",
     "lint": "eslint --fix 'src/**/*.ts'",
     "format": "prettier --write 'src/**/*.ts'",
-    "dev": "NODE_ENV=development nodemon src/index.ts",
+    "dev": "DEBUG=postgraphile:postgres:error NODE_ENV=development nodemon src/index.ts",
     "dev:migrate": "DATABASE_URL= yarn run db-migrate -e dev up"
   },
   "lint-staged": {

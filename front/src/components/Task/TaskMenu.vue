@@ -1,5 +1,5 @@
 <template>
-  <q-menu touch-position context-menu>
+  <q-menu touch-position :context-menu="contextMenu">
     <q-list dense>
       <q-item v-ripple v-close-popup tag="label">
         <q-item-section side top>
@@ -48,6 +48,10 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   props: {
     task: { type: Object as () => Task, required: true },
+    contextMenu: {
+      type: Boolean,
+      required: true,
+    },
   },
   setup() {
     return {
