@@ -11,7 +11,7 @@
       <div class="col col-3 col-grow">
         <q-select
           v-model="tagFilter"
-          :options="tags.map((t) => t.tag)"
+          :options="tags"
           use-chips
           multiple
           label="Filter by tag"
@@ -184,7 +184,11 @@ export default defineComponent({
       return this.displayMode != 'table';
     },
     tags() {
-      return [...new Set(this.tasks.flatMap((t) => t.assignedTags))];
+      return [
+        ...new Set(
+          this.tasks.flatMap((t) => t.assignedTags.map((tt) => tt.tag))
+        ),
+      ];
     },
     sortedTasks() {
       const tasks = this.tasks;
