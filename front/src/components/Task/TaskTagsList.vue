@@ -1,11 +1,6 @@
 <template>
   <div class="row">
-    <q-chip
-      v-for="tag in tags"
-      :key="tag.nodeId"
-      :style="style(tag.tag)"
-      @click="filterTag(tag.tag)"
-    >
+    <q-chip v-for="tag in tags" :key="tag.nodeId" :style="style(tag.tag)">
       <span class="tag-chip">
         {{ tag.tag }}
       </span>
@@ -16,8 +11,6 @@
 <script lang="ts">
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
-import { injectStrict } from 'src/ctfnote/utils';
-import keys from '../../injectionKeys';
 import { Tag } from 'src/ctfnote/models';
 
 export default defineComponent({
@@ -25,9 +18,7 @@ export default defineComponent({
     tags: { type: Object as () => Tag[], required: true },
   },
   setup() {
-    return {
-      filterTag: injectStrict(keys.filterTag),
-    };
+    return {};
   },
   methods: {
     style(name: string) {

@@ -26,6 +26,12 @@ fragment AssignedTagsFragment on AssignedTag {
   tag {
     ...TagFragment
   }
+}
+
+fragment TaskForTagsFragement on AssignedTag {
+  nodeId
+  taskId
+  tagId
   task {
     ...TaskFragment
   }

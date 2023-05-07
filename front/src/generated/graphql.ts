@@ -2907,6 +2907,20 @@ export type SearchTasksQueryVariables = Exact<{
 
 export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> } | null };
 
+export type SearchTagsQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchTagsQuery = { __typename?: 'Query', tags?: { __typename?: 'TagsConnection', nodes: Array<{ __typename?: 'Tag', tasksByAssignedTagTagIdAndTaskId: { __typename?: 'TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> } }> } | null };
+
+export type SearchAllQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchAllQuery = { __typename?: 'Query', tags?: { __typename?: 'TagsConnection', nodes: Array<{ __typename?: 'Tag', tasksByAssignedTagTagIdAndTaskId: { __typename?: 'TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> } }> } | null, tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> } | null, ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
+
 export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null };
 
 export type GetCredentialsForCtfIdQueryVariables = Exact<{
@@ -2966,6 +2980,8 @@ export type GetTagByIdQueryVariables = Exact<{
 export type GetTagByIdQuery = { __typename?: 'Query', tag?: { __typename?: 'Tag', tag: string, id: number } | null };
 
 export type AssignedTagsFragment = { __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null };
+
+export type TaskForTagsFragementFragment = { __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null };
 
 export type AddTagsForTaskMutationVariables = Exact<{
   tags?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
@@ -3199,6 +3215,16 @@ export const AdminSettingsInfoFragmentDoc = gql`
   icalPassword
 }
     ${SettingsInfoFragmentDoc}`;
+export const TaskForTagsFragementFragmentDoc = gql`
+    fragment TaskForTagsFragement on AssignedTag {
+  nodeId
+  taskId
+  tagId
+  task {
+    ...TaskFragment
+  }
+}
+    ${TaskFragmentDoc}`;
 export const GetUsersDocument = gql`
     query getUsers {
   users {
@@ -4251,6 +4277,99 @@ export function useSearchTasksLazyQuery(variables: SearchTasksQueryVariables | V
   return VueApolloComposable.useLazyQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
 }
 export type SearchTasksQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchTasksQuery, SearchTasksQueryVariables>;
+export const SearchTagsDocument = gql`
+    query SearchTags($search: String!) {
+  tags(filter: {tag: {includesInsensitive: $search}}) {
+    nodes {
+      tasksByAssignedTagTagIdAndTaskId {
+        nodes {
+          ...TaskFragment
+          ctf {
+            ...CtfFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${TaskFragmentDoc}
+${CtfFragmentDoc}`;
+
+/**
+ * __useSearchTagsQuery__
+ *
+ * To run a query within a Vue component, call `useSearchTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchTagsQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSearchTagsQuery({
+ *   search: // value for 'search'
+ * });
+ */
+export function useSearchTagsQuery(variables: SearchTagsQueryVariables | VueCompositionApi.Ref<SearchTagsQueryVariables> | ReactiveFunction<SearchTagsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<SearchTagsQuery, SearchTagsQueryVariables>(SearchTagsDocument, variables, options);
+}
+export function useSearchTagsLazyQuery(variables: SearchTagsQueryVariables | VueCompositionApi.Ref<SearchTagsQueryVariables> | ReactiveFunction<SearchTagsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<SearchTagsQuery, SearchTagsQueryVariables>(SearchTagsDocument, variables, options);
+}
+export type SearchTagsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchTagsQuery, SearchTagsQueryVariables>;
+export const SearchAllDocument = gql`
+    query SearchAll($search: String!) {
+  tags(filter: {tag: {includesInsensitive: $search}}) {
+    nodes {
+      tasksByAssignedTagTagIdAndTaskId {
+        nodes {
+          ...TaskFragment
+          ctf {
+            ...CtfFragment
+          }
+        }
+      }
+    }
+  }
+  tasks(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...TaskFragment
+      ctf {
+        ...CtfFragment
+      }
+    }
+  }
+  ctfs(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${TaskFragmentDoc}
+${CtfFragmentDoc}`;
+
+/**
+ * __useSearchAllQuery__
+ *
+ * To run a query within a Vue component, call `useSearchAllQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchAllQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useSearchAllQuery({
+ *   search: // value for 'search'
+ * });
+ */
+export function useSearchAllQuery(variables: SearchAllQueryVariables | VueCompositionApi.Ref<SearchAllQueryVariables> | ReactiveFunction<SearchAllQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<SearchAllQuery, SearchAllQueryVariables>(SearchAllDocument, variables, options);
+}
+export function useSearchAllLazyQuery(variables: SearchAllQueryVariables | VueCompositionApi.Ref<SearchAllQueryVariables> | ReactiveFunction<SearchAllQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<SearchAllQuery, SearchAllQueryVariables>(SearchAllDocument, variables, options);
+}
+export type SearchAllQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchAllQuery, SearchAllQueryVariables>;
 export const GetCredentialsForCtfIdDocument = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
   ctfSecret(id: $ctfId) {
@@ -5056,6 +5175,16 @@ export const AdminSettingsInfo = gql`
   icalPassword
 }
     ${SettingsInfo}`;
+export const TaskForTagsFragement = gql`
+    fragment TaskForTagsFragement on AssignedTag {
+  nodeId
+  taskId
+  tagId
+  task {
+    ...TaskFragment
+  }
+}
+    ${TaskFragment}`;
 export const GetUsers = gql`
     query getUsers {
   users {
@@ -5370,6 +5499,53 @@ export const SearchTasks = gql`
       ctf {
         ...CtfFragment
       }
+    }
+  }
+}
+    ${TaskFragment}
+${CtfFragment}`;
+export const SearchTags = gql`
+    query SearchTags($search: String!) {
+  tags(filter: {tag: {includesInsensitive: $search}}) {
+    nodes {
+      tasksByAssignedTagTagIdAndTaskId {
+        nodes {
+          ...TaskFragment
+          ctf {
+            ...CtfFragment
+          }
+        }
+      }
+    }
+  }
+}
+    ${TaskFragment}
+${CtfFragment}`;
+export const SearchAll = gql`
+    query SearchAll($search: String!) {
+  tags(filter: {tag: {includesInsensitive: $search}}) {
+    nodes {
+      tasksByAssignedTagTagIdAndTaskId {
+        nodes {
+          ...TaskFragment
+          ctf {
+            ...CtfFragment
+          }
+        }
+      }
+    }
+  }
+  tasks(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...TaskFragment
+      ctf {
+        ...CtfFragment
+      }
+    }
+  }
+  ctfs(filter: {title: {includesInsensitive: $search}}) {
+    nodes {
+      ...CtfFragment
     }
   }
 }
