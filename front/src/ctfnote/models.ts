@@ -28,7 +28,7 @@ export type Profile = PublicProfile & {
 };
 
 export type Me = {
-  profile: Profile;
+  profile: PublicProfile;
 
   isLogged: boolean;
   isGuest: boolean;

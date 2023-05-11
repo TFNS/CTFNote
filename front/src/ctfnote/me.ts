@@ -14,8 +14,8 @@ import { buildProfile, buildPublicProfile } from './profiles';
 import { wrapQuery } from './utils';
 /* Builders */
 
-export function buildMe(me: ProfileFragment): Me {
-  const profile = buildProfile(me);
+export function buildMe(me: PublicProfileFragment): Me {
+  const profile = buildPublicProfile(me);
   const isLogged = !!profile;
   const isAdmin = profile?.role == Role.UserAdmin;
   const isManager = isAdmin || profile?.role == Role.UserManager;
@@ -50,7 +50,7 @@ export function getMe(refresh = false) {
 export function useUpdateProfile() {
   const { mutate } = useUpdateProfileMutation({});
 
-  return async (profile: Profile, patch: ProfilePatch) => {
+  return async (profile: PublicProfile, patch: ProfilePatch) => {
     return mutate({ id: profile.id, patch });
   };
 }

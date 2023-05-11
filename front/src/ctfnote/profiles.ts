@@ -3,6 +3,7 @@ import {
   PublicProfileFragment,
   Role,
   SubscribeToProfileDocument,
+  SubscribeToPublicProfileDocument,
   useGetTeamAdminQuery,
   useGetTeamQuery,
   useSubscribeToProfileCreatedSubscription,
@@ -29,9 +30,7 @@ type FullPublicProfileFragement = {
   nodeId: string;
 };
 
-export function buildPublicProfile(
-  p: FullPublicProfileFragement
-): PublicProfile {
+export function buildPublicProfile(p: PublicProfileFragment): PublicProfile {
   return {
     ...p,
     color: p.color ?? colorHash(p.username),
@@ -40,7 +39,7 @@ export function buildPublicProfile(
   };
 }
 
-export function buildPublicProfileFromProfile(p: PublicProfile): PublicProfile {
+export function buildPublicProfileFromProfile(p: Profile): PublicProfile {
   return {
     ...p,
     color: p.color ?? colorHash(p.username),
@@ -85,10 +84,10 @@ export function getTeam() {
   const wrappedQuery = wrapQuery(
     query,
     [],
-    (data) => data.publicProfiles?.nodes.map(buildPublicProfile) ?? []
+    (data) => data.profiles?.nodes.map(buildPublicProfile) ?? []
   );
 
-  query.subscribeToMore({ document: SubscribeToProfileDocument });
+  query.subscribeToMore({ document: SubscribeToPublicProfileDocument });
   return wrappedQuery;
 }
 
@@ -112,7 +111,7 @@ export function useOnProfileUpdate() {
     sub.onResult((data) => {
       const node = data.data?.listen.relatedNode;
       if (!node || node.__typename != 'Profile') return;
-      cb(buildPublicProfile(node as PublicProfile));
+      cb(buildPublicProfile(node));
     });
   };
   return { ...sub, onResult };
@@ -124,7 +123,7 @@ export function useOnProfileCreated() {
     sub.onResult((data) => {
       const node = data.data?.listen.relatedNode;
       if (!node || node.__typename != 'Profile') return;
-      cb(buildPublicProfile(node as PublicProfile));
+      cb(buildPublicProfile(node));
     });
   };
   return { ...sub, onResult };
@@ -136,7 +135,7 @@ export function useOnProfileDeleted() {
     sub.onResult((data) => {
       const node = data.data?.listen.relatedNode;
       if (!node || node.__typename != 'Profile') return;
-      cb(buildPublicProfile(node as PublicProfile));
+      cb(buildPublicProfile(node));
     });
   };
   return { ...sub, onResult };
