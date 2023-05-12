@@ -6,12 +6,38 @@ on:
         branches:
             - "main"
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+    packages: write
+
 jobs:
-    build_and_publish:
+    build-and-push:
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                component: ["front", "api", "db"]
         steps:
+            - name: PrepareReg Names
+              run: |
+                  echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+                  echo IMAGE_TAG=$(echo ${{ github.ref }} | tr '[:upper:]' '[:lower:]' | awk '{split($0,a,"/"); print a[3]}') >> $GITHUB_ENV
             - name: Checkout
               uses: actions/checkout@v3
+            - name: Generate Docker metadata for ${{ matrix.component }}
+              id: meta-data
+              uses: docker/metadata-action@v4
+              with:
+                  images: ghcr.io/${{ env.IMAGE_REPOSITORY }}/ctfnote/${{ matrix.component }}
+                  tags: |
+                      type=ref,event=branch
+                      type=semver,pattern={{version}}
+                      type=semver,pattern={{major}}.{{minor}}
+                      type=semver,pattern={{major}}
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v2
             - name: Set up Docker Buildx
@@ -22,25 +48,13 @@ jobs:
                   registry: ghcr.io
                   username: ${{ github.repository_owner }}
                   password: ${{ github.token }}
-            - name: PrepareReg Names
-              run: |
-                  echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
-                  echo IMAGE_TAG=$(echo ${{ github.ref }} | tr '[:upper:]' '[:lower:]' | awk '{split($0,a,"/"); print a[3]}') >> $GITHUB_ENV
             - name: Build and push
               uses: docker/build-push-action@v4
               with:
-                  context: ./front
                   push: true
-                  tags: ghcr.io/${{env.IMAGE_REPOSITORY}}/front:latest
-            - name: Build and push
-              uses: docker/build-push-action@v4
-              with:
-                  context: ./api
-                  push: true
-                  tags: ghcr.io/${{env.IMAGE_REPOSITORY}}/api:latest
-            - name: Build and push
-              uses: docker/build-push-action@v4
-              with:
-                  context: ./db
-                  push: true
-                  tags: ghcr.io/${{env.IMAGE_REPOSITORY}}/db:latest
+                  platforms: linux/amd64,linux/arm64
+                  context: ./${{ matrix.component }}
+                  tags: ${{ steps.meta-data.outputs.tags }}
+                  labels: ${{ steps.meta-data.outputs.labels }}
+                  cache-from: type=gha,scope=${{ matrix.component }}
+                  cache-to: type=gha,scope=${{ matrix.component }}
