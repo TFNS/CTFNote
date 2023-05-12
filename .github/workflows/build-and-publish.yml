@@ -1,7 +1,7 @@
 name: "Build and publish Docker images to GHCR"
 
 on:
-    workflow_call:
+    workflow_dispatch:
     push:
         branches:
             - "main"
@@ -26,18 +26,18 @@ jobs:
               run: |
                   echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
                   echo IMAGE_TAG=$(echo ${{ github.ref }} | tr '[:upper:]' '[:lower:]' | awk '{split($0,a,"/"); print a[3]}') >> $GITHUB_ENV
+                  echo IMAGE_REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
             - name: Checkout
               uses: actions/checkout@v3
             - name: Generate Docker metadata for ${{ matrix.component }}
               id: meta-data
               uses: docker/metadata-action@v4
               with:
-                  images: ghcr.io/${{ env.IMAGE_REPOSITORY }}/ctfnote/${{ matrix.component }}
+                  images: ghcr.io/${{ env.IMAGE_REPOSITORY_OWNER }}/${{ env.IMAGE_REPOSITORY }}/${{ matrix.component }}
                   tags: |
+                      type=raw,value=latest,enable={{is_default_branch}}
                       type=ref,event=branch
                       type=semver,pattern={{version}}
-                      type=semver,pattern={{major}}.{{minor}}
-                      type=semver,pattern={{major}}
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v2
             - name: Set up Docker Buildx
