@@ -33,7 +33,7 @@ jobs:
               id: meta-data
               uses: docker/metadata-action@v4
               with:
-                  images: ghcr.io/${{ env.IMAGE_REPOSITORY_OWNER }}/${{ env.IMAGE_REPOSITORY }}/${{ matrix.component }}
+                  images: ghcr.io/${{ env.IMAGE_REPOSITORY }}/${{ matrix.component }}
                   tags: |
                       type=raw,value=latest,enable={{is_default_branch}}
                       type=ref,event=branch
