@@ -1035,6 +1035,43 @@ export enum ProfilesOrderBy {
   UsernameDesc = 'USERNAME_DESC'
 }
 
+export type PublicProfile = {
+  __typename?: 'PublicProfile';
+  color?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  nodeId?: Maybe<Scalars['String']>;
+  role?: Maybe<Role>;
+  username?: Maybe<Scalars['String']>;
+};
+
+/** A connection to a list of `PublicProfile` values. */
+export type PublicProfilesConnection = {
+  __typename?: 'PublicProfilesConnection';
+  /** A list of edges which contains the `PublicProfile` and cursor to aid in pagination. */
+  edges: Array<PublicProfilesEdge>;
+  /** A list of `PublicProfile` objects. */
+  nodes: Array<PublicProfile>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PublicProfile` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PublicProfile` edge in the connection. */
+export type PublicProfilesEdge = {
+  __typename?: 'PublicProfilesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PublicProfile` at the end of the edge. */
+  node: PublicProfile;
+};
+
+/** Methods to use when ordering `PublicProfile`. */
+export enum PublicProfilesOrderBy {
+  Natural = 'NATURAL'
+}
+
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
   __typename?: 'Query';
@@ -1071,6 +1108,8 @@ export type Query = Node & {
   profileByUsername?: Maybe<Profile>;
   /** Reads and enables pagination through a set of `Profile`. */
   profiles?: Maybe<ProfilesConnection>;
+  /** Reads and enables pagination through a set of `PublicProfile`. */
+  publicProfiles?: Maybe<PublicProfilesConnection>;
   /**
    * Exposes the root query type nested one level down. This is helpful for Relay 1
    * which can only query top level fields if they are in a particular form.
@@ -1233,6 +1272,17 @@ export type QueryProfilesArgs = {
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPublicProfilesArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PublicProfilesOrderBy>>;
 };
 
 
@@ -2077,7 +2127,7 @@ export type UpdateRoleForUserIdMutation = { __typename?: 'Mutation', updateUserR
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null };
 
 export type NewTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2236,9 +2286,11 @@ export type UninviteUserToCtfMutationVariables = Exact<{
 
 export type UninviteUserToCtfMutation = { __typename?: 'Mutation', deleteInvitation?: { __typename?: 'DeleteInvitationPayload', deletedInvitationNodeId?: string | null } | null };
 
-export type PublicProfileFragment = { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string };
+export type PublicProfileFragment = { __typename?: 'PublicProfile', id?: number | null, username?: string | null, color?: string | null, description?: string | null, role?: Role | null, nodeId?: string | null };
 
 export type ProfileFragment = { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string };
+
+export type RestrictedProfileFragment = { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string };
 
 export type UpdatePasswordMutationVariables = Exact<{
   oldPassword: Scalars['String'];
@@ -2259,22 +2311,17 @@ export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: {
 export type GetTeamQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTeamQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string }> } | null };
+export type GetTeamQuery = { __typename?: 'Query', publicProfiles?: { __typename?: 'PublicProfilesConnection', nodes: Array<{ __typename?: 'PublicProfile', id?: number | null, username?: string | null, color?: string | null, description?: string | null, role?: Role | null, nodeId?: string | null }> } | null };
 
 export type GetTeamAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetTeamAdminQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string }> } | null };
 
-export type SubscribeToPublicProfileSubscriptionVariables = Exact<{ [key: string]: never; }>;
-
-
-export type SubscribeToPublicProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
-
 export type SubscribeToProfileSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
+export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SubscribeToProfileCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -2511,7 +2558,17 @@ ${TaskFragmentDoc}
 ${CtfSecretFragmentDoc}
 ${InvitationFragmentDoc}`;
 export const PublicProfileFragmentDoc = gql`
-    fragment PublicProfileFragment on Profile {
+    fragment PublicProfileFragment on PublicProfile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+    `;
+export const RestrictedProfileFragmentDoc = gql`
+    fragment RestrictedProfile on Profile {
   id
   username
   color
@@ -2693,10 +2750,10 @@ export type UpdateRoleForUserIdMutationCompositionFunctionResult = VueApolloComp
 export const MeDocument = gql`
     query Me {
   me {
-    ...PublicProfileFragment
+    ...ProfileFragment
   }
 }
-    ${PublicProfileFragmentDoc}`;
+    ${ProfileFragmentDoc}`;
 
 /**
  * __useMeQuery__
@@ -3404,7 +3461,7 @@ export function useUpdateProfileMutation(options: VueApolloComposable.UseMutatio
 export type UpdateProfileMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateProfileMutation, UpdateProfileMutationVariables>;
 export const GetTeamDocument = gql`
     query getTeam {
-  profiles {
+  publicProfiles {
     nodes {
       ...PublicProfileFragment
     }
@@ -3460,47 +3517,18 @@ export function useGetTeamAdminLazyQuery(options: VueApolloComposable.UseQueryOp
   return VueApolloComposable.useLazyQuery<GetTeamAdminQuery, GetTeamAdminQueryVariables>(GetTeamAdminDocument, {}, options);
 }
 export type GetTeamAdminQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTeamAdminQuery, GetTeamAdminQueryVariables>;
-export const SubscribeToPublicProfileDocument = gql`
-    subscription subscribeToPublicProfile {
-  listen(topic: "update:profiles") {
-    relatedNode {
-      nodeId
-      ... on Profile {
-        ...PublicProfileFragment
-      }
-    }
-  }
-}
-    ${PublicProfileFragmentDoc}`;
-
-/**
- * __useSubscribeToPublicProfileSubscription__
- *
- * To run a query within a Vue component, call `useSubscribeToPublicProfileSubscription` and pass it any options that fit your needs.
- * When your component renders, `useSubscribeToPublicProfileSubscription` returns an object from Apollo Client that contains result, loading and error properties
- * you can use to render your UI.
- *
- * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
- *
- * @example
- * const { result, loading, error } = useSubscribeToPublicProfileSubscription();
- */
-export function useSubscribeToPublicProfileSubscription(options: VueApolloComposable.UseSubscriptionOptions<SubscribeToPublicProfileSubscription, SubscribeToPublicProfileSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<SubscribeToPublicProfileSubscription, SubscribeToPublicProfileSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<SubscribeToPublicProfileSubscription, SubscribeToPublicProfileSubscriptionVariables>> = {}) {
-  return VueApolloComposable.useSubscription<SubscribeToPublicProfileSubscription, SubscribeToPublicProfileSubscriptionVariables>(SubscribeToPublicProfileDocument, {}, options);
-}
-export type SubscribeToPublicProfileSubscriptionCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<SubscribeToPublicProfileSubscription, SubscribeToPublicProfileSubscriptionVariables>;
 export const SubscribeToProfileDocument = gql`
     subscription subscribeToProfile {
   listen(topic: "update:profiles") {
     relatedNode {
       nodeId
       ... on Profile {
-        ...ProfileFragment
+        ...RestrictedProfile
       }
     }
   }
 }
-    ${ProfileFragmentDoc}`;
+    ${RestrictedProfileFragmentDoc}`;
 
 /**
  * __useSubscribeToProfileSubscription__
@@ -3525,12 +3553,12 @@ export const SubscribeToProfileCreatedDocument = gql`
     relatedNode {
       nodeId
       ... on Profile {
-        ...PublicProfileFragment
+        ...RestrictedProfile
       }
     }
   }
 }
-    ${PublicProfileFragmentDoc}`;
+    ${RestrictedProfileFragmentDoc}`;
 
 /**
  * __useSubscribeToProfileCreatedSubscription__
@@ -3555,12 +3583,12 @@ export const SubscribeToProfileDeletedDocument = gql`
     relatedNode {
       nodeId
       ... on Profile {
-        ...PublicProfileFragment
+        ...RestrictedProfile
       }
     }
   }
 }
-    ${PublicProfileFragmentDoc}`;
+    ${RestrictedProfileFragmentDoc}`;
 
 /**
  * __useSubscribeToProfileDeletedSubscription__
@@ -4202,7 +4230,17 @@ ${TaskFragment}
 ${CtfSecretFragment}
 ${InvitationFragment}`;
 export const PublicProfileFragment = gql`
-    fragment PublicProfileFragment on Profile {
+    fragment PublicProfileFragment on PublicProfile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+    `;
+export const RestrictedProfile = gql`
+    fragment RestrictedProfile on Profile {
   id
   username
   color
@@ -4275,10 +4313,10 @@ export const UpdateRoleForUserId = gql`
 export const Me = gql`
     query Me {
   me {
-    ...PublicProfileFragment
+    ...ProfileFragment
   }
 }
-    ${PublicProfileFragment}`;
+    ${ProfileFragment}`;
 export const NewToken = gql`
     query newToken {
   newToken
@@ -4479,7 +4517,7 @@ export const UpdateProfile = gql`
     ${ProfileFragment}`;
 export const GetTeam = gql`
     query getTeam {
-  profiles {
+  publicProfiles {
     nodes {
       ...PublicProfileFragment
     }
@@ -4495,30 +4533,18 @@ export const GetTeamAdmin = gql`
   }
 }
     ${ProfileFragment}`;
-export const SubscribeToPublicProfile = gql`
-    subscription subscribeToPublicProfile {
-  listen(topic: "update:profiles") {
-    relatedNode {
-      nodeId
-      ... on Profile {
-        ...PublicProfileFragment
-      }
-    }
-  }
-}
-    ${PublicProfileFragment}`;
 export const SubscribeToProfile = gql`
     subscription subscribeToProfile {
   listen(topic: "update:profiles") {
     relatedNode {
       nodeId
       ... on Profile {
-        ...ProfileFragment
+        ...RestrictedProfile
       }
     }
   }
 }
-    ${ProfileFragment}`;
+    ${RestrictedProfile}`;
 export const SubscribeToProfileCreated = gql`
     subscription subscribeToProfileCreated {
   listen(topic: "created:profiles") {
@@ -4526,12 +4552,12 @@ export const SubscribeToProfileCreated = gql`
     relatedNode {
       nodeId
       ... on Profile {
-        ...PublicProfileFragment
+        ...RestrictedProfile
       }
     }
   }
 }
-    ${PublicProfileFragment}`;
+    ${RestrictedProfile}`;
 export const SubscribeToProfileDeleted = gql`
     subscription subscribeToProfileDeleted {
   listen(topic: "deleted:profiles") {
@@ -4539,12 +4565,12 @@ export const SubscribeToProfileDeleted = gql`
     relatedNode {
       nodeId
       ... on Profile {
-        ...PublicProfileFragment
+        ...RestrictedProfile
       }
     }
   }
 }
-    ${PublicProfileFragment}`;
+    ${RestrictedProfile}`;
 export const SearchCtFs = gql`
     query SearchCTFs($search: String!) {
   ctfs(filter: {title: {includesInsensitive: $search}}) {
