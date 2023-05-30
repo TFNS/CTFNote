@@ -3,14 +3,13 @@ import {
   MeDocument,
   ProfileFragment,
   ProfilePatch,
-  PublicProfileFragment,
   useMeQuery,
   useUpdatePasswordMutation,
   useUpdateProfileMutation,
 } from 'src/generated/graphql';
 import { inject, InjectionKey, provide, Ref } from 'vue';
-import { Me, Profile, PublicProfile, Role } from './models';
-import { buildProfile, buildPublicProfile } from './profiles';
+import { Me, Profile, Role } from './models';
+import { buildProfile } from './profiles';
 import { wrapQuery } from './utils';
 /* Builders */
 

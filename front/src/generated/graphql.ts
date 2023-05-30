@@ -1045,6 +1045,12 @@ export type PublicProfile = {
   username?: Maybe<Scalars['String']>;
 };
 
+export type PublicProfileSubscriptionPayload = {
+  __typename?: 'PublicProfileSubscriptionPayload';
+  event?: Maybe<Scalars['String']>;
+  publicProfile?: Maybe<PublicProfile>;
+};
+
 /** A connection to a list of `PublicProfile` values. */
 export type PublicProfilesConnection = {
   __typename?: 'PublicProfilesConnection';
@@ -1602,6 +1608,9 @@ export type StringFilter = {
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
 export type Subscription = {
   __typename?: 'Subscription';
+  currentProfileCreated?: Maybe<PublicProfileSubscriptionPayload>;
+  currentProfileDeleted?: Maybe<PublicProfileSubscriptionPayload>;
+  currentProfileUpdated?: Maybe<PublicProfileSubscriptionPayload>;
   listen: ListenPayload;
 };
 
@@ -2318,20 +2327,25 @@ export type GetTeamAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetTeamAdminQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string }> } | null };
 
+export type PublicProfileSubscriptionPayloadSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PublicProfileSubscriptionPayloadSubscription = { __typename?: 'Subscription', currentProfileUpdated?: { __typename?: 'PublicProfileSubscriptionPayload', publicProfile?: { __typename?: 'PublicProfile', id?: number | null, username?: string | null, color?: string | null, description?: string | null, role?: Role | null, nodeId?: string | null } | null } | null };
+
 export type SubscribeToProfileSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
+export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SubscribeToProfileCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
+export type SubscribeToProfileCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SubscribeToProfileDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
+export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SearchCtFsQueryVariables = Exact<{
   search: Scalars['String'];
@@ -3517,18 +3531,44 @@ export function useGetTeamAdminLazyQuery(options: VueApolloComposable.UseQueryOp
   return VueApolloComposable.useLazyQuery<GetTeamAdminQuery, GetTeamAdminQueryVariables>(GetTeamAdminDocument, {}, options);
 }
 export type GetTeamAdminQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTeamAdminQuery, GetTeamAdminQueryVariables>;
+export const PublicProfileSubscriptionPayloadDocument = gql`
+    subscription PublicProfileSubscriptionPayload {
+  currentProfileUpdated {
+    publicProfile {
+      ...PublicProfileFragment
+    }
+  }
+}
+    ${PublicProfileFragmentDoc}`;
+
+/**
+ * __usePublicProfileSubscriptionPayload__
+ *
+ * To run a query within a Vue component, call `usePublicProfileSubscriptionPayload` and pass it any options that fit your needs.
+ * When your component renders, `usePublicProfileSubscriptionPayload` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
+ *
+ * @example
+ * const { result, loading, error } = usePublicProfileSubscriptionPayload();
+ */
+export function usePublicProfileSubscriptionPayload(options: VueApolloComposable.UseSubscriptionOptions<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables>(PublicProfileSubscriptionPayloadDocument, {}, options);
+}
+export type PublicProfileSubscriptionPayloadCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables>;
 export const SubscribeToProfileDocument = gql`
     subscription subscribeToProfile {
   listen(topic: "update:profiles") {
     relatedNode {
       nodeId
       ... on Profile {
-        ...RestrictedProfile
+        ...ProfileFragment
       }
     }
   }
 }
-    ${RestrictedProfileFragmentDoc}`;
+    ${ProfileFragmentDoc}`;
 
 /**
  * __useSubscribeToProfileSubscription__
@@ -3553,12 +3593,12 @@ export const SubscribeToProfileCreatedDocument = gql`
     relatedNode {
       nodeId
       ... on Profile {
-        ...RestrictedProfile
+        ...ProfileFragment
       }
     }
   }
 }
-    ${RestrictedProfileFragmentDoc}`;
+    ${ProfileFragmentDoc}`;
 
 /**
  * __useSubscribeToProfileCreatedSubscription__
@@ -3583,12 +3623,12 @@ export const SubscribeToProfileDeletedDocument = gql`
     relatedNode {
       nodeId
       ... on Profile {
-        ...RestrictedProfile
+        ...ProfileFragment
       }
     }
   }
 }
-    ${RestrictedProfileFragmentDoc}`;
+    ${ProfileFragmentDoc}`;
 
 /**
  * __useSubscribeToProfileDeletedSubscription__
@@ -4533,18 +4573,27 @@ export const GetTeamAdmin = gql`
   }
 }
     ${ProfileFragment}`;
+export const PublicProfileSubscriptionPayload = gql`
+    subscription PublicProfileSubscriptionPayload {
+  currentProfileUpdated {
+    publicProfile {
+      ...PublicProfileFragment
+    }
+  }
+}
+    ${PublicProfileFragment}`;
 export const SubscribeToProfile = gql`
     subscription subscribeToProfile {
   listen(topic: "update:profiles") {
     relatedNode {
       nodeId
       ... on Profile {
-        ...RestrictedProfile
+        ...ProfileFragment
       }
     }
   }
 }
-    ${RestrictedProfile}`;
+    ${ProfileFragment}`;
 export const SubscribeToProfileCreated = gql`
     subscription subscribeToProfileCreated {
   listen(topic: "created:profiles") {
@@ -4552,12 +4601,12 @@ export const SubscribeToProfileCreated = gql`
     relatedNode {
       nodeId
       ... on Profile {
-        ...RestrictedProfile
+        ...ProfileFragment
       }
     }
   }
 }
-    ${RestrictedProfile}`;
+    ${ProfileFragment}`;
 export const SubscribeToProfileDeleted = gql`
     subscription subscribeToProfileDeleted {
   listen(topic: "deleted:profiles") {
@@ -4565,12 +4614,12 @@ export const SubscribeToProfileDeleted = gql`
     relatedNode {
       nodeId
       ... on Profile {
-        ...RestrictedProfile
+        ...ProfileFragment
       }
     }
   }
 }
-    ${RestrictedProfile}`;
+    ${ProfileFragment}`;
 export const SearchCtFs = gql`
     query SearchCTFs($search: String!) {
   ctfs(filter: {title: {includesInsensitive: $search}}) {

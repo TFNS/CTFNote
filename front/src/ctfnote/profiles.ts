@@ -1,13 +1,11 @@
 import {
   ProfileFragment,
   PublicProfileFragment,
+  PublicProfileSubscriptionPayloadDocument,
   Role,
-  SubscribeToProfileDocument,
   useGetTeamAdminQuery,
   useGetTeamQuery,
   useSubscribeToProfileCreatedSubscription,
-  useSubscribeToProfileDeletedSubscription,
-  useSubscribeToProfileSubscription,
 } from 'src/generated/graphql';
 import { makeId, Profile, PublicProfile } from './models';
 import { colorHash, wrapQuery } from './utils';
@@ -20,27 +18,28 @@ import { Ref, InjectionKey, provide, inject } from 'vue';
 //   >;
 // };
 
-type FullPublicProfileFragement = {
-  id: number;
-  username: string;
-  color: string;
-  description: string;
-  role: Required<NonNullable<Role | null | undefined>>;
-  nodeId: string;
-};
+export function buildPublicProfile(p: PublicProfileFragment): PublicProfile {
+  // These checks are here because PublicProfile comes from a view
+  // which does not have nullability checks
+  if (p.username == null) throw new Error("Username can't be null");
+  if (p.id == null) throw new Error("ID can't be null");
+  if (p.nodeId == null) throw new Error("NodeID can't be null");
+  const id = p.id;
+  const username = p.username;
+  const nodeId = p.nodeId;
 
-export function buildPublicProfile(
-  p: FullPublicProfileFragement
-): PublicProfile {
   return {
     ...p,
-    color: p.color ?? colorHash(p.username),
-    id: makeId(p.id),
+    nodeId: nodeId,
+    username: username,
+    description: p.description ? p.description : '',
+    color: p.color ?? colorHash(username),
+    id: makeId(id),
     role: p.role as Role,
   };
 }
 
-export function buildPublicProfileFromProfile(p: PublicProfile): PublicProfile {
+export function buildPublicProfileFromProfile(p: Profile): PublicProfile {
   return {
     ...p,
     color: p.color ?? colorHash(p.username),
@@ -88,7 +87,7 @@ export function getTeam() {
     (data) => data.publicProfiles?.nodes.map(buildPublicProfile) ?? []
   );
 
-  query.subscribeToMore({ document: SubscribeToProfileDocument });
+  query.subscribeToMore({ document: PublicProfileSubscriptionPayloadDocument });
   return wrappedQuery;
 }
 
@@ -100,43 +99,17 @@ export function getTeamAdmin() {
     (data) => data.profiles?.nodes.map(buildProfile) ?? []
   );
 
-  query.subscribeToMore({ document: SubscribeToProfileDocument });
   return wrappedQuery;
 }
 
 /* Subcriptions  */
-
-export function useOnProfileUpdate() {
-  const sub = useSubscribeToProfileSubscription();
-  const onResult = function (cb: (profile: PublicProfile) => void) {
-    sub.onResult((data) => {
-      const node = data.data?.listen.relatedNode;
-      if (!node || node.__typename != 'Profile') return;
-      cb(buildPublicProfile(node as PublicProfile));
-    });
-  };
-  return { ...sub, onResult };
-}
-
 export function useOnProfileCreated() {
   const sub = useSubscribeToProfileCreatedSubscription();
-  const onResult = function (cb: (profile: PublicProfile) => void) {
+  const onResult = function (cb: (profile: Profile) => void) {
     sub.onResult((data) => {
       const node = data.data?.listen.relatedNode;
       if (!node || node.__typename != 'Profile') return;
-      cb(buildPublicProfile(node as PublicProfile));
-    });
-  };
-  return { ...sub, onResult };
-}
-
-export function useOnProfileDeleted() {
-  const sub = useSubscribeToProfileDeletedSubscription();
-  const onResult = function (cb: (profile: PublicProfile) => void) {
-    sub.onResult((data) => {
-      const node = data.data?.listen.relatedNode;
-      if (!node || node.__typename != 'Profile') return;
-      cb(buildPublicProfile(node as PublicProfile));
+      cb(buildProfile(node));
     });
   };
   return { ...sub, onResult };

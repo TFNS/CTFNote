@@ -59,36 +59,45 @@ query getTeamAdmin {
   }
 }
 
-subscription subscribeToPublicProfile {
-  listen(topic: "update:public_profiles") {
+subscription PublicProfileSubscriptionPayload {
+  currentProfileUpdated {
+    publicProfile {
+      ...PublicProfileFragment
+    }
+  }
+}
+
+subscription subscribeToProfile {
+  listen(topic: "update:profiles") {
     relatedNode {
-      # nodeId
-      ... on PublicProfile {
-        ...PublicProfileFragment
+      nodeId
+      ... on Profile {
+        ...ProfileFragment
       }
     }
   }
 }
-# subscription subscribeToProfileCreated {
-#   listen(topic: "created:profiles") {
-#     relatedNodeId
-#     relatedNode {
-#       nodeId
-#       ... on PublicProfile {
-#         ...PublicProfileFragment
-#       }
-#     }
-#   }
-# }
 
-# subscription subscribeToProfileDeleted {
-#   listen(topic: "deleted:profiles") {
-#     relatedNodeId
-#     relatedNode {
-#       nodeId
-#       ... on PublicProfile {
-#         ...PublicProfileFragment
-#       }
-#     }
-#   }
-# }
+subscription subscribeToProfileCreated {
+  listen(topic: "created:profiles") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Profile {
+        ...ProfileFragment
+      }
+    }
+  }
+}
+
+subscription subscribeToProfileDeleted {
+  listen(topic: "deleted:profiles") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Profile {
+        ...ProfileFragment
+      }
+    }
+  }
+}

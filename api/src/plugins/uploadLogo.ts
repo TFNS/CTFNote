@@ -16,7 +16,7 @@ function isAdmin(pgRole: string): boolean {
 
 const UPLOAD_DIR_NAME = "uploads";
 
-interface Context {
+export interface Context {
   pgClient: Client;
   pgRole: string;
   jwtClaims: {

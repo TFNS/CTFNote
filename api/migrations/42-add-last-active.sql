@@ -32,13 +32,26 @@ BEGIN
   CASE TG_OP
   WHEN 'INSERT' THEN
     PERFORM
-      ctfnote_private.notify ('created', 'profiles', NEW.id); RETURN NEW;
+      ctfnote_private.notify ('created', 'profiles', (SELECT id FROM ctfnote.public_profile WHERE id = NEW.id)); RETURN NULL;
   WHEN 'UPDATE' THEN
     PERFORM
-      ctfnote_private.notify ('update', 'public_profiles', NEW.id); RETURN NEW;
+      ctfnote_private.notify ('update', 'profiles', (SELECT id FROM ctfnote.public_profile WHERE id = NEW.id)); RETURN NULL;
   WHEN 'DELETE' THEN
     PERFORM
-      ctfnote_private.notify ('deleted', 'profiles', OLD.id); RETURN OLD;
+      ctfnote_private.notify ('deleted', 'profiles', (SELECT id FROM ctfnote.public_profile WHERE id = OLD.id)); RETURN NULL;
+  END CASE;
+END
+$$ VOLATILE
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION ctfnote_private.notify_role_edit ()
+  RETURNS TRIGGER
+  AS $$
+BEGIN
+  CASE TG_OP
+  WHEN 'UPDATE' THEN
+    PERFORM
+      ctfnote_private.notify ('update', 'profiles', (SELECT id FROM ctfnote.public_profile WHERE id = NEW.id)); RETURN NULL;
   END CASE;
 END
 $$ VOLATILE
