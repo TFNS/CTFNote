@@ -7,10 +7,12 @@ import {
   useStopWorkingOnMutation,
   useUpdateTaskMutation,
 } from 'src/generated/graphql';
+
+//import sendmessage from discord-webhook from the api
+
 import { Ctf, Id, Task } from './models';
 import { Dialog } from 'quasar';
 import TaskEditDialogVue from '../components/Dialogs/TaskEditDialog.vue';
-
 /* Mutations */
 export function useCreateTask() {
   const { mutate: doCreateTask } = useCreateTaskForCtfIdMutation({});

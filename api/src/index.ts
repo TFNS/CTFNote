@@ -15,6 +15,9 @@ import importCtfPlugin from "./plugins/importCtf";
 import uploadLogoPlugin from "./plugins/uploadLogo";
 import uploadScalar from "./plugins/uploadScalar";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
+import OperationHook from "@graphile/operation-hooks";
+import discordHooks from "./plugins/discordHooks";
+import createDiscordClient from "./discord/";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -26,7 +29,7 @@ function createOptions() {
   const secret = crypto.randomBytes(32).toString("hex");
 
   const postgraphileOptions: PostGraphileOptions = {
-    pluginHook: makePluginHook([PgPubsub]),
+    pluginHook: makePluginHook([PgPubsub, OperationHook]),
     subscriptions: true,
     dynamicJson: true,
     simpleSubscriptions: true,
@@ -45,6 +48,7 @@ function createOptions() {
       uploadLogoPlugin,
       createTasKPlugin,
       ConnectionFilterPlugin,
+      discordHooks,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
@@ -107,9 +111,13 @@ async function main() {
   await performMigrations();
   const postgraphileOptions = createOptions();
   const app = createApp(postgraphileOptions);
+  await createDiscordClient();
+
   app.listen(config.web.port, () => {
+    //sendMessageToDiscord("CTFNote API started");
     console.log(`Listening on :${config.web.port}`);
   });
 }
+
 
 main();

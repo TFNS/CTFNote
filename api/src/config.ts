@@ -30,6 +30,9 @@ export type CTFNoteConfig = DeepReadOnly<{
   web: {
     port: number;
   };
+  discord: {
+    token: string;
+  }
 }>;
 
 function getEnv(name: string): string {
@@ -64,6 +67,10 @@ const config: CTFNoteConfig = {
   web: {
     port: getEnvInt("WEB_PORT"),
   },
+  discord: {
+      token: getEnv("DISCORD_BOT_TOKEN"),
+  }
+
 };
 
 export default config;
