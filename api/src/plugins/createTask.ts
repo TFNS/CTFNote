@@ -29,7 +29,7 @@ function buildNoteContent(
   return note;
 }
 
-async function createPad(
+export async function createPad(
   title: string,
   description?: string,
   category?: string

@@ -17,7 +17,7 @@ import uploadScalar from "./plugins/uploadScalar";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import OperationHook from "@graphile/operation-hooks";
 import discordHooks from "./plugins/discordHooks";
-import createDiscordClient from "./discord/";
+import {getDiscordClient} from "./discord";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -111,13 +111,13 @@ async function main() {
   await performMigrations();
   const postgraphileOptions = createOptions();
   const app = createApp(postgraphileOptions);
-  await createDiscordClient();
+
+  getDiscordClient();
 
   app.listen(config.web.port, () => {
     //sendMessageToDiscord("CTFNote API started");
     console.log(`Listening on :${config.web.port}`);
   });
 }
-
 
 main();

@@ -1,6 +1,5 @@
-import { Pool } from "pg";
+import {Pool} from "pg";
 import config from "../../config";
-
 
 const pgPool = new Pool({
     user: config.db.admin.login,
@@ -10,12 +9,9 @@ const pgPool = new Pool({
     port: config.db.port,
 });
 
-
 async function connectToDatabase() {
     await pgPool.connect();
     return pgPool;
 }
 
-export { connectToDatabase };
-
-
+export {connectToDatabase};

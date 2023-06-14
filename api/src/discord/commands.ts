@@ -1,5 +1,6 @@
-import { Command } from "./command";
-import { Hello } from "./commands/hello";
-import { CreateCtf } from "./commands/createCtf";
+import {Command} from "./command";
+import {CreateCtf} from "./commands/createCtf";
+import {ArchiveCtf} from "./commands/archiveCtf";
 
-export const Commands: Command[] = [Hello, CreateCtf];
+
+export const Commands: Command[] = [ArchiveCtf, CreateCtf];
