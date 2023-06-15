@@ -15,8 +15,6 @@ export default (client: Client): void => {
 
     client.user?.setAvatar("src/discord/boticon.png");
 
-
-
     await client.application.commands.set(Commands);
     interactionCreate(client);
 

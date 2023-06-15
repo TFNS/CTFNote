@@ -17,7 +17,7 @@ import uploadScalar from "./plugins/uploadScalar";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import OperationHook from "@graphile/operation-hooks";
 import discordHooks from "./plugins/discordHooks";
-import {getDiscordClient} from "./discord";
+import { getDiscordClient } from "./discord";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
