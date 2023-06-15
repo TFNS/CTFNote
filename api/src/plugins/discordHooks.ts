@@ -1,6 +1,6 @@
 import { Build, Context } from "postgraphile";
 import { SchemaBuilder } from "graphile-build";
-import { CategoryChannel, ChannelType, GuildBasedChannel } from "discord.js";
+import {CategoryChannel, ChannelType, GuildBasedChannel, TextChannel} from "discord.js";
 import {
   getCTFNameFromId,
   getNameFromUserId,
@@ -63,6 +63,19 @@ const discordMutationLoggingHook =
           type: ChannelType.GuildText,
           parent: categoryChannel.id,
         });
+
+        //send message to the main channel that a new task has been created
+        const mainChannel = guild?.channels.cache.find(
+            (channel) =>
+                channel.type === ChannelType.GuildText &&
+                channel.name === "challenges-talk" &&
+                channel.parentId === categoryChannel.id
+        ) as TextChannel | undefined;
+
+        if (mainChannel !== undefined) {
+          mainChannel.send(`New task created: ${args.input.title} - ${args.input.category}`);
+        }
+
       }
       if (fieldContext.scope.fieldName === "deleteTask") {
         const task = await getTaskFromId(args.input.id);
