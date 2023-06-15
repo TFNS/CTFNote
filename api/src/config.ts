@@ -33,6 +33,7 @@ export type CTFNoteConfig = DeepReadOnly<{
   discord: {
     token: string;
     serverId: string;
+    voiceChannels: number;
   };
 }>;
 
@@ -71,6 +72,7 @@ const config: CTFNoteConfig = {
   discord: {
     token: getEnv("DISCORD_BOT_TOKEN"),
     serverId: getEnv("DISCORD_SERVER_ID"),
+    voiceChannels: getEnvInt("DISCORD_VOICE_CHANNELS"),
   },
 };
 

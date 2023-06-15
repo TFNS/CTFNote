@@ -16,6 +16,8 @@ import {
   getCtfIdFromDatabase,
 } from "../database/ctfs";
 import { createPad } from "../../plugins/createTask";
+import config from "../../config";
+
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -60,6 +62,19 @@ export default (client: Client): void => {
           parent: channel?.id,
         });
 
+        // create voice channels for the ctf from the .env file
+        const numberOfVoiceChannels : number = config.discord.voiceChannels;
+
+        if (numberOfVoiceChannels > 0) {
+            for (let i = 0; i < numberOfVoiceChannels; i++) {
+                interaction.guild?.channels.create({
+                    name: `voice-${i}`,
+                    type: ChannelType.GuildVoice,
+                    parent: channel?.id,
+                });
+            }
+        }
+
         // create for every challenge a channel
         const ctfId: bigint = await getCtfIdFromDatabase(ctfName);
         const challenges: any = await getChallengesFromDatabase(ctfId);
@@ -92,6 +107,16 @@ export default (client: Client): void => {
             channel.type === ChannelType.GuildCategory &&
             channel.name === ctfName
         )) as CategoryChannel;
+
+        interaction.guild?.channels.cache.map((channel) => {
+          if (
+              channel.type === ChannelType.GuildVoice &&
+              channel.parentId === categoryChannel.id
+          ) {
+            channel.delete();
+          }
+        });
+
 
         const allMessages: any[] = [];
 
