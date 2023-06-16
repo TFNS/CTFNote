@@ -6,7 +6,7 @@ async function getCTFNamesFromDatabase(): Promise<string[]> {
   try {
     const query = `SELECT title, start_time, end_time
                        FROM ctfnote.ctf
-                       WHERE start_time >= NOW()
+                       WHERE end_time >= NOW()
                        ORDER BY start_time ASC;`;
 
     const queryResult = await pgClient.query(query);
