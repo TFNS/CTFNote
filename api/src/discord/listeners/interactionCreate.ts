@@ -204,7 +204,7 @@ export default (client: Client): void => {
           if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
             // Create a new pad
             const padUrl = await createPad(
-              `${ctfName} archive (${padIndex})`,
+              `${ctfName} Discord archive (${padIndex})`,
               currentPadMessages.join("\n")
             );
 
@@ -223,7 +223,7 @@ export default (client: Client): void => {
 
         // Create the final pad for the remaining messages
         const padUrl = await createPad(
-          `${ctfName} archive (${padIndex})`,
+          `${ctfName} Discord archive (${padIndex})`,
           currentPadMessages.join("\n")
         );
         pads.push(padUrl);
@@ -233,13 +233,13 @@ export default (client: Client): void => {
           .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
           .join("\n");
         const firstPadUrl = await createPad(
-          `${ctfName} archive`,
+          `${ctfName} Discord archive`,
           firstPadContent
         );
 
         await createTask(
-          `${ctfName} archive`,
-          `Archive of ${ctfName}`,
+          `${ctfName} Discord archive`,
+          `Discord archive of ${ctfName}`,
           "archive",
           "",
           firstPadUrl,
