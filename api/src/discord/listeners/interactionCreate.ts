@@ -190,7 +190,7 @@ export default (client: Client): void => {
 
         const ctfId = Number(await getCtfIdFromDatabase(ctfName));
 
-        const MAX_PAD_LENGTH = 100000;
+        const MAX_PAD_LENGTH = config.pad.documentMaxLength - 100; // some margin to be safe
 
         const pads = [];
         let currentPadMessages = [];
@@ -220,18 +220,23 @@ export default (client: Client): void => {
           currentPadMessages.push(message);
           currentPadLength += messageLength;
         }
+        let firstPadContent = "";
+        if (pads.length > 0) {
+          // Create the final pad for the remaining messages
+          const padUrl = await createPad(
+            `${ctfName} Discord archive (${padIndex})`,
+            currentPadMessages.join("\n")
+          );
+          pads.push(padUrl);
 
-        // Create the final pad for the remaining messages
-        const padUrl = await createPad(
-          `${ctfName} Discord archive (${padIndex})`,
-          currentPadMessages.join("\n")
-        );
-        pads.push(padUrl);
+          // Create the first pad with links to other pads
+          firstPadContent = pads
+            .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
+            .join("\n");
+        } else {
+          firstPadContent = currentPadMessages.join("\n");
+        }
 
-        // Create the first pad with links to other pads
-        const firstPadContent = pads
-          .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
-          .join("\n");
         const firstPadUrl = await createPad(
           `${ctfName} Discord archive`,
           firstPadContent
@@ -246,7 +251,11 @@ export default (client: Client): void => {
           ctfId
         );
         // remove message
-        await interaction.deleteReply();
+        interaction.deleteReply().catch((err) => {
+          console.log(
+            "Failed to delete reply of bot. Can be caused due to channel being archived and deleted., err"
+          );
+        });
       }
     }
 
