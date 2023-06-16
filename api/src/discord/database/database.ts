@@ -10,8 +10,7 @@ const pgPool = new Pool({
 });
 
 async function connectToDatabase() {
-  await pgPool.connect();
-  return pgPool;
+  return await pgPool.connect();
 }
 
 export { connectToDatabase };

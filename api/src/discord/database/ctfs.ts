@@ -15,6 +15,8 @@ async function getCTFNamesFromDatabase(): Promise<string[]> {
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
     return [];
+  } finally {
+    pgClient.release();
   }
 }
 
@@ -31,6 +33,8 @@ export async function getAllCtfsFromDatabase(): Promise<string[]> {
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
     return [];
+  } finally {
+    pgClient.release();
   }
 }
 
@@ -49,6 +53,8 @@ export async function getCtfIdFromDatabase(ctfName: string): Promise<bigint> {
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
     return BigInt(-1);
+  } finally {
+    pgClient.release();
   }
 }
 
@@ -69,6 +75,8 @@ export async function getChallengesFromDatabase(
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
     return [];
+  } finally {
+    pgClient.release();
   }
 }
 
@@ -87,6 +95,8 @@ export async function getNameFromUserId(userId: bigint): Promise<string> {
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
     return "";
+  } finally {
+    pgClient.release();
   }
 }
 
@@ -111,6 +121,8 @@ export async function getTaskFromId(taskId: bigint): Promise<string[]> {
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
     return [];
+  } finally {
+    pgClient.release();
   }
 }
 
@@ -134,6 +146,8 @@ export async function createTask(
   } catch (error) {
     console.error("Failed to create a task in the database:", error);
     throw error;
+  } finally {
+    pgClient.release();
   }
 }
 
@@ -152,6 +166,8 @@ export async function getCTFNameFromId(ctfId: bigint): Promise<string> {
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
     return "";
+  } finally {
+    pgClient.release();
   }
 }
 
