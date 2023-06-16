@@ -195,8 +195,8 @@ export default (client: Client): void => {
           if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
             // Create a new pad
             const padUrl = await createPad(
-                `${ctfName} archive (${padIndex})`,
-                currentPadMessages.join("\n")
+              `${ctfName} archive (${padIndex})`,
+              currentPadMessages.join("\n")
             );
 
             pads.push(padUrl);
@@ -214,22 +214,27 @@ export default (client: Client): void => {
 
         // Create the final pad for the remaining messages
         const padUrl = await createPad(
-            `${ctfName} archive (${padIndex})`,
-            currentPadMessages.join("\n")
+          `${ctfName} archive (${padIndex})`,
+          currentPadMessages.join("\n")
         );
         pads.push(padUrl);
 
         // Create the first pad with links to other pads
-        const firstPadContent = pads.map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`).join("\n");
-        const firstPadUrl = await createPad(`${ctfName} archive`, firstPadContent);
+        const firstPadContent = pads
+          .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
+          .join("\n");
+        const firstPadUrl = await createPad(
+          `${ctfName} archive`,
+          firstPadContent
+        );
 
         await createTask(
-            `${ctfName} archive`,
-            `Archive of ${ctfName}`,
-            "archive",
-            "",
-            firstPadUrl,
-            ctfId
+          `${ctfName} archive`,
+          `Archive of ${ctfName}`,
+          "archive",
+          "",
+          firstPadUrl,
+          ctfId
         );
         // remove message
         interaction.deleteReply();
