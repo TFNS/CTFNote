@@ -18,6 +18,14 @@ import {
 import { createPad } from "../../plugins/createTask";
 import config from "../../config";
 
+
+interface customMessage {
+  channel: string;
+  content: string;
+  author: string;
+  timestamp: number;
+}
+
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
     //check if it is a button interaction
@@ -122,7 +130,7 @@ export default (client: Client): void => {
             channel.type === ChannelType.GuildText &&
             channel.parentId === categoryChannel.id
           ) {
-            fetchAllMessages(channel as TextBasedChannel).then(
+            fetchChannel(channel as TextBasedChannel).then(
               async (messages) => {
                 allMessages.push(messages);
 
@@ -141,12 +149,6 @@ export default (client: Client): void => {
           }
         });
 
-        interface Message {
-          channel: string;
-          content: string;
-          author: string;
-          timestamp: string;
-        }
 
         // put the archive in the archive channel of the ctf in the description
         const niceMessages: string[] = allMessages.map((messages) => {
@@ -159,7 +161,7 @@ export default (client: Client): void => {
             channelName = messages[0].channel;
             niceMessage += `## ${channelName}\n`;
 
-            messages.forEach((message: Message) => {
+            messages.forEach((message: customMessage) => {
               if (channelName != message.channel) {
                 channelName = message.channel;
                 niceMessage = `## ${channelName}\n`;
@@ -195,8 +197,8 @@ export default (client: Client): void => {
           if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
             // Create a new pad
             const padUrl = await createPad(
-                `${ctfName} archive (${padIndex})`,
-                currentPadMessages.join("\n")
+              `${ctfName} archive (${padIndex})`,
+              currentPadMessages.join("\n")
             );
 
             pads.push(padUrl);
@@ -214,22 +216,27 @@ export default (client: Client): void => {
 
         // Create the final pad for the remaining messages
         const padUrl = await createPad(
-            `${ctfName} archive (${padIndex})`,
-            currentPadMessages.join("\n")
+          `${ctfName} archive (${padIndex})`,
+          currentPadMessages.join("\n")
         );
         pads.push(padUrl);
 
         // Create the first pad with links to other pads
-        const firstPadContent = pads.map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`).join("\n");
-        const firstPadUrl = await createPad(`${ctfName} archive`, firstPadContent);
+        const firstPadContent = pads
+          .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
+          .join("\n");
+        const firstPadUrl = await createPad(
+          `${ctfName} archive`,
+          firstPadContent
+        );
 
         await createTask(
-            `${ctfName} archive`,
-            `Archive of ${ctfName}`,
-            "archive",
-            "",
-            firstPadUrl,
-            ctfId
+          `${ctfName} archive`,
+          `Archive of ${ctfName}`,
+          "archive",
+          "",
+          firstPadUrl,
+          ctfId
         );
         // remove message
         interaction.deleteReply();
@@ -242,7 +249,8 @@ export default (client: Client): void => {
   });
 };
 
-async function fetchAllMessages(channel: TextBasedChannel): Promise<any> {
+async function fetchChannel(channel: TextBasedChannel): Promise<customMessage[]> {
+
   const messages = await channel.messages.fetch({ limit: 100 });
 
   const messagesCollection: any[] = [];
@@ -267,7 +275,9 @@ async function fetchAllMessages(channel: TextBasedChannel): Promise<any> {
 
     content += message.content;
 
-    const messageObject = {
+
+
+    const messageObject : customMessage = {
       channel: channelName,
       content: content,
       author: author,
