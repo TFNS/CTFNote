@@ -2,10 +2,12 @@ import {
   CategoryChannel,
   ChannelType,
   Client,
+  Collection,
   CommandInteraction,
   Interaction,
   Message,
   PermissionsBitField,
+  Snowflake,
   TextBasedChannel,
   TextChannel,
 } from "discord.js";
@@ -86,20 +88,27 @@ export default (client: Client): void => {
         const challenges: any = await getChallengesFromDatabase(ctfId);
 
         for (const challenge of challenges) {
-          const challengeChannel = await interaction.guild?.channels.create({
-            name: `${challenge.title} - ${challenge.category}`,
-            type: ChannelType.GuildText,
-            parent: channel?.id,
-            topic: `${challenge.title} - ${challenge.category}`,
-          });
-
-          if (challenge.description !== "") {
-            await challengeChannel?.send(challenge.description);
-          }
+          interaction.guild?.channels
+            .create({
+              name: `${challenge.title} - ${challenge.category}`,
+              type: ChannelType.GuildText,
+              parent: channel?.id,
+              topic: `${challenge.title} - ${challenge.category}`,
+            })
+            .then((challengeChannel) => {
+              if (challenge.description !== "") {
+                return challengeChannel?.send(challenge.description);
+              }
+            })
+            .catch((err) => {
+              console.error("Failed to create channel.", err);
+            });
         }
 
         // remove message
-        await interaction.deleteReply();
+        interaction
+          .deleteReply()
+          .catch((err) => console.error("Failed to delete reply.", err));
       } else if (interaction.customId.startsWith("archive-ctf-button-")) {
         const ctfName = interaction.customId.replace("archive-ctf-button-", "");
         await interaction.channel?.send(
@@ -124,23 +133,31 @@ export default (client: Client): void => {
 
         const allMessages: any[] = [];
 
-        interaction.guild?.channels.cache.map((channel) => {
-          if (
-            channel.type === ChannelType.GuildText &&
-            channel.parentId === categoryChannel.id
-          ) {
-            fetchAllMessages(channel as TextBasedChannel)
-              .then(async (messages) => {
+        const awaitingPromises = interaction.guild?.channels.cache.map(
+          async (channel) => {
+            if (
+              channel.type === ChannelType.GuildText &&
+              channel.parentId === categoryChannel.id
+            ) {
+              try {
+                const messages = await fetchAllMessages(
+                  channel as TextBasedChannel
+                );
                 allMessages.push(messages);
 
                 // Wait until fetchAllMessages is completed before deleting the channels
                 await channel.delete();
-              })
-              .catch((err) => {
-                console.error("Failed to fetch messages in channels.", err);
-              });
+              } catch (err) {
+                console.error(
+                  "Failed to fetch messages or delete channel during archiving.",
+                  err
+                );
+              }
+              return true;
+            }
           }
-        });
+        );
+        if (awaitingPromises !== undefined) await Promise.all(awaitingPromises);
 
         await categoryChannel.delete();
 
@@ -252,7 +269,7 @@ export default (client: Client): void => {
         );
         // remove message
         interaction.deleteReply().catch((err) => {
-          console.log(
+          console.error(
             "Failed to delete reply of bot. Can be caused due to channel being archived and deleted., err"
           );
         });
@@ -266,7 +283,15 @@ export default (client: Client): void => {
 };
 
 async function fetchAllMessages(channel: TextBasedChannel): Promise<any> {
-  const messages = await channel.messages.fetch({ limit: 100 });
+  let messages = new Collection<Snowflake, Message>();
+  let channelMessages = await channel.messages.fetch({ limit: 100 });
+  while (channelMessages.size > 0) {
+    messages = messages.concat(channelMessages);
+    channelMessages = await channel.messages.fetch({
+      limit: 100,
+      before: channelMessages.last()!.id,
+    });
+  }
 
   const messagesCollection: any[] = [];
 
