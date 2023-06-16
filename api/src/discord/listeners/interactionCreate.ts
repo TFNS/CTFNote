@@ -18,7 +18,6 @@ import {
 import { createPad } from "../../plugins/createTask";
 import config from "../../config";
 
-
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
     //check if it is a button interaction
@@ -63,35 +62,34 @@ export default (client: Client): void => {
         });
 
         // create voice channels for the ctf from the .env file
-        const numberOfVoiceChannels : number = config.discord.voiceChannels;
+        const numberOfVoiceChannels: number = config.discord.voiceChannels;
 
         if (numberOfVoiceChannels > 0) {
-            for (let i = 0; i < numberOfVoiceChannels; i++) {
-                interaction.guild?.channels.create({
-                    name: `voice-${i}`,
-                    type: ChannelType.GuildVoice,
-                    parent: channel?.id,
-                });
-            }
+          for (let i = 0; i < numberOfVoiceChannels; i++) {
+            interaction.guild?.channels.create({
+              name: `voice-${i}`,
+              type: ChannelType.GuildVoice,
+              parent: channel?.id,
+            });
+          }
         }
 
         // create for every challenge a channel
         const ctfId: bigint = await getCtfIdFromDatabase(ctfName);
         const challenges: any = await getChallengesFromDatabase(ctfId);
 
-        challenges.forEach((challenge: any) => {
-          interaction.guild?.channels
-            .create({
-              name: `${challenge.title} - ${challenge.category}`,
-              type: ChannelType.GuildText,
-              parent: channel?.id,
-              topic: `${challenge.title} - ${challenge.category}`,
-            })
-            .then((channel) => {
-              if (challenge.description != "")
-                channel.send(challenge.description);
-            });
-        });
+        for (const challenge of challenges) {
+          const challengeChannel = await interaction.guild?.channels.create({
+            name: `${challenge.title} - ${challenge.category}`,
+            type: ChannelType.GuildText,
+            parent: channel?.id,
+            topic: `${challenge.title} - ${challenge.category}`,
+          });
+
+          if (challenge.description !== "") {
+            await challengeChannel?.send(challenge.description);
+          }
+        }
 
         // remove message
         interaction.deleteReply();
@@ -110,13 +108,12 @@ export default (client: Client): void => {
 
         interaction.guild?.channels.cache.map((channel) => {
           if (
-              channel.type === ChannelType.GuildVoice &&
-              channel.parentId === categoryChannel.id
+            channel.type === ChannelType.GuildVoice &&
+            channel.parentId === categoryChannel.id
           ) {
             channel.delete();
           }
         });
-
 
         const allMessages: any[] = [];
 
@@ -178,19 +175,61 @@ export default (client: Client): void => {
           return niceMessage;
         });
 
-        const padUrl = await createPad(
-          `${ctfName} archive`,
-          niceMessages.join("\n")
-        );
+        // the character limit of a pad is 100000 characters
+        // so we need to split the messages in multiple pads
+        // and put the links to the other pads in the first pad
+
         const ctfId = Number(await getCtfIdFromDatabase(ctfName));
 
-        createTask(
-          `${ctfName} archive`,
-          `Archive of ${ctfName}`,
-          "archive",
-          "",
-          padUrl,
-          ctfId
+        const MAX_PAD_LENGTH = 100000;
+
+        const pads = [];
+        let currentPadMessages = [];
+        let currentPadLength = 0;
+        let padIndex = 1;
+
+        for (const message of niceMessages) {
+          const messageLength = message.length;
+
+          // If adding the current message exceeds the maximum pad length
+          if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
+            // Create a new pad
+            const padUrl = await createPad(
+                `${ctfName} archive (${padIndex})`,
+                currentPadMessages.join("\n")
+            );
+
+            pads.push(padUrl);
+
+            // Reset the current pad messages and length
+            currentPadMessages = [];
+            currentPadLength = 0;
+            padIndex++;
+          }
+
+          // Add the message to the current pad
+          currentPadMessages.push(message);
+          currentPadLength += messageLength;
+        }
+
+        // Create the final pad for the remaining messages
+        const padUrl = await createPad(
+            `${ctfName} archive (${padIndex})`,
+            currentPadMessages.join("\n")
+        );
+        pads.push(padUrl);
+
+        // Create the first pad with links to other pads
+        const firstPadContent = pads.map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`).join("\n");
+        const firstPadUrl = await createPad(`${ctfName} archive`, firstPadContent);
+
+        await createTask(
+            `${ctfName} archive`,
+            `Archive of ${ctfName}`,
+            "archive",
+            "",
+            firstPadUrl,
+            ctfId
         );
         // remove message
         interaction.deleteReply();
