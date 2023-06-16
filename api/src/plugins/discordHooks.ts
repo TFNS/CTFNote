@@ -144,7 +144,7 @@ const discordMutationLoggingHook =
           .then((username) => {
             return sendMessageFromTaskId(
               taskId,
-              `${username} is working working on this task!`
+              `${username} is working on this task!`
             );
           })
           .catch((err) => {
