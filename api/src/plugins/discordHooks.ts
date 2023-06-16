@@ -122,7 +122,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         sendMessageFromTaskId(args.input.id, `${taskTitle} is solved!`)
           .then(async (channel) => {
             if (channel !== null) {
-              return channel.setName(`${taskTitle}-${taskCategory}-solved`);
+              return channel.setName(`solved-${taskTitle}-${taskCategory}`);
             }
           })
           .catch((err) => {
