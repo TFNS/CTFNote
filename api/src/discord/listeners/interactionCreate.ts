@@ -28,7 +28,7 @@ export default (client: Client): void => {
         await interaction.channel?.send(
           `Creating the CTF channels and roles for ${ctfName}`
         );
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         const allowedRole = await interaction.guild?.roles.create({
           name: ctfName,
@@ -55,7 +55,7 @@ export default (client: Client): void => {
           ],
         });
 
-        interaction.guild?.channels.create({
+        await interaction.guild?.channels.create({
           name: `challenges-talk`,
           type: ChannelType.GuildText,
           parent: channel?.id,
@@ -66,11 +66,18 @@ export default (client: Client): void => {
 
         if (numberOfVoiceChannels > 0) {
           for (let i = 0; i < numberOfVoiceChannels; i++) {
-            interaction.guild?.channels.create({
-              name: `voice-${i}`,
-              type: ChannelType.GuildVoice,
-              parent: channel?.id,
-            });
+            interaction.guild?.channels
+              .create({
+                name: `voice-${i}`,
+                type: ChannelType.GuildVoice,
+                parent: channel?.id,
+              })
+              .catch((err) => {
+                console.error(
+                  "Failed to create one of the voice channels.",
+                  err
+                );
+              });
           }
         }
 
@@ -92,13 +99,13 @@ export default (client: Client): void => {
         }
 
         // remove message
-        interaction.deleteReply();
+        await interaction.deleteReply();
       } else if (interaction.customId.startsWith("archive-ctf-button-")) {
         const ctfName = interaction.customId.replace("archive-ctf-button-", "");
         await interaction.channel?.send(
           `Archiving the CTF channels and roles for ${ctfName}`
         );
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         const categoryChannel = (await interaction.guild?.channels.cache.find(
           (channel) =>
@@ -111,7 +118,7 @@ export default (client: Client): void => {
             channel.type === ChannelType.GuildVoice &&
             channel.parentId === categoryChannel.id
           ) {
-            channel.delete();
+            return channel.delete();
           }
         });
 
@@ -122,14 +129,16 @@ export default (client: Client): void => {
             channel.type === ChannelType.GuildText &&
             channel.parentId === categoryChannel.id
           ) {
-            fetchAllMessages(channel as TextBasedChannel).then(
-              async (messages) => {
+            fetchAllMessages(channel as TextBasedChannel)
+              .then(async (messages) => {
                 allMessages.push(messages);
 
                 // Wait until fetchAllMessages is completed before deleting the channels
                 await channel.delete();
-              }
-            );
+              })
+              .catch((err) => {
+                console.error("Failed to fetch messages in channels.", err);
+              });
           }
         });
 
@@ -137,7 +146,7 @@ export default (client: Client): void => {
 
         interaction.guild?.roles.cache.map((role) => {
           if (role.name === `${ctfName}`) {
-            role.delete();
+            return role.delete();
           }
         });
 
@@ -237,7 +246,7 @@ export default (client: Client): void => {
           ctfId
         );
         // remove message
-        interaction.deleteReply();
+        await interaction.deleteReply();
       }
     }
 
