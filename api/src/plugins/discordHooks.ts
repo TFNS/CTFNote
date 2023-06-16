@@ -15,7 +15,7 @@ import { getDiscordClient, usingDiscordBot } from "../discord";
 import config from "../config";
 
 const discordMutationLoggingHook =
-  (build: Build) => (fieldContext: Context<any>) => {
+  (_build: Build) => (fieldContext: Context<any>) => {
     const {
       scope: { isRootMutation },
     } = fieldContext;
@@ -63,11 +63,15 @@ const discordMutationLoggingHook =
           return null;
         }
 
-        categoryChannel.guild.channels.create({
-          name: `${args.input.title} - ${args.input.category}`,
-          type: ChannelType.GuildText,
-          parent: categoryChannel.id,
-        });
+        categoryChannel.guild.channels
+          .create({
+            name: `${args.input.title} - ${args.input.category}`,
+            type: ChannelType.GuildText,
+            parent: categoryChannel.id,
+          })
+          .catch((err) => {
+            console.error("Failed creating category.", err);
+          });
 
         //send message to the main channel that a new task has been created
         const mainChannel = guild?.channels.cache.find(
@@ -78,9 +82,16 @@ const discordMutationLoggingHook =
         ) as TextChannel | undefined;
 
         if (mainChannel !== undefined) {
-          mainChannel.send(
-            `New task created: ${args.input.title} - ${args.input.category}`
-          );
+          mainChannel
+            .send(
+              `New task created: ${args.input.title} - ${args.input.category}`
+            )
+            .catch((err) => {
+              console.error(
+                "Failed to send notification about a new task.",
+                err
+              );
+            });
         }
       }
       if (fieldContext.scope.fieldName === "deleteTask") {
@@ -97,7 +108,11 @@ const discordMutationLoggingHook =
 
         if (channel === undefined) return null;
 
-        channel.setName(`${taskTitle}-${taskCategory}-deleted`);
+        channel
+          .setName(`${taskTitle}-${taskCategory}-deleted`)
+          .catch((err) =>
+            console.error("Failed to mark channel as deleted.", err)
+          );
       }
 
       if (
@@ -109,41 +124,51 @@ const discordMutationLoggingHook =
           const task = await getTaskFromId(args.input.id);
           const taskTitle = task[0].toLowerCase();
           const taskCategory = task[1].toLowerCase();
-          sendMessageFromTaskId(args.input.id, `${taskTitle} is solved!`).then(
-            (channel) => {
+          sendMessageFromTaskId(args.input.id, `${taskTitle} is solved!`)
+            .then(async (channel) => {
               if (channel !== null) {
-                channel.setName(`${taskTitle}-${taskCategory}-solved`);
+                return channel.setName(`${taskTitle}-${taskCategory}-solved`);
               }
-            }
-          );
+            })
+            .catch((err) => {
+              console.error("Failed sending solved notification.", err);
+            });
         }
       }
       if (fieldContext.scope.fieldName === "startWorkingOn") {
         //send a message to the channel that the user started working on the task
         const userId = context.jwtClaims.user_id;
         const taskId = args.input.taskId;
-        const usernamePromise = getNameFromUserId(userId);
 
-        usernamePromise.then((username) => {
-          sendMessageFromTaskId(
-            taskId,
-            `${username} is working working on this task!`
-          );
-        });
+        getNameFromUserId(userId)
+          .then((username) => {
+            return sendMessageFromTaskId(
+              taskId,
+              `${username} is working working on this task!`
+            );
+          })
+          .catch((err) => {
+            console.error("Failed sending 'working on' notification.", err);
+          });
       }
       if (fieldContext.scope.fieldName === "stopWorkingOn") {
         //send a message to the channel that the user stopped working on the task
         const userId = context.jwtClaims.user_id;
         const taskId = args.input.taskId;
 
-        const usernamePromise = getNameFromUserId(userId);
-
-        usernamePromise.then((username) => {
-          sendMessageFromTaskId(
-            taskId,
-            `${username} stopped working on this task!`
-          );
-        });
+        getNameFromUserId(userId)
+          .then((username) => {
+            return sendMessageFromTaskId(
+              taskId,
+              `${username} stopped working on this task!`
+            );
+          })
+          .catch((err) => {
+            console.error(
+              "Failed sending 'stopped working on' notification.",
+              err
+            );
+          });
       }
 
       return input;
