@@ -697,6 +697,7 @@ export type Mutation = {
   updateCtfSecret?: Maybe<UpdateCtfSecretPayload>;
   /** Updates a single `CtfSecret` using its globally unique id and a patch. */
   updateCtfSecretByNodeId?: Maybe<UpdateCtfSecretPayload>;
+  updateLastActive?: Maybe<UpdateLastActivePayload>;
   /** Updates a single `Profile` using a unique key and a patch. */
   updateProfile?: Maybe<UpdateProfilePayload>;
   /** Updates a single `Profile` using its globally unique id and a patch. */
@@ -865,6 +866,12 @@ export type MutationUpdateCtfSecretByNodeIdArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateLastActiveArgs = {
+  input: UpdateLastActiveInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateProfileArgs = {
   input: UpdateProfileInput;
 };
@@ -1028,6 +1035,49 @@ export enum ProfilesOrderBy {
   UsernameDesc = 'USERNAME_DESC'
 }
 
+export type PublicProfile = {
+  __typename?: 'PublicProfile';
+  color?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
+  nodeId?: Maybe<Scalars['String']>;
+  role?: Maybe<Role>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type PublicProfileSubscriptionPayload = {
+  __typename?: 'PublicProfileSubscriptionPayload';
+  event?: Maybe<Scalars['String']>;
+  publicProfile?: Maybe<PublicProfile>;
+};
+
+/** A connection to a list of `PublicProfile` values. */
+export type PublicProfilesConnection = {
+  __typename?: 'PublicProfilesConnection';
+  /** A list of edges which contains the `PublicProfile` and cursor to aid in pagination. */
+  edges: Array<PublicProfilesEdge>;
+  /** A list of `PublicProfile` objects. */
+  nodes: Array<PublicProfile>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `PublicProfile` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `PublicProfile` edge in the connection. */
+export type PublicProfilesEdge = {
+  __typename?: 'PublicProfilesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `PublicProfile` at the end of the edge. */
+  node: PublicProfile;
+};
+
+/** Methods to use when ordering `PublicProfile`. */
+export enum PublicProfilesOrderBy {
+  Natural = 'NATURAL'
+}
+
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
   __typename?: 'Query';
@@ -1064,6 +1114,8 @@ export type Query = Node & {
   profileByUsername?: Maybe<Profile>;
   /** Reads and enables pagination through a set of `Profile`. */
   profiles?: Maybe<ProfilesConnection>;
+  /** Reads and enables pagination through a set of `PublicProfile`. */
+  publicProfiles?: Maybe<PublicProfilesConnection>;
   /**
    * Exposes the root query type nested one level down. This is helpful for Relay 1
    * which can only query top level fields if they are in a particular form.
@@ -1226,6 +1278,17 @@ export type QueryProfilesArgs = {
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryPublicProfilesArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<PublicProfilesOrderBy>>;
 };
 
 
@@ -1547,6 +1610,9 @@ export type StringFilter = {
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
 export type Subscription = {
   __typename?: 'Subscription';
+  currentProfileCreated?: Maybe<PublicProfileSubscriptionPayload>;
+  currentProfileDeleted?: Maybe<PublicProfileSubscriptionPayload>;
+  currentProfileUpdated?: Maybe<PublicProfileSubscriptionPayload>;
   listen: ListenPayload;
 };
 
@@ -1744,6 +1810,27 @@ export type UpdateCtfSecretPayload = {
 /** The output of our update `CtfSecret` mutation. */
 export type UpdateCtfSecretPayloadCtfSecretEdgeArgs = {
   orderBy?: InputMaybe<Array<CtfSecretsOrderBy>>;
+};
+
+/** All input for the `updateLastActive` mutation. */
+export type UpdateLastActiveInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `updateLastActive` mutation. */
+export type UpdateLastActivePayload = {
+  __typename?: 'UpdateLastActivePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
 };
 
 /** All input for the `updateProfileByNodeId` mutation. */
@@ -2210,7 +2297,11 @@ export type UninviteUserToCtfMutationVariables = Exact<{
 
 export type UninviteUserToCtfMutation = { __typename?: 'Mutation', deleteInvitation?: { __typename?: 'DeleteInvitationPayload', deletedInvitationNodeId?: string | null } | null };
 
+export type PublicProfileFragment = { __typename?: 'PublicProfile', id?: number | null, username?: string | null, color?: string | null, description?: string | null, role?: Role | null, nodeId?: string | null };
+
 export type ProfileFragment = { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string };
+
+export type RestrictedProfileFragment = { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string };
 
 export type UpdatePasswordMutationVariables = Exact<{
   oldPassword: Scalars['String'];
@@ -2231,7 +2322,17 @@ export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: {
 export type GetTeamQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTeamQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string }> } | null };
+export type GetTeamQuery = { __typename?: 'Query', publicProfiles?: { __typename?: 'PublicProfilesConnection', nodes: Array<{ __typename?: 'PublicProfile', id?: number | null, username?: string | null, color?: string | null, description?: string | null, role?: Role | null, nodeId?: string | null }> } | null };
+
+export type GetTeamAdminQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTeamAdminQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, nodeId: string }> } | null };
+
+export type PublicProfileSubscriptionPayloadSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PublicProfileSubscriptionPayloadSubscription = { __typename?: 'Subscription', currentProfileUpdated?: { __typename?: 'PublicProfileSubscriptionPayload', publicProfile?: { __typename?: 'PublicProfile', id?: number | null, username?: string | null, color?: string | null, description?: string | null, role?: Role | null, nodeId?: string | null } | null } | null };
 
 export type SubscribeToProfileSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -2477,6 +2578,26 @@ export const FullCtfFragmentDoc = gql`
 ${TaskFragmentDoc}
 ${CtfSecretFragmentDoc}
 ${InvitationFragmentDoc}`;
+export const PublicProfileFragmentDoc = gql`
+    fragment PublicProfileFragment on PublicProfile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+    `;
+export const RestrictedProfileFragmentDoc = gql`
+    fragment RestrictedProfile on Profile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+    `;
 export const SettingsInfoFragmentDoc = gql`
     fragment SettingsInfo on Setting {
   nodeId
@@ -3362,13 +3483,13 @@ export function useUpdateProfileMutation(options: VueApolloComposable.UseMutatio
 export type UpdateProfileMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateProfileMutation, UpdateProfileMutationVariables>;
 export const GetTeamDocument = gql`
     query getTeam {
-  profiles {
+  publicProfiles {
     nodes {
-      ...ProfileFragment
+      ...PublicProfileFragment
     }
   }
 }
-    ${ProfileFragmentDoc}`;
+    ${PublicProfileFragmentDoc}`;
 
 /**
  * __useGetTeamQuery__
@@ -3389,6 +3510,61 @@ export function useGetTeamLazyQuery(options: VueApolloComposable.UseQueryOptions
   return VueApolloComposable.useLazyQuery<GetTeamQuery, GetTeamQueryVariables>(GetTeamDocument, {}, options);
 }
 export type GetTeamQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTeamQuery, GetTeamQueryVariables>;
+export const GetTeamAdminDocument = gql`
+    query getTeamAdmin {
+  profiles {
+    nodes {
+      ...ProfileFragment
+    }
+  }
+}
+    ${ProfileFragmentDoc}`;
+
+/**
+ * __useGetTeamAdminQuery__
+ *
+ * To run a query within a Vue component, call `useGetTeamAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTeamAdminQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useGetTeamAdminQuery();
+ */
+export function useGetTeamAdminQuery(options: VueApolloComposable.UseQueryOptions<GetTeamAdminQuery, GetTeamAdminQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTeamAdminQuery, GetTeamAdminQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTeamAdminQuery, GetTeamAdminQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<GetTeamAdminQuery, GetTeamAdminQueryVariables>(GetTeamAdminDocument, {}, options);
+}
+export function useGetTeamAdminLazyQuery(options: VueApolloComposable.UseQueryOptions<GetTeamAdminQuery, GetTeamAdminQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTeamAdminQuery, GetTeamAdminQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTeamAdminQuery, GetTeamAdminQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetTeamAdminQuery, GetTeamAdminQueryVariables>(GetTeamAdminDocument, {}, options);
+}
+export type GetTeamAdminQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTeamAdminQuery, GetTeamAdminQueryVariables>;
+export const PublicProfileSubscriptionPayloadDocument = gql`
+    subscription PublicProfileSubscriptionPayload {
+  currentProfileUpdated {
+    publicProfile {
+      ...PublicProfileFragment
+    }
+  }
+}
+    ${PublicProfileFragmentDoc}`;
+
+/**
+ * __usePublicProfileSubscriptionPayload__
+ *
+ * To run a query within a Vue component, call `usePublicProfileSubscriptionPayload` and pass it any options that fit your needs.
+ * When your component renders, `usePublicProfileSubscriptionPayload` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the subscription, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/subscription.html#options;
+ *
+ * @example
+ * const { result, loading, error } = usePublicProfileSubscriptionPayload();
+ */
+export function usePublicProfileSubscriptionPayload(options: VueApolloComposable.UseSubscriptionOptions<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables> | VueCompositionApi.Ref<VueApolloComposable.UseSubscriptionOptions<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables>> | ReactiveFunction<VueApolloComposable.UseSubscriptionOptions<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables>> = {}) {
+  return VueApolloComposable.useSubscription<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables>(PublicProfileSubscriptionPayloadDocument, {}, options);
+}
+export type PublicProfileSubscriptionPayloadCompositionFunctionResult = VueApolloComposable.UseSubscriptionReturn<PublicProfileSubscriptionPayloadSubscription, PublicProfileSubscriptionPayloadSubscriptionVariables>;
 export const SubscribeToProfileDocument = gql`
     subscription subscribeToProfile {
   listen(topic: "update:profiles") {
@@ -4128,6 +4304,26 @@ export const FullCtfFragment = gql`
 ${TaskFragment}
 ${CtfSecretFragment}
 ${InvitationFragment}`;
+export const PublicProfileFragment = gql`
+    fragment PublicProfileFragment on PublicProfile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+    `;
+export const RestrictedProfile = gql`
+    fragment RestrictedProfile on Profile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+    `;
 export const SettingsInfo = gql`
     fragment SettingsInfo on Setting {
   nodeId
@@ -4397,6 +4593,15 @@ export const UpdateProfile = gql`
     ${ProfileFragment}`;
 export const GetTeam = gql`
     query getTeam {
+  publicProfiles {
+    nodes {
+      ...PublicProfileFragment
+    }
+  }
+}
+    ${PublicProfileFragment}`;
+export const GetTeamAdmin = gql`
+    query getTeamAdmin {
   profiles {
     nodes {
       ...ProfileFragment
@@ -4404,6 +4609,15 @@ export const GetTeam = gql`
   }
 }
     ${ProfileFragment}`;
+export const PublicProfileSubscriptionPayload = gql`
+    subscription PublicProfileSubscriptionPayload {
+  currentProfileUpdated {
+    publicProfile {
+      ...PublicProfileFragment
+    }
+  }
+}
+    ${PublicProfileFragment}`;
 export const SubscribeToProfile = gql`
     subscription subscribeToProfile {
   listen(topic: "update:profiles") {

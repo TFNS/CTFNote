@@ -17,6 +17,7 @@ import uploadScalar from "./plugins/uploadScalar";
 import { Pool } from "pg";
 import { icalRoute } from "./routes/ical";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
+import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -47,6 +48,7 @@ function createOptions() {
       uploadLogoPlugin,
       createTasKPlugin,
       ConnectionFilterPlugin,
+      ProfileSubscriptionPlugin,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
