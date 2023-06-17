@@ -306,7 +306,6 @@ async function fetchAllMessages(channel: TextBasedChannel): Promise<any> {
 
   messages.forEach((message: Message) => {
     if (message.author.bot) return;
-    if (message.content.startsWith("/")) return;
 
     const channel = message.channel as TextChannel;
 
