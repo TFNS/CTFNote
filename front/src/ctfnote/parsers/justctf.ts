@@ -28,15 +28,10 @@ const justCTFParser: Parser = {
       if (!challenge.description || !challenge.name) {
         continue;
       }
-      let category = 'unknown';
-
-      // as soon as CTFNote supports tags, we can rewrite this
-      // and maybe add the difficulty as a tag as well
-      if (challenge.categories.length > 0) category = challenge.categories[0];
 
       tasks.push({
         title: challenge.name,
-        category: category,
+        tags: challenge.categories,
         description: challenge.description,
       });
     }
