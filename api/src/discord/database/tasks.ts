@@ -71,12 +71,3 @@ export async function setFlagForChallengeId(
     pgClient.release();
   }
 }
-
-export function createTopic(title: string, tags: string[] | undefined): string {
-  let topic = `${title}, tags: `;
-  if (tags != null && tags.length > 0) {
-    topic += `${tags.join(", ")}`;
-  }
-
-  return topic;
-}

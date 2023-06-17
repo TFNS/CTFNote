@@ -44,13 +44,8 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
   const ctfId = await getCtfIdFromDatabase(categoryChannel.name);
   if (ctfId == null) return accessDenied(interaction);
 
-  const topic = currentTaskChannel?.topic;
-  if (topic == null) return accessDenied(interaction);
-
-  const nameAndTagsSplitted = topic.split(", tags: ");
-
-  if (nameAndTagsSplitted.length < 2) return accessDenied(interaction);
-  const name = nameAndTagsSplitted[0];
+  const name = currentTaskChannel?.topic;
+  if (name == null) return accessDenied(interaction);
 
   const task = await getTaskByCtfIdAndNameFromDatabase(ctfId, name);
   if (task.id == null) return accessDenied(interaction);

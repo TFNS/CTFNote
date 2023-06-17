@@ -19,7 +19,6 @@ import {
 } from "../database/ctfs";
 import { createPad } from "../../plugins/createTask";
 import config from "../../config";
-import { createTopic } from "../database/tasks";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -103,7 +102,7 @@ export default (client: Client): void => {
                   : `${challenge.title}`,
               type: ChannelType.GuildText,
               parent: channel?.id,
-              topic: createTopic(challenge.title, challenge.tags),
+              topic: challenge.title,
             })
             .then((challengeChannel) => {
               if (challenge.description !== "") {
