@@ -92,20 +92,22 @@ Edit the `.env` file to instruct the pad to use TLS:
 After deploying this configuration, run `certbot` to make it available over HTTPS.
 See [this article](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04) for more information.
 
-### Adding discord bot support
+### Add discord bot support
+
 To add support for the CTFNote discord bot, you need to change the following values in the `.env` file:
+
 ```
 DISCORD_BOT_TOKEN=secret_token
 DISCORD_SERVER_ID=server_id
 ```
 
-To get the DISCORD_BOT_TOKEN, you need to create a discord bot and add it to your server. 
-You can follow [this guide](https://discordpy.readthedocs.io/en/stable/discord.html) to do so. 
-When you are done copy the token from the Build-A-Bot section and paste it in the `.env` file.
+To get the `DISCORD_BOT_TOKEN`, you need to create a discord bot and add it to your server.
+You can follow [this guide](https://discordpy.readthedocs.io/en/stable/discord.html) to do so.
+When you are done, copy the token from the Build-A-Bot section and paste it in the `.env` file.
 
-To get the DISCORD_SERVER_ID, you need to enable developer mode in discord. Then right-click on your server and click on copy ID.
+To get the `DISCORD_SERVER_ID`, you need to enable developer mode in discord. Then right-click on your server and click on copy ID.
 
-
+Please do note use this bot if untrusted members can create channels or categories in your server, or can edit topics of channels.
 
 ### Migration
 
