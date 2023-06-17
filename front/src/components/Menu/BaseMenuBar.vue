@@ -4,7 +4,7 @@
       <q-toolbar-title class="row items-center q-gutter-md">
         <ctf-note-link name="index" class="text-white" underline>
           <q-img src="/favicon-transparent.svg" width="30px" class="q-mr-md" />
-          <q-btn flat no-caps>CTFNote</q-btn>
+          <q-btn flat no-caps v-if="$q.screen.gt.xs">CTFNote</q-btn>
         </ctf-note-link>
         <slot name="after-title" />
         <q-btn
