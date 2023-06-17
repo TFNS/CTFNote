@@ -2,10 +2,12 @@ import {
   CategoryChannel,
   ChannelType,
   Client,
+  Collection,
   CommandInteraction,
   Interaction,
   Message,
   PermissionsBitField,
+  Snowflake,
   TextBasedChannel,
   TextChannel,
 } from "discord.js";
@@ -18,14 +20,6 @@ import {
 import { createPad } from "../../plugins/createTask";
 import config from "../../config";
 
-
-interface customMessage {
-  channel: string;
-  content: string;
-  author: string;
-  timestamp: number;
-}
-
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
     //check if it is a button interaction
@@ -36,7 +30,7 @@ export default (client: Client): void => {
         await interaction.channel?.send(
           `Creating the CTF channels and roles for ${ctfName}`
         );
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         const allowedRole = await interaction.guild?.roles.create({
           name: ctfName,
@@ -63,7 +57,7 @@ export default (client: Client): void => {
           ],
         });
 
-        interaction.guild?.channels.create({
+        await interaction.guild?.channels.create({
           name: `challenges-talk`,
           type: ChannelType.GuildText,
           parent: channel?.id,
@@ -74,11 +68,18 @@ export default (client: Client): void => {
 
         if (numberOfVoiceChannels > 0) {
           for (let i = 0; i < numberOfVoiceChannels; i++) {
-            interaction.guild?.channels.create({
-              name: `voice-${i}`,
-              type: ChannelType.GuildVoice,
-              parent: channel?.id,
-            });
+            interaction.guild?.channels
+              .create({
+                name: `voice-${i}`,
+                type: ChannelType.GuildVoice,
+                parent: channel?.id,
+              })
+              .catch((err) => {
+                console.error(
+                  "Failed to create one of the voice channels.",
+                  err
+                );
+              });
           }
         }
 
@@ -87,26 +88,33 @@ export default (client: Client): void => {
         const challenges: any = await getChallengesFromDatabase(ctfId);
 
         for (const challenge of challenges) {
-          const challengeChannel = await interaction.guild?.channels.create({
-            name: `${challenge.title} - ${challenge.category}`,
-            type: ChannelType.GuildText,
-            parent: channel?.id,
-            topic: `${challenge.title} - ${challenge.category}`,
-          });
-
-          if (challenge.description !== "") {
-            await challengeChannel?.send(challenge.description);
-          }
+          interaction.guild?.channels
+            .create({
+              name: `${challenge.title} - ${challenge.category}`,
+              type: ChannelType.GuildText,
+              parent: channel?.id,
+              topic: `${challenge.title}, tags: ${challenge.category}`,
+            })
+            .then((challengeChannel) => {
+              if (challenge.description !== "") {
+                return challengeChannel?.send(challenge.description);
+              }
+            })
+            .catch((err) => {
+              console.error("Failed to create channel.", err);
+            });
         }
 
         // remove message
-        interaction.deleteReply();
+        interaction
+          .deleteReply()
+          .catch((err) => console.error("Failed to delete reply.", err));
       } else if (interaction.customId.startsWith("archive-ctf-button-")) {
         const ctfName = interaction.customId.replace("archive-ctf-button-", "");
         await interaction.channel?.send(
           `Archiving the CTF channels and roles for ${ctfName}`
         );
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         const categoryChannel = (await interaction.guild?.channels.cache.find(
           (channel) =>
@@ -119,36 +127,52 @@ export default (client: Client): void => {
             channel.type === ChannelType.GuildVoice &&
             channel.parentId === categoryChannel.id
           ) {
-            channel.delete();
+            return channel.delete();
           }
         });
 
         const allMessages: any[] = [];
 
-        interaction.guild?.channels.cache.map((channel) => {
-          if (
-            channel.type === ChannelType.GuildText &&
-            channel.parentId === categoryChannel.id
-          ) {
-            fetchChannel(channel as TextBasedChannel).then(
-              async (messages) => {
+        const awaitingPromises = interaction.guild?.channels.cache.map(
+          async (channel) => {
+            if (
+              channel.type === ChannelType.GuildText &&
+              channel.parentId === categoryChannel.id
+            ) {
+              try {
+                const messages = await fetchAllMessages(
+                  channel as TextBasedChannel
+                );
                 allMessages.push(messages);
 
                 // Wait until fetchAllMessages is completed before deleting the channels
                 await channel.delete();
+              } catch (err) {
+                console.error(
+                  "Failed to fetch messages or delete channel during archiving.",
+                  err
+                );
               }
-            );
+              return true;
+            }
           }
-        });
+        );
+        if (awaitingPromises !== undefined) await Promise.all(awaitingPromises);
 
         await categoryChannel.delete();
 
         interaction.guild?.roles.cache.map((role) => {
           if (role.name === `${ctfName}`) {
-            role.delete();
+            return role.delete();
           }
         });
 
+        interface Message {
+          channel: string;
+          content: string;
+          author: string;
+          timestamp: string;
+        }
 
         // put the archive in the archive channel of the ctf in the description
         const niceMessages: string[] = allMessages.map((messages) => {
@@ -161,7 +185,7 @@ export default (client: Client): void => {
             channelName = messages[0].channel;
             niceMessage += `## ${channelName}\n`;
 
-            messages.forEach((message: customMessage) => {
+            messages.forEach((message: Message) => {
               if (channelName != message.channel) {
                 channelName = message.channel;
                 niceMessage = `## ${channelName}\n`;
@@ -183,7 +207,7 @@ export default (client: Client): void => {
 
         const ctfId = Number(await getCtfIdFromDatabase(ctfName));
 
-        const MAX_PAD_LENGTH = 100000;
+        const MAX_PAD_LENGTH = config.pad.documentMaxLength - 100; // some margin to be safe
 
         const pads = [];
         let currentPadMessages = [];
@@ -197,7 +221,7 @@ export default (client: Client): void => {
           if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
             // Create a new pad
             const padUrl = await createPad(
-              `${ctfName} archive (${padIndex})`,
+              `${ctfName} Discord archive (${padIndex})`,
               currentPadMessages.join("\n")
             );
 
@@ -213,33 +237,42 @@ export default (client: Client): void => {
           currentPadMessages.push(message);
           currentPadLength += messageLength;
         }
+        let firstPadContent = "";
+        if (pads.length > 0) {
+          // Create the final pad for the remaining messages
+          const padUrl = await createPad(
+            `${ctfName} Discord archive (${padIndex})`,
+            currentPadMessages.join("\n")
+          );
+          pads.push(padUrl);
 
-        // Create the final pad for the remaining messages
-        const padUrl = await createPad(
-          `${ctfName} archive (${padIndex})`,
-          currentPadMessages.join("\n")
-        );
-        pads.push(padUrl);
+          // Create the first pad with links to other pads
+          firstPadContent = pads
+            .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
+            .join("\n");
+        } else {
+          firstPadContent = currentPadMessages.join("\n");
+        }
 
-        // Create the first pad with links to other pads
-        const firstPadContent = pads
-          .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
-          .join("\n");
         const firstPadUrl = await createPad(
-          `${ctfName} archive`,
+          `${ctfName} Discord archive`,
           firstPadContent
         );
 
         await createTask(
-          `${ctfName} archive`,
-          `Archive of ${ctfName}`,
+          `${ctfName} Discord archive`,
+          `Discord archive of ${ctfName}`,
           "archive",
           "",
           firstPadUrl,
           ctfId
         );
         // remove message
-        interaction.deleteReply();
+        interaction.deleteReply().catch((err) => {
+          console.error(
+            "Failed to delete reply of bot. Can be caused due to channel being archived and deleted., err"
+          );
+        });
       }
     }
 
@@ -249,9 +282,16 @@ export default (client: Client): void => {
   });
 };
 
-async function fetchChannel(channel: TextBasedChannel): Promise<customMessage[]> {
-
-  const messages = await channel.messages.fetch({ limit: 100 });
+async function fetchAllMessages(channel: TextBasedChannel): Promise<any> {
+  let messages = new Collection<Snowflake, Message>();
+  let channelMessages = await channel.messages.fetch({ limit: 100 });
+  while (channelMessages.size > 0) {
+    messages = messages.concat(channelMessages);
+    channelMessages = await channel.messages.fetch({
+      limit: 100,
+      before: channelMessages.last()!.id,
+    });
+  }
 
   const messagesCollection: any[] = [];
 
@@ -275,9 +315,7 @@ async function fetchChannel(channel: TextBasedChannel): Promise<customMessage[]>
 
     content += message.content;
 
-
-
-    const messageObject : customMessage = {
+    const messageObject = {
       channel: channelName,
       content: content,
       author: author,

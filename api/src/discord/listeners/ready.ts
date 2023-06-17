@@ -13,7 +13,9 @@ export default (client: Client): void => {
       activities: [{ name: "CTFs", type: ActivityType.Playing }],
     });
 
-    client.user?.setAvatar("src/discord/boticon.png");
+    client.user
+      ?.setAvatar("src/discord/boticon.png")
+      .catch((err) => console.error("Failed to change avatar of bot.", err));
 
     await client.application.commands.set(Commands);
     interactionCreate(client);
