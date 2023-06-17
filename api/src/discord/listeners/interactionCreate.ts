@@ -268,7 +268,6 @@ export default (client: Client): void => {
         await createTask(
           `${ctfName} Discord archive`,
           `Discord archive of ${ctfName}`,
-          "archive",
           "",
           firstPadUrl,
           ctfId
@@ -276,7 +275,8 @@ export default (client: Client): void => {
         // remove message
         interaction.deleteReply().catch((err) => {
           console.error(
-            "Failed to delete reply of bot. Can be caused due to channel being archived and deleted., err"
+            "Failed to delete reply of bot. Can be caused due to channel being archived and deleted.err",
+            err
           );
         });
       }

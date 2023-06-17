@@ -132,7 +132,6 @@ export async function getTaskFromId(taskId: bigint): Promise<Task> {
 export async function createTask(
   title: string,
   description: string,
-  category: string,
   flag: string,
   padUrl: string,
   ctfId: number
@@ -141,10 +140,10 @@ export async function createTask(
 
   try {
     const query = `
-            INSERT INTO ctfnote.task (title, description, category, flag, pad_url, ctf_id)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO ctfnote.task (title, description, flag, pad_url, ctf_id)
+            VALUES ($1, $2, $3, $4, $5)
         `;
-    const values = [title, description, category, flag, padUrl, ctfId];
+    const values = [title, description, flag, padUrl, ctfId];
     await pgClient.query(query, values);
   } catch (error) {
     console.error("Failed to create a task in the database:", error);
