@@ -70,13 +70,12 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
     await interaction.editReply({
       content: "Congrats! Task successfully solved!",
     });
+    return handleTaskSolved(challengeId);
   } else {
     await interaction.editReply({
       content: "Task is already solved. Please change the flag in CTFNote.",
     });
   }
-
-  return handleTaskSolved(challengeId);
 }
 
 export const SolveTask: Command = {
