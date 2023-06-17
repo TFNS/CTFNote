@@ -129,7 +129,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     ) {
       if (args.input.patch.flag !== "") {
         handleTaskSolved(args.input.id);
-      }else{
+      } else {
         const task = await getTaskFromId(args.input.id);
 
         const channel = guild?.channels.cache.find(
