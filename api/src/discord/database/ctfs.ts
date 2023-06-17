@@ -68,11 +68,11 @@ export async function getChallengesFromDatabase(
     //make a query to get all the challenges from a ctf
 
     const query =
-      "SELECT title, description, id, ctf_id FROM ctfnote.task WHERE ctf_id = $1 ORDER BY title";
+      "SELECT title, description, id, ctf_id, flag FROM ctfnote.task WHERE ctf_id = $1 ORDER BY title";
     const values = [ctfId];
     const queryResult = await pgClient.query(query, values);
 
-    return queryResult.rows.map((row) => row);
+    return queryResult.rows;
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
     return [];
@@ -108,7 +108,7 @@ export async function getTaskFromId(taskId: bigint): Promise<Task> {
     //make a query to get all the challenges from a ctf
 
     const query =
-      "SELECT title, ctf_id, id, description FROM ctfnote.task WHERE id = $1 LIMIT 1";
+      "SELECT title, ctf_id, id, description, flag FROM ctfnote.task WHERE id = $1 LIMIT 1";
     const values = [taskId];
     const queryResult = await pgClient.query(query, values);
 
@@ -118,6 +118,7 @@ export async function getTaskFromId(taskId: bigint): Promise<Task> {
       title: queryResult.rows[0].title as string,
       description: queryResult.rows[0].description as string,
       tags: undefined,
+      flag: queryResult.rows[0].flag as string,
     };
 
     return task;

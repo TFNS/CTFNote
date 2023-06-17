@@ -6,6 +6,7 @@ export interface Task {
   title: string;
   description: string;
   ctf_id: bigint;
+  flag: string;
 }
 
 export async function getTaskByCtfIdAndNameFromDatabase(
@@ -18,7 +19,7 @@ export async function getTaskByCtfIdAndNameFromDatabase(
     //make a query to get all the challenges from a ctf
 
     const query =
-      "SELECT title, ctf_id, id, description FROM ctfnote.task WHERE ctf_id = $1 AND title = $2 LIMIT 1";
+      "SELECT title, ctf_id, id, description, flag FROM ctfnote.task WHERE ctf_id = $1 AND title = $2 LIMIT 1";
     const values = [ctfId, name];
     const queryResult = await pgClient.query(query, values);
 
@@ -28,6 +29,7 @@ export async function getTaskByCtfIdAndNameFromDatabase(
       title: queryResult.rows[0].title as string,
       description: queryResult.rows[0].description as string,
       tags: undefined,
+      flag: queryResult.rows[0].flag as string,
     };
 
     return task;

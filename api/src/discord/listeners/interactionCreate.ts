@@ -96,7 +96,10 @@ export default (client: Client): void => {
         for (const challenge of challenges) {
           interaction.guild?.channels
             .create({
-              name: `${challenge.title}`,
+              name:
+                challenge.flag != ""
+                  ? `solved-${challenge.title}`
+                  : `${challenge.title}`,
               type: ChannelType.GuildText,
               parent: channel?.id,
               topic: `${challenge.title}, tags: ${challenge.category}`,
