@@ -6,14 +6,16 @@ import config from "../config";
 function buildNoteContent(
   title: string,
   description?: string,
-  category?: string
+  tags?: string[]
 ): string {
   let note = "";
 
   note += `# ${title}`;
 
-  if (category) {
-    note += ` - ${category}`;
+  if (tags) {
+    for (const tag of tags) {
+      note += ` - ${tag}`;
+    }
   }
 
   note += "\n\n";
@@ -32,7 +34,7 @@ function buildNoteContent(
 async function createPad(
   title: string,
   description?: string,
-  category?: string
+  tags?: string[]
 ): Promise<string> {
   const options = {
     headers: {
@@ -46,7 +48,7 @@ async function createPad(
   try {
     const res = await axios.post(
       config.pad.createUrl,
-      buildNoteContent(title, description, category),
+      buildNoteContent(title, description, tags),
       options
     );
     return res.headers.location;
@@ -62,7 +64,7 @@ export default makeExtendSchemaPlugin((build) => {
       input CreateTaskInput {
         ctfId: Int!
         title: String!
-        category: String
+        tags: [String]
         description: String
         flag: String
       }
@@ -80,7 +82,7 @@ export default makeExtendSchemaPlugin((build) => {
       Mutation: {
         createTask: async (
           _query,
-          { input: { title, description, category, flag, ctfId } },
+          { input: { title, description, tags, flag, ctfId } },
           { pgClient },
           resolveInfo
         ) => {
@@ -94,7 +96,7 @@ export default makeExtendSchemaPlugin((build) => {
             return {};
           }
 
-          const padPathOrUrl = await createPad(title, description, category);
+          const padPathOrUrl = await createPad(title, description, tags);
 
           let padPath: string;
           if (padPathOrUrl.startsWith("/")) {
@@ -109,15 +111,8 @@ export default makeExtendSchemaPlugin((build) => {
             const {
               rows: [newTask],
             } = await pgClient.query(
-              `SELECT * FROM ctfnote_private.create_task($1, $2, $3, $4, $5, $6)`,
-              [
-                title,
-                description ?? "",
-                category ?? "???",
-                flag ?? "",
-                padUrl,
-                ctfId,
-              ]
+              `SELECT * FROM ctfnote_private.create_task($1, $2, $3, $4, $5)`,
+              [title, description ?? "", flag ?? "", padUrl, ctfId]
             );
             const [row] =
               await resolveInfo.graphile.selectGraphQLResultFromTable(
@@ -128,6 +123,7 @@ export default makeExtendSchemaPlugin((build) => {
                   );
                 }
               );
+
             return {
               data: row,
               query: build.$$isQuery,

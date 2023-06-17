@@ -12,6 +12,7 @@ import {
   SubscribeToCtfDeletedDocument,
   SubscribeToCtfDeletedSubscription,
   SubscribeToCtfDeletedSubscriptionVariables,
+  TagFragment,
   TaskFragment,
   useCreateCtfMutation,
   useCtfsQuery,
@@ -33,6 +34,7 @@ import {
 import { CtfInvitation, makeId } from './models';
 import { Ctf, Profile, Task } from './models';
 import { wrapQuery } from './utils';
+import { buildTag } from './tags';
 
 type FullCtfResponse = {
   ctf: CtfFragment & {
@@ -67,6 +69,9 @@ export function buildTask(task: TaskFragment): Task {
     workOnTasks: task.workOnTasks.nodes.map((n) =>
       makeId<Profile>(n.profileId)
     ),
+    assignedTags: task.assignedTags.nodes
+      .filter((t) => t.__typename && t.tag?.__typename)
+      .map((t) => buildTag(t.tag as TagFragment)),
   };
 }
 

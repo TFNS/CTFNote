@@ -1,0 +1,81 @@
+fragment TagFragment on Tag {
+  nodeId
+  id
+  tag
+}
+
+query getTags {
+  tags {
+    nodes {
+      ...TagFragment
+    }
+  }
+}
+
+query getTagById($id: Int!) {
+  tag(id: $id) {
+    tag
+    id
+  }
+}
+
+fragment AssignedTagsFragment on AssignedTag {
+  nodeId
+  taskId
+  tagId
+  tag {
+    ...TagFragment
+  }
+}
+
+fragment TaskForTagsFragement on AssignedTag {
+  nodeId
+  taskId
+  tagId
+  task {
+    ...TaskFragment
+  }
+}
+
+# Mutations
+mutation addTagsForTask($tags: [String!], $taskId: Int!) {
+  addTagsForTask(input: { tags: $tags, taskid: $taskId }) {
+    clientMutationId
+  }
+}
+
+subscription subscribeToTag {
+  listen(topic: "update:tag") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Tag {
+        ...TagFragment
+      }
+    }
+  }
+}
+
+subscription subscribeToTagCreated {
+  listen(topic: "created:tag") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Tag {
+        ...TagFragment
+      }
+    }
+  }
+}
+
+subscription subscribeToTagDeleted {
+  listen(topic: "deleted:tag") {
+    relatedNodeId
+    relatedNode {
+      nodeId
+      ... on Tag {
+        ...TagFragment
+      }
+    }
+  }
+}

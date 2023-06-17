@@ -58,7 +58,7 @@ const HTBParser: Parser = {
 
       tasks.push({
         title: challenge.name,
-        category: category,
+        tags: [category],
         description: challenge.description,
       });
     }

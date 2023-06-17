@@ -10,18 +10,18 @@
       </div>
       <div class="col col-3 col-grow">
         <q-select
-          v-model="categoryFilter"
-          :options="categories"
+          v-model="tagFilter"
+          :options="tags"
           use-chips
           multiple
-          label="Filter by category"
+          label="Filter by tag"
           emit-value
         >
-          <template v-if="categoryFilter.length" #append>
+          <template v-if="tagFilter.length" #append>
             <q-icon
               name="cancel"
               class="cursor-pointer"
-              @click.stop="categoryFilter = []"
+              @click.stop="tagFilter = []"
             />
           </template>
         </q-select>
@@ -113,6 +113,7 @@ import TaskExportDialogVue from '../Dialogs/TaskExportDialog.vue';
 import TaskCards from './TaskCards.vue';
 import TaskTable from './TaskTable.vue';
 import keys from '../../injectionKeys';
+import { tagsSortFn } from 'src/ctfnote/tags';
 
 const displayOptions = ['classic', 'dense', 'ultradense', 'table'] as const;
 
@@ -129,7 +130,7 @@ export default defineComponent({
     const me = ctfnote.me.injectMe();
 
     const filter = ref('');
-    const categoryFilter = ref<string[]>([]);
+    const tagFilter = ref<string[]>([]);
     const hideSolved = makePersistant('task-hide-solved', ref(false));
     const myTasks = makePersistant('task-my-tasks', ref(false));
 
@@ -142,13 +143,16 @@ export default defineComponent({
         return false;
 
       // Hide task if there is a filter and category not in filter
-      const catFilter = categoryFilter.value;
-      if (catFilter.length && !catFilter.includes(task.category ?? '')) {
+      const tFilter = tagFilter.value;
+      if (
+        tFilter.length &&
+        !tFilter.some((t) => task.assignedTags.some((tt) => tt.tag == t))
+      ) {
         return false;
       }
 
-      // Filter using needle on title, category and description
-      const fields = ['title', 'category', 'description'] as const;
+      // Filter using needle on title and description
+      const fields = ['title', 'description'] as const;
 
       const checkField = (f: (typeof fields)[number]): boolean =>
         task[f]?.toLowerCase().includes(needle) ?? false;
@@ -156,9 +160,9 @@ export default defineComponent({
       return fields.some((name) => checkField(name));
     });
 
-    provide(keys.filterCategory, (category: string) => {
-      if (!categoryFilter.value.includes(category)) {
-        categoryFilter.value.push(category);
+    provide(keys.filterTag, (category: string) => {
+      if (!tagFilter.value.includes(category)) {
+        tagFilter.value.push(category);
       }
     });
 
@@ -167,7 +171,7 @@ export default defineComponent({
       hideSolved,
       myTasks,
       filter,
-      categoryFilter,
+      tagFilter,
       displayOptions,
       me,
     };
@@ -179,23 +183,18 @@ export default defineComponent({
     useCard() {
       return this.displayMode != 'table';
     },
-    categories() {
-      return [...new Set(this.tasks.map((t) => t.category))];
+    tags() {
+      return [
+        ...new Set(
+          this.tasks.flatMap((t) => t.assignedTags.map((tt) => tt.tag))
+        ),
+      ];
     },
     sortedTasks() {
       const tasks = this.tasks;
       return tasks
         .slice()
-        .sort((a, b) => {
-          const acat = (a.category ?? '').toLowerCase();
-          const bcat = (b.category ?? '').toLowerCase();
-          if (acat == bcat) {
-            const atitle = a.title.toLowerCase();
-            const btitle = a.title.toLowerCase();
-            return atitle == btitle ? 0 : atitle < btitle ? -1 : 1;
-          }
-          return acat < bcat ? -1 : 1;
-        })
+        .sort(tagsSortFn)
         .sort((a) => {
           return a.solved ? 1 : -1;
         });
