@@ -16,8 +16,6 @@ export async function getTaskByCtfIdAndNameFromDatabase(
   const pgClient = await connectToDatabase();
 
   try {
-    //make a query to get all the challenges from a ctf
-
     const query =
       "SELECT title, ctf_id, id, description, flag FROM ctfnote.task WHERE ctf_id = $1 AND title = $2 LIMIT 1";
     const values = [ctfId, name];
@@ -53,8 +51,6 @@ export async function setFlagForChallengeId(
   const pgClient = await connectToDatabase();
 
   try {
-    //make a query to get all the challenges from a ctf
-
     const query =
       "UPDATE ctfnote.task SET flag = $2 WHERE id = $1 AND flag = '' ";
     const values = [challengeId, flag];
