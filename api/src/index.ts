@@ -18,6 +18,7 @@ import { Pool } from "pg";
 import { icalRoute } from "./routes/ical";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
+import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -49,6 +50,7 @@ function createOptions() {
       createTasKPlugin,
       ConnectionFilterPlugin,
       PgManyToManyPlugin,
+      ProfileSubscriptionPlugin,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
