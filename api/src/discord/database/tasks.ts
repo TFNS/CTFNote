@@ -1,20 +1,36 @@
 import { connectToDatabase } from "./database";
 
-export async function getChallengeIdByCtfIdAndNameFromDatabase(
+export interface Task {
+  id: bigint;
+  tags: string[] | undefined;
+  title: string;
+  description: string;
+  ctf_id: bigint;
+}
+
+export async function getTaskByCtfIdAndNameFromDatabase(
   ctfId: bigint,
   name: string
-): Promise<bigint | null> {
+): Promise<Task> {
   const pgClient = await connectToDatabase();
 
   try {
     //make a query to get all the challenges from a ctf
 
     const query =
-      "SELECT id FROM ctfnote.task WHERE ctf_id = $1 AND title = $2 LIMIT 1";
+      "SELECT title, ctf_id, id, description FROM ctfnote.task WHERE ctf_id = $1 AND title = $2 LIMIT 1";
     const values = [ctfId, name];
     const queryResult = await pgClient.query(query, values);
-    // Extract the "id" field from the first row
-    return queryResult.rows[0].id;
+
+    const task: Task = {
+      id: queryResult.rows[0].id as bigint,
+      ctf_id: queryResult.rows[0].ctf_id as bigint,
+      title: queryResult.rows[0].title as string,
+      description: queryResult.rows[0].description as string,
+      tags: undefined,
+    };
+
+    return task;
   } catch (error) {
     console.error(
       "Failed to fetch CTF task from the database:",
@@ -22,7 +38,7 @@ export async function getChallengeIdByCtfIdAndNameFromDatabase(
       ctfId,
       name
     );
-    return null;
+    return {} as Task;
   } finally {
     pgClient.release();
   }

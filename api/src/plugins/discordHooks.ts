@@ -17,10 +17,10 @@ import config from "../config";
 export async function handleTaskSolved(id: bigint) {
   const task = await getTaskFromId(id);
 
-  return sendMessageFromTaskId(id, `${task[0]} is solved!`)
+  return sendMessageFromTaskId(id, `${task.title} is solved!`)
     .then(async (channel) => {
       if (channel !== null) {
-        return channel.setName(`${task[0]}-solved`);
+        return channel.setName(`${task.title}-solved`);
       }
     })
     .catch((err) => {
@@ -80,7 +80,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           name: `${args.input.title}`,
           type: ChannelType.GuildText,
           parent: categoryChannel.id,
-          topic: `${args.input.title}, tags: ${args.input.category}`,
+          topic: `${args.input.title}, tags: ${args.input.tags.join(", ")}`,
         })
         .catch((err) => {
           console.error("Failed creating category.", err);
@@ -97,7 +97,9 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       if (mainChannel !== undefined) {
         mainChannel
           .send(
-            `New task created: ${args.input.title} - ${args.input.category}`
+            `New task created: ${args.input.title} - ${args.input.tags.join(
+              ", "
+            )}`
           )
           .catch((err) => {
             console.error("Failed to send notification about a new task.", err);
@@ -110,13 +112,13 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       const channel = guild?.channels.cache.find(
         (channel) =>
           channel.type === ChannelType.GuildText &&
-          channel.name === `${task[0]}`
+          channel.name === `${task.title}`
       ) as CategoryChannel | undefined;
 
       if (channel === undefined) return null;
 
       channel
-        .setName(`${task[0]}-deleted`)
+        .setName(`${task.title}-deleted`)
         .catch((err) =>
           console.error("Failed to mark channel as deleted.", err)
         );
@@ -135,13 +137,13 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         const channel = guild?.channels.cache.find(
           (channel) =>
             channel.type === ChannelType.GuildText &&
-            channel.name === `${task[0]}-solved`
+            channel.name === `${task.title}-solved`
         ) as CategoryChannel | undefined;
 
         if (channel === undefined) return null;
 
         channel
-          .setName(`${task[0]}`)
+          .setName(`${task.title}`)
           .catch((err) =>
             console.error("Failed to mark channel as unsolved.", err)
           );
@@ -203,8 +205,7 @@ async function sendMessageFromTaskId(
   message: string
 ): Promise<GuildBasedChannel | null> {
   const task = await getTaskFromId(id);
-  const taskTitle = task[0].toLowerCase();
-  const ctfName = await getCTFNameFromId(BigInt(task[2]));
+  const ctfName = await getCTFNameFromId(BigInt(task.ctf_id));
 
   const discordClient = getDiscordClient();
 
@@ -218,11 +219,10 @@ async function sendMessageFromTaskId(
   }
 
   const channelsArray = Array.from(guild.channels.cache.values());
-
   for (const channel of channelsArray) {
     if (
       channel.type === ChannelType.GuildText &&
-      channel.name === `${taskTitle}` &&
+      channel.topic?.startsWith(task.title) &&
       channel.parent?.name === ctfName
     ) {
       channel.send(message);

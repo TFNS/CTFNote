@@ -17,7 +17,7 @@ import {
   getCtfIdFromDatabase,
 } from "../database/ctfs";
 import {
-  getChallengeIdByCtfIdAndNameFromDatabase,
+  getTaskByCtfIdAndNameFromDatabase,
   setFlagForChallengeId,
 } from "../database/tasks";
 import { handleTaskSolved } from "../../plugins/discordHooks";
@@ -56,21 +56,18 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
   if (nameAndTagsSplitted.length < 2) return accessDenied(interaction);
   const name = nameAndTagsSplitted[0];
 
-  const challengeId = await getChallengeIdByCtfIdAndNameFromDatabase(
-    ctfId,
-    name
-  );
-  if (challengeId == null) return accessDenied(interaction);
+  const task = await getTaskByCtfIdAndNameFromDatabase(ctfId, name);
+  if (task.id == null) return accessDenied(interaction);
 
   const flag = interaction.options.get("flag", true).value as string;
   if (flag == null || flag == "") return accessDenied(interaction);
 
-  const result = await setFlagForChallengeId(challengeId, flag);
+  const result = await setFlagForChallengeId(task.id, flag);
   if (result) {
     await interaction.editReply({
       content: "Congrats! Task successfully solved!",
     });
-    return handleTaskSolved(challengeId);
+    return handleTaskSolved(task.id);
   } else {
     await interaction.editReply({
       content: "Task is already solved. Please change the flag in CTFNote.",
