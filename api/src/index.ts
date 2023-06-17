@@ -17,6 +17,7 @@ import uploadScalar from "./plugins/uploadScalar";
 import { Pool } from "pg";
 import { icalRoute } from "./routes/ical";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
+import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
 import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
 
 function getDbUrl(role: "user" | "admin") {
@@ -48,6 +49,7 @@ function createOptions() {
       uploadLogoPlugin,
       createTasKPlugin,
       ConnectionFilterPlugin,
+      PgManyToManyPlugin,
       ProfileSubscriptionPlugin,
     ],
     ownerConnectionString: getDbUrl("admin"),
@@ -65,7 +67,24 @@ function createOptions() {
     postgraphileOptions.allowExplain = true;
     postgraphileOptions.jwtSecret = "DEV";
     postgraphileOptions.showErrorStack = "json" as const;
-    postgraphileOptions.extendedErrors = ["hint", "detail", "errcode"];
+    postgraphileOptions.extendedErrors = [
+      "severity",
+      "code",
+      "detail",
+      "hint",
+      "position",
+      "internalPosition",
+      "internalQuery",
+      "where",
+      "schema",
+      "table",
+      "column",
+      "dataType",
+      "constraint",
+      "file",
+      "line",
+      "routine",
+    ];
 
     postgraphileOptions.graphileBuildOptions = {
       connectionFilterAllowedOperators: ["includesInsensitive"],

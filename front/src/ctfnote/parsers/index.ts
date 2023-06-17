@@ -6,7 +6,7 @@ import PicoParser from './pico';
 
 export type ParsedTask = {
   title: string;
-  category: string;
+  tags: string[];
   description?: string;
   keep?: boolean;
 };

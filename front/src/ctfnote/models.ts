@@ -48,7 +48,7 @@ export type Task = {
   description: string;
   flag: string;
   solved: boolean;
-  category: string;
+  assignedTags: Tag[];
   workOnTasks: Id<Profile>[];
   ctf?: Ctf | string;
 };
@@ -115,4 +115,10 @@ export type User = {
   login: string;
   role: Role;
   profile: Profile;
+};
+
+export type Tag = {
+  nodeId: string;
+  id: Id<Tag>;
+  tag: string;
 };
