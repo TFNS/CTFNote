@@ -112,8 +112,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 
       const channel = guild?.channels.cache.find(
         (channel) =>
-          channel.type === ChannelType.GuildText &&
-          channel.name === `${task.title}`
+          channel.type === ChannelType.GuildText && channel.topic === task.title
       ) as CategoryChannel | undefined;
 
       if (channel === undefined) return null;
