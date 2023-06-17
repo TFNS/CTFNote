@@ -129,6 +129,22 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     ) {
       if (args.input.patch.flag !== "") {
         handleTaskSolved(args.input.id);
+      }else{
+        const task = await getTaskFromId(args.input.id);
+
+        const channel = guild?.channels.cache.find(
+          (channel) =>
+            channel.type === ChannelType.GuildText &&
+            channel.name === `${task[0]}-solved`
+        ) as CategoryChannel | undefined;
+
+        if (channel === undefined) return null;
+
+        channel
+          .setName(`${task[0]}`)
+          .catch((err) =>
+            console.error("Failed to mark channel as unsolved.", err)
+          );
       }
     }
     if (fieldContext.scope.fieldName === "startWorkingOn") {
