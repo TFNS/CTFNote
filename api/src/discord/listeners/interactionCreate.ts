@@ -19,6 +19,7 @@ import {
 } from "../database/ctfs";
 import { createPad } from "../../plugins/createTask";
 import config from "../../config";
+import { createTopic } from "../database/tasks";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -91,7 +92,7 @@ export default (client: Client): void => {
 
         // create for every challenge a channel
         const ctfId: bigint = await getCtfIdFromDatabase(ctfName);
-        const challenges: any = await getChallengesFromDatabase(ctfId);
+        const challenges = await getChallengesFromDatabase(ctfId);
 
         for (const challenge of challenges) {
           interaction.guild?.channels
@@ -102,7 +103,7 @@ export default (client: Client): void => {
                   : `${challenge.title}`,
               type: ChannelType.GuildText,
               parent: channel?.id,
-              topic: `${challenge.title}, tags: ${challenge.category}`,
+              topic: createTopic(challenge.title, challenge.tags),
             })
             .then((challengeChannel) => {
               if (challenge.description !== "") {

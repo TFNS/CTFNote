@@ -13,6 +13,7 @@ import {
 } from "../discord/database/ctfs";
 import { getDiscordClient, usingDiscordBot } from "../discord";
 import config from "../config";
+import { createTopic } from "../discord/database/tasks";
 
 export async function handleTaskSolved(id: bigint) {
   const task = await getTaskFromId(id);
@@ -42,7 +43,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "createTask" &&
     fieldContext.scope.fieldName !== "deleteTask" &&
     fieldContext.scope.fieldName !== "startWorkingOn" &&
-    fieldContext.scope.fieldName !== "stopWorkingOn"
+    fieldContext.scope.fieldName !== "stopWorkingOn" &&
+    fieldContext.scope.fieldName !== "addTagsForTask"
   ) {
     return null;
   }
@@ -80,7 +82,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           name: `${args.input.title}`,
           type: ChannelType.GuildText,
           parent: categoryChannel.id,
-          topic: `${args.input.title}, tags: ${args.input.tags.join(", ")}`,
+          topic: createTopic(args.input.title, args.input.tags),
         })
         .catch((err) => {
           console.error("Failed creating category.", err);
@@ -127,52 +129,82 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     // handle task (un)solved
     if (
       fieldContext.scope.fieldName === "updateTask" &&
-      args.input.patch.flag !== null &&
       args.input.id !== null
     ) {
-      if (args.input.patch.flag !== "") {
-        handleTaskSolved(args.input.id);
-      } else {
-        const task = await getTaskFromId(args.input.id);
+      console.log(args.input);
+      const task = await getTaskFromId(args.input.id);
+      let title = task.title;
+      if (args.input.patch.title !== null) {
+        title = args.input.patch.title;
+      }
+      const tags = task.tags;
 
+      if (args.input.patch.flag !== null) {
+        if (args.input.patch.flag !== "") {
+          handleTaskSolved(args.input.id);
+        } else {
+          const task = await getTaskFromId(args.input.id);
+
+          const channel = guild?.channels.cache.find(
+            (channel) =>
+              channel.type === ChannelType.GuildText &&
+              channel.topic?.startsWith(`${task.title}, tags:`)
+          ) as TextChannel | undefined;
+
+          if (channel === undefined) return null;
+
+          channel
+            .setName(`${task.title}`)
+            .catch((err) =>
+              console.error("Failed to mark channel as unsolved.", err)
+            );
+        }
+      }
+
+      // handle task title change
+      if (
+        args.input.patch.title !== null &&
+        args.input.patch.title !== task.title
+      ) {
         const channel = guild?.channels.cache.find(
           (channel) =>
             channel.type === ChannelType.GuildText &&
-            channel.topic?.startsWith(`${task.title}`)
+            channel.topic?.startsWith(`${task.title}, tags:`)
         ) as TextChannel | undefined;
 
         if (channel === undefined) return null;
-
+        console.log("title change", createTopic(title, tags));
         channel
-          .setName(`${task.title}`)
-          .catch((err) =>
-            console.error("Failed to mark channel as unsolved.", err)
-          );
+          .edit({
+            name: `${title}`,
+            topic: createTopic(title, tags),
+          })
+          .catch((err) => console.error("Failed to rename channel.", err));
       }
     }
 
-    // handle task title change
+    // handle tag change
     if (
-      fieldContext.scope.fieldName === "updateTask" &&
-      args.input.patch.title !== null &&
-      args.input.id !== null
+      fieldContext.scope.fieldName === "addTagsForTask" &&
+      args.input.tags !== null &&
+      args.input.taskid !== null
     ) {
-      const task = await getTaskFromId(args.input.id);
-
+      const task = await getTaskFromId(args.input.taskid);
+      console.log(task, args.input);
       const channel = guild?.channels.cache.find(
         (channel) =>
           channel.type === ChannelType.GuildText &&
-          channel.topic?.startsWith(`${task.title}`)
+          channel.topic?.startsWith(`${task.title}, tags:`)
       ) as TextChannel | undefined;
-
       if (channel === undefined) return null;
-
+      console.log("tag change", createTopic(task.title, args.input.tags));
       channel
         .edit({
-          name: `${args.input.patch.title}`,
-          topic: channel.topic?.replace(task.title, args.input.patch.title),
+          topic: createTopic(task.title, args.input.tags),
         })
-        .catch((err) => console.error("Failed to rename channel.", err));
+        .catch((err) =>
+          console.error("Failed to change topic of channel.", err)
+        );
     }
 
     if (fieldContext.scope.fieldName === "startWorkingOn") {
@@ -248,7 +280,7 @@ async function sendMessageFromTaskId(
   for (const channel of channelsArray) {
     if (
       channel.type === ChannelType.GuildText &&
-      channel.topic?.startsWith(task.title) &&
+      channel.topic?.startsWith(`${task.title}, tags:`) &&
       channel.parent?.name === ctfName
     ) {
       channel.send(message);

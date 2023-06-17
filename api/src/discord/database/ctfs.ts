@@ -68,7 +68,7 @@ export async function getChallengesFromDatabase(
     //make a query to get all the challenges from a ctf
 
     const query =
-      "SELECT title, description, id, ctf_id, flag FROM ctfnote.task WHERE ctf_id = $1 ORDER BY title";
+      "SELECT title, description, tsk.id, ctf_id, flag, array_agg(tag) AS tags FROM ctfnote.task tsk LEFT JOIN ctfnote.assigned_tags tt ON tsk.id = tt.task_id LEFT JOIN ctfnote.tag t ON tt.tag_id = t.id WHERE ctf_id = $1 GROUP BY tsk.id ORDER BY title";
     const values = [ctfId];
     const queryResult = await pgClient.query(query, values);
 
@@ -108,7 +108,7 @@ export async function getTaskFromId(taskId: bigint): Promise<Task> {
     //make a query to get all the challenges from a ctf
 
     const query =
-      "SELECT title, ctf_id, id, description, flag FROM ctfnote.task WHERE id = $1 LIMIT 1";
+      "SELECT title, ctf_id, tsk.id, description, flag, array_agg(tag) as tags FROM ctfnote.task tsk LEFT JOIN ctfnote.assigned_tags tt ON tsk.id = tt.task_id LEFT JOIN ctfnote.tag t ON tt.tag_id = t.id WHERE tsk.id = $1 GROUP BY tsk.id LIMIT 1;";
     const values = [taskId];
     const queryResult = await pgClient.query(query, values);
 
@@ -117,7 +117,7 @@ export async function getTaskFromId(taskId: bigint): Promise<Task> {
       ctf_id: queryResult.rows[0].ctf_id as bigint,
       title: queryResult.rows[0].title as string,
       description: queryResult.rows[0].description as string,
-      tags: undefined,
+      tags: queryResult.rows[0].tags as string[],
       flag: queryResult.rows[0].flag as string,
     };
 
