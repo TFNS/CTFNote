@@ -1,0 +1,60 @@
+name: "Build and publish Docker images to GHCR"
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - "main"
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.job }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+    packages: write
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                component: ["front", "api", "db"]
+        steps:
+            - name: PrepareReg Names
+              run: |
+                  echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+                  echo IMAGE_TAG=$(echo ${{ github.ref }} | tr '[:upper:]' '[:lower:]' | awk '{split($0,a,"/"); print a[3]}') >> $GITHUB_ENV
+                  echo IMAGE_REPOSITORY_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Generate Docker metadata for ${{ matrix.component }}
+              id: meta-data
+              uses: docker/metadata-action@v4
+              with:
+                  images: ghcr.io/${{ env.IMAGE_REPOSITORY }}/${{ matrix.component }}
+                  tags: |
+                      type=raw,value=latest,enable={{is_default_branch}}
+                      type=ref,event=branch
+                      type=semver,pattern={{version}}
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v2
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v2
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ github.token }}
+            - name: Build and push
+              uses: docker/build-push-action@v4
+              with:
+                  push: true
+                  platforms: linux/amd64,linux/arm64
+                  context: ./${{ matrix.component }}
+                  tags: ${{ steps.meta-data.outputs.tags }}
+                  labels: ${{ steps.meta-data.outputs.labels }}
+                  cache-from: type=gha,scope=${{ matrix.component }}
+                  cache-to: type=gha,scope=${{ matrix.component }}

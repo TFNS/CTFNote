@@ -16,3 +16,46 @@ query SearchTasks($search: String!) {
     }
   }
 }
+
+query SearchTags($search: String!) {
+  tags(filter: { tag: { includesInsensitive: $search } }) {
+    nodes {
+      tasksByAssignedTagTagIdAndTaskId {
+        nodes {
+          ...TaskFragment
+          ctf {
+            ...CtfFragment
+          }
+        }
+      }
+    }
+  }
+}
+
+query SearchAll($search: String!) {
+  tags(filter: { tag: { includesInsensitive: $search } }) {
+    nodes {
+      tasksByAssignedTagTagIdAndTaskId {
+        nodes {
+          ...TaskFragment
+          ctf {
+            ...CtfFragment
+          }
+        }
+      }
+    }
+  }
+  tasks(filter: { title: { includesInsensitive: $search } }) {
+    nodes {
+      ...TaskFragment
+      ctf {
+        ...CtfFragment
+      }
+    }
+  }
+  ctfs(filter: { title: { includesInsensitive: $search } }) {
+    nodes {
+      ...CtfFragment
+    }
+  }
+}

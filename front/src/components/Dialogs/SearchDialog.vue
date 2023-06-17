@@ -8,7 +8,7 @@
           v-model="searchText"
           filled
           label="What are you searching for?"
-          hint="Search for title of CTF or task"
+          hint="Search for tag or title of CTF or task"
           autofocus
           :loading="loading"
           @update:model-value="onSearchChange"
@@ -20,19 +20,25 @@
         <q-list bordered separator>
           <q-item
             v-for="(item, i) in items"
-            :key="item.id"
+            :key="item.nodeId"
             :focused="i === selectedItemIndex"
             clickable
+            class="col"
             @click="onItemSelected(item)"
           >
-            <q-item-section>
+            <q-item-section class="col-3">
               <span>
                 {{ !!item.ctf ? item.ctf.title + ' / ' : '' }}
                 <b>{{ item.title }}</b>
               </span>
             </q-item-section>
-
-            <q-item-section side top>
+            <q-item-section side class="col-8">
+              <task-tags-list
+                v-if="item.assignedTags"
+                :tags="item.assignedTags"
+              ></task-tags-list>
+            </q-item-section>
+            <q-item-section side top class="col-1">
               <q-badge color="teal" :label="item.__typename" />
             </q-item-section>
           </q-item>
@@ -52,8 +58,12 @@ import ctfnote from 'src/ctfnote';
 import { safeSlugify } from 'src/ctfnote/ctfs';
 import { Ctf, Task } from 'src/ctfnote/models';
 import { defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue';
+import TaskTagsList from '../Task/TaskTagsList.vue';
 
 export default defineComponent({
+  components: {
+    TaskTagsList,
+  },
   emits: useDialogPluginComponent.emits,
   setup() {
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
@@ -111,15 +121,12 @@ export default defineComponent({
   },
   methods: {
     async onSearchChange() {
-      if (!this.searchText) {
+      if (!this.searchText || this.searchText.length < 2) {
         this.items = [];
         return;
       }
 
-      const ctfs = await ctfnote.search.searchCtfs(this.searchText);
-      const tasks = await ctfnote.search.searchTasks(this.searchText);
-
-      this.items = [...ctfs, ...tasks];
+      this.items = await ctfnote.search.searchAll(this.searchText);
     },
     onItemSelected(item: Ctf | Task) {
       function isCtf(item: Ctf | Task): item is Ctf {
@@ -155,6 +162,8 @@ export default defineComponent({
       });
 
       window.location.href = link.href;
+
+      this.dialogRef?.hide();
     },
     submit() {
       const selectedItem = this.items[this.selectedItemIndex];

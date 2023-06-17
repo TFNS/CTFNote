@@ -14,10 +14,14 @@ import createTasKPlugin from "./plugins/createTask";
 import importCtfPlugin from "./plugins/importCtf";
 import uploadLogoPlugin from "./plugins/uploadLogo";
 import uploadScalar from "./plugins/uploadScalar";
+import { Pool } from "pg";
+import { icalRoute } from "./routes/ical";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import OperationHook from "@graphile/operation-hooks";
 import discordHooks from "./plugins/discordHooks";
 import { getDiscordClient } from "./discord";
+import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
+import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -49,6 +53,8 @@ function createOptions() {
       createTasKPlugin,
       ConnectionFilterPlugin,
       discordHooks,
+      PgManyToManyPlugin,
+      ProfileSubscriptionPlugin,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
@@ -65,7 +71,24 @@ function createOptions() {
     postgraphileOptions.allowExplain = true;
     postgraphileOptions.jwtSecret = "DEV";
     postgraphileOptions.showErrorStack = "json" as const;
-    postgraphileOptions.extendedErrors = ["hint", "detail", "errcode"];
+    postgraphileOptions.extendedErrors = [
+      "severity",
+      "code",
+      "detail",
+      "hint",
+      "position",
+      "internalPosition",
+      "internalQuery",
+      "where",
+      "schema",
+      "table",
+      "column",
+      "dataType",
+      "constraint",
+      "file",
+      "line",
+      "routine",
+    ];
 
     postgraphileOptions.graphileBuildOptions = {
       connectionFilterAllowedOperators: ["includesInsensitive"],
@@ -79,6 +102,10 @@ function createOptions() {
 }
 
 function createApp(postgraphileOptions: PostGraphileOptions) {
+  const pool = new Pool({
+    connectionString: getDbUrl("user"),
+  });
+
   const app = express();
   app.use(graphqlUploadExpress());
   app.use(
@@ -89,7 +116,8 @@ function createApp(postgraphileOptions: PostGraphileOptions) {
       },
     })
   );
-  app.use(postgraphile(getDbUrl("user"), "ctfnote", postgraphileOptions));
+  app.use(postgraphile(pool, "ctfnote", postgraphileOptions));
+  app.use("/calendar.ics", icalRoute(pool));
   return app;
 }
 

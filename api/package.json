@@ -9,7 +9,7 @@
     "build": "tsc",
     "lint": "eslint --fix 'src/**/*.ts'",
     "format": "prettier --write 'src/**/*.ts'",
-    "dev": "NODE_ENV=development nodemon src/index.ts",
+    "dev": "DEBUG=postgraphile:postgres:error NODE_ENV=development nodemon src/index.ts",
     "dev:migrate": "DATABASE_URL= yarn run db-migrate -e dev up"
   },
   "lint-staged": {
@@ -29,6 +29,7 @@
     "graphile-utils": "^4.13.0",
     "graphql": "^16.6.0",
     "graphql-upload-ts": "^2.0.5",
+    "ical-generator": "^3.2.1",
     "postgraphile": "^4.13.0",
     "postgraphile-plugin-connection-filter": "^2.3.0",
     "postgres-migrations": "^5.3.0"

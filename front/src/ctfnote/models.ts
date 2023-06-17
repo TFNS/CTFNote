@@ -14,13 +14,17 @@ export type Maybe<T> = T | null;
 
 /* CTFNote Types */
 
-export type Profile = {
+export type PublicProfile = {
   id: Id<Profile>;
   username: string;
   role: Role;
   description: string;
   color: string;
   nodeId: string;
+};
+
+export type Profile = PublicProfile & {
+  lastactive: string;
 };
 
 export type Me = {
@@ -44,7 +48,7 @@ export type Task = {
   description: string;
   flag: string;
   solved: boolean;
-  category: string;
+  assignedTags: Tag[];
   workOnTasks: Id<Profile>[];
   ctf?: Ctf | string;
 };
@@ -101,6 +105,7 @@ export type Settings = {
 export type AdminSettings = Settings & {
   registrationPassword: string;
   registrationDefaultRole: Role;
+  icalPassword: string;
 };
 
 export type User = {
@@ -110,4 +115,10 @@ export type User = {
   login: string;
   role: Role;
   profile: Profile;
+};
+
+export type Tag = {
+  nodeId: string;
+  id: Id<Tag>;
+  tag: string;
 };

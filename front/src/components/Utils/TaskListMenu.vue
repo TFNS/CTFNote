@@ -3,26 +3,14 @@
     <q-btn-dropdown stretch flat round>
       <template #label>
         <div class="row q-gutter-md items-center">
-          <task-menu v-if="task" :task="task" />
+          <task-menu v-if="task" :task="task" :context-menu="true" />
           <div>{{ title }}</div>
-          <div class="col">
-            <q-badge v-if="task" :style="colorHash(task.category)">
-              {{ task.category }}
-            </q-badge>
-          </div>
         </div>
       </template>
       <template #default>
         <q-list>
-          <q-item
-            v-for="t of sortedTasks"
-            :key="t.nodeId"
-            v-close-popup
-            clickable
-            :to="taskLink(t)"
-          >
-            <task-menu :task="t" />
-            <q-item-section>
+          <q-item v-for="t of sortedTasks" :key="t.nodeId" clickable>
+            <q-item-section @click="taskLink(t)">
               <q-item-label>
                 <div class="row" style="max-width: 200px">
                   <div class="col">
@@ -39,15 +27,9 @@
               </q-item-label>
             </q-item-section>
             <q-item-section side>
-              <q-chip
-                class="text-white"
-                style="max-width: 90px"
-                :style="colorHash(t.category)"
-              >
-                <div class="ellipsis">
-                  {{ t.category }}
-                </div>
-              </q-chip>
+              <q-btn icon="settings" flat round>
+                <task-menu v-if="t" :task="t" :context-menu="false" />
+              </q-btn>
             </q-item-section>
           </q-item>
         </q-list>
@@ -61,6 +43,7 @@ import { Ctf, Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import TaskMenu from '../Task/TaskMenu.vue';
+import { tagsSortFn } from 'src/ctfnote/tags';
 
 export default defineComponent({
   components: { TaskMenu },
@@ -81,16 +64,7 @@ export default defineComponent({
     sortedTasks() {
       return this.ctf.tasks
         .slice()
-        .sort((a, b) => {
-          const acat = (a.category ?? '').toLowerCase();
-          const bcat = (b.category ?? '').toLowerCase();
-          if (acat == bcat) {
-            const atitle = a.title.toLowerCase();
-            const btitle = a.title.toLowerCase();
-            return atitle == btitle ? 0 : atitle < btitle ? -1 : 1;
-          }
-          return acat < bcat ? -1 : 1;
-        })
+        .sort(tagsSortFn)
         .sort((a) => {
           return a.solved ? 1 : -1;
         });
@@ -101,7 +75,7 @@ export default defineComponent({
       if (!task) {
         return null;
       }
-      return {
+      return this.$router.push({
         name: 'task',
         params: {
           ctfId: this.ctf.id,
@@ -109,7 +83,7 @@ export default defineComponent({
           taskId: task.id,
           taskSlug: task.slug,
         },
-      };
+      });
     },
 
     colorHash(s: string) {
