@@ -27,10 +27,11 @@ export default (client: Client): void => {
       //create the ctf channels and roles
       if (interaction.customId.startsWith("create-ctf-button-")) {
         const ctfName = interaction.customId.replace("create-ctf-button-", "");
-        await interaction.channel?.send(
-          `Creating the CTF channels and roles for ${ctfName}`
-        );
         await interaction.deferUpdate();
+        await interaction.editReply({
+          content: `Creating the CTF channels and roles for ${ctfName}`,
+          components: [],
+        });
 
         const allowedRole = await interaction.guild?.roles.create({
           name: ctfName,
@@ -113,17 +114,13 @@ export default (client: Client): void => {
               console.error("Failed to create channel.", err);
             });
         }
-
-        // remove message
-        interaction
-          .deleteReply()
-          .catch((err) => console.error("Failed to delete reply.", err));
       } else if (interaction.customId.startsWith("archive-ctf-button-")) {
         const ctfName = interaction.customId.replace("archive-ctf-button-", "");
-        await interaction.channel?.send(
-          `Archiving the CTF channels and roles for ${ctfName}`
-        );
         await interaction.deferUpdate();
+        await interaction.editReply({
+          content: `Archiving the CTF channels and roles for ${ctfName}`,
+          components: [],
+        });
 
         const categoryChannel = (await interaction.guild?.channels.cache.find(
           (channel) =>
@@ -275,13 +272,6 @@ export default (client: Client): void => {
           firstPadUrl,
           ctfId
         );
-        // remove message
-        interaction.deleteReply().catch((err) => {
-          console.error(
-            "Failed to delete reply of bot. Can be caused due to channel being archived and deleted.err",
-            err
-          );
-        });
       }
     }
 
