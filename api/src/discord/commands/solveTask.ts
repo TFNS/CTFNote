@@ -1,14 +1,10 @@
 import {
-  ActionRowBuilder,
   ApplicationCommandOptionType,
   ApplicationCommandType,
-  ButtonBuilder,
-  ButtonStyle,
   CategoryChannel,
   ChannelType,
   Client,
   CommandInteraction,
-  PermissionFlagsBits,
   TextChannel,
 } from "discord.js";
 import { Command } from "../command";
