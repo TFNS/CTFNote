@@ -124,6 +124,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         );
     }
 
+    // handle task (un)solved
     if (
       fieldContext.scope.fieldName === "updateTask" &&
       args.input.patch.flag !== null &&
@@ -138,7 +139,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           (channel) =>
             channel.type === ChannelType.GuildText &&
             channel.topic?.startsWith(`${task.title}`)
-        ) as CategoryChannel | undefined;
+        ) as TextChannel | undefined;
 
         if (channel === undefined) return null;
 
@@ -149,6 +150,31 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           );
       }
     }
+
+    // handle task title change
+    if (
+      fieldContext.scope.fieldName === "updateTask" &&
+      args.input.patch.title !== null &&
+      args.input.id !== null
+    ) {
+      const task = await getTaskFromId(args.input.id);
+
+      const channel = guild?.channels.cache.find(
+        (channel) =>
+          channel.type === ChannelType.GuildText &&
+          channel.topic?.startsWith(`${task.title}`)
+      ) as TextChannel | undefined;
+
+      if (channel === undefined) return null;
+
+      channel
+        .edit({
+          name: `${args.input.patch.title}`,
+          topic: channel.topic?.replace(task.title, args.input.patch.title),
+        })
+        .catch((err) => console.error("Failed to rename channel.", err));
+    }
+
     if (fieldContext.scope.fieldName === "startWorkingOn") {
       //send a message to the channel that the user started working on the task
       const userId = context.jwtClaims.user_id;
