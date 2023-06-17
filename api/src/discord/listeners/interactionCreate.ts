@@ -93,7 +93,7 @@ export default (client: Client): void => {
               name: `${challenge.title} - ${challenge.category}`,
               type: ChannelType.GuildText,
               parent: channel?.id,
-              topic: `${challenge.title} - ${challenge.category}`,
+              topic: `${challenge.title}, tags: ${challenge.category}`,
             })
             .then((challengeChannel) => {
               if (challenge.description !== "") {

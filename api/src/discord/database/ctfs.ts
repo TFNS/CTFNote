@@ -67,7 +67,7 @@ export async function getChallengesFromDatabase(
     //make a query to get all the challenges from a ctf
 
     const query =
-      "SELECT title, description, category FROM ctfnote.task WHERE ctf_id = $1 ORDER BY category, title";
+      "SELECT title, description, category, id FROM ctfnote.task WHERE ctf_id = $1 ORDER BY category, title";
     const values = [ctfId];
     const queryResult = await pgClient.query(query, values);
     // Extract the "name" field from each row

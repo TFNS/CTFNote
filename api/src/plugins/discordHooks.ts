@@ -14,6 +14,22 @@ import {
 import { getDiscordClient, usingDiscordBot } from "../discord";
 import config from "../config";
 
+export async function handleTaskSolved(id: bigint) {
+  const task = await getTaskFromId(id);
+  const taskTitle = task[0].toLowerCase();
+  const taskCategory = task[1].toLowerCase();
+
+  return sendMessageFromTaskId(id, `${taskTitle} is solved!`)
+    .then(async (channel) => {
+      if (channel !== null) {
+        return channel.setName(`solved-${taskTitle}-${taskCategory}`);
+      }
+    })
+    .catch((err) => {
+      console.error("Failed sending solved notification.", err);
+    });
+}
+
 const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
   const {
     scope: { isRootMutation },
@@ -116,18 +132,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       args.input.id !== null
     ) {
       if (args.input.patch.flag !== "") {
-        const task = await getTaskFromId(args.input.id);
-        const taskTitle = task[0].toLowerCase();
-        const taskCategory = task[1].toLowerCase();
-        sendMessageFromTaskId(args.input.id, `${taskTitle} is solved!`)
-          .then(async (channel) => {
-            if (channel !== null) {
-              return channel.setName(`solved-${taskTitle}-${taskCategory}`);
-            }
-          })
-          .catch((err) => {
-            console.error("Failed sending solved notification.", err);
-          });
+        handleTaskSolved(args.input.id);
       }
     }
     if (fieldContext.scope.fieldName === "startWorkingOn") {
