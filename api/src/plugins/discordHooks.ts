@@ -176,6 +176,17 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           })
           .catch((err) => console.error("Failed to rename channel.", err));
       }
+
+      // handle task description change
+      if (
+        args.input.patch.description !== null &&
+        args.input.patch.description !== task.description
+      ) {
+        sendMessageFromTaskId(
+          task.id,
+          `Description changed:\n${args.input.patch.description}`
+        );
+      }
     }
 
     if (fieldContext.scope.fieldName === "startWorkingOn") {
