@@ -53,7 +53,12 @@ export default (client: Client): void => {
             {
               id: allowedRole.id,
               allow: [PermissionsBitField.Flags.ViewChannel], // Allow view permission to the allowed role
-              deny: [PermissionsBitField.Flags.CreatePublicThreads, PermissionsBitField.Flags.CreatePrivateThreads, PermissionsBitField.Flags.SendMessagesInThreads, PermissionsBitField.Flags.ManageThreads],
+              deny: [
+                PermissionsBitField.Flags.CreatePublicThreads,
+                PermissionsBitField.Flags.CreatePrivateThreads,
+                PermissionsBitField.Flags.SendMessagesInThreads,
+                PermissionsBitField.Flags.ManageThreads,
+              ],
             },
           ],
         });
@@ -91,7 +96,7 @@ export default (client: Client): void => {
         for (const challenge of challenges) {
           interaction.guild?.channels
             .create({
-              name: `${challenge.title} - ${challenge.category}`,
+              name: `${challenge.title}`,
               type: ChannelType.GuildText,
               parent: channel?.id,
               topic: `${challenge.title}, tags: ${challenge.category}`,

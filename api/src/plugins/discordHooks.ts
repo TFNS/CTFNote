@@ -16,13 +16,11 @@ import config from "../config";
 
 export async function handleTaskSolved(id: bigint) {
   const task = await getTaskFromId(id);
-  const taskTitle = task[0].toLowerCase();
-  const taskCategory = task[1].toLowerCase();
 
-  return sendMessageFromTaskId(id, `${taskTitle} is solved!`)
+  return sendMessageFromTaskId(id, `${task[0]} is solved!`)
     .then(async (channel) => {
       if (channel !== null) {
-        return channel.setName(`solved-${taskTitle}-${taskCategory}`);
+        return channel.setName(`${task[0]}-solved`);
       }
     })
     .catch((err) => {
@@ -79,9 +77,10 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 
       categoryChannel.guild.channels
         .create({
-          name: `${args.input.title} - ${args.input.category}`,
+          name: `${args.input.title}`,
           type: ChannelType.GuildText,
           parent: categoryChannel.id,
+          topic: `${args.input.title}, tags: ${args.input.category}`,
         })
         .catch((err) => {
           console.error("Failed creating category.", err);
@@ -108,19 +107,16 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     if (fieldContext.scope.fieldName === "deleteTask") {
       const task = await getTaskFromId(args.input.id);
 
-      const taskTitle = task[0].toLowerCase();
-      const taskCategory = task[1].toLowerCase();
-
       const channel = guild?.channels.cache.find(
         (channel) =>
           channel.type === ChannelType.GuildText &&
-          channel.name === `${taskTitle}-${taskCategory}`
+          channel.name === `${task[0]}`
       ) as CategoryChannel | undefined;
 
       if (channel === undefined) return null;
 
       channel
-        .setName(`${taskTitle}-${taskCategory}-deleted`)
+        .setName(`${task[0]}-deleted`)
         .catch((err) =>
           console.error("Failed to mark channel as deleted.", err)
         );
@@ -192,7 +188,6 @@ async function sendMessageFromTaskId(
 ): Promise<GuildBasedChannel | null> {
   const task = await getTaskFromId(id);
   const taskTitle = task[0].toLowerCase();
-  const taskCategory = task[1].toLowerCase();
   const ctfName = await getCTFNameFromId(BigInt(task[2]));
 
   const discordClient = getDiscordClient();
@@ -211,7 +206,7 @@ async function sendMessageFromTaskId(
   for (const channel of channelsArray) {
     if (
       channel.type === ChannelType.GuildText &&
-      channel.name === `${taskTitle}-${taskCategory}` &&
+      channel.name === `${taskTitle}` &&
       channel.parent?.name === ctfName
     ) {
       channel.send(message);
