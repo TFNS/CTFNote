@@ -20,7 +20,7 @@ export async function handleTaskSolved(id: bigint) {
   return sendMessageFromTaskId(id, `${task.title} is solved!`)
     .then(async (channel) => {
       if (channel !== null) {
-        return channel.setName(`${task.title}-solved`);
+        return channel.setName(`solved-${task.title}`);
       }
     })
     .catch((err) => {
