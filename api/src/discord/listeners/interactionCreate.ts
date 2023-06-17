@@ -53,6 +53,7 @@ export default (client: Client): void => {
             {
               id: allowedRole.id,
               allow: [PermissionsBitField.Flags.ViewChannel], // Allow view permission to the allowed role
+              deny: [PermissionsBitField.Flags.CreatePublicThreads, PermissionsBitField.Flags.CreatePrivateThreads, PermissionsBitField.Flags.SendMessagesInThreads, PermissionsBitField.Flags.ManageThreads],
             },
           ],
         });
