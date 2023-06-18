@@ -179,9 +179,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 
       // handle task description change
       if (
-        args.input.patch.description !== null &&
-        args.input.patch.description !== task.description &&
-        args.input.patch.description !== undefined
+        args.input.patch.description != null &&
+        args.input.patch.description !== task.description
       ) {
         sendMessageFromTaskId(
           task.id,
