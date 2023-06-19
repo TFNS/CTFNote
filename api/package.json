@@ -20,8 +20,10 @@
   "dependencies": {
     "@graphile-contrib/pg-many-to-many": "^1.0.2",
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
+    "@graphile/operation-hooks": "^1.0.0",
     "@graphile/pg-pubsub": "^4.13.0",
     "axios": "^1.3.4",
+    "discord.js": "^14.11.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "graphile-utils": "^4.13.0",

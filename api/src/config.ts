@@ -25,15 +25,25 @@ export type CTFNoteConfig = DeepReadOnly<{
   pad: {
     createUrl: string;
     showUrl: string;
+    documentMaxLength: number;
   };
 
   web: {
     port: number;
   };
+  discord: {
+    token: string;
+    serverId: string;
+    voiceChannels: number;
+  };
 }>;
 
-function getEnv(name: string): string {
+function getEnv(
+  name: string,
+  defaultValue: string | undefined = undefined
+): string {
   const v = process.env[name];
+  if (!v && defaultValue !== undefined) return defaultValue;
   if (!v) throw Error(`Missing env variable ${name}`);
   return v;
 }
@@ -60,9 +70,15 @@ const config: CTFNoteConfig = {
   pad: {
     createUrl: getEnv("PAD_CREATE_URL"),
     showUrl: getEnv("PAD_SHOW_URL"),
+    documentMaxLength: Number(getEnv("CMD_DOCUMENT_MAX_LENGTH", "100000")),
   },
   web: {
     port: getEnvInt("WEB_PORT"),
+  },
+  discord: {
+    token: getEnv("DISCORD_BOT_TOKEN"),
+    serverId: getEnv("DISCORD_SERVER_ID"),
+    voiceChannels: getEnvInt("DISCORD_VOICE_CHANNELS"),
   },
 };
 
