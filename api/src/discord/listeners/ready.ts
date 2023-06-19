@@ -2,6 +2,7 @@ import { ActivityType, Client } from "discord.js";
 
 import { Commands } from "../commands";
 import interactionCreate from "./interactionCreate";
+import fs from "fs";
 
 export default (client: Client): void => {
   client.on("ready", async () => {
@@ -14,7 +15,11 @@ export default (client: Client): void => {
     });
 
     client.user
-      ?.setAvatar("src/discord/boticon.png")
+      ?.setAvatar(
+        fs.existsSync("src/discord/boticon.png")
+          ? "src/discord/boticon.png"
+          : "dist/discord/boticon.png"
+      )
       .catch((err) => console.error("Failed to change avatar of bot.", err));
 
     await client.application.commands.set(Commands);
