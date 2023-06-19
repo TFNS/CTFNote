@@ -61,7 +61,8 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
           Math.floor(Math.random() * motivationalSentences.length)
         ],
     });
-    return handleTaskSolved(task.id);
+    await handleTaskSolved(task.id);
+    return;
   } else {
     await interaction.editReply({
       content: "Task is already solved. Please change the flag in CTFNote.",
