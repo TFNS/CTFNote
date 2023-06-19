@@ -103,11 +103,15 @@ DISCORD_SERVER_ID=server_id
 
 To get the `DISCORD_BOT_TOKEN`, you need to create a discord bot and add it to your server.
 You can follow [this guide](https://discordpy.readthedocs.io/en/stable/discord.html) to do so.
+
+- Please grant the bot the following intents: Presence Intent, Server Members Intent, Message Content Intent.
+- Please grant the bot the following permissions: Manage Roles, Manage Channels, Manage Webhooks, Read Messages/View Channels, Send Messages, Create Public Threads, Create Private Threads, Send Messages in Threads, Manage Messages, Manage Threads, Embed Links, Attach Files, Read Message History, Mention Everyone, Add Reactions, Use Slash Commands.
+
 When you are done, copy the token from the Build-A-Bot section and paste it in the `.env` file.
 
-To get the `DISCORD_SERVER_ID`, you need to enable developer mode in discord. Then right-click on your server and click on copy ID.
+You can find the `DISCORD_SERVER_ID` in the 'Widget' section of your server settings.
 
-Please do note use this bot if untrusted members can create channels or categories in your server, or can edit topics of channels.
+Please do not use this bot if untrusted members can create channels or categories in your server, or can edit topics of channels.
 
 ### Migration
 
