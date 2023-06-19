@@ -105,7 +105,7 @@ To get the `DISCORD_BOT_TOKEN`, you need to create a discord bot and add it to y
 You can follow [this guide](https://discordpy.readthedocs.io/en/stable/discord.html) to do so.
 
 - Please grant the bot the following intents: Presence Intent, Server Members Intent, Message Content Intent.
-- Please grant the bot the following permissions: Manage Roles, Manage Channels, Manage Webhooks, Read Messages/View Channels, Send Messages, Create Public Threads, Create Private Threads, Send Messages in Threads, Manage Messages, Manage Threads, Embed Links, Attach Files, Read Message History, Mention Everyone, Add Reactions, Use Slash Commands.
+- Please grant the bot the following permissions: Administrator.
 
 When you are done, copy the token from the Build-A-Bot section and paste it in the `.env` file.
 

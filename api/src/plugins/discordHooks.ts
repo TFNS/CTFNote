@@ -97,11 +97,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 
       if (mainChannel !== undefined) {
         mainChannel
-          .send(
-            `New task created: ${args.input.title} - ${args.input.tags.join(
-              ", "
-            )}`
-          )
+          .send(`New task created: ${args.input.title}`)
           .catch((err) => {
             console.error("Failed to send notification about a new task.", err);
           });
