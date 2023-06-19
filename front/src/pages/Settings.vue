@@ -114,6 +114,30 @@
               />
             </q-card-section>
           </q-card>
+          <q-card bordered class="q-mt-md">
+            <q-card-section>
+              <div class="text-h6">Link your Discord account</div>
+            </q-card-section>
+            <q-card-section>
+              <password-input
+                v-model="profileToken"
+                read-only
+                label="Your personal CTFNote token"
+                hint="Give this token to the CTFNote bot to link your account by using /auth"
+              />
+            </q-card-section>
+            <q-card-actions align="right" class="q-pa-md">
+              <div>
+                <q-btn
+                  icon="refresh"
+                  label="reset"
+                  color="positive"
+                  title="Change token"
+                  @click="resetToken"
+                />
+              </div>
+            </q-card-actions>
+          </q-card>
         </div>
       </div>
     </div>
@@ -126,13 +150,15 @@ import ColorPicker from 'src/components/Utils/ColorPicker.vue';
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
 import { Profile } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, ref, watch } from 'vue';
+import { Ref, defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
   components: { PasswordInput, ColorPicker, UserBadge },
   setup() {
     const me = ctfnote.me.injectMe();
-
+    let profileToken: Ref<string> = ref('');
+    const { result } = ctfnote.me.getProfileToken();
+    profileToken.value = (result as Ref<string>).value;
     const username = ref(me.value.profile?.username ?? '');
     const description = ref(me.value.profile?.description ?? '');
 
@@ -158,8 +184,10 @@ export default defineComponent({
 
     return {
       resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
+      notifySuccess: ctfnote.ui.useNotify().notifySuccess,
       updateProfile: ctfnote.me.useUpdateProfile(),
       updatePassword: ctfnote.me.useUpdatePassword(),
+      resetProfileToken: ctfnote.me.useResetProfileToken(),
       color,
       username,
       description,
@@ -169,6 +197,7 @@ export default defineComponent({
       disableSystemNotification,
       oldPassword: ref(''),
       newPassword: ref(''),
+      profileToken,
     };
   },
   computed: {
@@ -206,6 +235,18 @@ export default defineComponent({
           this.newPassword = '';
         }),
         { message: 'Password changed!', icon: 'lock' }
+      );
+    },
+    resetToken() {
+      void this.resolveAndNotify(
+        this.resetProfileToken().then((newToken) => {
+          if (!newToken) return;
+          this.profileToken = newToken;
+        }),
+        {
+          message: 'Token refreshed!',
+          icon: 'refresh',
+        }
       );
     },
   },

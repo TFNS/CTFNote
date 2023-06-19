@@ -4,6 +4,8 @@ import {
   ProfileFragment,
   ProfilePatch,
   useMeQuery,
+  useProfileTokenQuery,
+  useResetProfileTokenMutation,
   useUpdatePasswordMutation,
   useUpdateProfileMutation,
 } from 'src/generated/graphql';
@@ -101,4 +103,19 @@ export async function isLogged() {
   } catch {
     return false;
   }
+}
+
+export function getProfileToken() {
+  const r = useProfileTokenQuery();
+  return wrapQuery(r, 'no token', (data) => {
+    return data.profileToken;
+  });
+}
+
+export function useResetProfileToken() {
+  const { mutate } = useResetProfileTokenMutation({});
+  return async () => {
+    const r = await mutate({});
+    return r?.data?.resetProfileToken?.string;
+  };
 }

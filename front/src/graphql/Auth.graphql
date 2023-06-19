@@ -10,6 +10,16 @@ query newToken {
   newToken
 }
 
+query profileToken {
+  profileToken
+}
+
+mutation resetProfileToken {
+  resetProfileToken(input: {}) {
+    string
+  }
+}
+
 mutation Login($login: String!, $password: String!) {
   login(input: { login: $login, password: $password }) {
     jwt
