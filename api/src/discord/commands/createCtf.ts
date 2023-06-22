@@ -16,7 +16,7 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   const ctfNamesMessage = `Create one of the following CTFs`;
 
   if (!ctfNames || ctfNames.length === 0) {
-    interaction.editReply({
+    await interaction.editReply({
       content: "No CTFs found!",
     });
     return;
@@ -35,7 +35,7 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   });
 
   if (ctfNames.length === 0) {
-    interaction.editReply({
+    await interaction.editReply({
       content: "All CTFs have already been created!",
     });
     return;
@@ -55,7 +55,7 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   // Create the action row with the button components
   const actionRow: any = new ActionRowBuilder().addComponents(buttons);
 
-  interaction.editReply({
+  await interaction.editReply({
     content: ctfNamesMessage,
     components: [actionRow],
   });
