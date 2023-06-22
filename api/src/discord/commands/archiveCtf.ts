@@ -26,7 +26,7 @@ export const ArchiveCtf: Command = {
     );
 
     if (!ctfsInDiscord || ctfsInDiscord.size === 0) {
-      interaction.editReply({
+      await interaction.editReply({
         content: "No CTFs found!",
       });
       return;
