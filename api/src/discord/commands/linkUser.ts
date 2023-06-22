@@ -27,7 +27,7 @@ export const LinkUser: Command = {
 
     if (!userId) {
       await interaction.editReply({
-        content: "Invalid token!",
+        content: "No account with such token found that is not already linked!",
       });
       return;
     }

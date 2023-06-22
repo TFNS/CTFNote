@@ -5,7 +5,7 @@ export async function getUserByToken(token: string): Promise<bigint | null> {
 
   try {
     const query =
-      "SELECT id FROM ctfnote_private.user WHERE token = $1 LIMIT 1";
+      "SELECT id FROM ctfnote_private.user WHERE token = $1 AND discord_id is NULL LIMIT 1";
     const values = [token];
     const queryResult = await pgClient.query(query, values);
 
