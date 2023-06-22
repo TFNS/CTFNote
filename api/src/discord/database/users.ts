@@ -1,5 +1,8 @@
 import { connectToDatabase } from "./database";
 
+/*
+ * Only returns users that have not linked their discord account yet.
+ */
 export async function getUserByToken(token: string): Promise<bigint | null> {
   const pgClient = await connectToDatabase();
 
