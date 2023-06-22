@@ -7,8 +7,8 @@ import {
 import { Command } from "../command";
 import { getUserByToken, setDiscordIdForUser } from "../database/users";
 
-export const AuthUser: Command = {
-  name: "auth",
+export const LinkUser: Command = {
+  name: "link",
   description: "Connect your Discord account to your CTFNote account!",
   type: ApplicationCommandType.ChatInput,
   options: [

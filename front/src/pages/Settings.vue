@@ -123,7 +123,7 @@
                 v-model="profileToken"
                 read-only
                 label="Your personal CTFNote token"
-                hint="Give this token to the CTFNote bot to link your account by using /auth"
+                hint="Give this token to the CTFNote bot to link your account by using /link"
               />
             </q-card-section>
             <q-card-section class="row">
