@@ -20,6 +20,12 @@ mutation resetProfileToken {
   }
 }
 
+mutation resetDiscordId {
+  resetDiscordId(input: {}) {
+    string
+  }
+}
+
 mutation Login($login: String!, $password: String!) {
   login(input: { login: $login, password: $password }) {
     jwt

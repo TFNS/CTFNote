@@ -11,8 +11,8 @@
     </q-tabs>
 
     <div class="q-pa-md">
-      <div class="row q-gutter-md">
-        <div class="col">
+      <div class="row q-col-gutter-md">
+        <div class="col-md-6 col-xs-12">
           <q-card v-if="me" bordered>
             <q-form @submit="changeProfile">
               <q-card-section class="row justify-between">
@@ -65,7 +65,7 @@
             </q-form>
           </q-card>
         </div>
-        <div class="col">
+        <div class="col-md-6 col-xs-12">
           <q-card bordered>
             <q-form @submit="changePassword">
               <q-card-section>
@@ -126,16 +126,32 @@
                 hint="Give this token to the CTFNote bot to link your account by using /auth"
               />
             </q-card-section>
-            <q-card-actions align="right" class="q-pa-md">
-              <div>
-                <q-btn
-                  icon="refresh"
-                  label="reset"
-                  color="positive"
-                  title="Change token"
-                  @click="resetToken"
-                />
+            <q-card-section class="row">
+              <div v-if="me.profile.discordId == null">
+                Your CTFNote account is not linked to your Discord account.
               </div>
+              <div v-else>
+                Your CTFNote account is linked to Discord user ID
+                {{ me.profile.discordId }}.
+              </div>
+            </q-card-section>
+            <q-card-actions>
+              <q-btn
+                v-if="me.profile.discordId != null"
+                icon="close"
+                label="Unlink Discord"
+                color="negative"
+                title="Unlink Discord"
+                @click="unlinkDiscord"
+              />
+              <q-space></q-space>
+              <q-btn
+                icon="refresh"
+                label="Change token"
+                color="positive"
+                title="Change token"
+                @click="resetToken"
+              />
             </q-card-actions>
           </q-card>
         </div>
@@ -156,13 +172,20 @@ export default defineComponent({
   components: { PasswordInput, ColorPicker, UserBadge },
   setup() {
     const me = ctfnote.me.injectMe();
-    let profileToken: Ref<string> = ref('');
-    const { result } = ctfnote.me.getProfileToken();
-    profileToken.value = (result as Ref<string>).value;
     const username = ref(me.value.profile?.username ?? '');
     const description = ref(me.value.profile?.description ?? '');
 
     const color = ref(me.value.profile?.color);
+    const profileToken: Ref<string> = ref('');
+    const { result: profileTokenResult } = ctfnote.me.getProfileToken();
+
+    watch(
+      profileTokenResult,
+      (s) => {
+        profileToken.value = s;
+      },
+      { immediate: true }
+    );
 
     watch(
       me,
@@ -188,6 +211,7 @@ export default defineComponent({
       updateProfile: ctfnote.me.useUpdateProfile(),
       updatePassword: ctfnote.me.useUpdatePassword(),
       resetProfileToken: ctfnote.me.useResetProfileToken(),
+      resetDiscordId: ctfnote.me.useResetDiscordId(),
       color,
       username,
       description,
@@ -248,6 +272,12 @@ export default defineComponent({
           icon: 'refresh',
         }
       );
+    },
+    unlinkDiscord() {
+      void this.resolveAndNotify(this.resetDiscordId(), {
+        message: 'Discord unlinked!',
+        icon: 'close',
+      });
     },
   },
 });

@@ -938,7 +938,6 @@ export type Mutation = {
   resetDiscordId?: Maybe<ResetDiscordIdPayload>;
   resetPassword?: Maybe<ResetPasswordPayload>;
   resetProfileToken?: Maybe<ResetProfileTokenPayload>;
-  resetToken?: Maybe<ResetTokenPayload>;
   startWorkingOn?: Maybe<StartWorkingOnPayload>;
   stopWorkingOn?: Maybe<StopWorkingOnPayload>;
   /** Updates a single `Ctf` using a unique key and a patch. */
@@ -1122,12 +1121,6 @@ export type MutationResetPasswordArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationResetProfileTokenArgs = {
   input: ResetProfileTokenInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
-export type MutationResetTokenArgs = {
-  input: ResetTokenInput;
 };
 
 
@@ -1976,27 +1969,6 @@ export type ResetProfileTokenPayload = {
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   string?: Maybe<Scalars['String']>;
-};
-
-/** All input for the `resetToken` mutation. */
-export type ResetTokenInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-};
-
-/** The output of our `resetToken` mutation. */
-export type ResetTokenPayload = {
-  __typename?: 'ResetTokenPayload';
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>;
 };
 
 export enum Role {
@@ -2893,6 +2865,11 @@ export type ResetProfileTokenMutationVariables = Exact<{ [key: string]: never; }
 
 export type ResetProfileTokenMutation = { __typename?: 'Mutation', resetProfileToken?: { __typename?: 'ResetProfileTokenPayload', string?: string | null } | null };
 
+export type ResetDiscordIdMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ResetDiscordIdMutation = { __typename?: 'Mutation', resetDiscordId?: { __typename?: 'ResetDiscordIdPayload', string?: string | null } | null };
+
 export type LoginMutationVariables = Exact<{
   login: Scalars['String'];
   password: Scalars['String'];
@@ -3706,6 +3683,31 @@ export function useResetProfileTokenMutation(options: VueApolloComposable.UseMut
   return VueApolloComposable.useMutation<ResetProfileTokenMutation, ResetProfileTokenMutationVariables>(ResetProfileTokenDocument, options);
 }
 export type ResetProfileTokenMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<ResetProfileTokenMutation, ResetProfileTokenMutationVariables>;
+export const ResetDiscordIdDocument = gql`
+    mutation resetDiscordId {
+  resetDiscordId(input: {}) {
+    string
+  }
+}
+    `;
+
+/**
+ * __useResetDiscordIdMutation__
+ *
+ * To run a mutation, you first call `useResetDiscordIdMutation` within a Vue component and pass it any options that fit your needs.
+ * When your component renders, `useResetDiscordIdMutation` returns an object that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - Several other properties: https://v4.apollo.vuejs.org/api/use-mutation.html#return
+ *
+ * @param options that will be passed into the mutation, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/mutation.html#options;
+ *
+ * @example
+ * const { mutate, loading, error, onDone } = useResetDiscordIdMutation();
+ */
+export function useResetDiscordIdMutation(options: VueApolloComposable.UseMutationOptions<ResetDiscordIdMutation, ResetDiscordIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<ResetDiscordIdMutation, ResetDiscordIdMutationVariables>> = {}) {
+  return VueApolloComposable.useMutation<ResetDiscordIdMutation, ResetDiscordIdMutationVariables>(ResetDiscordIdDocument, options);
+}
+export type ResetDiscordIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<ResetDiscordIdMutation, ResetDiscordIdMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($login: String!, $password: String!) {
   login(input: {login: $login, password: $password}) {
@@ -5601,6 +5603,13 @@ export const ProfileToken = gql`
 export const ResetProfileToken = gql`
     mutation resetProfileToken {
   resetProfileToken(input: {}) {
+    string
+  }
+}
+    `;
+export const ResetDiscordId = gql`
+    mutation resetDiscordId {
+  resetDiscordId(input: {}) {
     string
   }
 }

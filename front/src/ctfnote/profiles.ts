@@ -51,6 +51,7 @@ export function buildPublicProfileFromProfile(p: Profile): PublicProfile {
 export function buildProfile(p: ProfileFragment): Profile {
   return {
     ...p,
+    discordId: p.discordId ?? null,
     lastactive: p.lastactive,
     color: p.color ?? colorHash(p.username),
     id: makeId(p.id),
