@@ -1,7 +1,7 @@
 import { connectToDatabase } from "./database";
 import { Task } from "./tasks";
 
-async function getCTFNamesFromDatabase(): Promise<string[]> {
+export async function getCTFNamesFromDatabase(): Promise<string[]> {
   const pgClient = await connectToDatabase();
 
   try {
@@ -172,5 +172,3 @@ export async function getCTFNameFromId(ctfId: bigint): Promise<string> {
     pgClient.release();
   }
 }
-
-export { getCTFNamesFromDatabase };
