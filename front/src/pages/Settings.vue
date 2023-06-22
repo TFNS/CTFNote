@@ -118,7 +118,7 @@
             <q-card-section>
               <div class="text-h6">Link your Discord account</div>
             </q-card-section>
-            <q-card-section>
+            <q-card-section v-if="me.profile.discordId == null">
               <password-input
                 v-model="profileToken"
                 read-only
