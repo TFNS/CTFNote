@@ -61,7 +61,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     context: any
   ) => {
     const guild = getDiscordGuild();
-    if (guild === null) return null;
+    if (guild === null) return input;
 
     //add challenges to the ctf channel discord
     if (fieldContext.scope.fieldName === "createTask") {
@@ -73,7 +73,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       ) as CategoryChannel | undefined;
 
       if (categoryChannel === undefined) {
-        return null;
+        return input;
       }
 
       categoryChannel.guild.channels
@@ -111,7 +111,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           channel.type === ChannelType.GuildText && channel.topic === task.title
       ) as CategoryChannel | undefined;
 
-      if (channel === undefined) return null;
+      if (channel === undefined) return input;
 
       channel
         .setName(`${task.title}-deleted`)
@@ -143,7 +143,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
               channel.topic === task.title
           ) as TextChannel | undefined;
 
-          if (channel === undefined) return null;
+          if (channel === undefined) return input;
 
           channel
             .setName(`${task.title}`)
@@ -164,7 +164,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
             channel.topic === task.title
         ) as TextChannel | undefined;
 
-        if (channel === undefined) return null;
+        if (channel === undefined) return input;
         channel
           .edit({
             name: title,
@@ -241,7 +241,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     context: any
   ) => {
     const guild = getDiscordGuild();
-    if (guild === null) return null;
+    if (guild === null) return input;
     if (fieldContext.scope.fieldName === "updateCtf") {
       handleUpdateCtf(args, guild);
     }
@@ -249,7 +249,9 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     if (fieldContext.scope.fieldName === "resetDiscordId") {
       // we need to use the await here to prevent a race condition
       // between deleting the discord id and retrieving the discord id (to remove the roles)
-      await handleResetDiscordId(context.jwtClaims.user_id);
+      await handleResetDiscordId(context.jwtClaims.user_id).catch((err) => {
+        console.error("Failed to reset discord id.", err);
+      });
     }
 
     return input;
