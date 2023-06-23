@@ -3,6 +3,7 @@ import { SchemaBuilder } from "graphile-build";
 import {
   CategoryChannel,
   ChannelType,
+  Guild,
   GuildBasedChannel,
   TextChannel,
 } from "discord.js";
@@ -11,7 +12,7 @@ import {
   getNameFromUserId,
   getTaskFromId,
 } from "../discord/database/ctfs";
-import { getDiscordClient, usingDiscordBot } from "../discord";
+import { getDiscordClient, getDiscordGuild, usingDiscordBot } from "../discord";
 import config from "../config";
 
 export async function handleTaskSolved(id: bigint) {
@@ -43,25 +44,19 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "deleteTask" &&
     fieldContext.scope.fieldName !== "startWorkingOn" &&
     fieldContext.scope.fieldName !== "stopWorkingOn" &&
-    fieldContext.scope.fieldName !== "addTagsForTask"
+    fieldContext.scope.fieldName !== "addTagsForTask" &&
+    fieldContext.scope.fieldName !== "updateCtf"
   ) {
     return null;
   }
 
-  const handleDiscordMutationLog = async (
+  const handleDiscordMutationAfter = async (
     input: any,
     args: any,
     context: any
   ) => {
-    const discordClient = getDiscordClient();
-    if (discordClient === null) return null;
-
-    const guild = discordClient.guilds.resolve(config.discord.serverId);
-
-    if (guild === null) {
-      console.error("Guild not found");
-      return null;
-    }
+    const guild = getDiscordGuild();
+    if (guild === null) return null;
 
     //add challenges to the ctf channel discord
     if (fieldContext.scope.fieldName === "createTask") {
@@ -224,17 +219,51 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     return input;
   };
 
+  const handleDiscordMutationBefore = async (
+    input: any,
+    args: any,
+    context: any
+  ) => {
+    const guild = getDiscordGuild();
+    if (guild === null) return null;
+    if (fieldContext.scope.fieldName === "updateCtf") {
+      handleUpdateCtf(args, guild);
+    }
+
+    return input;
+  };
+
   return {
-    before: [],
+    before: [
+      {
+        priority: 500,
+        callback: handleDiscordMutationBefore,
+      },
+    ],
     after: [
       {
         priority: 500,
-        callback: handleDiscordMutationLog,
+        callback: handleDiscordMutationAfter,
       },
     ],
     error: [],
   };
 };
+
+async function handleUpdateCtf(args: any, guild: Guild) {
+  const ctf = await getCTFNameFromId(args.input.id);
+
+  const categoryChannel = guild?.channels.cache.find(
+    (channel) =>
+      channel.type === ChannelType.GuildCategory && channel.name === ctf
+  ) as CategoryChannel | undefined;
+
+  if (categoryChannel == null) return null;
+
+  categoryChannel.setName(args.input.patch.title).catch((err) => {
+    console.error("Failed updating category.", err);
+  });
+}
 
 async function sendMessageFromTaskId(
   id: bigint,
@@ -243,11 +272,7 @@ async function sendMessageFromTaskId(
   const task = await getTaskFromId(id);
   const ctfName = await getCTFNameFromId(BigInt(task.ctf_id));
 
-  const discordClient = getDiscordClient();
-
-  if (discordClient === null) return null;
-
-  const guild = discordClient.guilds.resolve(config.discord.serverId);
+  const guild = getDiscordGuild();
 
   if (guild === null) {
     console.error("Guild not found");

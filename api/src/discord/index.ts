@@ -37,3 +37,17 @@ export function getDiscordClient(): Client | null {
 
   return client;
 }
+
+export function getDiscordGuild() {
+  const discordClient = getDiscordClient();
+  if (discordClient === null) return null;
+
+  const guild = discordClient.guilds.resolve(config.discord.serverId);
+
+  if (guild == null) {
+    console.error("Guild not found, please check your environment variables!");
+    return null;
+  }
+
+  return guild;
+}
