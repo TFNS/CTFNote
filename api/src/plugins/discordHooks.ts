@@ -231,16 +231,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       //send a message to the channel that the user started working on the task
       const userId = context.jwtClaims.user_id;
       const taskId = args.input.taskId;
-
-      return sendMessageFromTaskId(taskId, {
-        content: `${await convertToUsernameFormat(
-          userId
-        )} is working on this task!`,
-        allowedMentions: {
-          users: [],
-        },
-      }).catch((err) => {
-        console.error("Failed sending 'working on' notification.", err);
+      sendStartWorkingOnMessage(userId, taskId).catch((err) => {
+        console.error("Failed sending 'started working on' notification.", err);
       });
     }
     if (fieldContext.scope.fieldName === "stopWorkingOn") {
@@ -248,14 +240,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       const userId = context.jwtClaims.user_id;
       const taskId = args.input.taskId;
 
-      return sendMessageFromTaskId(taskId, {
-        content: `${await convertToUsernameFormat(
-          userId
-        )} stopped working on this task!`,
-        allowedMentions: {
-          users: [],
-        },
-      }).catch((err) => {
+      sendStopWorkingOnMessage(userId, taskId).catch((err) => {
         console.error("Failed sending 'stopped working on' notification.", err);
       });
     }
@@ -326,6 +311,35 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     error: [],
   };
 };
+
+export async function sendStartWorkingOnMessage(
+  userId: bigint,
+  taskId: bigint
+) {
+  return sendMessageFromTaskId(taskId, {
+    content: `${await convertToUsernameFormat(
+      userId
+    )} is working on this task!`,
+    allowedMentions: {
+      users: [],
+    },
+  }).catch((err) => {
+    console.error("Failed sending 'working on' notification.", err);
+  });
+}
+
+export async function sendStopWorkingOnMessage(userId: bigint, taskId: bigint) {
+  return sendMessageFromTaskId(taskId, {
+    content: `${await convertToUsernameFormat(
+      userId
+    )} stopped working on this task!`,
+    allowedMentions: {
+      users: [],
+    },
+  }).catch((err) => {
+    console.error("Failed sending 'stopped working on' notification.", err);
+  });
+}
 
 async function handleDeleteCtf(ctfId: any, guild: Guild) {
   const ctfName = await getCTFNameFromId(ctfId);
