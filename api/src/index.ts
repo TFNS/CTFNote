@@ -31,7 +31,7 @@ function getDbUrl(role: "user" | "admin") {
 
 function createOptions() {
   let secret: string;
-  if (config.sessionSecret.length < 64) {
+  if (config.sessionSecret.length < 64 && config.env !== "development") {
     console.info(
       "Using random session secret since SESSION_SECRET is too short. All users will be logged out."
     );
