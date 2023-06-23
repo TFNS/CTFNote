@@ -19,6 +19,7 @@ import {
 } from "../database/ctfs";
 import { createPad } from "../../plugins/createTask";
 import config from "../../config";
+import { getDiscordUsersThatCanPlayCTF } from "../database/users";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -70,6 +71,14 @@ export default (client: Client): void => {
           parent: channel?.id,
         });
 
+        // assign roles to users already having access to the ctf
+        const ctfId: bigint = await getCtfIdFromDatabase(ctfName);
+        const discordIds: string[] = await getDiscordUsersThatCanPlayCTF(ctfId);
+        discordIds.forEach((discordId) => {
+          const member = interaction.guild?.members.cache.get(discordId);
+          if (member) member.roles.add(allowedRole);
+        });
+
         // create voice channels for the ctf from the .env file
         const numberOfVoiceChannels: number = config.discord.voiceChannels;
 
@@ -91,7 +100,6 @@ export default (client: Client): void => {
         }
 
         // create for every challenge a channel
-        const ctfId: bigint = await getCtfIdFromDatabase(ctfName);
         const challenges = await getChallengesFromDatabase(ctfId);
 
         for (const challenge of challenges) {

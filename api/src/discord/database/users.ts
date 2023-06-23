@@ -79,3 +79,25 @@ export async function getDiscordIdFromUserId(
     pgClient.release();
   }
 }
+
+export async function getDiscordUsersThatCanPlayCTF(
+  ctfId: bigint
+): Promise<string[]> {
+  const pgClient = await connectToDatabase();
+  try {
+    const query =
+      "SELECT discord_id FROM ctfnote_private.discord_users_can_play_ctf($1)";
+    const values = [ctfId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows.map((row) => row.discord_id);
+  } catch (error) {
+    console.error(
+      "Failed to fetch discord users that can play ctf from the database:",
+      error
+    );
+    return [];
+  } finally {
+    pgClient.release();
+  }
+}
