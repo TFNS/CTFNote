@@ -7,7 +7,11 @@ export let usingDiscordBot = true;
 
 export function getDiscordClient(): Client | null {
   if (!usingDiscordBot) return null;
-
+  if (config.discord.use.toLowerCase() === "false") {
+    console.warn("Discord bot not enabled, skipping...");
+    usingDiscordBot = false;
+    return null;
+  }
   if (!config.discord.token) throw new Error("Discord token not set");
   if (!config.discord.serverId) throw new Error("Discord serverId not set");
 
@@ -36,4 +40,18 @@ export function getDiscordClient(): Client | null {
   }
 
   return client;
+}
+
+export function getDiscordGuild() {
+  const discordClient = getDiscordClient();
+  if (discordClient === null) return null;
+
+  const guild = discordClient.guilds.resolve(config.discord.serverId);
+
+  if (guild == null) {
+    console.error("Guild not found, please check your environment variables!");
+    return null;
+  }
+
+  return guild;
 }

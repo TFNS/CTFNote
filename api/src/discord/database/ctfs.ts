@@ -1,7 +1,20 @@
 import { connectToDatabase } from "./database";
 import { Task } from "./tasks";
 
-async function getCTFNamesFromDatabase(): Promise<string[]> {
+export interface CTF {
+  id: bigint;
+  title: string;
+  weight: number;
+  ctf_url: string;
+  logo_url: string;
+  ctftime_url: string;
+  description: string;
+  start_time: Date;
+  end_time: Date;
+  secrets_id: bigint;
+}
+
+export async function getCTFNamesFromDatabase(): Promise<string[]> {
   const pgClient = await connectToDatabase();
 
   try {
@@ -25,8 +38,7 @@ export async function getAllCtfsFromDatabase(): Promise<string[]> {
   const pgClient = await connectToDatabase();
 
   try {
-    const query = `SELECT title, start_time, end_time
-                       FROM ctfnote.ctf;`;
+    const query = `SELECT title FROM ctfnote.ctf;`;
 
     const queryResult = await pgClient.query(query);
 
@@ -173,4 +185,36 @@ export async function getCTFNameFromId(ctfId: bigint): Promise<string> {
   }
 }
 
-export { getCTFNamesFromDatabase };
+export async function getAccessibleCTFsForUser(userId: bigint): Promise<CTF[]> {
+  const pgClient = await connectToDatabase();
+
+  try {
+    const query = `SELECT * FROM ctfnote_private.user_can_play_ctfs($1);`;
+    const values = [userId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows;
+  } catch (error) {
+    console.error("Failed to fetch accessible CTFs from the database:", error);
+    return [];
+  } finally {
+    pgClient.release();
+  }
+}
+
+export async function getCtfById(ctfId: bigint): Promise<CTF> {
+  const pgClient = await connectToDatabase();
+
+  try {
+    const query = `SELECT * FROM ctfnote.ctf WHERE id = $1;`;
+    const values = [ctfId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows[0];
+  } catch (error) {
+    console.error("Failed to fetch CTFs from the database:", error);
+    return {} as CTF;
+  } finally {
+    pgClient.release();
+  }
+}

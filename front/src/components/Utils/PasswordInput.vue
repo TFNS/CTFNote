@@ -27,7 +27,7 @@ export default defineComponent({
   props: {
     modelValue: { type: String, default: '' },
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'update:visibility'],
   setup() {
     return { hidePwd: ref(true) };
   },
@@ -38,6 +38,14 @@ export default defineComponent({
       },
       set(v: string) {
         this.$emit('update:modelValue', v);
+      },
+    },
+  },
+  watch: {
+    hidePwd: {
+      immediate: true,
+      handler(v) {
+        this.$emit('update:visibility', !v);
       },
     },
   },

@@ -4,6 +4,9 @@ import {
   ProfileFragment,
   ProfilePatch,
   useMeQuery,
+  useProfileTokenQuery,
+  useResetDiscordIdMutation,
+  useResetProfileTokenMutation,
   useUpdatePasswordMutation,
   useUpdateProfileMutation,
 } from 'src/generated/graphql';
@@ -65,8 +68,8 @@ export function useUpdatePassword() {
 
 const MeSymbol: InjectionKey<Ref<Me>> = Symbol('me');
 
-export function provideMe() {
-  const { result: me } = getMe();
+export function provideMe(refresh = false) {
+  const { result: me } = getMe(refresh);
   provide(MeSymbol, me);
   return me;
 }
@@ -101,4 +104,28 @@ export async function isLogged() {
   } catch {
     return false;
   }
+}
+
+export function getProfileToken() {
+  const r = useProfileTokenQuery();
+  return wrapQuery(r, 'no token', (data) => {
+    return data.profileToken;
+  });
+}
+
+export function useResetProfileToken() {
+  const { mutate } = useResetProfileTokenMutation({});
+  return async () => {
+    const r = await mutate({});
+    return r?.data?.resetProfileToken?.string;
+  };
+}
+
+export function useResetDiscordId() {
+  const { mutate } = useResetDiscordIdMutation({});
+  return async () => {
+    const r = await mutate({});
+    provideMe(true);
+    return r?.data?.resetDiscordId?.string;
+  };
 }

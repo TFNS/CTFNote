@@ -17,6 +17,7 @@ import {
   setFlagForChallengeId,
 } from "../database/tasks";
 import { handleTaskSolved } from "../../plugins/discordHooks";
+import { getUserByDiscordId } from "../database/users";
 
 async function accessDenied(interaction: CommandInteraction) {
   await interaction.editReply({
@@ -61,7 +62,14 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
           Math.floor(Math.random() * motivationalSentences.length)
         ],
     });
-    return handleTaskSolved(task.id);
+    let userId: bigint | null | string = await getUserByDiscordId(
+      interaction.user.id
+    );
+    if (userId == null) userId = interaction.user.id;
+    await handleTaskSolved(task.id, userId).catch((e) => {
+      console.error("Error while handling task solved: ", e);
+    });
+    return;
   } else {
     await interaction.editReply({
       content: "Task is already solved. Please change the flag in CTFNote.",
@@ -82,7 +90,11 @@ export const SolveTask: Command = {
       minLength: 1,
     },
   ],
-  run: solveTaskLogic,
+  run: async (client, interaction) => {
+    return solveTaskLogic(client, interaction).catch((e) => {
+      console.error("Error during solve task logic: ", e);
+    });
+  },
 };
 
 const motivationalSentences = [

@@ -17,12 +17,12 @@
             v-model="form.tags"
             label="Tags"
             :options="suggestions"
-            @filter="filterFn"
             input-debounce="0"
             use-input
             use-chips
             multiple
             new-value-mode="add-unique"
+            @filter="filterFn"
           />
         </q-card-section>
         <q-card-section class="q-pt-none">
@@ -71,6 +71,7 @@ export default defineComponent({
     const filterFn = function (
       val: string,
       doneFn: (callBackFn: () => void, afterFn: () => void) => void,
+      //eslint-disable-next-line @typescript-eslint/no-unused-vars
       _abortFn: () => void
     ) {
       doneFn(

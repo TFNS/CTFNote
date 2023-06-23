@@ -16,7 +16,7 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   const ctfNamesMessage = `Create one of the following CTFs`;
 
   if (!ctfNames || ctfNames.length === 0) {
-    interaction.editReply({
+    await interaction.editReply({
       content: "No CTFs found!",
     });
     return;
@@ -35,7 +35,7 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   });
 
   if (ctfNames.length === 0) {
-    interaction.editReply({
+    await interaction.editReply({
       content: "All CTFs have already been created!",
     });
     return;
@@ -55,7 +55,7 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   // Create the action row with the button components
   const actionRow: any = new ActionRowBuilder().addComponents(buttons);
 
-  interaction.editReply({
+  await interaction.editReply({
     content: ctfNamesMessage,
     components: [actionRow],
   });
@@ -66,5 +66,9 @@ export const CreateCtf: Command = {
   description: "Creates the channels and roles for a CTF",
   type: ApplicationCommandType.ChatInput,
   defaultMemberPermissions: [PermissionFlagsBits.Administrator],
-  run: createCtfLogic,
+  run: async (client, interaction) => {
+    return createCtfLogic(client, interaction).catch((e) => {
+      console.error("Error during create ctf logic: ", e);
+    });
+  },
 };

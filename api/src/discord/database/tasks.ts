@@ -67,3 +67,51 @@ export async function setFlagForChallengeId(
     pgClient.release();
   }
 }
+
+export async function userStartsWorkingOnTask(
+  userId: bigint,
+  taskId: bigint
+): Promise<boolean> {
+  const pgClient = await connectToDatabase();
+
+  try {
+    const query = "SELECT ctfnote_private.start_working_on($1, $2)";
+    const values = [userId, taskId];
+    const result = await pgClient.query(query, values);
+    return result.rows[0].start_working_on as boolean;
+  } catch (error) {
+    console.error(
+      "Failed to start working on task from the database:",
+      error,
+      userId,
+      taskId
+    );
+    return false;
+  } finally {
+    pgClient.release();
+  }
+}
+
+export async function userStopsWorkingOnTask(
+  userId: bigint,
+  taskId: bigint
+): Promise<boolean> {
+  const pgClient = await connectToDatabase();
+
+  try {
+    const query = "SELECT ctfnote_private.stop_working_on($1, $2)";
+    const values = [userId, taskId];
+    const result = await pgClient.query(query, values);
+    return result.rows[0].stop_working_on as boolean;
+  } catch (error) {
+    console.error(
+      "Failed to stop working on task from the database:",
+      error,
+      userId,
+      taskId
+    );
+    return false;
+  } finally {
+    pgClient.release();
+  }
+}
