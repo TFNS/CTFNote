@@ -303,8 +303,6 @@ async function fetchAllMessages(channel: TextBasedChannel): Promise<any> {
   const messagesCollection: any[] = [];
 
   messages.forEach((message: Message) => {
-    if (message.author.bot) return;
-
     const channel = message.channel as TextChannel;
 
     const channelName = channel.name;
