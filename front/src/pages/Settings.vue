@@ -142,8 +142,8 @@
                 label="Unlink Discord"
                 color="negative"
                 title="Unlink Discord"
-                @click="unlinkDiscord"
                 :loading="resetDiscordLoading"
+                @click="unlinkDiscord"
               />
               <q-btn
                 v-if="me.profile.discordId == null"
