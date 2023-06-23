@@ -14,11 +14,13 @@ import { CTF, getAccessibleCTFsForUser } from "../database/ctfs";
 import { getDiscordClient } from "..";
 import config from "../../config";
 
-export async function grantDiscordUserRoleForCTF(
+export async function changeDiscordUserRoleForCTF(
   userId: bigint,
-  ctf: CTF
+  ctf: CTF,
+  operation: "add" | "remove"
 ): Promise<boolean> {
   const discordUserId = await getDiscordIdFromUserId(userId);
+  if (discordUserId == null) return false;
 
   const discordClient = getDiscordClient();
   if (!discordClient) return false;
@@ -31,7 +33,11 @@ export async function grantDiscordUserRoleForCTF(
   const member = await guild?.members.fetch(discordUserId);
   if (!member) return false;
 
-  await member.roles.add(role);
+  if (operation === "add") {
+    await member.roles.add(role);
+  } else if (operation === "remove") {
+    await member.roles.remove(role);
+  }
 
   return true;
 }
@@ -80,7 +86,7 @@ export const LinkUser: Command = {
     const ctfs = await getAccessibleCTFsForUser(userId);
 
     ctfs.forEach(function (ctf) {
-      grantDiscordUserRoleForCTF(userId, ctf);
+      changeDiscordUserRoleForCTF(userId, ctf, "add");
     });
   },
 };

@@ -9,11 +9,12 @@ import {
 } from "discord.js";
 import {
   getCTFNameFromId,
+  getCtfById,
   getNameFromUserId,
   getTaskFromId,
 } from "../discord/database/ctfs";
-import { getDiscordClient, getDiscordGuild, usingDiscordBot } from "../discord";
-import config from "../config";
+import { getDiscordGuild, usingDiscordBot } from "../discord";
+import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
 
 export async function handleTaskSolved(id: bigint) {
   const task = await getTaskFromId(id);
@@ -45,7 +46,9 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "startWorkingOn" &&
     fieldContext.scope.fieldName !== "stopWorkingOn" &&
     fieldContext.scope.fieldName !== "addTagsForTask" &&
-    fieldContext.scope.fieldName !== "updateCtf"
+    fieldContext.scope.fieldName !== "updateCtf" &&
+    fieldContext.scope.fieldName !== "createInvitation" &&
+    fieldContext.scope.fieldName !== "deleteInvitation"
   ) {
     return null;
   }
@@ -215,6 +218,17 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           );
         });
     }
+    if (fieldContext.scope.fieldName === "createInvitation") {
+      handeInvitation(
+        args.input.invitation.ctfId,
+        args.input.invitation.profileId,
+        "add"
+      );
+    }
+
+    if (fieldContext.scope.fieldName === "deleteInvitation") {
+      handeInvitation(args.input.ctfId, args.input.profileId, "remove");
+    }
 
     return input;
   };
@@ -249,6 +263,15 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     error: [],
   };
 };
+
+async function handeInvitation(
+  ctfId: bigint,
+  profileId: bigint,
+  operation: "add" | "remove"
+) {
+  const ctf = await getCtfById(ctfId);
+  await changeDiscordUserRoleForCTF(profileId, ctf, operation);
+}
 
 async function handleUpdateCtf(args: any, guild: Guild) {
   const ctf = await getCTFNameFromId(args.input.id);

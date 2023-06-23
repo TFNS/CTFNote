@@ -202,3 +202,20 @@ export async function getAccessibleCTFsForUser(userId: bigint): Promise<CTF[]> {
     pgClient.release();
   }
 }
+
+export async function getCtfById(ctfId: bigint): Promise<CTF> {
+  const pgClient = await connectToDatabase();
+
+  try {
+    const query = `SELECT * FROM ctfnote.ctf WHERE id = $1;`;
+    const values = [ctfId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows[0];
+  } catch (error) {
+    console.error("Failed to fetch CTFs from the database:", error);
+    return {} as CTF;
+  } finally {
+    pgClient.release();
+  }
+}

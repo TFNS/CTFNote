@@ -63,7 +63,9 @@ export async function getUserByDiscordId(
   }
 }
 
-export async function getDiscordIdFromUserId(userId: bigint): Promise<string> {
+export async function getDiscordIdFromUserId(
+  userId: bigint
+): Promise<string | null> {
   const pgClient = await connectToDatabase();
   try {
     const query = "SELECT discord_id FROM ctfnote.profile WHERE id = $1";
@@ -72,7 +74,7 @@ export async function getDiscordIdFromUserId(userId: bigint): Promise<string> {
 
     return queryResult.rows[0].discord_id as string;
   } catch (error) {
-    return "";
+    return null;
   } finally {
     pgClient.release();
   }
