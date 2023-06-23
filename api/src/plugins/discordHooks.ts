@@ -221,6 +221,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       ) {
         sendMessageFromTaskId(task.id, {
           content: `Description changed:\n${args.input.patch.description}`,
+        }).catch((err) => {
+          console.error("Failed sending description change notification.", err);
         });
       }
     }
@@ -262,11 +264,17 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         args.input.invitation.ctfId,
         args.input.invitation.profileId,
         "add"
-      );
+      ).catch((err) => {
+        console.error("Failed to create invitation.", err);
+      });
     }
 
     if (fieldContext.scope.fieldName === "deleteInvitation") {
-      handeInvitation(args.input.ctfId, args.input.profileId, "remove");
+      handeInvitation(args.input.ctfId, args.input.profileId, "remove").catch(
+        (err) => {
+          console.error("Failed to delete invitation.", err);
+        }
+      );
     }
 
     return input;

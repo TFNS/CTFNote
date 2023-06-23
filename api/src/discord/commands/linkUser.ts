@@ -53,6 +53,44 @@ export async function changeDiscordUserRoleForCTF(
   return true;
 }
 
+async function linkUserLogic(_client: Client, interaction: CommandInteraction) {
+  const token = interaction.options.get("token", true).value as string;
+
+  const userId = await getUserByToken(token);
+
+  if (!userId) {
+    await interaction.editReply({
+      content: "No account with such token found that is not already linked!",
+    });
+    return;
+  }
+
+  const discordId = interaction.user.id;
+
+  const success = await setDiscordIdForUser(userId, discordId);
+
+  if (!success) {
+    await interaction.editReply({
+      content:
+        "You can't link the same Discord account twice! Please use a different Discord account or investigate why your account is already linked.",
+    });
+    return;
+  }
+
+  await interaction.editReply({
+    content:
+      "Successfully linked your Discord account to your CTFNote account!",
+  });
+
+  const ctfs = await getAccessibleCTFsForUser(userId);
+
+  ctfs.forEach(function (ctf) {
+    changeDiscordUserRoleForCTF(userId, ctf, "add").catch((err) => {
+      console.error("Error while adding role to user: ", err);
+    });
+  });
+}
+
 export const LinkUser: Command = {
   name: "link",
   description: "Connect your Discord account to your CTFNote account!",
@@ -66,39 +104,9 @@ export const LinkUser: Command = {
       minLength: 1,
     },
   ],
-  run: async (_client: Client, interaction: CommandInteraction) => {
-    const token = interaction.options.get("token", true).value as string;
-
-    const userId = await getUserByToken(token);
-
-    if (!userId) {
-      await interaction.editReply({
-        content: "No account with such token found that is not already linked!",
-      });
-      return;
-    }
-
-    const discordId = interaction.user.id;
-
-    const success = await setDiscordIdForUser(userId, discordId);
-
-    if (!success) {
-      await interaction.editReply({
-        content:
-          "You can't link the same Discord account twice! Please use a different Discord account or investigate why your account is already linked.",
-      });
-      return;
-    }
-
-    await interaction.editReply({
-      content:
-        "Successfully linked your Discord account to your CTFNote account!",
-    });
-
-    const ctfs = await getAccessibleCTFsForUser(userId);
-
-    ctfs.forEach(function (ctf) {
-      changeDiscordUserRoleForCTF(userId, ctf, "add");
+  run: async (client, interaction) => {
+    return linkUserLogic(client, interaction).catch((e) => {
+      console.error("Error during link user logic: ", e);
     });
   },
 };

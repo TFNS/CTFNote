@@ -66,7 +66,9 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
       interaction.user.id
     );
     if (userId == null) userId = interaction.user.id;
-    await handleTaskSolved(task.id, userId);
+    await handleTaskSolved(task.id, userId).catch((e) => {
+      console.error("Error while handling task solved: ", e);
+    });
     return;
   } else {
     await interaction.editReply({
@@ -88,7 +90,11 @@ export const SolveTask: Command = {
       minLength: 1,
     },
   ],
-  run: solveTaskLogic,
+  run: async (client, interaction) => {
+    return solveTaskLogic(client, interaction).catch((e) => {
+      console.error("Error during solve task logic: ", e);
+    });
+  },
 };
 
 const motivationalSentences = [
