@@ -20,8 +20,17 @@ import { getDiscordGuild, usingDiscordBot } from "../discord";
 import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
 import { getDiscordIdFromUserId } from "../discord/database/users";
 
-export async function convertToUsernameFormat(userId: bigint) {
+export async function convertToUsernameFormat(userId: bigint | string) {
+  // this is actually the Discord ID and not a CTFNote userId
+  if (typeof userId === "string") {
+    // but if somehow it's not, just return it
+    if (isNaN(parseInt(userId))) return userId;
+    return `<@${userId}>`;
+  }
+
   const name = await getNameFromUserId(userId);
+  if (name == null) return name;
+
   const discordId = await getDiscordIdFromUserId(userId);
   if (discordId == null) return name;
 
@@ -40,10 +49,17 @@ export async function convertToUsernameFormat(userId: bigint) {
   }
 }
 
-export async function handleTaskSolved(id: bigint) {
+export async function handleTaskSolved(id: bigint, userId: bigint | string) {
   const task = await getTaskFromId(id);
 
-  return sendMessageFromTaskId(id, { content: `${task.title} is solved!` })
+  return sendMessageFromTaskId(id, {
+    content: `${task.title} is solved by ${await convertToUsernameFormat(
+      userId
+    )}!`,
+    allowedMentions: {
+      users: [],
+    },
+  })
     .then(async (channel) => {
       if (channel !== null) {
         return channel.setName(`solved-${task.title}`);
@@ -156,7 +172,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 
       if (args.input.patch.flag !== null) {
         if (args.input.patch.flag !== "") {
-          handleTaskSolved(args.input.id);
+          const userId = context.jwtClaims.user_id;
+          handleTaskSolved(args.input.id, userId);
         } else {
           const task = await getTaskFromId(args.input.id);
 

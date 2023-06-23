@@ -17,6 +17,7 @@ import {
   setFlagForChallengeId,
 } from "../database/tasks";
 import { handleTaskSolved } from "../../plugins/discordHooks";
+import { getUserByDiscordId } from "../database/users";
 
 async function accessDenied(interaction: CommandInteraction) {
   await interaction.editReply({
@@ -61,7 +62,11 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
           Math.floor(Math.random() * motivationalSentences.length)
         ],
     });
-    await handleTaskSolved(task.id);
+    let userId: bigint | null | string = await getUserByDiscordId(
+      interaction.user.id
+    );
+    if (userId == null) userId = interaction.user.id;
+    await handleTaskSolved(task.id, userId);
     return;
   } else {
     await interaction.editReply({
