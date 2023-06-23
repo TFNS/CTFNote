@@ -124,6 +124,7 @@
                 read-only
                 label="Your personal CTFNote token"
                 hint="Give this token to the CTFNote bot to link your account by using /link"
+                @update:visibility="pollMe"
               />
             </q-card-section>
             <q-card-section class="row">
@@ -224,12 +225,16 @@ export default defineComponent({
       newPassword: ref(''),
       profileToken,
       resetDiscordLoading: ref(false),
+      pollInterval: ref(0),
     };
   },
   computed: {
     tmpProfile(): Profile {
       return { username: this.username, color: this.color } as Profile;
     },
+  },
+  beforeUnmount() {
+    clearInterval(this.pollInterval);
   },
   methods: {
     async toggleNotification() {
@@ -286,6 +291,23 @@ export default defineComponent({
           icon: 'close',
         }
       );
+    },
+    pollMe(visibility: boolean) {
+      // if the profile token is set to visible, the user is probably going to copy it
+      // and thus we should poll the profile until the Discord profile is linked
+      if (visibility) {
+        this.pollInterval = window.setInterval(() => {
+          if (this.me.profile.discordId != null) {
+            clearInterval(this.pollInterval);
+          } else {
+            const { result: me } = ctfnote.me.getMe(true);
+            if (me.value == null) return;
+            this.me = me.value;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.pollInterval);
+      }
     },
   },
 });
