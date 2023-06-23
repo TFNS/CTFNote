@@ -135,7 +135,7 @@
                 {{ me.profile.discordId }}.
               </div>
             </q-card-section>
-            <q-card-actions>
+            <q-card-actions align="right" class="q-pa-md">
               <q-btn
                 v-if="me.profile.discordId != null"
                 icon="close"
@@ -143,9 +143,10 @@
                 color="negative"
                 title="Unlink Discord"
                 @click="unlinkDiscord"
+                :loading="resetDiscordLoading"
               />
-              <q-space></q-space>
               <q-btn
+                v-if="me.profile.discordId == null"
                 icon="refresh"
                 label="Change token"
                 color="positive"
@@ -222,6 +223,7 @@ export default defineComponent({
       oldPassword: ref(''),
       newPassword: ref(''),
       profileToken,
+      resetDiscordLoading: ref(false),
     };
   },
   computed: {
@@ -274,10 +276,16 @@ export default defineComponent({
       );
     },
     unlinkDiscord() {
-      void this.resolveAndNotify(this.resetDiscordId(), {
-        message: 'Discord unlinked!',
-        icon: 'close',
-      });
+      this.resetDiscordLoading = true;
+      void this.resolveAndNotify(
+        this.resetDiscordId().then(() => {
+          this.resetDiscordLoading = false;
+        }),
+        {
+          message: 'Discord unlinked!',
+          icon: 'close',
+        }
+      );
     },
   },
 });

@@ -16,7 +16,7 @@ import config from "../../config";
 
 export async function changeDiscordUserRoleForCTF(
   userId: bigint,
-  ctf: CTF,
+  ctf: CTF | string | string[],
   operation: "add" | "remove"
 ): Promise<boolean> {
   const discordUserId = await getDiscordIdFromUserId(userId);
@@ -27,16 +27,27 @@ export async function changeDiscordUserRoleForCTF(
 
   const guild = discordClient.guilds.resolve(config.discord.serverId);
 
-  const role = guild?.roles.cache.find((role) => role.name === ctf.title);
-  if (!role) return false;
+  let ctfTitle: string[] = [];
+  if (typeof ctf === "string") {
+    ctfTitle = [ctf];
+  } else if (Array.isArray(ctf)) {
+    ctfTitle = ctf;
+  } else {
+    ctfTitle = [ctf.title];
+  }
 
   const member = await guild?.members.fetch(discordUserId);
   if (!member) return false;
 
-  if (operation === "add") {
-    await member.roles.add(role);
-  } else if (operation === "remove") {
-    await member.roles.remove(role);
+  for (const c of ctfTitle) {
+    const role = guild?.roles.cache.find((role) => role.name === c);
+    if (!role) return false;
+
+    if (operation === "add") {
+      await member.roles.add(role);
+    } else if (operation === "remove") {
+      await member.roles.remove(role);
+    }
   }
 
   return true;
@@ -73,7 +84,8 @@ export const LinkUser: Command = {
 
     if (!success) {
       await interaction.editReply({
-        content: "Failed to set your Discord ID in the database!",
+        content:
+          "You can't link the same Discord account twice! Please use a different Discord account or investigate why your account is already linked.",
       });
       return;
     }

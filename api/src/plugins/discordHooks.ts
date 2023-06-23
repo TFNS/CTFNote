@@ -8,6 +8,7 @@ import {
   TextChannel,
 } from "discord.js";
 import {
+  getAllCtfsFromDatabase,
   getCTFNameFromId,
   getCtfById,
   getNameFromUserId,
@@ -48,7 +49,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "addTagsForTask" &&
     fieldContext.scope.fieldName !== "updateCtf" &&
     fieldContext.scope.fieldName !== "createInvitation" &&
-    fieldContext.scope.fieldName !== "deleteInvitation"
+    fieldContext.scope.fieldName !== "deleteInvitation" &&
+    fieldContext.scope.fieldName !== "resetDiscordId"
   ) {
     return null;
   }
@@ -244,6 +246,12 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       handleUpdateCtf(args, guild);
     }
 
+    if (fieldContext.scope.fieldName === "resetDiscordId") {
+      // we need to use the await here to prevent a race condition
+      // between deleting the discord id and retrieving the discord id (to remove the roles)
+      await handleResetDiscordId(context.jwtClaims.user_id);
+    }
+
     return input;
   };
 
@@ -263,6 +271,11 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     error: [],
   };
 };
+
+async function handleResetDiscordId(userId: bigint) {
+  const allCtfs = await getAllCtfsFromDatabase();
+  await changeDiscordUserRoleForCTF(userId, allCtfs, "remove");
+}
 
 async function handeInvitation(
   ctfId: bigint,
