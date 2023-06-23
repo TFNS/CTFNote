@@ -97,6 +97,7 @@ See [this article](https://www.digitalocean.com/community/tutorials/how-to-secur
 To add support for the CTFNote discord bot, you need to change the following values in the `.env` file:
 
 ```
+USE_DISCORD=true
 DISCORD_BOT_TOKEN=secret_token
 DISCORD_SERVER_ID=server_id
 ```
