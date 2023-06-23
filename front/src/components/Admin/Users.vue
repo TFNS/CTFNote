@@ -122,6 +122,12 @@ const columns = [
     sortable: true,
   },
   { name: 'role', label: 'Role', field: 'role', sortable: true },
+  {
+    name: 'discordId',
+    label: 'Discord ID',
+    field: (u: User) => u.profile.discordId,
+    sortable: true,
+  },
   { name: 'btns' },
 ];
 
