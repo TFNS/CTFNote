@@ -344,6 +344,12 @@ async function handleDeleteCtf(ctfId: any, guild: Guild) {
     }
   });
 
+  guild.roles.cache.map((role) => {
+    if (role.name === ctfName) {
+      return role.delete();
+    }
+  });
+
   categoryChannel.delete();
 }
 
