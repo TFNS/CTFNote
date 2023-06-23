@@ -5,7 +5,36 @@ import {
   CommandInteraction,
 } from "discord.js";
 import { Command } from "../command";
-import { getUserByToken, setDiscordIdForUser } from "../database/users";
+import {
+  getDiscordIdFromUserId,
+  getUserByToken,
+  setDiscordIdForUser,
+} from "../database/users";
+import { CTF, getAccessibleCTFsForUser } from "../database/ctfs";
+import { getDiscordClient } from "..";
+import config from "../../config";
+
+export async function grantDiscordUserRoleForCTF(
+  userId: bigint,
+  ctf: CTF
+): Promise<boolean> {
+  const discordUserId = await getDiscordIdFromUserId(userId);
+
+  const discordClient = getDiscordClient();
+  if (!discordClient) return false;
+
+  const guild = discordClient.guilds.resolve(config.discord.serverId);
+
+  const role = guild?.roles.cache.find((role) => role.name === ctf.title);
+  if (!role) return false;
+
+  const member = await guild?.members.fetch(discordUserId);
+  if (!member) return false;
+
+  await member.roles.add(role);
+
+  return true;
+}
 
 export const LinkUser: Command = {
   name: "link",
@@ -40,11 +69,18 @@ export const LinkUser: Command = {
       await interaction.editReply({
         content: "Failed to set your Discord ID in the database!",
       });
-    } else {
-      await interaction.editReply({
-        content:
-          "Successfully linked your Discord account to your CTFNote account!",
-      });
+      return;
     }
+
+    await interaction.editReply({
+      content:
+        "Successfully linked your Discord account to your CTFNote account!",
+    });
+
+    const ctfs = await getAccessibleCTFsForUser(userId);
+
+    ctfs.forEach(function (ctf) {
+      grantDiscordUserRoleForCTF(userId, ctf);
+    });
   },
 };
