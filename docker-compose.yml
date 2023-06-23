@@ -17,6 +17,7 @@ services:
       DB_HOST: db
       DB_PORT: 5432
       WEB_PORT: 3000
+      USE_DISCORD: ${USE_DISCORD:-false}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-bot_token}
       DISCORD_SERVER_ID: ${DISCORD_SERVER_ID:-server_id}
       DISCORD_VOICE_CHANNELS: ${DISCORD_VOICE_CHANNELS:-3}
