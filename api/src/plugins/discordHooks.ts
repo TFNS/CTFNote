@@ -89,7 +89,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "updateCtf" &&
     fieldContext.scope.fieldName !== "createInvitation" &&
     fieldContext.scope.fieldName !== "deleteInvitation" &&
-    fieldContext.scope.fieldName !== "resetDiscordId"
+    fieldContext.scope.fieldName !== "resetDiscordId" &&
+    fieldContext.scope.fieldName !== "deleteCtf"
   ) {
     return null;
   }
@@ -279,7 +280,15 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     const guild = getDiscordGuild();
     if (guild === null) return input;
     if (fieldContext.scope.fieldName === "updateCtf") {
-      handleUpdateCtf(args, guild);
+      handleUpdateCtf(args, guild).catch((err) => {
+        console.error("Failed to update ctf.", err);
+      });
+    }
+
+    if (fieldContext.scope.fieldName === "deleteCtf") {
+      handleDeleteCtf(args.input.id, guild).catch((err) => {
+        console.error("Failed to delete ctf.", err);
+      });
     }
 
     if (fieldContext.scope.fieldName === "resetDiscordId") {
@@ -309,6 +318,34 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     error: [],
   };
 };
+
+async function handleDeleteCtf(ctfId: any, guild: Guild) {
+  const ctfName = await getCTFNameFromId(ctfId);
+  const categoryChannel = guild.channels.cache.find(
+    (channel) =>
+      channel.type === ChannelType.GuildCategory && channel.name === ctfName
+  ) as CategoryChannel;
+
+  guild?.channels.cache.map((channel) => {
+    if (
+      channel.type === ChannelType.GuildVoice &&
+      channel.parentId === categoryChannel.id
+    ) {
+      return channel.delete();
+    }
+  });
+
+  guild?.channels.cache.map(async (channel) => {
+    if (
+      channel.type === ChannelType.GuildText &&
+      channel.parentId === categoryChannel.id
+    ) {
+      await channel.delete();
+    }
+  });
+
+  categoryChannel.delete();
+}
 
 async function handleResetDiscordId(userId: bigint) {
   const allCtfs = await getAllCtfsFromDatabase();
