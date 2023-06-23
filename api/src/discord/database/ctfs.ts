@@ -38,8 +38,7 @@ export async function getAllCtfsFromDatabase(): Promise<string[]> {
   const pgClient = await connectToDatabase();
 
   try {
-    const query = `SELECT title, start_time, end_time
-                       FROM ctfnote.ctf;`;
+    const query = `SELECT title FROM ctfnote.ctf;`;
 
     const queryResult = await pgClient.query(query);
 
