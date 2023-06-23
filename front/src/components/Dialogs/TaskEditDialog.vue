@@ -71,6 +71,7 @@ export default defineComponent({
     const filterFn = function (
       val: string,
       doneFn: (callBackFn: () => void, afterFn: () => void) => void,
+      //eslint-disable-next-line @typescript-eslint/no-unused-vars
       _abortFn: () => void
     ) {
       doneFn(
