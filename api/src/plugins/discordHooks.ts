@@ -5,6 +5,8 @@ import {
   ChannelType,
   Guild,
   GuildBasedChannel,
+  MessageCreateOptions,
+  MessagePayload,
   TextChannel,
 } from "discord.js";
 import {
@@ -16,11 +18,32 @@ import {
 } from "../discord/database/ctfs";
 import { getDiscordGuild, usingDiscordBot } from "../discord";
 import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
+import { getDiscordIdFromUserId } from "../discord/database/users";
+
+export async function convertToUsernameFormat(userId: bigint) {
+  const name = await getNameFromUserId(userId);
+  const discordId = await getDiscordIdFromUserId(userId);
+  if (discordId == null) return name;
+
+  const guild = getDiscordGuild();
+  if (guild == null) return name;
+
+  const member = await guild.members.fetch({ user: discordId });
+  if (member == null) return name;
+
+  const discordName = member.displayName;
+
+  if (discordName.toLowerCase() !== name.toLowerCase()) {
+    return `<@${discordId}> (${name})`;
+  } else {
+    return `<@${discordId}>`;
+  }
+}
 
 export async function handleTaskSolved(id: bigint) {
   const task = await getTaskFromId(id);
 
-  return sendMessageFromTaskId(id, `${task.title} is solved!`)
+  return sendMessageFromTaskId(id, { content: `${task.title} is solved!` })
     .then(async (channel) => {
       if (channel !== null) {
         return channel.setName(`solved-${task.title}`);
@@ -178,10 +201,9 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         args.input.patch.description != null &&
         args.input.patch.description !== task.description
       ) {
-        sendMessageFromTaskId(
-          task.id,
-          `Description changed:\n${args.input.patch.description}`
-        );
+        sendMessageFromTaskId(task.id, {
+          content: `Description changed:\n${args.input.patch.description}`,
+        });
       }
     }
 
@@ -190,35 +212,32 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       const userId = context.jwtClaims.user_id;
       const taskId = args.input.taskId;
 
-      getNameFromUserId(userId)
-        .then((username) => {
-          return sendMessageFromTaskId(
-            taskId,
-            `${username} is working on this task!`
-          );
-        })
-        .catch((err) => {
-          console.error("Failed sending 'working on' notification.", err);
-        });
+      return sendMessageFromTaskId(taskId, {
+        content: `${await convertToUsernameFormat(
+          userId
+        )} is working on this task!`,
+        allowedMentions: {
+          users: [],
+        },
+      }).catch((err) => {
+        console.error("Failed sending 'working on' notification.", err);
+      });
     }
     if (fieldContext.scope.fieldName === "stopWorkingOn") {
       //send a message to the channel that the user stopped working on the task
       const userId = context.jwtClaims.user_id;
       const taskId = args.input.taskId;
 
-      getNameFromUserId(userId)
-        .then((username) => {
-          return sendMessageFromTaskId(
-            taskId,
-            `${username} stopped working on this task!`
-          );
-        })
-        .catch((err) => {
-          console.error(
-            "Failed sending 'stopped working on' notification.",
-            err
-          );
-        });
+      return sendMessageFromTaskId(taskId, {
+        content: `${await convertToUsernameFormat(
+          userId
+        )} stopped working on this task!`,
+        allowedMentions: {
+          users: [],
+        },
+      }).catch((err) => {
+        console.error("Failed sending 'stopped working on' notification.", err);
+      });
     }
     if (fieldContext.scope.fieldName === "createInvitation") {
       handeInvitation(
@@ -310,7 +329,7 @@ async function handleUpdateCtf(args: any, guild: Guild) {
 
 async function sendMessageFromTaskId(
   id: bigint,
-  message: string
+  message: MessagePayload | MessageCreateOptions
 ): Promise<GuildBasedChannel | null> {
   const task = await getTaskFromId(id);
   const ctfName = await getCTFNameFromId(BigInt(task.ctf_id));
@@ -329,7 +348,9 @@ async function sendMessageFromTaskId(
       channel.topic === task.title &&
       channel.parent?.name === ctfName
     ) {
-      channel.send(message);
+      channel.send(message).catch((err) => {
+        console.error("Failed sending message.", err);
+      });
       return channel;
     }
   }
