@@ -7,7 +7,11 @@ export let usingDiscordBot = true;
 
 export function getDiscordClient(): Client | null {
   if (!usingDiscordBot) return null;
-
+  if (config.discord.use.toLowerCase() === "false") {
+    console.warn("Discord bot not enabled, skipping...");
+    usingDiscordBot = false;
+    return null;
+  }
   if (!config.discord.token) throw new Error("Discord token not set");
   if (!config.discord.serverId) throw new Error("Discord serverId not set");
 

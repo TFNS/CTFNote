@@ -32,6 +32,7 @@ export type CTFNoteConfig = DeepReadOnly<{
     port: number;
   };
   discord: {
+    use: string;
     token: string;
     serverId: string;
     voiceChannels: number;
@@ -76,6 +77,7 @@ const config: CTFNoteConfig = {
     port: getEnvInt("WEB_PORT"),
   },
   discord: {
+    use: getEnv("USE_DISCORD", "false"),
     token: getEnv("DISCORD_BOT_TOKEN"),
     serverId: getEnv("DISCORD_SERVER_ID"),
     voiceChannels: getEnvInt("DISCORD_VOICE_CHANNELS"),
