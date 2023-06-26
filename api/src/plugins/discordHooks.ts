@@ -359,16 +359,19 @@ async function handleUpdateCtf(args: any, guild: Guild) {
   const ctf = await getCtfFromDatabase(args.input.id);
   if (ctf == null) return;
 
-  const categoryChannel = guild?.channels.cache.find(
+  const categoryChannels = guild?.channels.cache.filter(
     (channel) =>
-      channel.type === ChannelType.GuildCategory && channel.name === ctf.title
-  ) as CategoryChannel | undefined;
+      channel.type === ChannelType.GuildCategory &&
+      channel.name.startsWith(ctf.title)
+  );
 
-  if (categoryChannel != null) {
-    categoryChannel.setName(args.input.patch.title).catch((err) => {
-      console.error("Failed updating category.", err);
-    });
-  }
+  categoryChannels.map((categoryChannel) => {
+    categoryChannel
+      .setName(categoryChannel.name.replace(ctf.title, args.input.patch.title))
+      .catch((err) => {
+        console.error("Failed updating category.", err);
+      });
+  });
 
   const role = guild?.roles.cache.find((role) => role.name === ctf.title);
   role?.setName(args.input.patch.title).catch((err) => {
