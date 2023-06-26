@@ -18,6 +18,7 @@ import { getDiscordGuild, usingDiscordBot } from "../discord";
 import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
 import { getDiscordIdFromUserId } from "../discord/database/users";
 import { getTaskFromId } from "../discord/database/tasks";
+import { sendMessageToChannel } from "../discord/utils/messages";
 
 export async function convertToUsernameFormat(userId: bigint | string) {
   // this is actually the Discord ID and not a CTFNote userId
@@ -52,14 +53,10 @@ export async function handleTaskSolved(id: bigint, userId: bigint | string) {
   const task = await getTaskFromId(id);
   if (task == null) return;
 
-  return sendMessageFromTaskId(id, {
-    content: `${task.title} is solved by ${await convertToUsernameFormat(
-      userId
-    )}!`,
-    allowedMentions: {
-      users: [],
-    },
-  })
+  return sendMessageFromTaskId(
+    id,
+    `${task.title} is solved by ${await convertToUsernameFormat(userId)}!`
+  )
     .then(async (channel) => {
       if (channel != null) {
         return channel.setName(`solved-${task.title}`);
@@ -125,6 +122,11 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           parent: categoryChannel.id,
           topic: args.input.title,
         })
+        .then((channel) => {
+          if (args.input.description != null && args.input.description !== "") {
+            sendMessageToChannel(channel, args.input.description);
+          }
+        })
         .catch((err) => {
           console.error("Failed creating category.", err);
         });
@@ -138,11 +140,11 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       ) as TextChannel | undefined;
 
       if (mainChannel !== undefined) {
-        mainChannel
-          .send(`New task created: ${args.input.title}`)
-          .catch((err) => {
-            console.error("Failed to send notification about a new task.", err);
-          });
+        sendMessageToChannel(
+          mainChannel,
+          `New task created: ${args.input.title}`,
+          false
+        );
       }
     }
     if (fieldContext.scope.fieldName === "deleteTask") {
@@ -225,9 +227,10 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         args.input.patch.description != null &&
         args.input.patch.description !== task.description
       ) {
-        sendMessageFromTaskId(task.id, {
-          content: `Description changed:\n${args.input.patch.description}`,
-        }).catch((err) => {
+        sendMessageFromTaskId(
+          task.id,
+          `Description changed:\n${args.input.patch.description}`
+        ).catch((err) => {
           console.error("Failed sending description change notification.", err);
         });
       }
@@ -322,27 +325,19 @@ export async function sendStartWorkingOnMessage(
   userId: bigint,
   taskId: bigint
 ) {
-  return sendMessageFromTaskId(taskId, {
-    content: `${await convertToUsernameFormat(
-      userId
-    )} is working on this task!`,
-    allowedMentions: {
-      users: [],
-    },
-  }).catch((err) => {
+  return sendMessageFromTaskId(
+    taskId,
+    `${await convertToUsernameFormat(userId)} is working on this task!`
+  ).catch((err) => {
     console.error("Failed sending 'working on' notification.", err);
   });
 }
 
 export async function sendStopWorkingOnMessage(userId: bigint, taskId: bigint) {
-  return sendMessageFromTaskId(taskId, {
-    content: `${await convertToUsernameFormat(
-      userId
-    )} stopped working on this task!`,
-    allowedMentions: {
-      users: [],
-    },
-  }).catch((err) => {
+  return sendMessageFromTaskId(
+    taskId,
+    `${await convertToUsernameFormat(userId)} stopped working on this task!`
+  ).catch((err) => {
     console.error("Failed sending 'stopped working on' notification.", err);
   });
 }
@@ -421,7 +416,7 @@ async function handleUpdateCtf(args: any, guild: Guild) {
 
 async function sendMessageFromTaskId(
   id: bigint,
-  message: MessagePayload | MessageCreateOptions
+  message: string
 ): Promise<GuildBasedChannel | null> {
   const task = await getTaskFromId(id);
   if (task == null) return null;
@@ -443,9 +438,7 @@ async function sendMessageFromTaskId(
       channel.topic === task.title &&
       channel.parent?.name === ctf.title
     ) {
-      channel.send(message).catch((err) => {
-        console.error("Failed sending message.", err);
-      });
+      sendMessageToChannel(channel, message);
       return channel;
     }
   }

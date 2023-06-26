@@ -17,6 +17,7 @@ import { createPad } from "../../plugins/createTask";
 import config from "../../config";
 import { getDiscordUsersThatCanPlayCTF } from "../database/users";
 import { getChallengesFromDatabase } from "../database/tasks";
+import { sendMessageToChannel } from "../utils/messages";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -116,7 +117,7 @@ export default (client: Client): void => {
             })
             .then((challengeChannel) => {
               if (challenge.description !== "") {
-                return challengeChannel?.send(challenge.description);
+                sendMessageToChannel(challengeChannel, challenge.description);
               }
             })
             .catch((err) => {
