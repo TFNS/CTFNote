@@ -401,7 +401,7 @@ async function sendMessageFromTaskId(
     if (
       channel.type === ChannelType.GuildText &&
       channel.topic === task.title &&
-      channel.parent?.name === ctf.title
+      channel.parent?.name.startsWith(ctf.title)
     ) {
       sendMessageToChannel(channel, message);
       return channel;
