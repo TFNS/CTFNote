@@ -12,14 +12,11 @@ import {
   TextChannel,
 } from "discord.js";
 import { Commands } from "../commands";
-import {
-  createTask,
-  getChallengesFromDatabase,
-  getCtfIdFromDatabase,
-} from "../database/ctfs";
+import { createTask, getCtfFromDatabase } from "../database/ctfs";
 import { createPad } from "../../plugins/createTask";
 import config from "../../config";
 import { getDiscordUsersThatCanPlayCTF } from "../database/users";
+import { getChallengesFromDatabase } from "../database/tasks";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -72,8 +69,12 @@ export default (client: Client): void => {
         });
 
         // assign roles to users already having access to the ctf
-        const ctfId: bigint = await getCtfIdFromDatabase(ctfName);
-        const discordIds: string[] = await getDiscordUsersThatCanPlayCTF(ctfId);
+        const ctf = await getCtfFromDatabase(ctfName);
+        if (ctf == null) return;
+
+        const discordIds: string[] = await getDiscordUsersThatCanPlayCTF(
+          ctf.id
+        );
         discordIds.forEach((discordId) => {
           const member = interaction.guild?.members.cache.get(discordId);
           if (member) member.roles.add(allowedRole);
@@ -100,7 +101,7 @@ export default (client: Client): void => {
         }
 
         // create for every challenge a channel
-        const challenges = await getChallengesFromDatabase(ctfId);
+        const challenges = await getChallengesFromDatabase(ctf.id);
 
         for (const challenge of challenges) {
           interaction.guild?.channels
@@ -219,7 +220,8 @@ export default (client: Client): void => {
         // so we need to split the messages in multiple pads
         // and put the links to the other pads in the first pad
 
-        const ctfId = Number(await getCtfIdFromDatabase(ctfName));
+        const ctf = await getCtfFromDatabase(ctfName);
+        if (ctf == null) return;
 
         const MAX_PAD_LENGTH = config.pad.documentMaxLength - 100; // some margin to be safe
 
@@ -278,7 +280,7 @@ export default (client: Client): void => {
           `Discord archive of ${ctfName}`,
           "",
           firstPadUrl,
-          ctfId
+          ctf.id
         );
       }
     }

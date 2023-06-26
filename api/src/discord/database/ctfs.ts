@@ -14,6 +14,21 @@ export interface CTF {
   secrets_id: bigint;
 }
 
+function buildCtf(row: any): CTF {
+  return {
+    id: row.id as bigint,
+    title: row.title as string,
+    weight: row.weight as number,
+    ctf_url: row.ctf_url as string,
+    logo_url: row.logo_url as string,
+    ctftime_url: row.ctftime_url as string,
+    description: row.description as string,
+    start_time: row.start_time as Date,
+    end_time: row.end_time as Date,
+    secrets_id: row.secrets_id as bigint,
+  };
+}
+
 export async function getCTFNamesFromDatabase(): Promise<string[]> {
   const pgClient = await connectToDatabase();
 
@@ -52,42 +67,30 @@ export async function getAllCtfsFromDatabase(): Promise<string[]> {
 }
 
 // get id from ctf name
-export async function getCtfIdFromDatabase(ctfName: string): Promise<bigint> {
+export async function getCtfFromDatabase(
+  ctfName: string | bigint
+): Promise<CTF | null> {
   const pgClient = await connectToDatabase();
 
   try {
     //make a query to get all the challenges from a ctf
 
-    const query = "SELECT id FROM ctfnote.ctf WHERE title = $1";
+    let query =
+      "SELECT id, title, weight, ctf_url, logo_url, ctftime_url, description, start_time, end_time, secrets_id FROM ctfnote.ctf";
+
+    if (typeof ctfName === "string") {
+      query += " WHERE title = $1";
+    } else if (typeof ctfName === "bigint" || typeof ctfName === "number") {
+      query += " WHERE id = $1";
+    }
+
     const values = [ctfName];
     const queryResult = await pgClient.query(query, values);
 
-    return queryResult.rows[0].id;
+    return buildCtf(queryResult.rows[0]);
   } catch (error) {
     console.error("Failed to fetch CTF names from the database:", error);
-    return BigInt(-1);
-  } finally {
-    pgClient.release();
-  }
-}
-
-export async function getChallengesFromDatabase(
-  ctfId: bigint
-): Promise<Task[]> {
-  const pgClient = await connectToDatabase();
-
-  try {
-    //make a query to get all the challenges from a ctf
-
-    const query =
-      "SELECT title, description, tsk.id, ctf_id, flag, array_agg(tag) AS tags FROM ctfnote.task tsk LEFT JOIN ctfnote.assigned_tags tt ON tsk.id = tt.task_id LEFT JOIN ctfnote.tag t ON tt.tag_id = t.id WHERE ctf_id = $1 GROUP BY tsk.id ORDER BY title";
-    const values = [ctfId];
-    const queryResult = await pgClient.query(query, values);
-
-    return queryResult.rows;
-  } catch (error) {
-    console.error("Failed to fetch CTF names from the database:", error);
-    return [];
+    return null;
   } finally {
     pgClient.release();
   }
@@ -97,12 +100,9 @@ export async function getNameFromUserId(userId: bigint): Promise<string> {
   const pgClient = await connectToDatabase();
 
   try {
-    //make a query to get all the challenges from a ctf
-
     const query = "SELECT username FROM ctfnote.profile WHERE id = $1";
     const values = [userId];
     const queryResult = await pgClient.query(query, values);
-    // Extract the "name" field from each row
 
     return queryResult.rows[0].username;
   } catch (error) {
@@ -113,41 +113,12 @@ export async function getNameFromUserId(userId: bigint): Promise<string> {
   }
 }
 
-export async function getTaskFromId(taskId: bigint): Promise<Task> {
-  const pgClient = await connectToDatabase();
-
-  try {
-    //make a query to get all the challenges from a ctf
-
-    const query =
-      "SELECT title, ctf_id, tsk.id, description, flag, array_agg(tag) as tags FROM ctfnote.task tsk LEFT JOIN ctfnote.assigned_tags tt ON tsk.id = tt.task_id LEFT JOIN ctfnote.tag t ON tt.tag_id = t.id WHERE tsk.id = $1 GROUP BY tsk.id LIMIT 1;";
-    const values = [taskId];
-    const queryResult = await pgClient.query(query, values);
-
-    const task: Task = {
-      id: queryResult.rows[0].id as bigint,
-      ctf_id: queryResult.rows[0].ctf_id as bigint,
-      title: queryResult.rows[0].title as string,
-      description: queryResult.rows[0].description as string,
-      tags: queryResult.rows[0].tags as string[],
-      flag: queryResult.rows[0].flag as string,
-    };
-
-    return task;
-  } catch (error) {
-    console.error("Failed to fetch CTF names from the database:", error);
-    return {} as Task;
-  } finally {
-    pgClient.release();
-  }
-}
-
 export async function createTask(
   title: string,
   description: string,
   flag: string,
   padUrl: string,
-  ctfId: number
+  ctfId: bigint
 ): Promise<void> {
   const pgClient = await connectToDatabase();
 
@@ -166,25 +137,6 @@ export async function createTask(
   }
 }
 
-export async function getCTFNameFromId(ctfId: bigint): Promise<string> {
-  const pgClient = await connectToDatabase();
-
-  try {
-    //make a query to get all the challenges from a ctf
-
-    const query = "SELECT title FROM ctfnote.ctf WHERE id = $1";
-    const values = [ctfId];
-    const queryResult = await pgClient.query(query, values);
-
-    return queryResult.rows[0].title;
-  } catch (error) {
-    console.error("Failed to fetch CTF names from the database:", error);
-    return "";
-  } finally {
-    pgClient.release();
-  }
-}
-
 export async function getAccessibleCTFsForUser(userId: bigint): Promise<CTF[]> {
   const pgClient = await connectToDatabase();
 
@@ -197,23 +149,6 @@ export async function getAccessibleCTFsForUser(userId: bigint): Promise<CTF[]> {
   } catch (error) {
     console.error("Failed to fetch accessible CTFs from the database:", error);
     return [];
-  } finally {
-    pgClient.release();
-  }
-}
-
-export async function getCtfById(ctfId: bigint): Promise<CTF> {
-  const pgClient = await connectToDatabase();
-
-  try {
-    const query = `SELECT * FROM ctfnote.ctf WHERE id = $1;`;
-    const values = [ctfId];
-    const queryResult = await pgClient.query(query, values);
-
-    return queryResult.rows[0];
-  } catch (error) {
-    console.error("Failed to fetch CTFs from the database:", error);
-    return {} as CTF;
   } finally {
     pgClient.release();
   }

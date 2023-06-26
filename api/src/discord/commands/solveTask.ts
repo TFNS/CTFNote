@@ -8,10 +8,7 @@ import {
   TextChannel,
 } from "discord.js";
 import { Command } from "../command";
-import {
-  getCTFNamesFromDatabase,
-  getCtfIdFromDatabase,
-} from "../database/ctfs";
+import { getCTFNamesFromDatabase, getCtfFromDatabase } from "../database/ctfs";
 import {
   getTaskByCtfIdAndNameFromDatabase,
   setFlagForChallengeId,
@@ -42,13 +39,13 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
       channel.guildId === categoryChannel.guildId
   )) as TextChannel;
 
-  const ctfId = await getCtfIdFromDatabase(categoryChannel.name);
-  if (ctfId == null) return accessDenied(interaction);
+  const ctf = await getCtfFromDatabase(categoryChannel.name);
+  if (ctf == null) return accessDenied(interaction);
 
   const name = currentTaskChannel?.topic;
   if (name == null) return accessDenied(interaction);
 
-  const task = await getTaskByCtfIdAndNameFromDatabase(ctfId, name);
+  const task = await getTaskByCtfIdAndNameFromDatabase(ctf.id, name);
   if (task.id == null) return accessDenied(interaction);
 
   const flag = interaction.options.get("flag", true).value as string;

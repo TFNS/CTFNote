@@ -11,14 +11,13 @@ import {
 } from "discord.js";
 import {
   getAllCtfsFromDatabase,
-  getCTFNameFromId,
-  getCtfById,
+  getCtfFromDatabase,
   getNameFromUserId,
-  getTaskFromId,
 } from "../discord/database/ctfs";
 import { getDiscordGuild, usingDiscordBot } from "../discord";
 import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
 import { getDiscordIdFromUserId } from "../discord/database/users";
+import { getTaskFromId } from "../discord/database/tasks";
 
 export async function convertToUsernameFormat(userId: bigint | string) {
   // this is actually the Discord ID and not a CTFNote userId
@@ -51,6 +50,7 @@ export async function convertToUsernameFormat(userId: bigint | string) {
 
 export async function handleTaskSolved(id: bigint, userId: bigint | string) {
   const task = await getTaskFromId(id);
+  if (task == null) return;
 
   return sendMessageFromTaskId(id, {
     content: `${task.title} is solved by ${await convertToUsernameFormat(
@@ -105,11 +105,13 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 
     //add challenges to the ctf channel discord
     if (fieldContext.scope.fieldName === "createTask") {
-      const ctfName = await getCTFNameFromId(args.input.ctfId);
+      const ctf = await getCtfFromDatabase(args.input.ctfId);
+      if (ctf == null) return input;
 
       const categoryChannel = guild?.channels.cache.find(
         (channel) =>
-          channel.type === ChannelType.GuildCategory && channel.name === ctfName
+          channel.type === ChannelType.GuildCategory &&
+          channel.name === ctf.title
       ) as CategoryChannel | undefined;
 
       if (categoryChannel === undefined) {
@@ -145,6 +147,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     }
     if (fieldContext.scope.fieldName === "deleteTask") {
       const task = await getTaskFromId(args.input.id);
+      if (task == null) return input;
 
       const channel = guild?.channels.cache.find(
         (channel) =>
@@ -166,6 +169,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       args.input.id !== null
     ) {
       const task = await getTaskFromId(args.input.id);
+      if (task == null) return input;
+
       let title = task.title;
       if (args.input.patch.title !== null) {
         title = args.input.patch.title;
@@ -177,6 +182,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           handleTaskSolved(args.input.id, userId);
         } else {
           const task = await getTaskFromId(args.input.id);
+          if (task == null) return input;
 
           const channel = guild?.channels.cache.find(
             (channel) =>
@@ -342,10 +348,12 @@ export async function sendStopWorkingOnMessage(userId: bigint, taskId: bigint) {
 }
 
 async function handleDeleteCtf(ctfId: any, guild: Guild) {
-  const ctfName = await getCTFNameFromId(ctfId);
+  const ctf = await getCtfFromDatabase(ctfId);
+  if (ctf == null) return;
+
   const categoryChannel = guild.channels.cache.find(
     (channel) =>
-      channel.type === ChannelType.GuildCategory && channel.name === ctfName
+      channel.type === ChannelType.GuildCategory && channel.name === ctf.title
   ) as CategoryChannel;
 
   guild?.channels.cache.map((channel) => {
@@ -367,7 +375,7 @@ async function handleDeleteCtf(ctfId: any, guild: Guild) {
   });
 
   guild.roles.cache.map((role) => {
-    if (role.name === ctfName) {
+    if (role.name === ctf.title) {
       return role.delete();
     }
   });
@@ -385,16 +393,18 @@ async function handeInvitation(
   profileId: bigint,
   operation: "add" | "remove"
 ) {
-  const ctf = await getCtfById(ctfId);
+  const ctf = await getCtfFromDatabase(ctfId);
+  if (ctf == null) return;
   await changeDiscordUserRoleForCTF(profileId, ctf, operation);
 }
 
 async function handleUpdateCtf(args: any, guild: Guild) {
-  const ctf = await getCTFNameFromId(args.input.id);
+  const ctf = await getCtfFromDatabase(args.input.id);
+  if (ctf == null) return;
 
   const categoryChannel = guild?.channels.cache.find(
     (channel) =>
-      channel.type === ChannelType.GuildCategory && channel.name === ctf
+      channel.type === ChannelType.GuildCategory && channel.name === ctf.title
   ) as CategoryChannel | undefined;
 
   if (categoryChannel != null) {
@@ -403,7 +413,7 @@ async function handleUpdateCtf(args: any, guild: Guild) {
     });
   }
 
-  const role = guild?.roles.cache.find((role) => role.name === ctf);
+  const role = guild?.roles.cache.find((role) => role.name === ctf.title);
   role?.setName(args.input.patch.title).catch((err) => {
     console.error("Failed updating role.", err);
   });
@@ -414,7 +424,10 @@ async function sendMessageFromTaskId(
   message: MessagePayload | MessageCreateOptions
 ): Promise<GuildBasedChannel | null> {
   const task = await getTaskFromId(id);
-  const ctfName = await getCTFNameFromId(BigInt(task.ctf_id));
+  if (task == null) return null;
+
+  const ctf = await getCtfFromDatabase(task.ctf_id);
+  if (ctf == null) return null;
 
   const guild = getDiscordGuild();
 
@@ -428,7 +441,7 @@ async function sendMessageFromTaskId(
     if (
       channel.type === ChannelType.GuildText &&
       channel.topic === task.title &&
-      channel.parent?.name === ctfName
+      channel.parent?.name === ctf.title
     ) {
       channel.send(message).catch((err) => {
         console.error("Failed sending message.", err);
