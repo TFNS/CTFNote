@@ -50,6 +50,7 @@ import { Id, Task, Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { Ref, defineComponent, reactive, ref } from 'vue';
 import { makeId } from 'src/ctfnote/models';
+import { TaskPatch } from 'src/generated/graphql';
 
 export default defineComponent({
   props: {
@@ -120,7 +121,18 @@ export default defineComponent({
         }
       } else if (this.task) {
         await this.addTagsForTask(this.form.tags, makeId(this.task.id));
-        await this.updateTask(this.task, this.form);
+
+        const patch: TaskPatch = {};
+        if (this.form.title !== this.task.title) {
+          patch.title = this.form.title;
+        }
+        if (this.form.description !== this.task.description) {
+          patch.description = this.form.description;
+        }
+        if (this.form.flag !== this.task.flag) {
+          patch.flag = this.form.flag;
+        }
+        await this.updateTask(this.task, patch);
       }
 
       this.onDialogOK();

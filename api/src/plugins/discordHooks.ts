@@ -61,7 +61,7 @@ export async function handleTaskSolved(id: bigint, userId: bigint | string) {
     },
   })
     .then(async (channel) => {
-      if (channel !== null) {
+      if (channel != null) {
         return channel.setName(`solved-${task.title}`);
       }
     })
@@ -114,7 +114,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           channel.name === ctf.title
       ) as CategoryChannel | undefined;
 
-      if (categoryChannel === undefined) {
+      if (categoryChannel == null) {
         return input;
       }
 
@@ -166,17 +166,17 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     // handle task (un)solved
     if (
       fieldContext.scope.fieldName === "updateTask" &&
-      args.input.id !== null
+      args.input.id != null
     ) {
       const task = await getTaskFromId(args.input.id);
       if (task == null) return input;
 
       let title = task.title;
-      if (args.input.patch.title !== null) {
+      if (args.input.patch.title != null) {
         title = args.input.patch.title;
       }
 
-      if (args.input.patch.flag !== null) {
+      if (args.input.patch.flag != null) {
         if (args.input.patch.flag !== "") {
           const userId = context.jwtClaims.user_id;
           handleTaskSolved(args.input.id, userId);
@@ -190,7 +190,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
               channel.topic === task.title
           ) as TextChannel | undefined;
 
-          if (channel === undefined) return input;
+          if (channel == null) return input;
 
           channel
             .setName(`${task.title}`)
@@ -202,8 +202,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 
       // handle task title change
       if (
-        args.input.patch.title !== null &&
-        args.input.patch.title !== task.title
+        args.input.patch.title != null &&
+        args.input.patch.title != task.title
       ) {
         const channel = guild?.channels.cache.find(
           (channel) =>
@@ -211,7 +211,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
             channel.topic === task.title
         ) as TextChannel | undefined;
 
-        if (channel === undefined) return input;
+        if (channel == null) return input;
         channel
           .edit({
             name: title,
