@@ -107,7 +107,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     //add challenges to the ctf channel discord
     if (fieldContext.scope.fieldName === "createTask") {
       const task = args.input as TaskInput;
-      createChannelForNewTask(guild, task, true);
+      // we have to await this since big imports will cause race conditions with the Discord API
+      await createChannelForNewTask(guild, task, true);
     }
     if (fieldContext.scope.fieldName === "deleteTask") {
       const task = await getTaskFromId(args.input.id);

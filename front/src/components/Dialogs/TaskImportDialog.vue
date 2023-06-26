@@ -164,15 +164,14 @@ export default defineComponent({
         this.tab = 'confirm';
       } else {
         this.loading = true;
-        const result = this.parsedTasks
-          .filter((t) => t.keep)
-          .map(async (task) => {
-            const r = await this.createTask(this.ctf.id, task);
-            const newTask = r?.data?.createTask?.task;
-            if (newTask) {
-              await this.addTagsForTask(task.tags, makeId(newTask.id));
-            }
-          });
+        const result = this.parsedTasks.filter((t) => t.keep);
+        for (const task of result) {
+          const r = await this.createTask(this.ctf.id, task);
+          const newTask = r?.data?.createTask?.task;
+          if (newTask) {
+            await this.addTagsForTask(task.tags, makeId(newTask.id));
+          }
+        }
         await Promise.all(result);
         this.loading = false;
         this.onDialogOK();
