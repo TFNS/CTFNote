@@ -63,7 +63,11 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
       interaction.user.id
     );
     if (userId == null) userId = interaction.user.id;
-    await handleTaskSolved(task.id, userId).catch((e) => {
+
+    const guild = interaction.guild;
+    if (guild == null) return;
+
+    await handleTaskSolved(guild, task.id, userId).catch((e) => {
       console.error("Error while handling task solved: ", e);
     });
     return;

@@ -1,5 +1,8 @@
-import { TextChannel } from "discord.js";
+import { ChannelType, Guild, TextChannel } from "discord.js";
 import config from "../../config";
+import { Task } from "../database/tasks";
+import { CTF, getCtfFromDatabase } from "../database/ctfs";
+import { getTaskChannel } from "./channels";
 
 export async function sendMessageToChannel(
   channel: TextChannel,
@@ -36,4 +39,21 @@ export async function sendMessageToChannel(
   return await channel.send(options).catch((err) => {
     console.error("Failed to send message to channel", channel, message, err);
   });
+}
+
+export async function sendMessageToTask(
+  guild: Guild,
+  task: Task,
+  message: string | null | undefined,
+  ctf: CTF | null = null
+) {
+  if (ctf == null) {
+    ctf = await getCtfFromDatabase(task.ctfId);
+  }
+  if (ctf == null) return null;
+
+  const taskChannel = await getTaskChannel(guild, task, ctf);
+  if (taskChannel == null) return null;
+
+  return sendMessageToChannel(taskChannel, message);
 }

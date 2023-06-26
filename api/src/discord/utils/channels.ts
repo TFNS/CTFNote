@@ -11,8 +11,13 @@ import {
 import { CTF, getCtfFromDatabase } from "../database/ctfs";
 import { getDiscordUsersThatCanPlayCTF } from "../database/users";
 import config from "../../config";
-import { Task, getUserIdsWorkingOnTask } from "../database/tasks";
+import {
+  Task,
+  getTaskFromId,
+  getUserIdsWorkingOnTask,
+} from "../database/tasks";
 import { sendMessageToChannel } from "./messages";
+import { channelIsChildOfCtf, channelIsTask } from "./comparison";
 
 enum CategoryType {
   NEW,
@@ -20,19 +25,32 @@ enum CategoryType {
   SOLVED,
 }
 
-function newCategoryName(ctf: CTF) {
+export enum ChannelMovingEvent {
+  START,
+  UNSOLVED,
+  SOLVED,
+}
+
+export interface TaskInput {
+  ctfId: bigint;
+  title: string;
+  description: string;
+  flag: string;
+}
+
+export function newCategoryName(ctf: CTF) {
   return `${ctf.title} - New`;
 }
 
-function startedCategoryName(ctf: CTF) {
+export function startedCategoryName(ctf: CTF) {
   return `${ctf.title} - Started`;
 }
 
-function solvedCategoryName(ctf: CTF) {
+export function solvedCategoryName(ctf: CTF) {
   return `${ctf.title} - Solved`;
 }
 
-function findAvailableCategory(guild: Guild, originalName: string) {
+function findAvailableCategoryName(guild: Guild, originalName: string) {
   let i = 0;
   let name = originalName;
   while (guild.channels.cache.find((channel) => channel.name === name)) {
@@ -56,7 +74,7 @@ async function createCategoryChannel(
   }
 
   return guild?.channels.create({
-    name: findAvailableCategory(guild, name),
+    name: findAvailableCategoryName(guild, name),
     type: ChannelType.GuildCategory,
     permissionOverwrites: [
       // Set permissions for @everyone role (default permissions)
@@ -188,7 +206,7 @@ function getTalkChannelForCtf(guild: Guild, ctf: CTF) {
   ) as TextChannel;
 }
 
-async function getNotFullCategoryForCtf(
+export async function getNotFullCategoryForCtf(
   guild: Guild,
   ctf: CTF,
   type: CategoryType
@@ -280,13 +298,6 @@ async function handleCreateAndNotify(
   return taskChannel;
 }
 
-export interface TaskInput {
-  ctfId: bigint;
-  title: string;
-  description: string;
-  flag: string;
-}
-
 export async function createChannelForNewTask(
   guild: Guild,
   newTask: TaskInput,
@@ -299,4 +310,82 @@ export async function createChannelForNewTask(
   if (category == null) return;
 
   return handleCreateAndNotify(guild, newTask, ctf, category, announce);
+}
+
+export async function getTaskChannel(guild: Guild, task: Task, ctf: CTF) {
+  const taskChannel = guild.channels.cache.find((channel) => {
+    if (channelIsTask(channel, task) && channelIsChildOfCtf(channel, ctf)) {
+      return channel;
+    }
+  });
+
+  if (taskChannel == null) return null;
+  return taskChannel as TextChannel;
+}
+
+export async function moveChannel(
+  guild: Guild,
+  task: Task | bigint,
+  ctf: CTF | null,
+  operation: ChannelMovingEvent
+) {
+  if (typeof task === "bigint" || typeof task === "number") {
+    const t = await getTaskFromId(task);
+    if (t == null) return;
+    task = t;
+  }
+
+  if (ctf == null) {
+    ctf = await getCtfFromDatabase(task.ctfId);
+    if (ctf == null) return;
+  }
+  const taskChannel = await getTaskChannel(guild, task, ctf);
+  if (taskChannel == null) return;
+
+  // if channel is not in 'new' category, skip
+  if (
+    operation === ChannelMovingEvent.START &&
+    !taskChannel.parent?.name.startsWith(newCategoryName(ctf))
+  )
+    return;
+
+  // if channel is already in 'solved' category, skip
+  if (
+    operation === ChannelMovingEvent.SOLVED &&
+    taskChannel.parent?.name.startsWith(solvedCategoryName(ctf))
+  )
+    return;
+
+  // if channel is not in 'solved' category, skip
+  if (
+    operation === ChannelMovingEvent.UNSOLVED &&
+    !taskChannel.parent?.name.startsWith(solvedCategoryName(ctf))
+  )
+    return;
+
+  let targetParent: CategoryChannel | null = null;
+
+  if (operation === ChannelMovingEvent.START) {
+    targetParent = await getNotFullCategoryForCtf(
+      guild,
+      ctf,
+      CategoryType.STARTED
+    );
+  } else if (operation === ChannelMovingEvent.SOLVED) {
+    targetParent = await getNotFullCategoryForCtf(
+      guild,
+      ctf,
+      CategoryType.SOLVED
+    );
+  } else if (operation === ChannelMovingEvent.UNSOLVED) {
+    targetParent = await getNotFullCategoryForCtf(
+      guild,
+      ctf,
+      CategoryType.STARTED
+    );
+  }
+
+  if (targetParent == null) return;
+
+  await taskChannel.setParent(targetParent);
 }

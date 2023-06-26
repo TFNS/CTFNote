@@ -5,8 +5,6 @@ import {
   ChannelType,
   Guild,
   GuildBasedChannel,
-  MessageCreateOptions,
-  MessagePayload,
   TextChannel,
 } from "discord.js";
 import {
@@ -19,7 +17,12 @@ import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
 import { getDiscordIdFromUserId } from "../discord/database/users";
 import { getTaskFromId } from "../discord/database/tasks";
 import { sendMessageToChannel } from "../discord/utils/messages";
-import { TaskInput, createChannelForNewTask } from "../discord/utils/channels";
+import {
+  ChannelMovingEvent,
+  TaskInput,
+  createChannelForNewTask,
+  moveChannel,
+} from "../discord/utils/channels";
 
 export async function convertToUsernameFormat(userId: bigint | string) {
   // this is actually the Discord ID and not a CTFNote userId
@@ -50,22 +53,22 @@ export async function convertToUsernameFormat(userId: bigint | string) {
   }
 }
 
-export async function handleTaskSolved(id: bigint, userId: bigint | string) {
+export async function handleTaskSolved(
+  guild: Guild,
+  id: bigint,
+  userId: bigint | string
+) {
   const task = await getTaskFromId(id);
   if (task == null) return;
+
+  await moveChannel(guild, task, null, ChannelMovingEvent.SOLVED);
 
   return sendMessageFromTaskId(
     id,
     `${task.title} is solved by ${await convertToUsernameFormat(userId)}!`
-  )
-    .then(async (channel) => {
-      if (channel != null) {
-        return channel.setName(`solved-${task.title}`);
-      }
-    })
-    .catch((err) => {
-      console.error("Failed sending solved notification.", err);
-    });
+  ).catch((err) => {
+    console.error("Failed sending solved notification.", err);
+  });
 }
 
 const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
@@ -99,7 +102,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     context: any
   ) => {
     const guild = getDiscordGuild();
-    if (guild === null) return input;
+    if (guild == null) return input;
 
     //add challenges to the ctf channel discord
     if (fieldContext.scope.fieldName === "createTask") {
@@ -140,24 +143,13 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       if (args.input.patch.flag != null) {
         if (args.input.patch.flag !== "") {
           const userId = context.jwtClaims.user_id;
-          handleTaskSolved(args.input.id, userId);
+
+          handleTaskSolved(guild, args.input.id, userId);
         } else {
           const task = await getTaskFromId(args.input.id);
           if (task == null) return input;
 
-          const channel = guild?.channels.cache.find(
-            (channel) =>
-              channel.type === ChannelType.GuildText &&
-              channel.topic === task.title
-          ) as TextChannel | undefined;
-
-          if (channel == null) return input;
-
-          channel
-            .setName(`${task.title}`)
-            .catch((err) =>
-              console.error("Failed to mark channel as unsolved.", err)
-            );
+          moveChannel(guild, task, null, ChannelMovingEvent.UNSOLVED);
         }
       }
 
@@ -199,8 +191,13 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       //send a message to the channel that the user started working on the task
       const userId = context.jwtClaims.user_id;
       const taskId = args.input.taskId;
-      sendStartWorkingOnMessage(userId, taskId).catch((err) => {
-        console.error("Failed sending 'started working on' notification.", err);
+      moveChannel(guild, taskId, null, ChannelMovingEvent.START).then(() => {
+        sendStartWorkingOnMessage(userId, taskId).catch((err) => {
+          console.error(
+            "Failed sending 'started working on' notification.",
+            err
+          );
+        });
       });
     }
     if (fieldContext.scope.fieldName === "stopWorkingOn") {
