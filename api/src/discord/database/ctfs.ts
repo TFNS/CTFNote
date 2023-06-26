@@ -59,7 +59,7 @@ export async function getAllCtfsFromDatabase(): Promise<string[]> {
 
     return queryResult.rows.map((row) => row.title);
   } catch (error) {
-    console.error("Failed to fetch CTF names from the database:", error);
+    console.error("Failed to fetch all CTFs from the database:", error);
     return [];
   } finally {
     pgClient.release();
@@ -82,6 +82,8 @@ export async function getCtfFromDatabase(
       query += " WHERE title = $1";
     } else if (typeof ctfName === "bigint" || typeof ctfName === "number") {
       query += " WHERE id = $1";
+    } else {
+      throw new Error("Invalid type for ctfName: " + typeof ctfName);
     }
 
     const values = [ctfName];
@@ -89,7 +91,7 @@ export async function getCtfFromDatabase(
 
     return buildCtf(queryResult.rows[0]);
   } catch (error) {
-    console.error("Failed to fetch CTF names from the database:", error);
+    console.error("Failed to get CTF from the database:", error);
     return null;
   } finally {
     pgClient.release();
@@ -106,7 +108,7 @@ export async function getNameFromUserId(userId: bigint): Promise<string> {
 
     return queryResult.rows[0].username;
   } catch (error) {
-    console.error("Failed to fetch CTF names from the database:", error);
+    console.error("get name from user id from the database:", error);
     return "";
   } finally {
     pgClient.release();

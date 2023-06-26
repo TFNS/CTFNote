@@ -46,7 +46,7 @@ async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
   if (name == null) return accessDenied(interaction);
 
   const task = await getTaskByCtfIdAndNameFromDatabase(ctf.id, name);
-  if (task.id == null) return accessDenied(interaction);
+  if (task == null) return accessDenied(interaction);
 
   const flag = interaction.options.get("flag", true).value as string;
   if (flag == null || flag == "") return accessDenied(interaction);

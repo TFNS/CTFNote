@@ -55,7 +55,7 @@ async function workingOnLogic(
   if (name == null) return accessDenied(interaction);
 
   const task = await getTaskByCtfIdAndNameFromDatabase(ctf.id, name);
-  if (task.id == null) return accessDenied(interaction);
+  if (task == null) return accessDenied(interaction);
 
   const userId = await getUserByDiscordId(interaction.user.id);
   if (userId == null) {

@@ -5,14 +5,14 @@ export interface Task {
   tags: string[] | undefined;
   title: string;
   description: string;
-  ctf_id: bigint;
+  ctfId: bigint;
   flag: string;
 }
 
 function buildTask(row: any): Task {
   return {
     id: row.id as bigint,
-    ctf_id: row.ctf_id as bigint,
+    ctfId: row.ctf_id as bigint,
     title: row.title as string,
     description: row.description as string,
     tags: undefined,
@@ -23,7 +23,7 @@ function buildTask(row: any): Task {
 export async function getTaskByCtfIdAndNameFromDatabase(
   ctfId: bigint,
   name: string
-): Promise<Task> {
+): Promise<Task | null> {
   const pgClient = await connectToDatabase();
 
   try {
@@ -40,7 +40,7 @@ export async function getTaskByCtfIdAndNameFromDatabase(
       ctfId,
       name
     );
-    return {} as Task;
+    return null;
   } finally {
     pgClient.release();
   }
@@ -57,7 +57,7 @@ export async function getTaskFromId(taskId: bigint): Promise<Task | null> {
 
     return buildTask(queryResult.rows[0]);
   } catch (error) {
-    console.error("Failed to fetch CTF names from the database:", error);
+    console.error("Failed to get task from id:", error);
     return null;
   } finally {
     pgClient.release();
@@ -77,7 +77,7 @@ export async function getChallengesFromDatabase(
 
     return queryResult.rows;
   } catch (error) {
-    console.error("Failed to fetch CTF names from the database:", error);
+    console.error("Failed to get challenges from database:", error);
     return [];
   } finally {
     pgClient.release();
@@ -151,6 +151,27 @@ export async function userStopsWorkingOnTask(
       taskId
     );
     return false;
+  } finally {
+    pgClient.release();
+  }
+}
+
+export async function getUserIdsWorkingOnTask(task: Task): Promise<bigint[]> {
+  const pgClient = await connectToDatabase();
+  try {
+    const query =
+      "SELECT profile_id FROM ctfnote.work_on_task WHERE task_id = $1";
+    const values = [task.id];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows.map((row) => row.user_id as bigint);
+  } catch (error) {
+    console.error(
+      "Failed to fetch user ids working on task from the database:",
+      error,
+      task
+    );
+    return [];
   } finally {
     pgClient.release();
   }

@@ -36,6 +36,8 @@ export type CTFNoteConfig = DeepReadOnly<{
     token: string;
     serverId: string;
     voiceChannels: number;
+    botName: string;
+    maxChannelsPerCategory: number;
   };
 }>;
 
@@ -81,6 +83,8 @@ const config: CTFNoteConfig = {
     token: getEnv("DISCORD_BOT_TOKEN"),
     serverId: getEnv("DISCORD_SERVER_ID"),
     voiceChannels: getEnvInt("DISCORD_VOICE_CHANNELS"),
+    botName: getEnv("DISCORD_BOT_NAME", "CTFNote"),
+    maxChannelsPerCategory: 50, // 50 is the hard Discord limit
   },
 };
 

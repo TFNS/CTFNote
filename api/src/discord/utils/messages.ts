@@ -1,10 +1,12 @@
 import { TextChannel } from "discord.js";
+import config from "../../config";
 
 export async function sendMessageToChannel(
   channel: TextChannel,
   message: string,
   silent = true
 ) {
+  if (message == "") return null;
   const options = {
     content: message,
     allowedMentions: {
@@ -19,7 +21,7 @@ export async function sendMessageToChannel(
     if (latestMessages.size > 0) {
       const lastMessage = latestMessages.first();
       if (
-        lastMessage?.author.username === BOT_NAME &&
+        lastMessage?.author.username === config.discord.botName &&
         lastMessage?.createdTimestamp > Date.now() - 600000
       ) {
         silent = true;

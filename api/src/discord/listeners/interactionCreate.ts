@@ -15,9 +15,11 @@ import { Commands } from "../commands";
 import { createTask, getCtfFromDatabase } from "../database/ctfs";
 import { createPad } from "../../plugins/createTask";
 import config from "../../config";
-import { getDiscordUsersThatCanPlayCTF } from "../database/users";
 import { getChallengesFromDatabase } from "../database/tasks";
-import { sendMessageToChannel } from "../utils/messages";
+import {
+  createChannelForTaskInCtf,
+  createChannelsAndRolesForCtf,
+} from "../utils/channels";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -32,97 +34,20 @@ export default (client: Client): void => {
           components: [],
         });
 
-        const allowedRole = await interaction.guild?.roles.create({
-          name: ctfName,
-          color: "Random",
-          mentionable: true,
-        });
-
-        if (!allowedRole) return;
-
-        const channel = await interaction.guild?.channels.create({
-          name: `${ctfName}`,
-          type: ChannelType.GuildCategory,
-          permissionOverwrites: [
-            // Set permissions for @everyone role (default permissions)
-            {
-              id: interaction.guild.roles.everyone,
-              deny: [PermissionsBitField.Flags.ViewChannel], // Deny view permission to @everyone
-            },
-            // Set permissions for the allowed role
-            {
-              id: allowedRole.id,
-              allow: [PermissionsBitField.Flags.ViewChannel], // Allow view permission to the allowed role
-              deny: [
-                PermissionsBitField.Flags.CreatePublicThreads,
-                PermissionsBitField.Flags.CreatePrivateThreads,
-                PermissionsBitField.Flags.SendMessagesInThreads,
-                PermissionsBitField.Flags.ManageThreads,
-              ],
-            },
-          ],
-        });
-
-        await interaction.guild?.channels.create({
-          name: `challenges-talk`,
-          type: ChannelType.GuildText,
-          parent: channel?.id,
-        });
+        const guild = interaction.guild;
+        if (guild == null) return;
 
         // assign roles to users already having access to the ctf
         const ctf = await getCtfFromDatabase(ctfName);
         if (ctf == null) return;
 
-        const discordIds: string[] = await getDiscordUsersThatCanPlayCTF(
-          ctf.id
-        );
-        discordIds.forEach((discordId) => {
-          const member = interaction.guild?.members.cache.get(discordId);
-          if (member) member.roles.add(allowedRole);
-        });
-
-        // create voice channels for the ctf from the .env file
-        const numberOfVoiceChannels: number = config.discord.voiceChannels;
-
-        if (numberOfVoiceChannels > 0) {
-          for (let i = 0; i < numberOfVoiceChannels; i++) {
-            interaction.guild?.channels
-              .create({
-                name: `voice-${i}`,
-                type: ChannelType.GuildVoice,
-                parent: channel?.id,
-              })
-              .catch((err) => {
-                console.error(
-                  "Failed to create one of the voice channels.",
-                  err
-                );
-              });
-          }
-        }
+        await createChannelsAndRolesForCtf(guild, ctf);
 
         // create for every challenge a channel
         const challenges = await getChallengesFromDatabase(ctf.id);
 
         for (const challenge of challenges) {
-          interaction.guild?.channels
-            .create({
-              name:
-                challenge.flag != ""
-                  ? `solved-${challenge.title}`
-                  : `${challenge.title}`,
-              type: ChannelType.GuildText,
-              parent: channel?.id,
-              topic: challenge.title,
-            })
-            .then((challengeChannel) => {
-              if (challenge.description !== "") {
-                sendMessageToChannel(challengeChannel, challenge.description);
-              }
-            })
-            .catch((err) => {
-              console.error("Failed to create channel.", err);
-            });
+          await createChannelForTaskInCtf(guild, challenge, ctf);
         }
       } else if (interaction.customId.startsWith("archive-ctf-button-")) {
         const ctfName = interaction.customId.replace("archive-ctf-button-", "");

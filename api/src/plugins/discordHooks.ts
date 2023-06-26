@@ -19,6 +19,7 @@ import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
 import { getDiscordIdFromUserId } from "../discord/database/users";
 import { getTaskFromId } from "../discord/database/tasks";
 import { sendMessageToChannel } from "../discord/utils/messages";
+import { TaskInput, createChannelForNewTask } from "../discord/utils/channels";
 
 export async function convertToUsernameFormat(userId: bigint | string) {
   // this is actually the Discord ID and not a CTFNote userId
@@ -102,50 +103,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 
     //add challenges to the ctf channel discord
     if (fieldContext.scope.fieldName === "createTask") {
-      const ctf = await getCtfFromDatabase(args.input.ctfId);
-      if (ctf == null) return input;
-
-      const categoryChannel = guild?.channels.cache.find(
-        (channel) =>
-          channel.type === ChannelType.GuildCategory &&
-          channel.name === ctf.title
-      ) as CategoryChannel | undefined;
-
-      if (categoryChannel == null) {
-        return input;
-      }
-
-      categoryChannel.guild.channels
-        .create({
-          name: `${args.input.title}`,
-          type: ChannelType.GuildText,
-          parent: categoryChannel.id,
-          topic: args.input.title,
-        })
-        .then((channel) => {
-          if (args.input.description != null && args.input.description !== "") {
-            sendMessageToChannel(channel, args.input.description);
-          }
-        })
-        .catch((err) => {
-          console.error("Failed creating category.", err);
-        });
-
-      //send message to the main channel that a new task has been created
-      const mainChannel = guild?.channels.cache.find(
-        (channel) =>
-          channel.type === ChannelType.GuildText &&
-          channel.name === "challenges-talk" &&
-          channel.parentId === categoryChannel.id
-      ) as TextChannel | undefined;
-
-      if (mainChannel !== undefined) {
-        sendMessageToChannel(
-          mainChannel,
-          `New task created: ${args.input.title}`,
-          false
-        );
-      }
+      const task = args.input as TaskInput;
+      createChannelForNewTask(guild, task, true);
     }
     if (fieldContext.scope.fieldName === "deleteTask") {
       const task = await getTaskFromId(args.input.id);
@@ -421,7 +380,7 @@ async function sendMessageFromTaskId(
   const task = await getTaskFromId(id);
   if (task == null) return null;
 
-  const ctf = await getCtfFromDatabase(task.ctf_id);
+  const ctf = await getCtfFromDatabase(task.ctfId);
   if (ctf == null) return null;
 
   const guild = getDiscordGuild();
