@@ -3,10 +3,10 @@ import config from "../../config";
 
 export async function sendMessageToChannel(
   channel: TextChannel,
-  message: string,
+  message: string | null | undefined,
   silent = true
 ) {
-  if (message == "") return null;
+  if (message == "" || message == null) return null;
   const options = {
     content: message,
     allowedMentions: {
