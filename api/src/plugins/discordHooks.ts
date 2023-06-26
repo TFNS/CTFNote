@@ -305,27 +305,32 @@ async function handleDeleteCtf(ctfId: any, guild: Guild) {
   const ctf = await getCtfFromDatabase(ctfId);
   if (ctf == null) return;
 
-  const categoryChannel = guild.channels.cache.find(
+  const categoryChannels = guild.channels.cache.filter(
     (channel) =>
-      channel.type === ChannelType.GuildCategory && channel.name === ctf.title
-  ) as CategoryChannel;
+      channel.type === ChannelType.GuildCategory &&
+      channel.name.startsWith(ctf.title)
+  );
 
-  guild?.channels.cache.map((channel) => {
-    if (
-      channel.type === ChannelType.GuildVoice &&
-      channel.parentId === categoryChannel.id
-    ) {
-      return channel.delete();
-    }
-  });
+  categoryChannels.map((categoryChannel) => {
+    guild?.channels.cache.map((channel) => {
+      if (
+        channel.type === ChannelType.GuildVoice &&
+        channel.parentId === categoryChannel.id
+      ) {
+        return channel.delete();
+      }
+    });
 
-  guild?.channels.cache.map(async (channel) => {
-    if (
-      channel.type === ChannelType.GuildText &&
-      channel.parentId === categoryChannel.id
-    ) {
-      await channel.delete();
-    }
+    guild?.channels.cache.map(async (channel) => {
+      if (
+        channel.type === ChannelType.GuildText &&
+        channel.parentId === categoryChannel.id
+      ) {
+        await channel.delete();
+      }
+    });
+
+    categoryChannel.delete();
   });
 
   guild.roles.cache.map((role) => {
@@ -333,8 +338,6 @@ async function handleDeleteCtf(ctfId: any, guild: Guild) {
       return role.delete();
     }
   });
-
-  categoryChannel.delete();
 }
 
 async function handleResetDiscordId(userId: bigint) {
