@@ -365,7 +365,10 @@ export async function moveChannel(
 
   let targetParent: CategoryChannel | null = null;
 
-  if (operation === ChannelMovingEvent.START) {
+  if (
+    operation === ChannelMovingEvent.START ||
+    operation === ChannelMovingEvent.UNSOLVED
+  ) {
     targetParent = await getNotFullCategoryForCtf(
       guild,
       ctf,
@@ -376,12 +379,6 @@ export async function moveChannel(
       guild,
       ctf,
       CategoryType.SOLVED
-    );
-  } else if (operation === ChannelMovingEvent.UNSOLVED) {
-    targetParent = await getNotFullCategoryForCtf(
-      guild,
-      ctf,
-      CategoryType.STARTED
     );
   }
 
