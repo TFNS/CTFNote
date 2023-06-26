@@ -87,6 +87,8 @@ export default defineComponent({
     return {
       createTask: ctfnote.tasks.useCreateTask(),
       addTagsForTask: ctfnote.tags.useAddTagsForTask(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
+      notifySuccess: ctfnote.ui.useNotify().notifySuccess,
       model: ref(''),
       currentParser: ref(parserOptions[0]),
       parsedTasks: ref<ParsedTask[]>([]),
@@ -158,6 +160,16 @@ export default defineComponent({
         return { ...task, keep: !taskSet.has(hash) };
       });
     },
+    async createTasks(tasks: ParsedTask[]) {
+      for (const task of tasks) {
+        const r = await this.createTask(this.ctf.id, task);
+        const newTask = r?.data?.createTask?.task;
+        if (newTask) {
+          await this.addTagsForTask(task.tags, makeId(newTask.id));
+        }
+      }
+    },
+
     async btnClick() {
       if (this.tab == 'parse') {
         this.parsedTasks = this.parseTasks(this.model);
@@ -165,16 +177,16 @@ export default defineComponent({
       } else {
         this.loading = true;
         const result = this.parsedTasks.filter((t) => t.keep);
-        for (const task of result) {
-          const r = await this.createTask(this.ctf.id, task);
-          const newTask = r?.data?.createTask?.task;
-          if (newTask) {
-            await this.addTagsForTask(task.tags, makeId(newTask.id));
-          }
-        }
-        await Promise.all(result);
-        this.loading = false;
         this.onDialogOK();
+
+        this.notifySuccess({
+          message: `Importing ${result.length} tasks. This may take a while...`,
+          icon: 'flag',
+        });
+        return this.resolveAndNotify(this.createTasks(result), {
+          message: `Imported ${result.length} tasks`,
+          icon: 'flag',
+        });
       }
     },
   },
