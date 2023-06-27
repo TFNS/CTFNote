@@ -1,6 +1,6 @@
 import { ChannelType, Guild, TextChannel } from "discord.js";
 import config from "../../config";
-import { Task } from "../database/tasks";
+import { Task, getTaskFromId } from "../database/tasks";
 import { CTF, getCtfFromDatabase } from "../database/ctfs";
 import { getTaskChannel } from "./channels";
 
@@ -43,10 +43,16 @@ export async function sendMessageToChannel(
 
 export async function sendMessageToTask(
   guild: Guild,
-  task: Task,
+  task: Task | bigint,
   message: string | null | undefined,
   ctf: CTF | null = null
 ) {
+  if (typeof task === "bigint" || typeof task === "number") {
+    const t = await getTaskFromId(task);
+    if (t == null) return null;
+    task = t;
+  }
+
   if (ctf == null) {
     ctf = await getCtfFromDatabase(task.ctfId);
   }

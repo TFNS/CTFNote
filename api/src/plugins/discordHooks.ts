@@ -15,8 +15,8 @@ import {
 import { getDiscordGuild, usingDiscordBot } from "../discord";
 import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
 import { getDiscordIdFromUserId } from "../discord/database/users";
-import { getTaskFromId } from "../discord/database/tasks";
-import { sendMessageToChannel } from "../discord/utils/messages";
+import { Task, getTaskFromId } from "../discord/database/tasks";
+import { sendMessageToTask } from "../discord/utils/messages";
 import {
   ChannelMovingEvent,
   TaskInput,
@@ -63,12 +63,11 @@ export async function handleTaskSolved(
 
   await moveChannel(guild, task, null, ChannelMovingEvent.SOLVED);
 
-  return sendMessageFromTaskId(
+  return sendMessageToTask(
+    guild,
     id,
     `${task.title} is solved by ${await convertToUsernameFormat(userId)}!`
-  ).catch((err) => {
-    console.error("Failed sending solved notification.", err);
-  });
+  );
 }
 
 const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
@@ -179,12 +178,11 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         args.input.patch.description != null &&
         args.input.patch.description !== task.description
       ) {
-        sendMessageFromTaskId(
-          task.id,
+        sendMessageToTask(
+          guild,
+          task,
           `Description changed:\n${args.input.patch.description}`
-        ).catch((err) => {
-          console.error("Failed sending description change notification.", err);
-        });
+        );
       }
     }
 
@@ -193,7 +191,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       const userId = context.jwtClaims.user_id;
       const taskId = args.input.taskId;
       moveChannel(guild, taskId, null, ChannelMovingEvent.START).then(() => {
-        sendStartWorkingOnMessage(userId, taskId).catch((err) => {
+        sendStartWorkingOnMessage(guild, userId, taskId).catch((err) => {
           console.error(
             "Failed sending 'started working on' notification.",
             err
@@ -206,7 +204,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       const userId = context.jwtClaims.user_id;
       const taskId = args.input.taskId;
 
-      sendStopWorkingOnMessage(userId, taskId).catch((err) => {
+      sendStopWorkingOnMessage(guild, userId, taskId).catch((err) => {
         console.error("Failed sending 'stopped working on' notification.", err);
       });
     }
@@ -279,24 +277,27 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 };
 
 export async function sendStartWorkingOnMessage(
+  guild: Guild,
   userId: bigint,
-  taskId: bigint
+  task: Task | bigint
 ) {
-  return sendMessageFromTaskId(
-    taskId,
+  return sendMessageToTask(
+    guild,
+    task,
     `${await convertToUsernameFormat(userId)} is working on this task!`
-  ).catch((err) => {
-    console.error("Failed sending 'working on' notification.", err);
-  });
+  );
 }
 
-export async function sendStopWorkingOnMessage(userId: bigint, taskId: bigint) {
-  return sendMessageFromTaskId(
-    taskId,
+export async function sendStopWorkingOnMessage(
+  guild: Guild,
+  userId: bigint,
+  task: Task | bigint
+) {
+  return sendMessageToTask(
+    guild,
+    task,
     `${await convertToUsernameFormat(userId)} stopped working on this task!`
-  ).catch((err) => {
-    console.error("Failed sending 'stopped working on' notification.", err);
-  });
+  );
 }
 
 async function handleDeleteCtf(ctfId: any, guild: Guild) {
@@ -375,38 +376,6 @@ async function handleUpdateCtf(args: any, guild: Guild) {
   role?.setName(args.input.patch.title).catch((err) => {
     console.error("Failed updating role.", err);
   });
-}
-
-async function sendMessageFromTaskId(
-  id: bigint,
-  message: string
-): Promise<GuildBasedChannel | null> {
-  const task = await getTaskFromId(id);
-  if (task == null) return null;
-
-  const ctf = await getCtfFromDatabase(task.ctfId);
-  if (ctf == null) return null;
-
-  const guild = getDiscordGuild();
-
-  if (guild === null) {
-    console.error("Guild not found");
-    return null;
-  }
-
-  const channelsArray = Array.from(guild.channels.cache.values());
-  for (const channel of channelsArray) {
-    if (
-      channel.type === ChannelType.GuildText &&
-      channel.topic === task.title &&
-      channel.parent?.name.startsWith(ctf.title)
-    ) {
-      sendMessageToChannel(channel, message);
-      return channel;
-    }
-  }
-
-  return null;
 }
 
 export default function (builder: SchemaBuilder): void {

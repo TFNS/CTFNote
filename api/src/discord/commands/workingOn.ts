@@ -32,6 +32,9 @@ async function workingOnLogic(
   interaction: CommandInteraction,
   operation: "start" | "stop"
 ) {
+  const guild = interaction.guild;
+  if (guild == null) return;
+
   const ctfNames = await getCTFNamesFromDatabase();
 
   const categoryChannel = (await interaction.guild?.channels.cache.find(
@@ -75,7 +78,7 @@ async function workingOnLogic(
             Math.floor(Math.random() * startWorkingSentences.length)
           ],
       });
-      await sendStartWorkingOnMessage(userId, task.id);
+      await sendStartWorkingOnMessage(guild, userId, task);
       return;
     } else {
       await interaction.editReply({
@@ -92,7 +95,7 @@ async function workingOnLogic(
             Math.floor(Math.random() * stopWorkingSentences.length)
           ],
       });
-      await sendStopWorkingOnMessage(userId, task.id);
+      await sendStopWorkingOnMessage(guild, userId, task);
       return;
     } else {
       await interaction.editReply({
