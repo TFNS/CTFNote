@@ -9,6 +9,7 @@ type DeepReadOnly<T> = {
 
 export type CTFNoteConfig = DeepReadOnly<{
   env: string;
+  sessionSecret: string;
   db: {
     database: string;
     admin: {
@@ -57,6 +58,7 @@ function getEnvInt(name: string): number {
 
 const config: CTFNoteConfig = {
   env: getEnv("NODE_ENV"),
+  sessionSecret: getEnv("SESSION_SECRET", ""),
   db: {
     database: getEnv("DB_DATABASE"),
     user: {
