@@ -37,7 +37,7 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   }
 
   // Make a loop to create buttons for each CTF
-  const buttons: any[] = [];
+  const buttons: ButtonBuilder[] = [];
   for (let i = 0; i < ctfNames.length; i++) {
     buttons.push(
       new ButtonBuilder()
