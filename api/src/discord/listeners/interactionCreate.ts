@@ -1,25 +1,50 @@
-import {
-  CategoryChannel,
-  ChannelType,
-  Client,
-  Collection,
-  CommandInteraction,
-  Interaction,
-  Message,
-  PermissionsBitField,
-  Snowflake,
-  TextBasedChannel,
-  TextChannel,
-} from "discord.js";
+import { Client, CommandInteraction, Interaction } from "discord.js";
 import { Commands } from "../commands";
 import { createTask, getCtfFromDatabase } from "../database/ctfs";
-import { createPad } from "../../plugins/createTask";
-import config from "../../config";
 import { getChallengesFromDatabase } from "../database/tasks";
 import {
   createChannelForTaskInCtf,
   createChannelsAndRolesForCtf,
+  getChannelCategoriesForCtf,
 } from "../utils/channels";
+import {
+  convertMessagesToPadFormat,
+  createPadWithoutLimit,
+  getMessagesOfCategories,
+} from "../utils/messages";
+import { handleDeleteCtf } from "../../plugins/discordHooks";
+
+async function handleArchiveInteraction(
+  interaction: Interaction,
+  ctfName: string
+) {
+  const guild = interaction.guild;
+  if (guild == null) return;
+
+  const ctf = await getCtfFromDatabase(ctfName);
+  if (ctf == null) return null;
+
+  const categories = getChannelCategoriesForCtf(guild, ctf.title);
+  if (categories.size === 0) return;
+
+  const messages = await getMessagesOfCategories(
+    Array.from(categories.values())
+  );
+
+  await handleDeleteCtf(ctfName, guild);
+
+  const padMessages = await convertMessagesToPadFormat(messages);
+
+  const padUrl = await createPadWithoutLimit(padMessages, ctf.title);
+
+  await createTask(
+    `${ctf.title} Discord archive`,
+    `Discord archive of ${ctf.title}`,
+    "",
+    padUrl,
+    ctf.id
+  );
+}
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -57,157 +82,7 @@ export default (client: Client): void => {
           components: [],
         });
 
-        const categoryChannel = (await interaction.guild?.channels.cache.find(
-          (channel) =>
-            channel.type === ChannelType.GuildCategory &&
-            channel.name === ctfName
-        )) as CategoryChannel;
-
-        interaction.guild?.channels.cache.map((channel) => {
-          if (
-            channel.type === ChannelType.GuildVoice &&
-            channel.parentId === categoryChannel.id
-          ) {
-            return channel.delete();
-          }
-        });
-
-        const allMessages: any[] = [];
-
-        const awaitingPromises = interaction.guild?.channels.cache.map(
-          async (channel) => {
-            if (
-              channel.type === ChannelType.GuildText &&
-              channel.parentId === categoryChannel.id
-            ) {
-              try {
-                const messages = await fetchAllMessages(
-                  channel as TextBasedChannel
-                );
-                allMessages.push(messages);
-
-                // Wait until fetchAllMessages is completed before deleting the channels
-                await channel.delete();
-              } catch (err) {
-                console.error(
-                  "Failed to fetch messages or delete channel during archiving.",
-                  err
-                );
-              }
-              return true;
-            }
-          }
-        );
-        if (awaitingPromises !== undefined) await Promise.all(awaitingPromises);
-
-        await categoryChannel.delete();
-
-        interaction.guild?.roles.cache.map((role) => {
-          if (role.name === `${ctfName}`) {
-            return role.delete();
-          }
-        });
-
-        interface Message {
-          channel: string;
-          content: string;
-          author: string;
-          timestamp: string;
-        }
-
-        // put the archive in the archive channel of the ctf in the description
-        const niceMessages: string[] = allMessages.map((messages) => {
-          let channelName = "";
-          let niceMessage = "";
-
-          messages = messages.reverse();
-
-          if (messages.length > 0) {
-            channelName = messages[0].channel;
-            niceMessage += `## ${channelName}\n`;
-
-            messages.forEach((message: Message) => {
-              if (channelName != message.channel) {
-                channelName = message.channel;
-                niceMessage = `## ${channelName}\n`;
-              }
-
-              const timestamp = new Date(message.timestamp).toLocaleString();
-
-              const formattedMessage = `[${timestamp}] ${message.author}: ${message.content}`;
-              niceMessage += formattedMessage + "\n";
-            });
-          }
-
-          return niceMessage;
-        });
-
-        // the character limit of a pad is 100000 characters
-        // so we need to split the messages in multiple pads
-        // and put the links to the other pads in the first pad
-
-        const ctf = await getCtfFromDatabase(ctfName);
-        if (ctf == null) return;
-
-        const MAX_PAD_LENGTH = config.pad.documentMaxLength - 100; // some margin to be safe
-
-        const pads = [];
-        let currentPadMessages = [];
-        let currentPadLength = 0;
-        let padIndex = 1;
-
-        for (const message of niceMessages) {
-          const messageLength = message.length;
-
-          // If adding the current message exceeds the maximum pad length
-          if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
-            // Create a new pad
-            const padUrl = await createPad(
-              `${ctfName} Discord archive (${padIndex})`,
-              currentPadMessages.join("\n")
-            );
-
-            pads.push(padUrl);
-
-            // Reset the current pad messages and length
-            currentPadMessages = [];
-            currentPadLength = 0;
-            padIndex++;
-          }
-
-          // Add the message to the current pad
-          currentPadMessages.push(message);
-          currentPadLength += messageLength;
-        }
-        let firstPadContent = "";
-        if (pads.length > 0) {
-          // Create the final pad for the remaining messages
-          const padUrl = await createPad(
-            `${ctfName} Discord archive (${padIndex})`,
-            currentPadMessages.join("\n")
-          );
-          pads.push(padUrl);
-
-          // Create the first pad with links to other pads
-          firstPadContent = pads
-            .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
-            .join("\n");
-        } else {
-          firstPadContent = currentPadMessages.join("\n");
-        }
-
-        const firstPadUrl = await createPad(
-          `${ctfName} Discord archive`,
-          firstPadContent
-        );
-
-        await createTask(
-          `${ctfName} Discord archive`,
-          `Discord archive of ${ctfName}`,
-          "",
-          firstPadUrl,
-          ctf.id
-        );
+        await handleArchiveInteraction(interaction, ctfName);
       }
     }
 
@@ -216,49 +91,6 @@ export default (client: Client): void => {
     }
   });
 };
-
-async function fetchAllMessages(channel: TextBasedChannel): Promise<any> {
-  let messages = new Collection<Snowflake, Message>();
-  let channelMessages = await channel.messages.fetch({ limit: 100 });
-  while (channelMessages.size > 0) {
-    messages = messages.concat(channelMessages);
-    channelMessages = await channel.messages.fetch({
-      limit: 100,
-      before: channelMessages.last()!.id,
-    });
-  }
-
-  const messagesCollection: any[] = [];
-
-  messages.forEach((message: Message) => {
-    const channel = message.channel as TextChannel;
-
-    const channelName = channel.name;
-    const timestamp = message.createdTimestamp;
-    const author = message.author.username;
-
-    let content = "";
-
-    if (message.attachments.size > 0) {
-      message.attachments.forEach((attachment) => {
-        message.content += attachment.url + " ";
-      });
-    }
-
-    content += message.content;
-
-    const messageObject = {
-      channel: channelName,
-      content: content,
-      author: author,
-      timestamp: timestamp,
-    };
-
-    messagesCollection.push(messageObject);
-  });
-
-  return messagesCollection; // Return an array of names
-}
 
 const handleSlashCommand = async (
   client: Client,

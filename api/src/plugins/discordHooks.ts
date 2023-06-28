@@ -302,7 +302,7 @@ export async function sendStopWorkingOnMessage(
   );
 }
 
-async function handleDeleteCtf(ctfId: any, guild: Guild) {
+export async function handleDeleteCtf(ctfId: string | bigint, guild: Guild) {
   const ctf = await getCtfFromDatabase(ctfId);
   if (ctf == null) return;
 

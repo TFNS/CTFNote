@@ -1,8 +1,18 @@
-import { ChannelType, Guild, TextChannel } from "discord.js";
+import {
+  CategoryChannel,
+  ChannelType,
+  Collection,
+  Guild,
+  Message,
+  Snowflake,
+  TextBasedChannel,
+  TextChannel,
+} from "discord.js";
 import config from "../../config";
 import { Task, getTaskFromId } from "../database/tasks";
 import { CTF, getCtfFromDatabase } from "../database/ctfs";
 import { getTaskChannel } from "./channels";
+import { createPad } from "../../plugins/createTask";
 
 export async function sendMessageToChannel(
   channel: TextChannel,
@@ -62,4 +72,168 @@ export async function sendMessageToTask(
   if (taskChannel == null) return null;
 
   return sendMessageToChannel(taskChannel, message);
+}
+
+async function getMessagesOfCategory(category: CategoryChannel) {
+  const messages: Message<boolean>[] = [];
+  await Promise.all(
+    category.children.cache
+      .filter((c) => c.type === ChannelType.GuildText)
+      .map(async (channel) => {
+        const channelMessages = await getMessagesOfChannel(
+          channel as TextBasedChannel
+        );
+        channelMessages.mapValues((message) => {
+          messages.push(message);
+        });
+      })
+  );
+  return messages;
+}
+
+export async function getMessagesOfCategories(categories: CategoryChannel[]) {
+  const messages: Message<boolean>[] = [];
+  await Promise.all(
+    categories.map(async (category) => {
+      (await getMessagesOfCategory(category)).forEach((message) => {
+        messages.push(message);
+      });
+    })
+  );
+
+  return messages;
+}
+
+async function getMessagesOfChannel(channel: TextBasedChannel) {
+  let messages = new Collection<Snowflake, Message>();
+
+  let channelMessages = await channel.messages.fetch({ limit: 100 });
+  while (channelMessages.size > 0) {
+    messages = messages.concat(channelMessages);
+    channelMessages = await channel.messages.fetch({
+      limit: 100,
+      before: channelMessages.last()!.id,
+    });
+  }
+
+  return messages;
+}
+
+// source: https://stackoverflow.com/a/38327540
+/**
+ * @description
+ * Takes an Array<V>, and a grouping function,
+ * and returns a Map of the array grouped by the grouping function.
+ *
+ * @param list An array of type V.
+ * @param keyGetter A Function that takes the the Array type V as an input, and returns a value of type K.
+ *                  K is generally intended to be a property key of V.
+ *
+ * @returns Map of the array grouped by the grouping function.
+ */
+function groupBy<K, V>(
+  list: Array<V>,
+  keyGetter: (input: V) => K
+): Map<K, Array<V>> {
+  const map = new Map<K, Array<V>>();
+  list.forEach((item) => {
+    const key = keyGetter(item);
+    const collection = map.get(key);
+    if (!collection) {
+      map.set(key, [item]);
+    } else {
+      collection.push(item);
+    }
+  });
+  return map;
+}
+
+export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
+  messages = messages.reverse();
+  const grouped = groupBy(
+    Array.from(messages.values()),
+    (message) => message.channelId
+  );
+
+  const result: string[] = [];
+
+  grouped.forEach((messages) => {
+    const channel = messages[0].channel;
+    if (channel.type !== ChannelType.GuildText) return;
+
+    result.push(`## ${channel.name}`);
+
+    messages.forEach((message) => {
+      const timestamp = new Date(message.createdTimestamp).toLocaleString();
+
+      if (message.attachments.size > 0) {
+        message.attachments.forEach((attachment) => {
+          message.content += attachment.url + " ";
+        });
+      }
+
+      let content = message.content;
+      if (content.startsWith("```")) content = "\n" + content;
+      if (content.startsWith("> ")) content = content + "\n"; // need an extra line break for quotes
+
+      const formattedMessage = `[${timestamp}] ${message.author.username}: ${content}`;
+      result.push(formattedMessage);
+    });
+  });
+
+  return result;
+}
+
+export async function createPadWithoutLimit(
+  messages: string[],
+  ctfTitle: string
+) {
+  const MAX_PAD_LENGTH = config.pad.documentMaxLength - 100; // some margin to be safe
+
+  const pads = [];
+  let currentPadMessages = [];
+  let currentPadLength = 0;
+  let padIndex = 1;
+
+  for (const message of messages) {
+    const messageLength = message.length;
+
+    // If adding the current message exceeds the maximum pad length
+    if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
+      // Create a new pad
+      const padUrl = await createPad(
+        `${ctfTitle} Discord archive (${padIndex})`,
+        currentPadMessages.join("\n")
+      );
+
+      pads.push(padUrl);
+
+      // Reset the current pad messages and length
+      currentPadMessages = [];
+      currentPadLength = 0;
+      padIndex++;
+    }
+
+    // Add the message to the current pad
+    currentPadMessages.push(message);
+    currentPadLength += messageLength;
+  }
+  let firstPadContent = "";
+  if (pads.length > 0) {
+    // Create the final pad for the remaining messages
+    const padUrl = await createPad(
+      `${ctfTitle} Discord archive (${padIndex})`,
+      currentPadMessages.join("\n")
+    );
+    pads.push(padUrl);
+
+    // Create the first pad with links to other pads
+    firstPadContent = pads
+      .map((padUrl, index) => `[Pad ${index + 1}](${padUrl})`)
+      .join("\n");
+  } else {
+    firstPadContent = currentPadMessages.join("\n");
+  }
+
+  return await createPad(`${ctfTitle} Discord archive`, firstPadContent);
 }
