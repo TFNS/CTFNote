@@ -1,20 +1,14 @@
 import {
   ApplicationCommandOptionType,
   ApplicationCommandType,
-  CategoryChannel,
-  ChannelType,
   Client,
   CommandInteraction,
-  TextChannel,
 } from "discord.js";
 import { Command } from "../command";
-import { getCTFNamesFromDatabase, getCtfFromDatabase } from "../database/ctfs";
-import {
-  getTaskByCtfIdAndNameFromDatabase,
-  setFlagForChallengeId,
-} from "../database/tasks";
+import { setFlagForChallengeId } from "../database/tasks";
 import { handleTaskSolved } from "../../plugins/discordHooks";
 import { getUserByDiscordId } from "../database/users";
+import { getCurrentTaskChannelFromDiscord } from "../utils/channels";
 
 async function accessDenied(interaction: CommandInteraction) {
   await interaction.editReply({
@@ -23,30 +17,10 @@ async function accessDenied(interaction: CommandInteraction) {
 }
 
 async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
-  const ctfNames = await getCTFNamesFromDatabase();
+  const r = await getCurrentTaskChannelFromDiscord(interaction);
+  if (r == null) return accessDenied(interaction);
 
-  const categoryChannel = (await interaction.guild?.channels.cache.find(
-    (channel) =>
-      channel.type === ChannelType.GuildCategory &&
-      ctfNames.includes(channel.name)
-  )) as CategoryChannel;
-  if (categoryChannel == null) return accessDenied(interaction);
-
-  const currentTaskChannel = (await interaction.guild?.channels.cache.find(
-    (channel) =>
-      channel.type === ChannelType.GuildText &&
-      channel.id === interaction.channelId &&
-      channel.guildId === categoryChannel.guildId
-  )) as TextChannel;
-
-  const ctf = await getCtfFromDatabase(categoryChannel.name);
-  if (ctf == null) return accessDenied(interaction);
-
-  const name = currentTaskChannel?.topic;
-  if (name == null) return accessDenied(interaction);
-
-  const task = await getTaskByCtfIdAndNameFromDatabase(ctf.id, name);
-  if (task == null) return accessDenied(interaction);
+  const task = r.task;
 
   const flag = interaction.options.get("flag", true).value as string;
   if (flag == null || flag == "") return accessDenied(interaction);

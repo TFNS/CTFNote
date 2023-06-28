@@ -392,7 +392,10 @@ export async function moveChannel(
     if (ctf == null) return;
   }
   const taskChannel = await getTaskChannel(guild, task, ctf);
-  if (taskChannel == null) return;
+  if (taskChannel == null) {
+    console.error("Task channel not found", task, ctf, operation);
+    return;
+  }
 
   // if channel is not in 'new' category, skip
   if (
@@ -404,7 +407,7 @@ export async function moveChannel(
   // if channel is already in 'solved' category, skip
   if (
     operation === ChannelMovingEvent.SOLVED &&
-    !isChannelOfCtf(taskChannel, solvedCategoryName(ctf))
+    isChannelOfCtf(taskChannel, solvedCategoryName(ctf))
   )
     return;
 
