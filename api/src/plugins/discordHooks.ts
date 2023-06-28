@@ -156,13 +156,9 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         args.input.patch.title != null &&
         args.input.patch.title != task.title
       ) {
-        const channel = guild?.channels.cache.find(
-          (channel) =>
-            channel.type === ChannelType.GuildText &&
-            channel.topic === task.title
-        ) as TextChannel | undefined;
-
+        const channel = await getTaskChannel(guild, task, null);
         if (channel == null) return input;
+
         channel
           .edit({
             name: title,
