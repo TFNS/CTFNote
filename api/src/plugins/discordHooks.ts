@@ -46,12 +46,10 @@ export async function convertToUsernameFormat(userId: bigint | string) {
   const member = await guild.members.fetch({ user: discordId });
   if (member == null) return name;
 
-  const discordName = member.displayName;
-
-  if (discordName.toLowerCase() !== name.toLowerCase()) {
-    return `<@${discordId}> (${name})`;
+  if (member.displayName.toLowerCase() !== name.toLowerCase()) {
+    return `${member.user} (${name})`;
   } else {
-    return `<@${discordId}>`;
+    return `${member.user}`;
   }
 }
 

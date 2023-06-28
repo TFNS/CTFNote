@@ -155,6 +155,11 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
     (message) => message.channelId
   );
 
+  if (messages.length > 0) {
+    // update guild member list for mentions
+    await messages[0].guild?.members.fetch();
+  }
+
   const result: string[] = [];
 
   grouped.forEach((messages) => {
@@ -175,6 +180,23 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
       let content = message.content;
       if (content.startsWith("```")) content = "\n" + content;
       if (content.startsWith("> ")) content = content + "\n"; // need an extra line break for quotes
+
+      // resolve mentions to usernames
+      const mentions = content.match(/<(?:[^\d>]+|:[A-Za-z0-9]+:)\w+>/g);
+      if (mentions != null) {
+        mentions.forEach((user) => {
+          const id = user.replace(/\D/g, "");
+          const discordUser = message.guild?.members.cache.get(id);
+          if (discordUser == null) return;
+
+          content = content.replace(
+            user,
+            discordUser.user.discriminator != "0"
+              ? `@${discordUser.user.username}#${discordUser.user.discriminator}`
+              : `@${discordUser.user.username}`
+          );
+        });
+      }
 
       const formattedMessage = `[${timestamp}] ${message.author.username}: ${content}`;
       result.push(formattedMessage);
