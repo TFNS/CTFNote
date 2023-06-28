@@ -246,9 +246,16 @@ export async function getNotFullCategoryForCtf(
 
   if (categories.size === 0) return null;
 
+  categories = categories.sorted(
+    (a, b) => a.createdTimestamp - b.createdTimestamp
+  );
+
   let category: CategoryChannel | null = null;
   categories.forEach((c) => {
-    if (c.children.cache.size < config.discord.maxChannelsPerCategory) {
+    if (
+      c.children.cache.size < config.discord.maxChannelsPerCategory &&
+      !category
+    ) {
       category = c;
     }
   });
