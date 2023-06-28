@@ -20,7 +20,7 @@ import {
 import { sendMessageToChannel } from "./messages";
 import {
   isChannelOfCtf,
-  channelIsTask,
+  isTaskChannelOf,
   isRoleOfCtf,
   isCategoryOfCtf,
 } from "./comparison";
@@ -342,7 +342,7 @@ export async function createChannelForNewTask(
 
 export async function getTaskChannel(guild: Guild, task: Task, ctf: CTF) {
   const taskChannel = guild.channels.cache.find((channel) => {
-    if (channelIsTask(channel, task) && isChannelOfCtf(channel, ctf)) {
+    if (isTaskChannelOf(channel, task) && isChannelOfCtf(channel, ctf)) {
       return channel;
     }
   });

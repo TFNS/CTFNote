@@ -30,7 +30,10 @@ export function isChannelOfCtf(
   return isCategoryOfCtf(channel.parent, ctfTitle);
 }
 
-export function channelIsTask(channel: GuildBasedChannel, task: Task | string) {
+export function isTaskChannelOf(
+  channel: GuildBasedChannel,
+  task: Task | string
+) {
   const taskTitle = typeof task === "string" ? task : task.title;
 
   if (channel.type !== ChannelType.GuildText) return false;
