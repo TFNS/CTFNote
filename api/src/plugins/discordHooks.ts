@@ -281,6 +281,7 @@ export async function sendStartWorkingOnMessage(
   userId: bigint,
   task: Task | bigint
 ) {
+  await moveChannel(guild, task, null, ChannelMovingEvent.START);
   return sendMessageToTask(
     guild,
     task,

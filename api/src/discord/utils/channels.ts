@@ -2,8 +2,8 @@ import {
   CategoryChannel,
   ChannelType,
   Collection,
+  CommandInteraction,
   Guild,
-  GuildBasedChannel,
   PermissionsBitField,
   Role,
   TextChannel,
@@ -13,6 +13,7 @@ import { getDiscordUsersThatCanPlayCTF } from "../database/users";
 import config from "../../config";
 import {
   Task,
+  getTaskByCtfIdAndNameFromDatabase,
   getTaskFromId,
   getUserIdsWorkingOnTask,
 } from "../database/tasks";
@@ -38,16 +39,33 @@ export interface TaskInput {
   flag: string;
 }
 
+const newSuffix = " - New";
+const startedSuffix = " - Started";
+const solvedSuffix = " - Solved";
+
 export function newCategoryName(ctf: CTF) {
-  return `${ctf.title} - New`;
+  return ctf.title + newSuffix;
 }
 
 export function startedCategoryName(ctf: CTF) {
-  return `${ctf.title} - Started`;
+  return ctf.title + startedSuffix;
 }
 
 export function solvedCategoryName(ctf: CTF) {
-  return `${ctf.title} - Solved`;
+  return ctf.title + solvedSuffix;
+}
+
+function getCtfNameFromCategoryName(name: string) {
+  let s = name.split(newSuffix);
+  if (s.length > 1) return s[0];
+
+  s = name.split(startedSuffix);
+  if (s.length > 1) return s[0];
+
+  s = name.split(solvedSuffix);
+  if (s.length > 1) return s[0];
+
+  throw new Error(`Failed to get ctf name from category name ${name}`);
 }
 
 function findAvailableCategoryName(guild: Guild, originalName: string) {
@@ -321,6 +339,30 @@ export async function getTaskChannel(guild: Guild, task: Task, ctf: CTF) {
 
   if (taskChannel == null) return null;
   return taskChannel as TextChannel;
+}
+
+export async function getCurrentTaskChannelFromDiscord(
+  interaction: CommandInteraction
+) {
+  if (interaction.channel == null) return null;
+
+  if (interaction.channel.type !== ChannelType.GuildText) return null;
+
+  const category = interaction.channel.parent;
+  if (category == null) return null;
+
+  const ctf = await getCtfFromDatabase(
+    getCtfNameFromCategoryName(category.name)
+  );
+  if (ctf == null) return null;
+
+  const name = interaction.channel.topic;
+  if (name == null) return null;
+
+  const task = await getTaskByCtfIdAndNameFromDatabase(ctf.id, name);
+  if (task == null) return null;
+
+  return { ctf: ctf, task: task, channel: interaction.channel };
 }
 
 export async function moveChannel(
