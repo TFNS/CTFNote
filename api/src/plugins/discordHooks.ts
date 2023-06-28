@@ -23,6 +23,7 @@ import {
   createChannelForNewTask,
   moveChannel,
 } from "../discord/utils/channels";
+import { isCategoryOfCtf } from "../discord/utils/comparison";
 
 export async function convertToUsernameFormat(userId: bigint | string) {
   // this is actually the Discord ID and not a CTFNote userId
@@ -308,7 +309,7 @@ async function handleDeleteCtf(ctfId: any, guild: Guild) {
   const categoryChannels = guild.channels.cache.filter(
     (channel) =>
       channel.type === ChannelType.GuildCategory &&
-      channel.name.startsWith(ctf.title)
+      isCategoryOfCtf(channel, ctf)
   );
 
   categoryChannels.map((categoryChannel) => {
@@ -362,7 +363,7 @@ async function handleUpdateCtf(args: any, guild: Guild) {
   const categoryChannels = guild?.channels.cache.filter(
     (channel) =>
       channel.type === ChannelType.GuildCategory &&
-      channel.name.startsWith(ctf.title)
+      isCategoryOfCtf(channel, ctf)
   );
 
   categoryChannels.map((categoryChannel) => {

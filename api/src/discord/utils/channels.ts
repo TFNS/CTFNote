@@ -18,7 +18,12 @@ import {
   getUserIdsWorkingOnTask,
 } from "../database/tasks";
 import { sendMessageToChannel } from "./messages";
-import { channelIsChildOfCtf, channelIsTask } from "./comparison";
+import {
+  isChannelOfCtf,
+  channelIsTask,
+  isRoleOfCtf,
+  isCategoryOfCtf,
+} from "./comparison";
 
 enum CategoryType {
   NEW,
@@ -39,54 +44,52 @@ export interface TaskInput {
   flag: string;
 }
 
-const newSuffix = " - New";
-const startedSuffix = " - Started";
-const solvedSuffix = " - Solved";
+const newPrefix = "New - ";
+const startedPrefix = "Started - ";
+const solvedPrefix = "Solved - ";
 
 export function newCategoryName(ctf: CTF) {
-  return ctf.title + newSuffix;
+  return newPrefix + ctf.title;
 }
 
 export function startedCategoryName(ctf: CTF) {
-  return ctf.title + startedSuffix;
+  return startedPrefix + ctf.title;
 }
 
 export function solvedCategoryName(ctf: CTF) {
-  return ctf.title + solvedSuffix;
+  return solvedPrefix + ctf.title;
 }
 
 function getCtfNameFromCategoryName(name: string) {
-  let s = name.split(newSuffix);
-  if (s.length > 1) return s[0];
-
-  s = name.split(startedSuffix);
-  if (s.length > 1) return s[0];
-
-  s = name.split(solvedSuffix);
-  if (s.length > 1) return s[0];
+  // cut off the start up to the first prefix and return the rest of the string
+  for (const prefix of [newPrefix, startedPrefix, solvedPrefix]) {
+    if (name.search(prefix) !== -1)
+      return name.substring(name.search(prefix) + prefix.length, name.length);
+  }
 
   throw new Error(`Failed to get ctf name from category name ${name}`);
 }
 
-function findAvailableCategoryName(guild: Guild, originalName: string) {
+function findAvailableCategoryName(guild: Guild, ctf: CTF | string) {
   let i = 0;
+  const originalName = typeof ctf === "string" ? ctf : ctf.title;
   let name = originalName;
   while (guild.channels.cache.find((channel) => channel.name === name)) {
     i++;
-    name = `${originalName} (${i})`;
+    name = `(${i}) ${originalName}`;
   }
   return name;
 }
 
 async function createCategoryChannel(
   guild: Guild,
-  name: string,
+  name: CTF | string,
   role: Role | null | undefined = null
 ) {
   if (role == null) {
-    role = guild.roles.cache.find((r) => name.startsWith(r.name));
+    role = guild.roles.cache.find((r) => isRoleOfCtf(r, name));
     if (role == null) {
-      console.error(`Could not find role for ${name}`);
+      console.error(`Could not find role for CTF`);
       return null;
     }
   }
@@ -189,30 +192,30 @@ export async function createChannelsAndRolesForCtf(guild: Guild, ctf: CTF) {
   });
 }
 
-function getChannelCategoriesForCtf(
+export function getChannelCategoriesForCtf(
   guild: Guild,
-  ctf: CTF
+  ctf: CTF | string
 ): Collection<string, CategoryChannel> {
   return guild.channels.cache.filter(
     (channel) =>
       channel.type === ChannelType.GuildCategory &&
-      channel.name.startsWith(ctf.title)
+      isCategoryOfCtf(channel, ctf)
   ) as Collection<string, CategoryChannel>;
 }
 
 function getNewCategoriesForCtf(guild: Guild, ctf: CTF) {
   const categories = getChannelCategoriesForCtf(guild, ctf);
-  return categories.filter((c) => c.name.startsWith(newCategoryName(ctf)));
+  return categories.filter((c) => isCategoryOfCtf(c, newCategoryName(ctf)));
 }
 
 function getStartedCategoriesForCtf(guild: Guild, ctf: CTF) {
   const categories = getChannelCategoriesForCtf(guild, ctf);
-  return categories.filter((c) => c.name.startsWith(startedCategoryName(ctf)));
+  return categories.filter((c) => isCategoryOfCtf(c, startedCategoryName(ctf)));
 }
 
 function getSolvedCategoriesForCtf(guild: Guild, ctf: CTF) {
   const categories = getChannelCategoriesForCtf(guild, ctf);
-  return categories.filter((c) => c.name.startsWith(solvedCategoryName(ctf)));
+  return categories.filter((c) => isCategoryOfCtf(c, solvedCategoryName(ctf)));
 }
 
 function getTalkChannelForCtf(guild: Guild, ctf: CTF) {
@@ -220,7 +223,7 @@ function getTalkChannelForCtf(guild: Guild, ctf: CTF) {
     (channel) =>
       channel.type === ChannelType.GuildText &&
       channel.name === `challenges-talk` &&
-      channel.parent?.name.startsWith(startedCategoryName(ctf))
+      isChannelOfCtf(channel, startedCategoryName(ctf))
   ) as TextChannel;
 }
 
@@ -332,7 +335,7 @@ export async function createChannelForNewTask(
 
 export async function getTaskChannel(guild: Guild, task: Task, ctf: CTF) {
   const taskChannel = guild.channels.cache.find((channel) => {
-    if (channelIsTask(channel, task) && channelIsChildOfCtf(channel, ctf)) {
+    if (channelIsTask(channel, task) && isChannelOfCtf(channel, ctf)) {
       return channel;
     }
   });
@@ -387,21 +390,21 @@ export async function moveChannel(
   // if channel is not in 'new' category, skip
   if (
     operation === ChannelMovingEvent.START &&
-    !taskChannel.parent?.name.startsWith(newCategoryName(ctf))
+    !isChannelOfCtf(taskChannel, newCategoryName(ctf))
   )
     return;
 
   // if channel is already in 'solved' category, skip
   if (
     operation === ChannelMovingEvent.SOLVED &&
-    taskChannel.parent?.name.startsWith(solvedCategoryName(ctf))
+    !isChannelOfCtf(taskChannel, solvedCategoryName(ctf))
   )
     return;
 
   // if channel is not in 'solved' category, skip
   if (
     operation === ChannelMovingEvent.UNSOLVED &&
-    !taskChannel.parent?.name.startsWith(solvedCategoryName(ctf))
+    !isChannelOfCtf(taskChannel, solvedCategoryName(ctf))
   )
     return;
 
