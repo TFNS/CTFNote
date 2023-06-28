@@ -21,6 +21,7 @@ import {
   ChannelMovingEvent,
   TaskInput,
   createChannelForNewTask,
+  getTaskChannel,
   moveChannel,
 } from "../discord/utils/channels";
 import { isCategoryOfCtf } from "../discord/utils/comparison";
@@ -114,15 +115,11 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       const task = await getTaskFromId(args.input.id);
       if (task == null) return input;
 
-      const channel = guild?.channels.cache.find(
-        (channel) =>
-          channel.type === ChannelType.GuildText && channel.topic === task.title
-      ) as CategoryChannel | undefined;
-
-      if (channel === undefined) return input;
+      const channel = await getTaskChannel(guild, task, null);
+      if (channel == null) return input;
 
       channel
-        .setName(`${task.title}-deleted`)
+        .setName(`deleted-${task.title}`)
         .catch((err) =>
           console.error("Failed to mark channel as deleted.", err)
         );

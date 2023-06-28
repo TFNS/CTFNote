@@ -340,9 +340,21 @@ export async function createChannelForNewTask(
   return handleCreateAndNotify(guild, newTask, ctf, category, announce);
 }
 
-export async function getTaskChannel(guild: Guild, task: Task, ctf: CTF) {
+export async function getTaskChannel(
+  guild: Guild,
+  task: Task,
+  ctf: CTF | null
+) {
+  if (ctf == null) {
+    ctf = await getCtfFromDatabase(task.ctfId);
+    if (ctf == null) return null;
+  }
+
+  // to get arround TypeScript's type system
+  const c = ctf;
+
   const taskChannel = guild.channels.cache.find((channel) => {
-    if (isTaskChannelOf(channel, task) && isChannelOfCtf(channel, ctf)) {
+    if (isTaskChannelOf(channel, task) && isChannelOfCtf(channel, c)) {
       return channel;
     }
   });
