@@ -30,7 +30,15 @@ function getDbUrl(role: "user" | "admin") {
 }
 
 function createOptions() {
-  const secret = crypto.randomBytes(32).toString("hex");
+  let secret: string;
+  if (config.sessionSecret.length < 64 && config.env !== "development") {
+    console.info(
+      "Using random session secret since SESSION_SECRET is too short. All users will be logged out."
+    );
+    secret = crypto.randomBytes(32).toString("hex");
+  } else {
+    secret = config.sessionSecret;
+  }
 
   const postgraphileOptions: PostGraphileOptions = {
     pluginHook: makePluginHook([PgPubsub, OperationHook]),

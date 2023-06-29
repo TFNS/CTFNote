@@ -23,6 +23,7 @@ services:
       DISCORD_VOICE_CHANNELS: ${DISCORD_VOICE_CHANNELS:-3}
       TZ: ${TZ:-UTC}
       LC_ALL: ${LC_ALL:-en_US.UTF-8}
+      SESSION_SECRET: ${SESSION_SECRET:-}
     depends_on:
       - db
     volumes:
