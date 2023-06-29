@@ -150,9 +150,12 @@ function groupBy<K, V>(
 
 export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
   messages = messages.reverse();
-  const grouped = groupBy(
+  const groupedByCategory = groupBy(
     Array.from(messages.values()),
-    (message) => message.channelId
+    (message) => {
+      const channel = message.channel as TextChannel;
+      return channel.parent ? channel.parent.name : "without category";
+    }
   );
 
   if (messages.length > 0) {
@@ -162,44 +165,49 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
 
   const result: string[] = [];
 
-  grouped.forEach((messages) => {
-    const channel = messages[0].channel;
-    if (channel.type !== ChannelType.GuildText) return;
+  groupedByCategory.forEach((messagesInCategory, category) => {
+    result.push(`# ${category}`);
+    const grouped = groupBy(messagesInCategory, (message) => message.channelId);
 
-    result.push(`## ${channel.name}`);
+    grouped.forEach((messages) => {
+      const channel = messages[0].channel;
+      if (channel.type !== ChannelType.GuildText) return;
 
-    messages.forEach((message) => {
-      const timestamp = new Date(message.createdTimestamp).toLocaleString();
+      result.push(`## ${channel.name}`);
 
-      if (message.attachments.size > 0) {
-        message.attachments.forEach((attachment) => {
-          message.content += attachment.url + " ";
-        });
-      }
+      messages.forEach((message) => {
+        const timestamp = new Date(message.createdTimestamp).toLocaleString();
 
-      let content = message.content;
-      if (content.startsWith("```")) content = "\n" + content;
-      if (content.startsWith("> ")) content = content + "\n"; // need an extra line break for quotes
+        if (message.attachments.size > 0) {
+          message.attachments.forEach((attachment) => {
+            message.content += attachment.url + " ";
+          });
+        }
 
-      // resolve mentions to usernames
-      const mentions = content.match(/<(?:[^\d>]+|:[A-Za-z0-9]+:)\w+>/g);
-      if (mentions != null) {
-        mentions.forEach((user) => {
-          const id = user.replace(/\D/g, "");
-          const discordUser = message.guild?.members.cache.get(id);
-          if (discordUser == null) return;
+        let content = message.content;
+        if (content.startsWith("```")) content = "\n" + content;
+        if (content.startsWith("> ")) content = content + "\n"; // need an extra line break for quotes
 
-          content = content.replace(
-            user,
-            discordUser.user.discriminator != "0"
-              ? `@${discordUser.user.username}#${discordUser.user.discriminator}`
-              : `@${discordUser.user.username}`
-          );
-        });
-      }
+        // resolve mentions to usernames
+        const mentions = content.match(/<(?:[^\d>]+|:[A-Za-z0-9]+:)\w+>/g);
+        if (mentions != null) {
+          mentions.forEach((user) => {
+            const id = user.replace(/\D/g, "");
+            const discordUser = message.guild?.members.cache.get(id);
+            if (discordUser == null) return;
 
-      const formattedMessage = `[${timestamp}] ${message.author.username}: ${content}`;
-      result.push(formattedMessage);
+            content = content.replace(
+              user,
+              discordUser.user.discriminator != "0"
+                ? `@${discordUser.user.username}#${discordUser.user.discriminator}`
+                : `@${discordUser.user.username}`
+            );
+          });
+        }
+
+        const formattedMessage = `[${timestamp}] ${message.author.username}: ${content}`;
+        result.push(formattedMessage);
+      });
     });
   });
 
