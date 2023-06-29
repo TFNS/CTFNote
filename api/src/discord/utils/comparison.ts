@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 import { CTF } from "../database/ctfs";
 import { Task } from "../database/tasks";
+import { getCtfNameFromCategoryName } from "./channels";
 
 export function isCategoryOfCtf(
   channel: CategoryChannel | undefined | null,
@@ -45,5 +46,5 @@ export function isRoleOfCtf(role: Role | string, ctf: CTF | string) {
   const ctfTitle = typeof ctf === "string" ? ctf : ctf.title;
   const roleName = typeof role === "string" ? role : role.name;
 
-  return roleName === ctfTitle;
+  return roleName === getCtfNameFromCategoryName(ctfTitle);
 }

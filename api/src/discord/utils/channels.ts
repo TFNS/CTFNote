@@ -60,14 +60,14 @@ export function solvedCategoryName(ctf: CTF) {
   return solvedPrefix + ctf.title;
 }
 
-function getCtfNameFromCategoryName(name: string) {
+export function getCtfNameFromCategoryName(name: string) {
   // cut off the start up to the first prefix and return the rest of the string
   for (const prefix of [newPrefix, startedPrefix, solvedPrefix]) {
     if (name.search(prefix) !== -1)
       return name.substring(name.search(prefix) + prefix.length, name.length);
   }
 
-  throw new Error(`Failed to get ctf name from category name ${name}`);
+  return name;
 }
 
 function findAvailableCategoryName(guild: Guild, ctf: CTF | string) {
@@ -89,7 +89,7 @@ async function createCategoryChannel(
   if (role == null) {
     role = guild.roles.cache.find((r) => isRoleOfCtf(r, name));
     if (role == null) {
-      console.error(`Could not find role for CTF`);
+      console.error(`Could not find role for CTF`, name, role);
       return null;
     }
   }
@@ -335,7 +335,14 @@ export async function createChannelForNewTask(
   if (ctf == null) return;
 
   const category = await getNotFullCategoryForCtf(guild, ctf, CategoryType.NEW);
-  if (category == null) return;
+  if (category == null) {
+    console.error(
+      "Could not find a non-full category for new task",
+      newTask,
+      announce
+    );
+    return;
+  }
 
   return handleCreateAndNotify(guild, newTask, ctf, category, announce);
 }
