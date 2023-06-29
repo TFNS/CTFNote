@@ -96,6 +96,7 @@ export default defineComponent({
       updateTask: ctfnote.tasks.useUpdateTask(),
       createTask: ctfnote.tasks.useCreateTask(),
       addTagsForTask: ctfnote.tags.useAddTagsForTask(),
+      notifySuccess: ctfnote.ui.useNotify().notifySuccess,
       tags,
       suggestions,
       filterFn,
@@ -112,7 +113,12 @@ export default defineComponent({
   methods: {
     async submit() {
       let task = null;
+
+      this.onDialogOK();
       if (this.ctfId) {
+        this.notifySuccess({
+          message: `Task ${this.form.title} is being created...`,
+        });
         const r = await this.createTask(this.ctfId, this.form);
 
         task = r?.data?.createTask?.task;
@@ -120,6 +126,9 @@ export default defineComponent({
           await this.addTagsForTask(this.form.tags, makeId(task.id));
         }
       } else if (this.task) {
+        this.notifySuccess({
+          message: `Task ${this.form.title} is being updated...`,
+        });
         await this.addTagsForTask(this.form.tags, makeId(this.task.id));
 
         const patch: TaskPatch = {};
@@ -134,8 +143,6 @@ export default defineComponent({
         }
         await this.updateTask(this.task, patch);
       }
-
-      this.onDialogOK();
     },
   },
 });
