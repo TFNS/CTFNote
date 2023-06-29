@@ -13,14 +13,14 @@ services:
     networks:
       - ctfnote
     ports:
-      - '5432:5432'
+      - "5432:5432"
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:1.9.7
+    image: quay.io/hedgedoc/hedgedoc:1.9.8
     environment:
-      CMD_DB_URL: 'postgres://ctfnote:ctfnote@db:5432/hedgedoc'
-      CMD_URL_PATH: 'pad'
-      CMD_IMAGE_UPLOAD_TYPE: 'filesystem'
-      CMD_CSP_ENABLE: 'false'
+      CMD_DB_URL: "postgres://ctfnote:ctfnote@db:5432/hedgedoc"
+      CMD_URL_PATH: "pad"
+      CMD_IMAGE_UPLOAD_TYPE: "filesystem"
+      CMD_CSP_ENABLE: "false"
     depends_on:
       - db
     restart: always
@@ -29,7 +29,7 @@ services:
     networks:
       - ctfnote
     ports:
-      - '3001:3000'
+      - "3001:3000"
 volumes:
   ctfnote-db:
   pad-uploads:
