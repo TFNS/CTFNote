@@ -114,6 +114,8 @@ You can find the `DISCORD_SERVER_ID` in the 'Widget' section of your server sett
 
 Please do not use this bot if untrusted members can create channels or categories in your server, or can edit topics of channels.
 
+The `/create` and `/archive` commands are only accessible when you have Discord administrator rights.
+
 ### Migration
 
 If you already have an instance of CTFNote in a previous version and wish to
