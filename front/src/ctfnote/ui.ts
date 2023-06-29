@@ -62,7 +62,6 @@ export function useNotify() {
   };
 
   const globalNotify = (opts: NotifyOptions) => {
-    console.log('enabled', isSystemNotificationEnabled());
     if (isSystemNotificationEnabled()) {
       try {
         new Notification(opts.message, {
