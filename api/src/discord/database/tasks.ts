@@ -1,4 +1,5 @@
 import { connectToDatabase } from "./database";
+import { PoolClient } from "pg";
 
 export interface Task {
   id: bigint;
@@ -22,9 +23,11 @@ function buildTask(row: any): Task {
 
 export async function getTaskByCtfIdAndNameFromDatabase(
   ctfId: bigint,
-  name: string
+  name: string,
+  pgClient: PoolClient | null = null
 ): Promise<Task | null> {
-  const pgClient = await connectToDatabase();
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
 
   try {
     const query =
@@ -42,7 +45,7 @@ export async function getTaskByCtfIdAndNameFromDatabase(
     );
     return null;
   } finally {
-    pgClient.release();
+    if (!useRequestClient) pgClient.release();
   }
 }
 

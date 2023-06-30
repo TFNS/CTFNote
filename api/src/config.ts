@@ -27,6 +27,8 @@ export type CTFNoteConfig = DeepReadOnly<{
     createUrl: string;
     showUrl: string;
     documentMaxLength: number;
+    domain: string;
+    useSSL: string;
   };
 
   web: {
@@ -76,6 +78,8 @@ const config: CTFNoteConfig = {
     createUrl: getEnv("PAD_CREATE_URL"),
     showUrl: getEnv("PAD_SHOW_URL"),
     documentMaxLength: Number(getEnv("CMD_DOCUMENT_MAX_LENGTH", "100000")),
+    domain: getEnv("CMD_DOMAIN", ""),
+    useSSL: getEnv("CMD_PROTOCOL_USESSL", "false"),
   },
   web: {
     port: getEnvInt("WEB_PORT"),

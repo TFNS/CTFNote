@@ -24,6 +24,7 @@ import {
   isRoleOfCtf,
   isCategoryOfCtf,
 } from "./comparison";
+import { safeSlugify } from "../../utils/utils";
 
 enum CategoryType {
   NEW,
@@ -304,9 +305,32 @@ export async function createChannelForTaskInCtf(
   return handleCreateAndNotify(guild, task, ctf, category, announce);
 }
 
+async function pinTaskLinkToChannel(
+  channel: TextChannel,
+  task: Task,
+  ctf: CTF
+) {
+  if (config.pad.domain == "") return;
+
+  const ssl = config.pad.useSSL == "false" ? "" : "s";
+
+  const url = `http${ssl}://${config.pad.domain}/#/ctf/${ctf.id}-${safeSlugify(
+    ctf.title
+  )}/task/${task.id}`;
+
+  const message = await sendMessageToChannel(
+    channel,
+    `CTFNote task: ${url}`,
+    true
+  );
+  if (message == null) return;
+
+  await message.pin();
+}
+
 async function handleCreateAndNotify(
   guild: Guild,
-  task: Task | TaskInput,
+  task: Task,
   ctf: CTF,
   category: CategoryChannel,
   announce = false
@@ -314,6 +338,7 @@ async function handleCreateAndNotify(
   const taskChannel = await createTaskChannel(guild, task, category);
   if (taskChannel == null) return;
 
+  await pinTaskLinkToChannel(taskChannel, task, ctf);
   await sendMessageToChannel(taskChannel, task.description);
 
   if (announce)
@@ -328,7 +353,7 @@ async function handleCreateAndNotify(
 
 export async function createChannelForNewTask(
   guild: Guild,
-  newTask: TaskInput,
+  newTask: Task,
   announce = false
 ) {
   const ctf = await getCtfFromDatabase(newTask.ctfId);

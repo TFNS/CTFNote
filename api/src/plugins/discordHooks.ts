@@ -1,12 +1,6 @@
 import { Build, Context } from "postgraphile";
 import { SchemaBuilder } from "graphile-build";
-import {
-  CategoryChannel,
-  ChannelType,
-  Guild,
-  GuildBasedChannel,
-  TextChannel,
-} from "discord.js";
+import { ChannelType, Guild } from "discord.js";
 import {
   getAllCtfsFromDatabase,
   getCtfFromDatabase,
@@ -15,16 +9,20 @@ import {
 import { getDiscordGuild, usingDiscordBot } from "../discord";
 import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
 import { getDiscordIdFromUserId } from "../discord/database/users";
-import { Task, getTaskFromId } from "../discord/database/tasks";
+import {
+  Task,
+  getTaskByCtfIdAndNameFromDatabase,
+  getTaskFromId,
+} from "../discord/database/tasks";
 import { sendMessageToTask } from "../discord/utils/messages";
 import {
   ChannelMovingEvent,
-  TaskInput,
   createChannelForNewTask,
   getTaskChannel,
   moveChannel,
 } from "../discord/utils/channels";
 import { isCategoryOfCtf } from "../discord/utils/comparison";
+import { GraphQLResolveInfoWithMessages } from "@graphile/operation-hooks";
 
 export async function convertToUsernameFormat(userId: bigint | string) {
   // this is actually the Discord ID and not a CTFNote userId
@@ -98,14 +96,22 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
   const handleDiscordMutationAfter = async (
     input: any,
     args: any,
-    context: any
+    context: any,
+    _resolveInfo: GraphQLResolveInfoWithMessages
   ) => {
     const guild = getDiscordGuild();
     if (guild == null) return input;
 
     //add challenges to the ctf channel discord
     if (fieldContext.scope.fieldName === "createTask") {
-      const task = args.input as TaskInput;
+      // we have to query the task using the context.pgClient in order to see the newly created task
+      const task = await getTaskByCtfIdAndNameFromDatabase(
+        args.input.ctfId,
+        args.input.title,
+        context.pgClient
+      );
+      if (task == null) return input;
+
       // we have to await this since big imports will cause race conditions with the Discord API
       await createChannelForNewTask(guild, task, true);
     }
@@ -224,7 +230,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
   const handleDiscordMutationBefore = async (
     input: any,
     args: any,
-    context: any
+    context: any,
+    _resolveInfo: GraphQLResolveInfoWithMessages
   ) => {
     const guild = getDiscordGuild();
     if (guild === null) return input;
