@@ -17,6 +17,8 @@ services:
       DB_HOST: db
       DB_PORT: 5432
       WEB_PORT: 3000
+      CMD_DOMAIN: ${CMD_DOMAIN:-}
+      CMD_PROTOCOL_USESSL: ${CMD_PROTOCOL_USESSL:-false}
       USE_DISCORD: ${USE_DISCORD:-false}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-bot_token}
       DISCORD_SERVER_ID: ${DISCORD_SERVER_ID:-server_id}
