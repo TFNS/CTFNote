@@ -27,6 +27,8 @@ export type CTFNoteConfig = DeepReadOnly<{
     createUrl: string;
     showUrl: string;
     documentMaxLength: number;
+    domain: string;
+    useSSL: string;
   };
 
   web: {
@@ -37,6 +39,8 @@ export type CTFNoteConfig = DeepReadOnly<{
     token: string;
     serverId: string;
     voiceChannels: number;
+    botName: string;
+    maxChannelsPerCategory: number;
   };
 }>;
 
@@ -74,6 +78,8 @@ const config: CTFNoteConfig = {
     createUrl: getEnv("PAD_CREATE_URL"),
     showUrl: getEnv("PAD_SHOW_URL"),
     documentMaxLength: Number(getEnv("CMD_DOCUMENT_MAX_LENGTH", "100000")),
+    domain: getEnv("CMD_DOMAIN", ""),
+    useSSL: getEnv("CMD_PROTOCOL_USESSL", "false"),
   },
   web: {
     port: getEnvInt("WEB_PORT"),
@@ -83,6 +89,8 @@ const config: CTFNoteConfig = {
     token: getEnv("DISCORD_BOT_TOKEN"),
     serverId: getEnv("DISCORD_SERVER_ID"),
     voiceChannels: getEnvInt("DISCORD_VOICE_CHANNELS"),
+    botName: getEnv("DISCORD_BOT_NAME", "CTFNote"),
+    maxChannelsPerCategory: 50, // 50 is the hard Discord limit
   },
 };
 

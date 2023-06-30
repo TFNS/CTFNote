@@ -50,6 +50,7 @@ import { Id, Task, Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { Ref, defineComponent, reactive, ref } from 'vue';
 import { makeId } from 'src/ctfnote/models';
+import { TaskPatch } from 'src/generated/graphql';
 
 export default defineComponent({
   props: {
@@ -95,6 +96,7 @@ export default defineComponent({
       updateTask: ctfnote.tasks.useUpdateTask(),
       createTask: ctfnote.tasks.useCreateTask(),
       addTagsForTask: ctfnote.tags.useAddTagsForTask(),
+      notifySuccess: ctfnote.ui.useNotify().notifySuccess,
       tags,
       suggestions,
       filterFn,
@@ -111,7 +113,12 @@ export default defineComponent({
   methods: {
     async submit() {
       let task = null;
+
+      this.onDialogOK();
       if (this.ctfId) {
+        this.notifySuccess({
+          message: `Task ${this.form.title} is being created...`,
+        });
         const r = await this.createTask(this.ctfId, this.form);
 
         task = r?.data?.createTask?.task;
@@ -119,11 +126,23 @@ export default defineComponent({
           await this.addTagsForTask(this.form.tags, makeId(task.id));
         }
       } else if (this.task) {
+        this.notifySuccess({
+          message: `Task ${this.form.title} is being updated...`,
+        });
         await this.addTagsForTask(this.form.tags, makeId(this.task.id));
-        await this.updateTask(this.task, this.form);
-      }
 
-      this.onDialogOK();
+        const patch: TaskPatch = {};
+        if (this.form.title !== this.task.title) {
+          patch.title = this.form.title;
+        }
+        if (this.form.description !== this.task.description) {
+          patch.description = this.form.description;
+        }
+        if (this.form.flag !== this.task.flag) {
+          patch.flag = this.form.flag;
+        }
+        await this.updateTask(this.task, patch);
+      }
     },
   },
 });

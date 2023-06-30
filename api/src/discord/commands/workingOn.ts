@@ -8,10 +8,7 @@ import {
   TextChannel,
 } from "discord.js";
 import { Command } from "../command";
-import {
-  getCTFNamesFromDatabase,
-  getCtfIdFromDatabase,
-} from "../database/ctfs";
+import { getCTFNamesFromDatabase, getCtfFromDatabase } from "../database/ctfs";
 import {
   getTaskByCtfIdAndNameFromDatabase,
   userStartsWorkingOnTask,
@@ -22,6 +19,7 @@ import {
   sendStopWorkingOnMessage,
 } from "../../plugins/discordHooks";
 import { getUserByDiscordId } from "../database/users";
+import { getCurrentTaskChannelFromDiscord } from "../utils/channels";
 
 async function accessDenied(interaction: CommandInteraction) {
   await interaction.editReply({
@@ -35,30 +33,13 @@ async function workingOnLogic(
   interaction: CommandInteraction,
   operation: "start" | "stop"
 ) {
-  const ctfNames = await getCTFNamesFromDatabase();
+  const guild = interaction.guild;
+  if (guild == null) return;
 
-  const categoryChannel = (await interaction.guild?.channels.cache.find(
-    (channel) =>
-      channel.type === ChannelType.GuildCategory &&
-      ctfNames.includes(channel.name)
-  )) as CategoryChannel;
-  if (categoryChannel == null) return accessDenied(interaction);
+  const result = await getCurrentTaskChannelFromDiscord(interaction);
+  if (result == null) return accessDenied(interaction);
 
-  const currentTaskChannel = (await interaction.guild?.channels.cache.find(
-    (channel) =>
-      channel.type === ChannelType.GuildText &&
-      channel.id === interaction.channelId &&
-      channel.guildId === categoryChannel.guildId
-  )) as TextChannel;
-
-  const ctfId = await getCtfIdFromDatabase(categoryChannel.name);
-  if (ctfId == null) return accessDenied(interaction);
-
-  const name = currentTaskChannel?.topic;
-  if (name == null) return accessDenied(interaction);
-
-  const task = await getTaskByCtfIdAndNameFromDatabase(ctfId, name);
-  if (task.id == null) return accessDenied(interaction);
+  const task = result.task;
 
   const userId = await getUserByDiscordId(interaction.user.id);
   if (userId == null) {
@@ -78,11 +59,11 @@ async function workingOnLogic(
             Math.floor(Math.random() * startWorkingSentences.length)
           ],
       });
-      await sendStartWorkingOnMessage(userId, task.id);
+      await sendStartWorkingOnMessage(guild, userId, task);
       return;
     } else {
       await interaction.editReply({
-        content: `You are already working on the task ${name}`,
+        content: `You are already working on the task ${task.title}`,
       });
       return;
     }
@@ -95,11 +76,11 @@ async function workingOnLogic(
             Math.floor(Math.random() * stopWorkingSentences.length)
           ],
       });
-      await sendStopWorkingOnMessage(userId, task.id);
+      await sendStopWorkingOnMessage(guild, userId, task);
       return;
     } else {
       await interaction.editReply({
-        content: `You are not working on the task ${name}`,
+        content: `You are not working on the task ${task.title}`,
       });
       return;
     }

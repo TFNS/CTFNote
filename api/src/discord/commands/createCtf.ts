@@ -3,16 +3,16 @@ import {
   ApplicationCommandType,
   ButtonBuilder,
   ButtonStyle,
-  ChannelType,
   Client,
   CommandInteraction,
   PermissionFlagsBits,
 } from "discord.js";
 import { Command } from "../command";
 import { getCTFNamesFromDatabase } from "../database/ctfs";
+import { getChannelCategoriesForCtf } from "../utils/channels";
 
 async function createCtfLogic(client: Client, interaction: CommandInteraction) {
-  const ctfNames = await getCTFNamesFromDatabase();
+  let ctfNames = await getCTFNamesFromDatabase();
   const ctfNamesMessage = `Create one of the following CTFs`;
 
   if (!ctfNames || ctfNames.length === 0) {
@@ -22,17 +22,12 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
     return;
   }
 
-  const categorys = interaction.guild?.channels.cache.filter(
-    (channel) =>
-      channel.type === ChannelType.GuildCategory &&
-      ctfNames.includes(channel.name)
-  );
+  const guild = interaction.guild;
+  if (guild == null) return;
 
-  categorys?.forEach((category) => {
-    if (ctfNames.includes(category.name)) {
-      ctfNames.splice(ctfNames.indexOf(category.name), 1);
-    }
-  });
+  ctfNames = ctfNames.filter(
+    (ctfName) => getChannelCategoriesForCtf(guild, ctfName).size === 0
+  );
 
   if (ctfNames.length === 0) {
     await interaction.editReply({
@@ -42,7 +37,7 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   }
 
   // Make a loop to create buttons for each CTF
-  const buttons: any[] = [];
+  const buttons: ButtonBuilder[] = [];
   for (let i = 0; i < ctfNames.length; i++) {
     buttons.push(
       new ButtonBuilder()
