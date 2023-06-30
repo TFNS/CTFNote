@@ -359,7 +359,13 @@ export async function createChannelForNewTask(
   const ctf = await getCtfFromDatabase(newTask.ctfId);
   if (ctf == null) return;
 
-  const category = await getNotFullCategoryForCtf(guild, ctf, CategoryType.NEW);
+  let movingType = CategoryType.NEW;
+
+  if (newTask.flag != "") {
+    movingType = CategoryType.SOLVED;
+  }
+
+  const category = await getNotFullCategoryForCtf(guild, ctf, movingType);
   if (category == null) {
     console.error(
       "Could not find a non-full category for new task",
