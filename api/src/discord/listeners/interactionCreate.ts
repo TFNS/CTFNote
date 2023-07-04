@@ -31,8 +31,6 @@ async function handleArchiveInteraction(
     Array.from(categories.values())
   );
 
-  await handleDeleteCtf(ctfName, guild);
-
   const padMessages = await convertMessagesToPadFormat(messages);
 
   const padUrl = await createPadWithoutLimit(padMessages, ctf.title);
@@ -44,6 +42,8 @@ async function handleArchiveInteraction(
     padUrl,
     ctf.id
   );
+
+  await handleDeleteCtf(ctfName, guild);
 }
 
 export default (client: Client): void => {
