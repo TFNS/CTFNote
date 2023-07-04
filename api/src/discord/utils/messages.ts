@@ -246,7 +246,7 @@ export async function createPadWithoutLimit(
 
     // Add the message to the current pad
     currentPadMessages.push(message);
-    currentPadLength += messageLength;
+    currentPadLength += messageLength + 1;
   }
   let firstPadContent = "";
   if (pads.length > 0) {
