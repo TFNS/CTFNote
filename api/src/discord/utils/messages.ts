@@ -218,7 +218,7 @@ export async function createPadWithoutLimit(
   messages: string[],
   ctfTitle: string
 ) {
-  const MAX_PAD_LENGTH = config.pad.documentMaxLength - 100 - messages.length; // some margin to be safe
+  const MAX_PAD_LENGTH = config.pad.documentMaxLength - 1000 - messages.length; // some margin to be safe
 
   const pads = [];
   let currentPadMessages = [];
@@ -246,7 +246,7 @@ export async function createPadWithoutLimit(
 
     // Add the message to the current pad
     currentPadMessages.push(message);
-    currentPadLength += messageLength;
+    currentPadLength += messageLength + 1;
   }
   let firstPadContent = "";
   if (pads.length > 0) {
