@@ -53,7 +53,13 @@ export async function createPad(
     );
     return res.headers.location;
   } catch (e) {
-    throw Error(`Call to ${config.pad.createUrl} during task creation failed.`);
+    throw Error(
+      `Call to ${
+        config.pad.createUrl
+      } during task creation failed. Length of note: ${
+        buildNoteContent(title, description, tags).length
+      }`
+    );
   }
 }
 
