@@ -4,6 +4,7 @@ import {
   Collection,
   Guild,
   Message,
+  MessageFlags,
   Snowflake,
   TextBasedChannel,
   TextChannel,
@@ -43,7 +44,7 @@ export async function sendMessageToChannel(
   }
 
   if (silent) {
-    options.flags = [4096];
+    options.flags = [MessageFlags.SuppressNotifications];
   }
 
   return await channel.send(options).catch((err) => {
@@ -64,7 +65,7 @@ export async function sendMessageToTask(
   }
 
   if (ctf == null) {
-    ctf = await getCtfFromDatabase(task.ctfId);
+    ctf = await getCtfFromDatabase(task.ctf_id);
   }
   if (ctf == null) return null;
 
@@ -197,7 +198,10 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
             const discordChannel = message.guild?.channels.cache.get(id);
 
             if (discordUser != null) {
-              const nickname = discordUser.nickname != null ? ` (${discordUser.nickname})` : ``;
+              const nickname =
+                discordUser.nickname != null
+                  ? ` (${discordUser.nickname})`
+                  : ``;
               content = content.replace(
                 mention,
                 discordUser.user.discriminator != "0"
@@ -207,10 +211,7 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
             }
 
             if (discordChannel != null) {
-              content = content.replace(
-                mention,
-                `#${discordChannel.name}`
-              );
+              content = content.replace(mention, `#${discordChannel.name}`);
             }
           });
         }
@@ -276,4 +277,13 @@ export async function createPadWithoutLimit(
   }
 
   return await createPad(`${ctfTitle} Discord archive`, firstPadContent);
+}
+
+export const topicDelimiter = " /-/";
+
+export function getTaskTitleFromTopic(topic: string) {
+  const splitted = topic.split(topicDelimiter);
+  const r = splitted.pop();
+  if (r == null) return topic;
+  return splitted.join(topicDelimiter);
 }

@@ -17,7 +17,11 @@ import {
   getTaskFromId,
   getUserIdsWorkingOnTask,
 } from "../database/tasks";
-import { sendMessageToChannel } from "./messages";
+import {
+  getTaskTitleFromTopic,
+  sendMessageToChannel,
+  topicDelimiter,
+} from "./messages";
 import {
   isChannelOfCtf,
   isTaskChannelOf,
@@ -121,7 +125,7 @@ async function createCategoryChannel(
 
 async function createTaskChannel(
   guild: Guild,
-  task: Task | TaskInput | string,
+  task: Task,
   category: CategoryChannel
 ) {
   const taskName = typeof task === "string" ? task : task.title;
@@ -130,7 +134,7 @@ async function createTaskChannel(
     name: taskName,
     type: ChannelType.GuildText,
     parent: category.id,
-    topic: taskName,
+    topic: taskName + topicDelimiter + " " + (await getTaskLink(task)),
   });
 }
 
@@ -288,7 +292,7 @@ export async function createChannelForTaskInCtf(
 ) {
   // query CTF if not provided
   if (ctf == null) {
-    ctf = await getCtfFromDatabase(task.ctfId);
+    ctf = await getCtfFromDatabase(task.ctf_id);
     if (ctf == null) return;
   }
 
@@ -305,18 +309,28 @@ export async function createChannelForTaskInCtf(
   return handleCreateAndNotify(guild, task, ctf, category, announce);
 }
 
+async function getTaskLink(task: Task, ctf: CTF | null = null) {
+  if (config.pad.domain == "") return "";
+
+  if (ctf == null) {
+    ctf = await getCtfFromDatabase(task.ctf_id);
+    if (ctf == null) return "";
+  }
+
+  const ssl = config.pad.useSSL == "false" ? "" : "s";
+
+  return `http${ssl}://${config.pad.domain}/#/ctf/${ctf.id}-${safeSlugify(
+    ctf.title
+  )}/task/${task.id}`;
+}
+
 async function pinTaskLinkToChannel(
   channel: TextChannel,
   task: Task,
   ctf: CTF
 ) {
-  if (config.pad.domain == "") return;
-
-  const ssl = config.pad.useSSL == "false" ? "" : "s";
-
-  const url = `http${ssl}://${config.pad.domain}/#/ctf/${ctf.id}-${safeSlugify(
-    ctf.title
-  )}/task/${task.id}`;
+  const url = await getTaskLink(task, ctf);
+  if (url == "") return;
 
   const message = await sendMessageToChannel(
     channel,
@@ -324,8 +338,6 @@ async function pinTaskLinkToChannel(
     true
   );
   if (message == null) return;
-
-  await message.pin();
 }
 
 async function handleCreateAndNotify(
@@ -356,7 +368,7 @@ export async function createChannelForNewTask(
   newTask: Task,
   announce = false
 ) {
-  const ctf = await getCtfFromDatabase(newTask.ctfId);
+  const ctf = await getCtfFromDatabase(newTask.ctf_id);
   if (ctf == null) return;
 
   let movingType = CategoryType.NEW;
@@ -384,7 +396,7 @@ export async function getTaskChannel(
   ctf: CTF | null
 ) {
   if (ctf == null) {
-    ctf = await getCtfFromDatabase(task.ctfId);
+    ctf = await getCtfFromDatabase(task.ctf_id);
     if (ctf == null) return null;
   }
 
@@ -415,8 +427,9 @@ export async function getCurrentTaskChannelFromDiscord(
     getCtfNameFromCategoryName(category.name)
   );
   if (ctf == null) return null;
+  if (interaction.channel.topic == null) return null;
 
-  const name = interaction.channel.topic;
+  const name = getTaskTitleFromTopic(interaction.channel.topic);
   if (name == null) return null;
 
   const task = await getTaskByCtfIdAndNameFromDatabase(ctf.id, name);
@@ -438,7 +451,7 @@ export async function moveChannel(
   }
 
   if (ctf == null) {
-    ctf = await getCtfFromDatabase(task.ctfId);
+    ctf = await getCtfFromDatabase(task.ctf_id);
     if (ctf == null) return;
   }
   const taskChannel = await getTaskChannel(guild, task, ctf);
