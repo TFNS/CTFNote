@@ -197,11 +197,12 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
             const discordChannel = message.guild?.channels.cache.get(id);
 
             if (discordUser != null) {
+              const nickname = discordUser.nickname != null ? ` (${discordUser.nickname})` : ``;
               content = content.replace(
                 mention,
                 discordUser.user.discriminator != "0"
-                  ? `@${discordUser.user.username}#${discordUser.user.discriminator}`
-                  : `@${discordUser.user.username}`
+                  ? `@${discordUser.user.username}#${discordUser.user.discriminator}${nickname}`
+                  : `@${discordUser.user.username}${nickname}`
               );
             }
 
