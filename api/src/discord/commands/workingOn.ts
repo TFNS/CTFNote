@@ -1,16 +1,6 @@
-import {
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
-  CategoryChannel,
-  ChannelType,
-  Client,
-  CommandInteraction,
-  TextChannel,
-} from "discord.js";
+import { ApplicationCommandType, Client, CommandInteraction } from "discord.js";
 import { Command } from "../command";
-import { getCTFNamesFromDatabase, getCtfFromDatabase } from "../database/ctfs";
 import {
-  getTaskByCtfIdAndNameFromDatabase,
   userStartsWorkingOnTask,
   userStopsWorkingOnTask,
 } from "../database/tasks";
