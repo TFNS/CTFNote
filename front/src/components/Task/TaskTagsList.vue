@@ -1,6 +1,11 @@
 <template>
   <div class="row">
-    <q-chip v-for="tag in tags" :key="tag.nodeId" :style="style(tag.tag)">
+    <q-chip
+      v-for="tag in tags"
+      :key="tag.nodeId"
+      text-color="white"
+      :style="style(tag.tag)"
+    >
       <span class="tag-chip">
         {{ tag.tag }}
       </span>
