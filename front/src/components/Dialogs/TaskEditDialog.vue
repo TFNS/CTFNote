@@ -23,6 +23,7 @@
             use-chips
             multiple
             new-value-mode="add-unique"
+            behavior="menu"
           />
         </q-card-section>
         <q-card-section class="q-pt-none">
