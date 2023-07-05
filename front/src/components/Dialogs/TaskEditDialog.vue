@@ -22,6 +22,7 @@
             use-chips
             multiple
             new-value-mode="add-unique"
+            behavior="menu"
             @filter="filterFn"
           />
         </q-card-section>

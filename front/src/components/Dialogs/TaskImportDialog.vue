@@ -144,7 +144,11 @@ export default defineComponent({
       const parsedTasks = this.currentParser.value.parse(v);
       // Precompute a set of task to avoid N square operation
       const hashTask = (title: string, tags: string[]): string =>
-        title.concat(...tags);
+        title +
+        tags
+          .map((t) => t.toLowerCase())
+          .sort()
+          .join('');
       const taskSet = new Set();
       for (const task of this.ctf.tasks) {
         taskSet.add(
