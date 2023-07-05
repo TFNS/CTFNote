@@ -31,7 +31,7 @@ function buildNoteContent(
   return note;
 }
 
-async function createPad(
+export async function createPad(
   title: string,
   description?: string,
   tags?: string[]
@@ -53,7 +53,13 @@ async function createPad(
     );
     return res.headers.location;
   } catch (e) {
-    throw Error(`Call to ${config.pad.createUrl} during task creation failed.`);
+    throw Error(
+      `Call to ${
+        config.pad.createUrl
+      } during task creation failed. Length of note: ${
+        buildNoteContent(title, description, tags).length
+      }`
+    );
   }
 }
 

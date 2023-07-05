@@ -11,8 +11,8 @@
     </q-tabs>
 
     <div class="q-pa-md">
-      <div class="row q-gutter-md">
-        <div class="col">
+      <div class="row q-col-gutter-md">
+        <div class="col-md-6 col-xs-12">
           <q-card v-if="me" bordered>
             <q-form @submit="changeProfile">
               <q-card-section class="row justify-between">
@@ -65,7 +65,7 @@
             </q-form>
           </q-card>
         </div>
-        <div class="col">
+        <div class="col-md-6 col-xs-12">
           <q-card bordered>
             <q-form @submit="changePassword">
               <q-card-section>
@@ -114,6 +114,48 @@
               />
             </q-card-section>
           </q-card>
+          <q-card bordered class="q-mt-md">
+            <q-card-section>
+              <div class="text-h6">Link your Discord account</div>
+            </q-card-section>
+            <q-card-section v-if="me.profile.discordId == null">
+              <password-input
+                v-model="profileToken"
+                read-only
+                label="Your personal CTFNote token"
+                hint="Give this token to the CTFNote bot to link your account by using /link"
+                @update:visibility="pollMe"
+              />
+            </q-card-section>
+            <q-card-section class="row">
+              <div v-if="me.profile.discordId == null">
+                Your CTFNote account is not linked to your Discord account.
+              </div>
+              <div v-else>
+                Your CTFNote account is linked to Discord user ID
+                {{ me.profile.discordId }}.
+              </div>
+            </q-card-section>
+            <q-card-actions align="right" class="q-pa-md">
+              <q-btn
+                v-if="me.profile.discordId != null"
+                icon="close"
+                label="Unlink Discord"
+                color="negative"
+                title="Unlink Discord"
+                :loading="resetDiscordLoading"
+                @click="unlinkDiscord"
+              />
+              <q-btn
+                v-if="me.profile.discordId == null"
+                icon="refresh"
+                label="Change token"
+                color="positive"
+                title="Change token"
+                @click="resetToken"
+              />
+            </q-card-actions>
+          </q-card>
         </div>
       </div>
     </div>
@@ -126,17 +168,26 @@ import ColorPicker from 'src/components/Utils/ColorPicker.vue';
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
 import { Profile } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, ref, watch } from 'vue';
+import { Ref, defineComponent, ref, watch } from 'vue';
 
 export default defineComponent({
   components: { PasswordInput, ColorPicker, UserBadge },
   setup() {
     const me = ctfnote.me.injectMe();
-
     const username = ref(me.value.profile?.username ?? '');
     const description = ref(me.value.profile?.description ?? '');
 
     const color = ref(me.value.profile?.color);
+    const profileToken: Ref<string> = ref('');
+    const { result: profileTokenResult } = ctfnote.me.getProfileToken();
+
+    watch(
+      profileTokenResult,
+      (s) => {
+        profileToken.value = s;
+      },
+      { immediate: true }
+    );
 
     watch(
       me,
@@ -158,8 +209,11 @@ export default defineComponent({
 
     return {
       resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
+      notifySuccess: ctfnote.ui.useNotify().notifySuccess,
       updateProfile: ctfnote.me.useUpdateProfile(),
       updatePassword: ctfnote.me.useUpdatePassword(),
+      resetProfileToken: ctfnote.me.useResetProfileToken(),
+      resetDiscordId: ctfnote.me.useResetDiscordId(),
       color,
       username,
       description,
@@ -169,12 +223,18 @@ export default defineComponent({
       disableSystemNotification,
       oldPassword: ref(''),
       newPassword: ref(''),
+      profileToken,
+      resetDiscordLoading: ref(false),
+      pollInterval: ref(0),
     };
   },
   computed: {
     tmpProfile(): Profile {
       return { username: this.username, color: this.color } as Profile;
     },
+  },
+  beforeUnmount() {
+    clearInterval(this.pollInterval);
   },
   methods: {
     async toggleNotification() {
@@ -207,6 +267,47 @@ export default defineComponent({
         }),
         { message: 'Password changed!', icon: 'lock' }
       );
+    },
+    resetToken() {
+      void this.resolveAndNotify(
+        this.resetProfileToken().then((newToken) => {
+          if (!newToken) return;
+          this.profileToken = newToken;
+        }),
+        {
+          message: 'Token refreshed!',
+          icon: 'refresh',
+        }
+      );
+    },
+    unlinkDiscord() {
+      this.resetDiscordLoading = true;
+      void this.resolveAndNotify(
+        this.resetDiscordId().then(() => {
+          this.resetDiscordLoading = false;
+        }),
+        {
+          message: 'Discord unlinked!',
+          icon: 'close',
+        }
+      );
+    },
+    pollMe(visibility: boolean) {
+      // if the profile token is set to visible, the user is probably going to copy it
+      // and thus we should poll the profile until the Discord profile is linked
+      if (visibility) {
+        this.pollInterval = window.setInterval(() => {
+          if (this.me.profile.discordId != null) {
+            clearInterval(this.pollInterval);
+          } else {
+            const { result: me } = ctfnote.me.getMe(true);
+            if (me.value == null) return;
+            this.me = me.value;
+          }
+        }, 1000);
+      } else {
+        clearInterval(this.pollInterval);
+      }
     },
   },
 });

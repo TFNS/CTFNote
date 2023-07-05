@@ -17,6 +17,9 @@ import uploadScalar from "./plugins/uploadScalar";
 import { Pool } from "pg";
 import { icalRoute } from "./routes/ical";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
+import OperationHook from "@graphile/operation-hooks";
+import discordHooks from "./plugins/discordHooks";
+import { getDiscordClient } from "./discord";
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
 import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
 
@@ -27,10 +30,18 @@ function getDbUrl(role: "user" | "admin") {
 }
 
 function createOptions() {
-  const secret = crypto.randomBytes(32).toString("hex");
+  let secret: string;
+  if (config.sessionSecret.length < 64 && config.env !== "development") {
+    console.info(
+      "Using random session secret since SESSION_SECRET is too short. All users will be logged out."
+    );
+    secret = crypto.randomBytes(32).toString("hex");
+  } else {
+    secret = config.sessionSecret;
+  }
 
   const postgraphileOptions: PostGraphileOptions = {
-    pluginHook: makePluginHook([PgPubsub]),
+    pluginHook: makePluginHook([PgPubsub, OperationHook]),
     subscriptions: true,
     dynamicJson: true,
     simpleSubscriptions: true,
@@ -49,6 +60,7 @@ function createOptions() {
       uploadLogoPlugin,
       createTasKPlugin,
       ConnectionFilterPlugin,
+      discordHooks,
       PgManyToManyPlugin,
       ProfileSubscriptionPlugin,
     ],
@@ -135,7 +147,11 @@ async function main() {
   await performMigrations();
   const postgraphileOptions = createOptions();
   const app = createApp(postgraphileOptions);
+
+  getDiscordClient();
+
   app.listen(config.web.port, () => {
+    //sendMessageToDiscord("CTFNote API started");
     console.log(`Listening on :${config.web.port}`);
   });
 }

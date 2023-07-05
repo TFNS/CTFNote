@@ -25,6 +25,7 @@ export type PublicProfile = {
 
 export type Profile = PublicProfile & {
   lastactive: string;
+  discordId: string | null;
 };
 
 export type Me = {
@@ -94,7 +95,7 @@ export const defaultColorsNames = [
   'warning',
 ] as const;
 
-export type SettingsColor = typeof defaultColorsNames[number];
+export type SettingsColor = (typeof defaultColorsNames)[number];
 export type SettingsColorMap = Record<SettingsColor, string>;
 export type Settings = {
   registrationAllowed: boolean;

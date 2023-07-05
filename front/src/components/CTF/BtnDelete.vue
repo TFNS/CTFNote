@@ -38,10 +38,13 @@ export default defineComponent({
         })
         .onOk(() => {
           const title = this.ctf.title;
-          void this.resolveAndNotify(this.deleteCtf(this.ctf), {
-            message: `CTF ${title} deleted!`,
-            icon: 'delete',
-          });
+          void this.resolveAndNotify(
+            this.deleteCtf(this.ctf).then(() => this.$router.push('/')),
+            {
+              message: `CTF ${title} deleted!`,
+              icon: 'delete',
+            }
+          );
         });
     },
   },
