@@ -114,6 +114,7 @@ import TaskCards from './TaskCards.vue';
 import TaskTable from './TaskTable.vue';
 import keys from '../../injectionKeys';
 import { tagsSortFn } from 'src/ctfnote/tags';
+import { Platform } from 'quasar';
 
 const displayOptions = ['classic', 'dense', 'ultradense', 'table'] as const;
 
@@ -166,8 +167,13 @@ export default defineComponent({
       }
     });
 
+    const chooseDisplayMode = () => (Platform.is.mobile ? 'classic' : 'table');
+
     return {
-      displayMode: makePersistant('task-display-mode', ref('classic')),
+      displayMode: makePersistant(
+        'task-display-mode',
+        ref(chooseDisplayMode())
+      ),
       hideSolved,
       myTasks,
       filter,
