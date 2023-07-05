@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="row q-mb-md q-gutter-md items-center">
-      <div class="col col-3">
+      <div class="col col-md-3 col-sm-6 col-xs-11">
         <q-input v-model="filter" label="search">
           <template #append>
             <q-icon name="search" />
           </template>
         </q-input>
       </div>
-      <div class="col col-3 col-grow">
+      <div class="col col-md-3 col-sm-5 col-xs-11 col-grow">
         <q-select
           v-model="tagFilter"
           :options="tags"
@@ -31,7 +31,7 @@
         <q-checkbox v-model="myTasks" label="Show my tasks" />
       </div>
       <q-space />
-      <div class="col col-1">
+      <div class="col">
         <q-select
           v-model="displayMode"
           label="Display"
