@@ -4,6 +4,7 @@ import {
   Collection,
   Guild,
   Message,
+  MessageFlags,
   Snowflake,
   TextBasedChannel,
   TextChannel,
@@ -43,7 +44,7 @@ export async function sendMessageToChannel(
   }
 
   if (silent) {
-    options.flags = [4096];
+    options.flags = [MessageFlags.SuppressNotifications];
   }
 
   return await channel.send(options).catch((err) => {
@@ -64,7 +65,7 @@ export async function sendMessageToTask(
   }
 
   if (ctf == null) {
-    ctf = await getCtfFromDatabase(task.ctfId);
+    ctf = await getCtfFromDatabase(task.ctf_id);
   }
   if (ctf == null) return null;
 
@@ -188,20 +189,30 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
         if (content.startsWith("```")) content = "\n" + content;
         if (content.startsWith("> ")) content = content + "\n"; // need an extra line break for quotes
 
-        // resolve mentions to usernames
+        // resolve mentions to usernames or channelnames
         const mentions = content.match(/<(?:[^\d>]+|:[A-Za-z0-9]+:)\w+>/g);
         if (mentions != null) {
-          mentions.forEach((user) => {
-            const id = user.replace(/\D/g, "");
+          mentions.forEach((mention) => {
+            const id = mention.replace(/\D/g, "");
             const discordUser = message.guild?.members.cache.get(id);
-            if (discordUser == null) return;
+            const discordChannel = message.guild?.channels.cache.get(id);
 
-            content = content.replace(
-              user,
-              discordUser.user.discriminator != "0"
-                ? `@${discordUser.user.username}#${discordUser.user.discriminator}`
-                : `@${discordUser.user.username}`
-            );
+            if (discordUser != null) {
+              const nickname =
+                discordUser.nickname != null
+                  ? ` (${discordUser.nickname})`
+                  : ``;
+              content = content.replace(
+                mention,
+                discordUser.user.discriminator != "0"
+                  ? `@${discordUser.user.username}#${discordUser.user.discriminator}${nickname}`
+                  : `@${discordUser.user.username}${nickname}`
+              );
+            }
+
+            if (discordChannel != null) {
+              content = content.replace(mention, `#${discordChannel.name}`);
+            }
           });
         }
 
@@ -266,4 +277,13 @@ export async function createPadWithoutLimit(
   }
 
   return await createPad(`${ctfTitle} Discord archive`, firstPadContent);
+}
+
+export const topicDelimiter = " /-/";
+
+export function getTaskTitleFromTopic(topic: string) {
+  const splitted = topic.split(topicDelimiter);
+  const r = splitted.pop();
+  if (r == null) return topic;
+  return splitted.join(topicDelimiter);
 }

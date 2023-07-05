@@ -6,14 +6,14 @@ export interface Task {
   tags: string[] | undefined;
   title: string;
   description: string;
-  ctfId: bigint;
+  ctf_id: bigint;
   flag: string;
 }
 
 function buildTask(row: any): Task {
   return {
     id: row.id as bigint,
-    ctfId: row.ctf_id as bigint,
+    ctf_id: row.ctf_id as bigint,
     title: row.title as string,
     description: row.description as string,
     tags: undefined,

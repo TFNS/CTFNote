@@ -7,6 +7,7 @@ import {
 import { CTF } from "../database/ctfs";
 import { Task } from "../database/tasks";
 import { getCtfNameFromCategoryName } from "./channels";
+import { getTaskTitleFromTopic } from "./messages";
 
 export function isCategoryOfCtf(
   channel: CategoryChannel | undefined | null,
@@ -38,8 +39,9 @@ export function isTaskChannelOf(
   const taskTitle = typeof task === "string" ? task : task.title;
 
   if (channel.type !== ChannelType.GuildText) return false;
+  if (channel.topic == null) return false;
 
-  return channel.topic == taskTitle;
+  return getTaskTitleFromTopic(channel.topic) == taskTitle;
 }
 
 export function isRoleOfCtf(role: Role | string, ctf: CTF | string) {

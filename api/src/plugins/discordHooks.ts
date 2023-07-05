@@ -166,7 +166,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         channel
           .edit({
             name: title,
-            topic: title,
+            topic: channel.topic?.replace(task.title, title),
           })
           .catch((err) => console.error("Failed to rename channel.", err));
       }
