@@ -4,6 +4,7 @@ import RawParser from './raw';
 import HTBParser from './htb';
 import PicoParser from './pico';
 import justCTFParser from './justctf';
+import AngstromParser from './angstrom';
 
 export type ParsedTask = {
   title: string;
@@ -26,4 +27,5 @@ export default [
   HTBParser,
   PicoParser,
   justCTFParser,
+  AngstromParser,
 ];
