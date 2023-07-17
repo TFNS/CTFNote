@@ -183,7 +183,11 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
 
         if (message.attachments.size > 0) {
           message.attachments.forEach((attachment) => {
-            message.content += attachment.url + " ";
+            if (attachment.contentType?.startsWith("image/")) {
+              message.content += ` ![${attachment.name}](${attachment.url}) `;
+            } else {
+              message.content += ` ${attachment.url} `;
+            }
           });
         }
 
