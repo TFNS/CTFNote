@@ -96,7 +96,7 @@ export default defineComponent({
       const subTasks = [
         ...markdown.matchAll(
           new RegExp(
-            `(https?://${window.location.host}(/pad/[a-zA-Z0-9_-]*))`,
+            `(https?://${window.location.host}(/pad/(?!uploads)[a-zA-Z0-9_-]*))`,
             'g'
           )
         ),
