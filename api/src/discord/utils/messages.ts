@@ -15,6 +15,8 @@ import { CTF, getCtfFromDatabase } from "../database/ctfs";
 import { getTaskChannel } from "./channels";
 import { createPad } from "../../plugins/createTask";
 
+export const discordArchiveTaskName = "Discord archive";
+
 export async function sendMessageToChannel(
   channel: TextChannel,
   message: string | null | undefined,
@@ -243,7 +245,7 @@ export async function createPadWithoutLimit(
     if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
       // Create a new pad
       const padUrl = await createPad(
-        `${ctfTitle} Discord archive (${padIndex})`,
+        `${ctfTitle} ${discordArchiveTaskName} (${padIndex})`,
         currentPadMessages.join("\n")
       );
 
@@ -263,7 +265,7 @@ export async function createPadWithoutLimit(
   if (pads.length > 0) {
     // Create the final pad for the remaining messages
     const padUrl = await createPad(
-      `${ctfTitle} Discord archive (${padIndex})`,
+      `${ctfTitle} ${discordArchiveTaskName} (${padIndex})`,
       currentPadMessages.join("\n")
     );
     pads.push(padUrl);
@@ -276,7 +278,10 @@ export async function createPadWithoutLimit(
     firstPadContent = currentPadMessages.join("\n");
   }
 
-  return await createPad(`${ctfTitle} Discord archive`, firstPadContent);
+  return await createPad(
+    `${ctfTitle} ${discordArchiveTaskName}`,
+    firstPadContent
+  );
 }
 
 export const topicDelimiter = " /-/";

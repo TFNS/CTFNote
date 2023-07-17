@@ -1,50 +1,13 @@
 import { Client, CommandInteraction, Interaction } from "discord.js";
 import { Commands } from "../commands";
-import { createTask, getCtfFromDatabase } from "../database/ctfs";
+import { getCtfFromDatabase } from "../database/ctfs";
 import { getChallengesFromDatabase } from "../database/tasks";
 import {
   createChannelForTaskInCtf,
   createChannelsAndRolesForCtf,
-  getChannelCategoriesForCtf,
 } from "../utils/channels";
-import {
-  convertMessagesToPadFormat,
-  createPadWithoutLimit,
-  getMessagesOfCategories,
-} from "../utils/messages";
-import { handleDeleteCtf } from "../../plugins/discordHooks";
-
-async function handleArchiveInteraction(
-  interaction: Interaction,
-  ctfName: string
-) {
-  const guild = interaction.guild;
-  if (guild == null) return;
-
-  const ctf = await getCtfFromDatabase(ctfName);
-  if (ctf == null) return null;
-
-  const categories = getChannelCategoriesForCtf(guild, ctf.title);
-  if (categories.size === 0) return;
-
-  const messages = await getMessagesOfCategories(
-    Array.from(categories.values())
-  );
-
-  const padMessages = await convertMessagesToPadFormat(messages);
-
-  const padUrl = await createPadWithoutLimit(padMessages, ctf.title);
-
-  await createTask(
-    `${ctf.title} Discord archive`,
-    `Discord archive of ${ctf.title}`,
-    "",
-    padUrl,
-    ctf.id
-  );
-
-  await handleDeleteCtf(ctfName, guild);
-}
+import { handleDeleteInteraction } from "../commands/deleteCtf";
+import { handleArchiveInteraction } from "../commands/archiveCtf";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -74,6 +37,11 @@ export default (client: Client): void => {
         for (const challenge of challenges) {
           await createChannelForTaskInCtf(guild, challenge, ctf);
         }
+
+        await interaction.editReply({
+          content: `Created the CTF channels and roles for ${ctfName}`,
+          components: [],
+        });
       } else if (interaction.customId.startsWith("archive-ctf-button-")) {
         const ctfName = interaction.customId.replace("archive-ctf-button-", "");
         await interaction.deferUpdate();
@@ -81,8 +49,31 @@ export default (client: Client): void => {
           content: `Archiving the CTF channels and roles for ${ctfName}`,
           components: [],
         });
-
         await handleArchiveInteraction(interaction, ctfName);
+
+        await interaction.editReply({
+          content: `Archived the CTF channels and roles for ${ctfName}`,
+          components: [],
+        });
+      } else if (interaction.customId.startsWith("delete-ctf-button-")) {
+        const ctfName = interaction.customId.replace("delete-ctf-button-", "");
+        await interaction.deferUpdate();
+        await interaction.editReply({
+          content: `Deleting the CTF channels and roles for ${ctfName}`,
+          components: [],
+        });
+
+        const done = await handleDeleteInteraction(interaction, ctfName);
+        if (!done) {
+          await interaction.editReply({
+            content: `I insist that you create an \`/archive\` first!`,
+          });
+        } else {
+          await interaction.editReply({
+            content: `Deleted the CTF channels and roles for ${ctfName}`,
+            components: [],
+          });
+        }
       }
     }
 

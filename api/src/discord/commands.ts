@@ -4,6 +4,7 @@ import { ArchiveCtf } from "./commands/archiveCtf";
 import { SolveTask } from "./commands/solveTask";
 import { LinkUser } from "./commands/linkUser";
 import { StartWorking, StopWorking } from "./commands/workingOn";
+import { DeleteCtf } from "./commands/deleteCtf";
 
 export const Commands: Command[] = [
   ArchiveCtf,
@@ -12,4 +13,5 @@ export const Commands: Command[] = [
   LinkUser,
   StartWorking,
   StopWorking,
+  DeleteCtf,
 ];

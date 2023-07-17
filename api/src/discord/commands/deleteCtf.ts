@@ -3,61 +3,43 @@ import {
   ApplicationCommandType,
   ButtonBuilder,
   ButtonStyle,
+  ChannelType,
   Client,
   CommandInteraction,
   Interaction,
   PermissionFlagsBits,
 } from "discord.js";
 import { Command } from "../command";
-import {
-  createTask,
-  getAllCtfsFromDatabase,
-  getCtfFromDatabase,
-} from "../database/ctfs";
+import { getAllCtfsFromDatabase, getCtfFromDatabase } from "../database/ctfs";
 import { getChannelCategoriesForCtf } from "../utils/channels";
-import {
-  convertMessagesToPadFormat,
-  createPadWithoutLimit,
-  getMessagesOfCategories,
-} from "../utils/messages";
+import { handleDeleteCtf } from "../../plugins/discordHooks";
+import { getTaskByCtfIdAndNameFromDatabase } from "../database/tasks";
+import { discordArchiveTaskName } from "../utils/messages";
 
-export async function handleArchiveInteraction(
+export async function handleDeleteInteraction(
   interaction: Interaction,
   ctfName: string
 ) {
   const guild = interaction.guild;
-  if (guild == null) return false;
+  if (guild == null) return;
 
   const ctf = await getCtfFromDatabase(ctfName);
-  if (ctf == null) return false;
+  if (ctf == null) return null;
 
-  const categories = getChannelCategoriesForCtf(guild, ctf.title);
-  if (categories.size === 0) return false;
-
-  const messages = await getMessagesOfCategories(
-    Array.from(categories.values())
+  const discordArchiveTask = await getTaskByCtfIdAndNameFromDatabase(
+    ctf.id,
+    `${ctfName} ${discordArchiveTaskName}`
   );
 
-  const padMessages = await convertMessagesToPadFormat(messages);
+  if (discordArchiveTask == null) return false;
 
-  const padUrl = await createPadWithoutLimit(padMessages, ctf.title);
-
-  await createTask(
-    `${ctf.title} Discord archive`,
-    `Discord archive of ${ctf.title}`,
-    "",
-    padUrl,
-    ctf.id
-  );
+  await handleDeleteCtf(ctfName, guild);
 
   return true;
 }
 
-async function archiveCtfLogic(
-  client: Client,
-  interaction: CommandInteraction
-) {
-  // Get current CTFs from the discord categorys
+async function deleteCtfLogic(client: Client, interaction: CommandInteraction) {
+  // Get current CTFs from the discord categories
   let ctfNames = await getAllCtfsFromDatabase();
   const guild = interaction.guild;
   if (guild == null) return;
@@ -76,7 +58,7 @@ async function archiveCtfLogic(
   for (let i = 0; i < ctfNames.length; i++) {
     buttons.push(
       new ButtonBuilder()
-        .setCustomId(`archive-ctf-button-${ctfNames[i]}`)
+        .setCustomId(`delete-ctf-button-${ctfNames[i]}`)
         .setLabel(ctfNames[i])
         .setStyle(ButtonStyle.Success)
     );
@@ -85,19 +67,20 @@ async function archiveCtfLogic(
   const actionRow: any = new ActionRowBuilder().addComponents(buttons);
 
   await interaction.editReply({
-    content: "Which CTF do you want to archive?",
+    content:
+      "Which CTF do you want to **permanently** delete? **You must create an archive first!**",
     components: [actionRow],
   });
 }
 
-export const ArchiveCtf: Command = {
-  name: "archive",
-  description: "Archive the CTF messages!",
+export const DeleteCtf: Command = {
+  name: "delete",
+  description: "Delete the channels and roles for a CTF. This is irreversible!",
   type: ApplicationCommandType.ChatInput,
   defaultMemberPermissions: [PermissionFlagsBits.Administrator],
   run: async (client, interaction) => {
-    return archiveCtfLogic(client, interaction).catch((e) => {
-      console.error("Error during archive ctf logic: ", e);
+    return deleteCtfLogic(client, interaction).catch((e) => {
+      console.error("Error during delete ctf logic: ", e);
     });
   },
 };
