@@ -76,8 +76,11 @@ export default defineComponent({
       this.onDialogCancel();
     },
 
-    async downloadTaskMarkdown(task: Task) {
+    async downloadTaskMarkdown(task: Task, visitedUrls: string[] = []) {
       const result = await fetch(task.padUrl + '/download/markdown');
+      if (result.status != 200) {
+        return `Error fetching markdown for exporting task ${task.title}`;
+      }
       let markdown = await result.text();
       if (markdown.trimStart().substring(0, 1) != '#') {
         //does not start with a title, manually adding...
@@ -87,6 +90,7 @@ export default defineComponent({
         }
         markdown = withTitle + '\n' + markdown;
       }
+      visitedUrls.push(task.padUrl);
 
       // fetch subtasks recursively
       const subTasks = [
@@ -99,10 +103,15 @@ export default defineComponent({
       ];
 
       for (const subTask of subTasks) {
-        const subTaskMarkdown = await this.downloadTaskMarkdown({
-          ...task,
-          padUrl: subTask[1],
-        });
+        if (visitedUrls.includes(subTask[1])) continue;
+
+        const subTaskMarkdown = await this.downloadTaskMarkdown(
+          {
+            ...task,
+            padUrl: subTask[1],
+          },
+          visitedUrls.concat([subTask[1]])
+        );
 
         markdown += `\n\n---\nContent of ${subTask[0]}\n\n${subTaskMarkdown}`;
       }
