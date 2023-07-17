@@ -87,6 +87,26 @@ export default defineComponent({
         }
         markdown = withTitle + '\n' + markdown;
       }
+
+      // fetch subtasks recursively
+      const subTasks = [
+        ...markdown.matchAll(
+          new RegExp(
+            `(https?://${window.location.host}(/pad/[a-zA-Z0-9_-]*))`,
+            'g'
+          )
+        ),
+      ];
+
+      for (const subTask of subTasks) {
+        const subTaskMarkdown = await this.downloadTaskMarkdown({
+          ...task,
+          padUrl: subTask[1],
+        });
+
+        markdown += `\n\n---\nContent of ${subTask[0]}\n\n${subTaskMarkdown}`;
+      }
+
       return markdown;
     },
 
