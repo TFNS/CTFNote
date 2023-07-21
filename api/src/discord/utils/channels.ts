@@ -8,7 +8,11 @@ import {
   Role,
   TextChannel,
 } from "discord.js";
-import { CTF, getCtfFromDatabase } from "../database/ctfs";
+import {
+  CTF,
+  getAllCtfsFromDatabase,
+  getCtfFromDatabase,
+} from "../database/ctfs";
 import { getDiscordUsersThatCanPlayCTF } from "../database/users";
 import config from "../../config";
 import {
@@ -503,4 +507,18 @@ export async function moveChannel(
   if (targetParent == null) return;
 
   await taskChannel.setParent(targetParent);
+}
+/*
+ * Returns the CTF names of all categories that are currently active in the Discord server.
+ */
+export async function getActiveCtfCategories(guild: Guild): Promise<string[]> {
+  const allCtfs = await getAllCtfsFromDatabase();
+
+  return allCtfs.filter((ctf) =>
+    guild.channels.cache.find(
+      (channel) =>
+        channel.type === ChannelType.GuildCategory &&
+        isCategoryOfCtf(channel, ctf)
+    )
+  );
 }

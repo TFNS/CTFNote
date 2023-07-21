@@ -2,6 +2,7 @@ import { Build, Context } from "postgraphile";
 import { SchemaBuilder } from "graphile-build";
 import { ChannelType, Guild } from "discord.js";
 import {
+  getAccessibleCTFsForUser,
   getAllCtfsFromDatabase,
   getCtfFromDatabase,
   getNameFromUserId,
@@ -18,6 +19,7 @@ import { sendMessageToTask } from "../discord/utils/messages";
 import {
   ChannelMovingEvent,
   createChannelForNewTask,
+  getActiveCtfCategories,
   getTaskChannel,
   moveChannel,
 } from "../discord/utils/channels";
@@ -83,12 +85,12 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "deleteTask" &&
     fieldContext.scope.fieldName !== "startWorkingOn" &&
     fieldContext.scope.fieldName !== "stopWorkingOn" &&
-    fieldContext.scope.fieldName !== "addTagsForTask" &&
     fieldContext.scope.fieldName !== "updateCtf" &&
     fieldContext.scope.fieldName !== "createInvitation" &&
     fieldContext.scope.fieldName !== "deleteInvitation" &&
     fieldContext.scope.fieldName !== "resetDiscordId" &&
-    fieldContext.scope.fieldName !== "deleteCtf"
+    fieldContext.scope.fieldName !== "deleteCtf" &&
+    fieldContext.scope.fieldName !== "updateUserRole"
   ) {
     return null;
   }
@@ -222,6 +224,29 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
           console.error("Failed to delete invitation.", err);
         }
       );
+    }
+
+    if (fieldContext.scope.fieldName === "updateUserRole") {
+      const userId = args.input.userId;
+
+      // reset all roles
+      const currentCtfs = await getActiveCtfCategories(guild);
+      await Promise.all(
+        currentCtfs.map(async function (ctf) {
+          return changeDiscordUserRoleForCTF(userId, ctf, "remove").catch(
+            (err) => {
+              console.error("Error while adding role to user: ", err);
+            }
+          );
+        })
+      );
+      // re-assign roles if accessible
+      const ctfs = await getAccessibleCTFsForUser(userId, context.pgClient);
+      ctfs.forEach(function (ctf) {
+        changeDiscordUserRoleForCTF(userId, ctf, "add").catch((err) => {
+          console.error("Error while adding role to user: ", err);
+        });
+      });
     }
 
     return input;
