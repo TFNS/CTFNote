@@ -188,8 +188,10 @@ export default defineComponent({
     async updateRole(user: User, role: Role) {
       const profile = user.profile;
       const performUpdate = async () => {
+        this.loading = true;
         await this.updateUserRole(user, role);
         await this.refetch();
+        this.loading = false;
       };
 
       const roleStr = role.toString().slice(5);

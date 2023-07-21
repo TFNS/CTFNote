@@ -1,5 +1,5 @@
 import { connectToDatabase } from "./database";
-import { Task } from "./tasks";
+import { PoolClient } from "pg";
 
 export interface CTF {
   id: bigint;
@@ -139,8 +139,12 @@ export async function createTask(
   }
 }
 
-export async function getAccessibleCTFsForUser(userId: bigint): Promise<CTF[]> {
-  const pgClient = await connectToDatabase();
+export async function getAccessibleCTFsForUser(
+  userId: bigint,
+  pgClient: PoolClient | null = null
+): Promise<CTF[]> {
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
 
   try {
     const query = `SELECT * FROM ctfnote_private.user_can_play_ctfs($1);`;
@@ -152,6 +156,6 @@ export async function getAccessibleCTFsForUser(userId: bigint): Promise<CTF[]> {
     console.error("Failed to fetch accessible CTFs from the database:", error);
     return [];
   } finally {
-    pgClient.release();
+    if (!useRequestClient) pgClient.release();
   }
 }
