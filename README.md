@@ -92,7 +92,9 @@ Edit the `.env` file to instruct the pad to use TLS:
 After deploying this configuration, run `certbot` to make it available over HTTPS.
 See [this article](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04) for more information.
 
-### Add discord bot support
+### Add Discord bot support
+
+![Screenshot of a CTF in Discord](screenshots/discord-agile.png)
 
 To add support for the CTFNote discord bot, you need to change the following values in the `.env` file:
 
@@ -101,6 +103,8 @@ USE_DISCORD=true
 DISCORD_BOT_TOKEN=secret_token
 DISCORD_SERVER_ID=server_id
 ```
+
+You can also configure the amount of voice channels you want per CTF by changing `DISCORD_VOICE_CHANNELS`.
 
 To get the `DISCORD_BOT_TOKEN`, you need to create a discord bot and add it to your server.
 You can follow [this guide](https://discordpy.readthedocs.io/en/stable/discord.html) to do so.
@@ -112,9 +116,37 @@ When you are done, copy the token from the Build-A-Bot section and paste it in t
 
 You can find the `DISCORD_SERVER_ID` in the 'Widget' section of your server settings.
 
-Please do not use this bot if untrusted members can create channels or categories in your server, or can edit topics of channels.
+#### Limitations
 
-The `/create` and `/archive` commands are only accessible when you have Discord administrator rights.
+Please do not use this bot if untrusted members can create channels or categories in your server, or can edit topics of channels.
+This can cause privilege escalations within CTFNote.
+
+Please also note that syncing the CTFNote state to Discord is prone to race conditions.
+Therefore, some actions such as importing tasks are now serialized (due to correctly handling the 50 channel limit per category of Discord).
+Therefore you should patiently wait before the bot is done importing before you perform certain actions, such as deleting or editing the CTF.
+The bot will tell you when its done by editing the private reply.
+You will now also see more loading animations within CTFNote to indicate syncing to Discord.
+
+Discord also has modification timeouts when you perform certain actions such as editing the category or channel name.
+If you modify a task or CTF name multiple times in a row, the sync to Discord can't be performed and you should rename the CTF categories / task channel and topic manually in order to restore syncing.
+
+#### Available commands
+
+- `/link [token]`: link you Discord account with your CTFNote account through the CTFNote token found in your profile.
+- `/create`: create Discord categories, channels and roles for any upcoming / active CTF.
+- `/archive`: convert the messages in the channels of a CTF to a task to be stored permanently in CTFNote.
+- `/delete`: remove the Discord categories, channels and roles for a CTF.
+  You must first create an `/archive` before you can do this.
+- `/start`: start working on the task linked to the Discord channel.
+- `/stop`: stop working on the task linked to the Discord channel.
+- `/solve [flag]`: solve the task linked to the Discord channel.
+  Solving can only be done once and flags cannot be removed/overridden through Discord.
+
+The `/create`, `/archive` and `/delete` commands are only accessible when you have Discord administrator rights (not related to the CTFNote administrator rights).
+`/start`, `/stop` and `/solve` are only accessible to users who have `/link`ed their Discord account.
+
+The bot will automatically create more categories when you hit the 50 Discord channel limit, so you can have an almost infinite amount of tasks per CTF.
+It is your own responsibility to stay below the Discord server channel limit, which is 500 at the moment of writing (categories count as channels).
 
 ### Migration
 
