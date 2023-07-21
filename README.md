@@ -18,8 +18,6 @@ Building CTFNote requires at least 3 GB of RAM. If you want to host CTFNote
 on a server with less than 3 GB of RAM, you can use the pre-build images
 from the GitHub Container Registry.
 
-Make sure to [authenticate Docker to GHCR](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-with-a-personal-access-token-classic).
-
 Download `docker-compose.yml` and `docker-compose.prebuild.yml` for example through cloning the repository and run:
 
 ```shell
