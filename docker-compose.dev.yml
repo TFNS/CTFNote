@@ -15,7 +15,7 @@ services:
     ports:
       - "5432:5432"
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:1.9.8
+    image: quay.io/hedgedoc/hedgedoc:1.9.9
     environment:
       CMD_DB_URL: "postgres://ctfnote:ctfnote@db:5432/hedgedoc"
       CMD_URL_PATH: "pad"
