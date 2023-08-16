@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build the API Docker image
+      run: |
+              docker build ./api --file Dockerfile --tag ghcr.io/duckz-org/ctfnote-api:latest
+              docker push ghcr.io/duckz-org/ctfnote-api:latest
+    - name: Build the Frontend Docker image
+      run: |
+              docker build ./front --file Dockerfile --tag ghcr.io/duckz-org/ctfnote-frontend:latest
+              docker push ghcr.io/duckz-org/ctfnote-frontend:latest
