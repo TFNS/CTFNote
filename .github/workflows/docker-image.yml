@@ -23,9 +23,9 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the API Docker image
       run: |
-              docker build ./api --file Dockerfile --tag ghcr.io/duckz-org/ctfnote-api:latest
+              docker build ./api --file api/Dockerfile --tag ghcr.io/duckz-org/ctfnote-api:latest
               docker push ghcr.io/duckz-org/ctfnote-api:latest
     - name: Build the Frontend Docker image
       run: |
-              docker build ./front --file Dockerfile --tag ghcr.io/duckz-org/ctfnote-frontend:latest
+              docker build ./front --file front/Dockerfile --tag ghcr.io/duckz-org/ctfnote-frontend:latest
               docker push ghcr.io/duckz-org/ctfnote-frontend:latest
