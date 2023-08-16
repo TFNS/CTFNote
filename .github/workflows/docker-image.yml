@@ -34,3 +34,7 @@ jobs:
       run: |
               docker build ./front --file front/Dockerfile --tag ghcr.io/duckz-org/ctfnote-frontend:latest
               docker push ghcr.io/duckz-org/ctfnote-frontend:latest
+    - name: Build the PostgreSQL Docker image
+      run: |
+              docker build ./db --file db/Dockerfile --tag ghcr.io/duckz-org/ctfnote-db:latest
+              docker push ghcr.io/duckz-org/ctfnote-db:latest
