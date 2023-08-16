@@ -55,4 +55,4 @@ RUN chown node /app/uploads
 ENV GRAPHILE_TURBO=1
 ENV NODE_ENV=$NODE_ENV
 USER node
-CMD ./start.sh db 5432 yarn start
+CMD ./start.sh postgres-ctfnote 5432 yarn start
