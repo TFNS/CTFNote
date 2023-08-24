@@ -41,6 +41,7 @@ import { useDialogPluginComponent } from 'quasar';
 import { Ctf, Task } from 'src/ctfnote/models';
 import { defineComponent, ref } from 'vue';
 import * as JSZip from 'jszip';
+import { tagsSortFn } from 'src/ctfnote/tags';
 
 export default defineComponent({
   props: {
@@ -75,13 +76,46 @@ export default defineComponent({
       this.onDialogCancel();
     },
 
-    async downloadTaskMarkdown(task: Task) {
+    async downloadTaskMarkdown(task: Task, visitedUrls: string[] = []) {
       const result = await fetch(task.padUrl + '/download/markdown');
+      if (result.status != 200) {
+        return `Error fetching markdown for exporting task ${task.title}`;
+      }
       let markdown = await result.text();
       if (markdown.trimStart().substring(0, 1) != '#') {
         //does not start with a title, manually adding...
-        markdown = `# ${task.title} - ${task.category}\n` + markdown;
+        let withTitle = `# ${task.title}`;
+        for (const tag of task.assignedTags) {
+          withTitle += ` - ${tag.tag}`;
+        }
+        markdown = withTitle + '\n' + markdown;
       }
+      visitedUrls.push(task.padUrl);
+
+      // fetch subtasks recursively
+      const subTasks = [
+        ...markdown.matchAll(
+          new RegExp(
+            `(https?://${window.location.host}(/pad/(?!uploads)[a-zA-Z0-9_-]*))`,
+            'g'
+          )
+        ),
+      ];
+
+      for (const subTask of subTasks) {
+        if (visitedUrls.includes(subTask[1])) continue;
+
+        const subTaskMarkdown = await this.downloadTaskMarkdown(
+          {
+            ...task,
+            padUrl: subTask[1],
+          },
+          visitedUrls.concat([subTask[1]])
+        );
+
+        markdown += `\n\n---\nContent of ${subTask[0]}\n\n${subTaskMarkdown}`;
+      }
+
       return markdown;
     },
 
@@ -181,9 +215,7 @@ export default defineComponent({
         .sort((a, b) =>
           a.title.toLowerCase().localeCompare(b.title.toLowerCase())
         )
-        .sort((a, b) =>
-          a.category.toLowerCase().localeCompare(b.category.toLowerCase())
-        );
+        .sort(tagsSortFn);
 
       if (this.currentFormatOption == 'Markdown') {
         await this.exportTasksAsMarkdown(sortedTasks);

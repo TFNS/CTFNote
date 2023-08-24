@@ -36,6 +36,11 @@
             {{ value }}
           </q-td>
         </template>
+        <template #body-cell-lastactive="{ value }">
+          <q-td class="text-right">
+            {{ value }}
+          </q-td>
+        </template>
         <template #body-cell-username="{ value }">
           <q-td class="text-right">
             {{ value }}
@@ -81,6 +86,7 @@
 </template>
 
 <script lang="ts">
+import { date } from 'quasar';
 import { Role, User } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 
@@ -102,12 +108,26 @@ const columns = [
   },
   { name: 'login', label: 'Login', field: 'login', sortable: true },
   {
+    name: 'lastactive',
+    label: 'Last active',
+    field: (u: User) => {
+      return date.formatDate(u.profile.lastactive, 'YYYY-MM-DD HH:mm:ss');
+    },
+    sortable: true,
+  },
+  {
     name: 'username',
     label: 'Username',
     field: (u: User) => u.profile.username,
     sortable: true,
   },
   { name: 'role', label: 'Role', field: 'role', sortable: true },
+  {
+    name: 'discordId',
+    label: 'Discord ID',
+    field: (u: User) => u.profile.discordId,
+    sortable: true,
+  },
   { name: 'btns' },
 ];
 
@@ -168,8 +188,10 @@ export default defineComponent({
     async updateRole(user: User, role: Role) {
       const profile = user.profile;
       const performUpdate = async () => {
+        this.loading = true;
         await this.updateUserRole(user, role);
         await this.refetch();
+        this.loading = false;
       };
 
       const roleStr = role.toString().slice(5);

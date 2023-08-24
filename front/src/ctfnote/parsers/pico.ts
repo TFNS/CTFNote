@@ -17,7 +17,7 @@ const PicoParser: Parser = {
       if (!task.name || !task.category) {
         continue;
       }
-      tasks.push({ title: task.name, category: task.category.name });
+      tasks.push({ title: task.name, tags: [task.category.name] });
     }
     return tasks;
   },

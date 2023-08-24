@@ -32,6 +32,7 @@ ARG NODE_ENV
 # Copy over selectively just the tings we need, try and avoid the rest
 COPY --from=builder /app/package.json /app/yarn.lock /app/start.sh /app/
 COPY --from=builder /app/dist/ /app/dist/
+COPY --from=builder /app/src/discord/boticon.png /app/dist/discord/boticon.png
 COPY --from=builder /app/migrations/ /app/migrations/
 
 ################################################################################

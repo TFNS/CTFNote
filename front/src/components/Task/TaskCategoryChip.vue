@@ -1,10 +1,5 @@
 <template>
-  <q-chip
-    class="text-white"
-    clickable
-    :style="style"
-    @click="filterCategory(name)"
-  >
+  <q-chip class="text-white" clickable :style="style" @click="filterTag(name)">
     {{ name }}
   </q-chip>
 </template>
@@ -20,7 +15,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      filterCategory: injectStrict(keys.filterCategory),
+      filterTag: injectStrict(keys.filterTag),
     };
   },
   computed: {

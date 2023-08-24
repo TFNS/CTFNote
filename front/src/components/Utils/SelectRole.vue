@@ -1,5 +1,5 @@
 <template>
-  <q-select v-model="role" emit-value :options="options">
+  <q-select v-model="role" emit-value :options="options" :loading="loading">
     <template v-for="(_, name) of $slots" :key="name" #[name]>
       <slot :name="name" />
     </template>
@@ -13,6 +13,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   props: {
     modelValue: { type: String, default: 'guest' },
+    loading: { type: Boolean, default: false },
   },
   emits: ['update:model-value'],
   setup() {

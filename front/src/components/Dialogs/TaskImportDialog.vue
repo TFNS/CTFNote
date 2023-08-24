@@ -39,6 +39,11 @@
                   <q-checkbox v-model="row['keep']" />
                 </q-td>
               </template>
+              <template #body-cell-tags="{ row }">
+                <q-td auto-width lass="text-center">
+                  {{ row['tags'].join(', ') }}
+                </q-td>
+              </template>
             </q-table>
           </q-tab-panel>
         </q-tab-panels>
@@ -60,7 +65,7 @@
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import ctfnote from 'src/ctfnote';
-import { Ctf } from 'src/ctfnote/models';
+import { Ctf, makeId } from 'src/ctfnote/models';
 import parsers, { ParsedTask } from 'src/ctfnote/parsers';
 import { defineComponent, ref } from 'vue';
 
@@ -76,11 +81,14 @@ export default defineComponent({
 
     const columns = [
       { name: 'title', label: 'Title', field: 'title' },
-      { name: 'category', label: 'Category', field: 'category' },
+      { name: 'tags', label: 'Tags', field: 'tags' },
       { name: 'keep', label: 'Import task', field: 'keep' },
     ];
     return {
       createTask: ctfnote.tasks.useCreateTask(),
+      addTagsForTask: ctfnote.tags.useAddTagsForTask(),
+      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
+      notifySuccess: ctfnote.ui.useNotify().notifySuccess,
       model: ref(''),
       currentParser: ref(parserOptions[0]),
       parsedTasks: ref<ParsedTask[]>([]),
@@ -135,32 +143,54 @@ export default defineComponent({
       // Get list of task {title,category} from parse
       const parsedTasks = this.currentParser.value.parse(v);
       // Precompute a set of task to avoid N square operation
-      const hashTask = (title: string, category?: string | null) =>
-        `${title}${category || 'none'}`;
+      const hashTask = (title: string, tags: string[]): string =>
+        title +
+        tags
+          .map((t) => t.toLowerCase())
+          .sort()
+          .join('');
       const taskSet = new Set();
       for (const task of this.ctf.tasks) {
-        taskSet.add(hashTask(task.title, task.category));
+        taskSet.add(
+          hashTask(
+            task.title,
+            task.assignedTags.map((t) => t.tag)
+          )
+        );
       }
       // mark already existing tasks
       return parsedTasks.map((task) => {
-        const hash = hashTask(task.title, task.category);
+        const hash = hashTask(task.title, task.tags);
         return { ...task, keep: !taskSet.has(hash) };
       });
     },
+    async createTasks(tasks: ParsedTask[]) {
+      for (const task of tasks) {
+        const r = await this.createTask(this.ctf.id, task);
+        const newTask = r?.data?.createTask?.task;
+        if (newTask) {
+          await this.addTagsForTask(task.tags, makeId(newTask.id));
+        }
+      }
+    },
+
     async btnClick() {
       if (this.tab == 'parse') {
         this.parsedTasks = this.parseTasks(this.model);
         this.tab = 'confirm';
       } else {
         this.loading = true;
-        const result = this.parsedTasks
-          .filter((t) => t.keep)
-          .map((task) => {
-            return this.createTask(this.ctf.id, task);
-          });
-        await Promise.all(result);
-        this.loading = false;
+        const result = this.parsedTasks.filter((t) => t.keep);
         this.onDialogOK();
+
+        this.notifySuccess({
+          message: `Importing ${result.length} tasks. This may take a while...`,
+          icon: 'flag',
+        });
+        return this.resolveAndNotify(this.createTasks(result), {
+          message: `Imported ${result.length} tasks`,
+          icon: 'flag',
+        });
       }
     },
   },

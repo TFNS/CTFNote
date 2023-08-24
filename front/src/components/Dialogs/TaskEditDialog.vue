@@ -13,7 +13,18 @@
           <q-input v-model="form.title" required label="Title" />
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-input v-model="form.category" label="Category" />
+          <q-select
+            v-model="form.tags"
+            label="Tags"
+            :options="suggestions"
+            input-debounce="0"
+            use-input
+            use-chips
+            multiple
+            new-value-mode="add-unique"
+            behavior="menu"
+            @filter="filterFn"
+          />
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-input
@@ -38,7 +49,10 @@
 import { useDialogPluginComponent } from 'quasar';
 import { Id, Task, Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, reactive } from 'vue';
+import { Ref, defineComponent, reactive, ref } from 'vue';
+import { makeId } from 'src/ctfnote/models';
+import { TaskPatch } from 'src/generated/graphql';
+
 export default defineComponent({
   props: {
     ctfId: { type: Number as unknown as () => Id<Ctf> | null, default: null },
@@ -48,10 +62,31 @@ export default defineComponent({
   setup(props) {
     const form = reactive({
       title: props.task?.title ?? '',
-      category: props.task?.category ?? '',
+      tags: props.task?.assignedTags.map((t) => t.tag) ?? [],
       description: props.task?.description ?? '',
       flag: props.task?.flag ?? '',
     });
+
+    const tags = ctfnote.tags.provideTags();
+    let suggestions: Ref<string[]> = ref(tags.value.map((t) => t.tag));
+
+    const filterFn = function (
+      val: string,
+      doneFn: (callBackFn: () => void, afterFn: () => void) => void,
+      //eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _abortFn: () => void
+    ) {
+      doneFn(
+        () => {
+          const needle = val.toLocaleLowerCase();
+          suggestions.value = tags.value
+            .map((t) => t.tag)
+            .filter((v) => v.toLocaleLowerCase().indexOf(needle) > -1);
+        },
+        () => void 0
+      );
+    };
+
     const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent();
 
     return {
@@ -61,6 +96,11 @@ export default defineComponent({
       onDialogOK,
       updateTask: ctfnote.tasks.useUpdateTask(),
       createTask: ctfnote.tasks.useCreateTask(),
+      addTagsForTask: ctfnote.tags.useAddTagsForTask(),
+      notifySuccess: ctfnote.ui.useNotify().notifySuccess,
+      tags,
+      suggestions,
+      filterFn,
     };
   },
   computed: {
@@ -72,13 +112,38 @@ export default defineComponent({
     },
   },
   methods: {
-    submit() {
-      if (this.ctfId) {
-        void this.createTask(this.ctfId, this.form);
-      } else if (this.task) {
-        void this.updateTask(this.task, { ...this.form });
-      }
+    async submit() {
+      let task = null;
+
       this.onDialogOK();
+      if (this.ctfId) {
+        this.notifySuccess({
+          message: `Task ${this.form.title} is being created...`,
+        });
+        const r = await this.createTask(this.ctfId, this.form);
+
+        task = r?.data?.createTask?.task;
+        if (task) {
+          await this.addTagsForTask(this.form.tags, makeId(task.id));
+        }
+      } else if (this.task) {
+        this.notifySuccess({
+          message: `Task ${this.form.title} is being updated...`,
+        });
+        await this.addTagsForTask(this.form.tags, makeId(this.task.id));
+
+        const patch: TaskPatch = {};
+        if (this.form.title !== this.task.title) {
+          patch.title = this.form.title;
+        }
+        if (this.form.description !== this.task.description) {
+          patch.description = this.form.description;
+        }
+        if (this.form.flag !== this.task.flag) {
+          patch.flag = this.form.flag;
+        }
+        await this.updateTask(this.task, patch);
+      }
     },
   },
 });

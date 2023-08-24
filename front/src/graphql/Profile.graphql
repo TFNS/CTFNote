@@ -1,4 +1,24 @@
+fragment PublicProfileFragment on PublicProfile {
+  id
+  username
+  color
+  description
+  role
+  nodeId
+}
+
 fragment ProfileFragment on Profile {
+  id
+  username
+  lastactive
+  color
+  description
+  role
+  discordId
+  nodeId
+}
+
+fragment RestrictedProfile on Profile {
   id
   username
   color
@@ -25,9 +45,25 @@ mutation updateProfile($id: Int!, $patch: ProfilePatch!) {
 }
 
 query getTeam {
+  publicProfiles {
+    nodes {
+      ...PublicProfileFragment
+    }
+  }
+}
+
+query getTeamAdmin {
   profiles {
     nodes {
       ...ProfileFragment
+    }
+  }
+}
+
+subscription PublicProfileSubscriptionPayload {
+  currentProfileUpdated {
+    publicProfile {
+      ...PublicProfileFragment
     }
   }
 }
@@ -42,6 +78,7 @@ subscription subscribeToProfile {
     }
   }
 }
+
 subscription subscribeToProfileCreated {
   listen(topic: "created:profiles") {
     relatedNodeId

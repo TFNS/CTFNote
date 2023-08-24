@@ -17,6 +17,16 @@ services:
       DB_HOST: db
       DB_PORT: 5432
       WEB_PORT: 3000
+      CMD_DOMAIN: ${CMD_DOMAIN:-}
+      CMD_PROTOCOL_USESSL: ${CMD_PROTOCOL_USESSL:-false}
+      CMD_DOCUMENT_MAX_LENGTH: ${CMD_DOCUMENT_MAX_LENGTH:-100000}
+      USE_DISCORD: ${USE_DISCORD:-false}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-bot_token}
+      DISCORD_SERVER_ID: ${DISCORD_SERVER_ID:-server_id}
+      DISCORD_VOICE_CHANNELS: ${DISCORD_VOICE_CHANNELS:-3}
+      TZ: ${TZ:-UTC}
+      LC_ALL: ${LC_ALL:-en_US.UTF-8}
+      SESSION_SECRET: ${SESSION_SECRET:-}
     depends_on:
       - db
     volumes:
@@ -44,7 +54,7 @@ services:
     ports:
       - 8080:80
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:1.9.8
+    image: quay.io/hedgedoc/hedgedoc:1.9.9
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad
@@ -52,6 +62,7 @@ services:
       - CMD_PROTOCOL_USESSL
       - CMD_CSP_ENABLE=${CMD_CSP_ENABLE:-false}
       - CMD_IMAGE_UPLOAD_TYPE=${CMD_IMAGE_UPLOAD_TYPE:-imgur}
+      - CMD_DOCUMENT_MAX_LENGTH=${CMD_DOCUMENT_MAX_LENGTH:-100000}
     depends_on:
       - db
     restart: always

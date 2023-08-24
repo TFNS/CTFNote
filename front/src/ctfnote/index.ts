@@ -9,6 +9,7 @@ import * as ui from './ui';
 import * as utils from './utils';
 import * as uploads from './uploads';
 import * as search from './search';
+import * as tags from './tags';
 
 export const ctfnote = {
   profiles,
@@ -22,6 +23,7 @@ export const ctfnote = {
   utils,
   uploads,
   search,
+  tags,
 };
 
 export type Ctfnote = typeof ctfnote;
