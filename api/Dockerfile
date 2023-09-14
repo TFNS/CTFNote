@@ -12,9 +12,10 @@ FROM node@${NODE_DIGEST} as builder
 ARG NODE_ENV
 
 # Cache node_modules for as long as possible
-COPY package.json yarn.lock tsconfig.json start.sh /app/
+COPY package.json yarn.lock tsconfig.json start.sh .yarnrc.yml /app/
+COPY .yarn /app/.yarn/
 WORKDIR /app/
-RUN yarn install --frozen-lockfile --production=false --no-progress
+RUN yarn install --frozen-lockfile
 # Copy over the server source code
 COPY src/ /app/src/
 COPY migrations/ /app/migrations/
@@ -30,7 +31,8 @@ FROM node@${NODE_DIGEST} as clean
 ARG NODE_ENV
 
 # Copy over selectively just the tings we need, try and avoid the rest
-COPY --from=builder /app/package.json /app/yarn.lock /app/start.sh /app/
+COPY --from=builder /app/package.json /app/yarn.lock /app/.yarnrc.yml /app/start.sh /app/
+COPY --from=builder /app/.yarn/ /app/.yarn/
 COPY --from=builder /app/dist/ /app/dist/
 COPY --from=builder /app/src/discord/boticon.png /app/dist/discord/boticon.png
 COPY --from=builder /app/migrations/ /app/migrations/
@@ -48,7 +50,7 @@ WORKDIR /app/
 COPY --from=clean /app/ /app/
 
 # Install yarn ASAP because it's the slowest
-RUN yarn install --frozen-lockfile --production=true --no-progress
+RUN yarn install --frozen-lockfile
 RUN chmod -R 0555 .
 RUN mkdir /app/uploads
 RUN chown node /app/uploads

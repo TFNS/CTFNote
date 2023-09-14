@@ -10,5 +10,6 @@
   },
   "scripts": {
     "prepare": "husky install"
-  }
+  },
+  "packageManager": "yarn@3.6.3"
 }

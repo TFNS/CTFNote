@@ -45,5 +45,6 @@
     "prettier": "^2.8.7",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
-  }
+  },
+  "packageManager": "yarn@3.6.3"
 }

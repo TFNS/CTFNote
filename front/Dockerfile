@@ -2,7 +2,8 @@ FROM node@sha256:1a9a71ea86aad332aa7740316d4111ee1bd4e890df47d3b5eff3e5bded3b3d1
 
 RUN apk add --no-cache python3 make g++
 RUN mkdir -p /usr/src/app
-COPY package.json quasar.conf.js .eslintrc.js .eslintignore tsconfig.json .postcssrc.js yarn.lock babel.config.js quasar.extensions.json /usr/src/app/
+COPY package.json quasar.conf.js .eslintrc.js .eslintignore tsconfig.json .postcssrc.js .yarnrc.yml yarn.lock babel.config.js quasar.extensions.json /usr/src/app/
+COPY .yarn /usr/src/app/.yarn/
 RUN cd /usr/src/app && yarn install
 
 COPY src /usr/src/app/src
