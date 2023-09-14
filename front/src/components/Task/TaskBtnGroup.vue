@@ -64,8 +64,8 @@ export default defineComponent({
       return this.onIt ? 'secondary' : 'primary';
     },
     onIt() {
-      if (!this.me.profile?.id) return false;
-      return this.task.workOnTasks.includes(this.me.profile.id);
+      if (!this.me?.profile?.id) return false;
+      return this.task.workOnTasks.includes(this.me?.profile.id);
     },
     onItIcon() {
       return this.onIt ? 'person_remove' : 'person_add_alt_1';

@@ -71,7 +71,7 @@ export default defineComponent({
     },
     taskIconColor() {
       if (this.task.solved) return 'positive';
-      if (this.task.workOnTasks.some((id) => id == this.me.profile?.id)) {
+      if (this.task.workOnTasks.some((id) => id == this.me?.profile?.id)) {
         return 'secondary';
       }
       return 'primary';

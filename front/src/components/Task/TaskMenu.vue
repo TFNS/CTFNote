@@ -65,10 +65,10 @@ export default defineComponent({
   },
   computed: {
     onIt() {
-      if (!this.me.profile?.id) {
+      if (!this.me?.profile?.id) {
         return false;
       }
-      return this.task.workOnTasks.includes(this.me.profile.id);
+      return this.task.workOnTasks.includes(this.me?.profile.id);
     },
   },
   methods: {

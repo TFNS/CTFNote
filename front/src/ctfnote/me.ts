@@ -66,7 +66,7 @@ export function useUpdatePassword() {
 
 /* Global provider  */
 
-const MeSymbol: InjectionKey<Ref<Me>> = Symbol('me');
+const MeSymbol: InjectionKey<Ref<Me | null>> = Symbol('me');
 
 export function provideMe(refresh = false) {
   const { result: me } = getMe(refresh);

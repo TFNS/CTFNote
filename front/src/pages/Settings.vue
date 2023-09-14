@@ -118,7 +118,7 @@
             <q-card-section>
               <div class="text-h6">Link your Discord account</div>
             </q-card-section>
-            <q-card-section v-if="me.profile.discordId == null">
+            <q-card-section v-if="me?.profile.discordId == null">
               <password-input
                 v-model="profileToken"
                 read-only
@@ -128,17 +128,17 @@
               />
             </q-card-section>
             <q-card-section class="row">
-              <div v-if="me.profile.discordId == null">
+              <div v-if="me?.profile.discordId == null">
                 Your CTFNote account is not linked to your Discord account.
               </div>
               <div v-else>
                 Your CTFNote account is linked to Discord user ID
-                {{ me.profile.discordId }}.
+                {{ me?.profile.discordId }}.
               </div>
             </q-card-section>
             <q-card-actions align="right" class="q-pa-md">
               <q-btn
-                v-if="me.profile.discordId != null"
+                v-if="me?.profile.discordId != null"
                 icon="close"
                 label="Unlink Discord"
                 color="negative"
@@ -147,7 +147,7 @@
                 @click="unlinkDiscord"
               />
               <q-btn
-                v-if="me.profile.discordId == null"
+                v-if="me?.profile.discordId == null"
                 icon="refresh"
                 label="Change token"
                 color="positive"
@@ -174,10 +174,10 @@ export default defineComponent({
   components: { PasswordInput, ColorPicker, UserBadge },
   setup() {
     const me = ctfnote.me.injectMe();
-    const username = ref(me.value.profile?.username ?? '');
-    const description = ref(me.value.profile?.description ?? '');
+    const username = ref(me.value?.profile?.username ?? '');
+    const description = ref(me.value?.profile?.description ?? '');
 
-    const color = ref(me.value.profile?.color);
+    const color = ref(me.value?.profile?.color);
     const profileToken: Ref<string> = ref('');
     const { result: profileTokenResult } = ctfnote.me.getProfileToken();
 
@@ -192,7 +192,7 @@ export default defineComponent({
     watch(
       me,
       (v) => {
-        if (!v.profile) return;
+        if (!v || !v.profile) return;
         username.value = v.profile.username;
         description.value = v.profile.description;
         color.value = v.profile.color;
@@ -247,7 +247,7 @@ export default defineComponent({
       }
     },
     changeProfile() {
-      const profile = this.me.profile;
+      const profile = this.me?.profile;
       if (!profile) return;
 
       void this.resolveAndNotify(
@@ -297,7 +297,7 @@ export default defineComponent({
       // and thus we should poll the profile until the Discord profile is linked
       if (visibility) {
         this.pollInterval = window.setInterval(() => {
-          if (this.me.profile.discordId != null) {
+          if (this.me?.profile.discordId != null) {
             clearInterval(this.pollInterval);
           } else {
             const { result: me } = ctfnote.me.getMe(true);
