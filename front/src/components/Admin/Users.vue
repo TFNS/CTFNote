@@ -196,7 +196,7 @@ export default defineComponent({
 
       const roleStr = role.toString().slice(5);
 
-      if (profile.id == this.me.profile?.id) {
+      if (profile.id == this.me?.profile?.id) {
         this.$q
           .dialog({
             title: 'Are you sure ?',

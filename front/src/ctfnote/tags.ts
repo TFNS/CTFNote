@@ -31,7 +31,7 @@ export function tagsSortFn(a: Task, b: Task): number {
 }
 
 /* Global provider  */
-const TagsSymbol: InjectionKey<Ref<Tag[]>> = Symbol('tags');
+const TagsSymbol: InjectionKey<Ref<readonly Tag[]>> = Symbol('tags');
 
 export function provideTags() {
   const { result: tags } = getTags();

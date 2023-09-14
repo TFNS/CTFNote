@@ -140,7 +140,11 @@ export default defineComponent({
       // Hide solved task if hideSolved == true
       if (hideSolved.value && task.solved) return false;
 
-      if (myTasks.value && task.workOnTasks.indexOf(me.value.profile.id) === -1)
+      if (
+        myTasks.value &&
+        me.value &&
+        task.workOnTasks.indexOf(me.value.profile.id) === -1
+      )
         return false;
 
       // Hide task if there is a filter and category not in filter
