@@ -12,12 +12,28 @@ CTFNote is a collaborative tool aiming to help CTF teams to organise their work.
 
 Before starting, make sure to fill in the information in the `.env` file.
 
-Then you can start it with `docker-compose`. The default
+### Pre-build images
+
+Building CTFNote requires at least 3 GB of RAM. If you want to host CTFNote
+on a server with less than 3 GB of RAM, you can use the pre-build images
+from the GitHub Container Registry.
+
+Download `docker-compose.yml` and `docker-compose.prebuild.yml` for example through cloning the repository and run:
+
+```shell
+$ docker compose -f docker-compose.prebuild.yml up -d --pull always
+```
+
+### Self-build images
+
+You can build and start CTFNote with `docker compose`. The default
 configuration makes it super easy to start a new instance!
 
 ```shell
-$ docker-compose up -d
+$ docker compose up -d
 ```
+
+### Accessing the instance
 
 The instance will spawn a web server on port `127.0.0.1:8080`. The first account created will
 have administrative privileges.
