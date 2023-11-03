@@ -67,14 +67,6 @@ server {
 }
 ```
 
-Edit the `docker-compose.yml` file to make sure CTFNote only listens on
-localhost:
-
-```diff
--      - 8080:80
-+      - 127.0.0.1:8080:80
-```
-
 Edit the `.env` file to instruct the pad to use TLS:
 
 ```diff
