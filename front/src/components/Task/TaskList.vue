@@ -143,7 +143,9 @@ export default defineComponent({
       if (
         myTasks.value &&
         me.value &&
-        task.workOnTasks.indexOf(me.value.profile.id) === -1
+        task.workOnTasks.filter(
+          (w) => w.profileId == me.value?.profile.id && w.active
+        ).length == 0
       )
         return false;
 

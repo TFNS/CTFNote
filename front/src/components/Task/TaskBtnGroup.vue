@@ -1,6 +1,7 @@
 <template>
   <div class="q-gutter-sm">
     <q-btn
+      v-touch-hold:2000.mouse="handleOnItClick"
       round
       size="sm"
       :title="onItTitle"
@@ -56,6 +57,7 @@ export default defineComponent({
       solveTask: ctfnote.tasks.useSolveTaskPopup(),
       deleteTask: ctfnote.tasks.useDeleteTaskPopup(),
       editTask: ctfnote.tasks.useEditTaskPopup(),
+      cancelWorkingOn: ctfnote.tasks.useCancelWorkingOn(),
     };
   },
 
@@ -63,9 +65,13 @@ export default defineComponent({
     onItColor() {
       return this.onIt ? 'secondary' : 'primary';
     },
-    onIt() {
+    onIt(): boolean {
       if (!this.me?.profile?.id) return false;
-      return this.task.workOnTasks.includes(this.me?.profile.id);
+      return (
+        this.task.workOnTasks.filter(
+          (w) => w.profileId == this.me?.profile.id && w.active
+        ).length > 0
+      );
     },
     onItIcon() {
       return this.onIt ? 'person_remove' : 'person_add_alt_1';
@@ -81,6 +87,9 @@ export default defineComponent({
       } else {
         void this.stopWorkingOn(this.task);
       }
+    },
+    async handleOnItClick() {
+      await this.cancelWorkingOn(this.task);
     },
   },
 });

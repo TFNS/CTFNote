@@ -35,6 +35,7 @@ import { CtfInvitation, makeId } from './models';
 import { Ctf, Profile, Task } from './models';
 import { wrapQuery } from './utils';
 import { buildTag } from './tags';
+import { buildWorkingOn } from './tasks';
 
 type FullCtfResponse = {
   ctf: CtfFragment & {
@@ -66,9 +67,7 @@ export function buildTask(task: TaskFragment): Task {
     ctfId: makeId(task.ctfId),
     slug,
     solved: task.solved ?? false,
-    workOnTasks: task.workOnTasks.nodes.map((n) =>
-      makeId<Profile>(n.profileId)
-    ),
+    workOnTasks: task.workOnTasks.nodes.map((w) => buildWorkingOn(w)),
     assignedTags: task.assignedTags.nodes
       .filter((t) => t.__typename && t.tag?.__typename)
       .map((t) => buildTag(t.tag as TagFragment)),

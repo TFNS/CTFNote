@@ -3,9 +3,8 @@
 fragment WorkingOnFragment on WorkOnTask {
   nodeId
   profileId
-  profile {
-    ...ProfileFragment
-  }
+  active
+  taskId
 }
 
 # Fragments
@@ -103,6 +102,14 @@ mutation startWorkingOn($taskId: Int!) {
 }
 mutation stopWorkingOn($taskId: Int!) {
   stopWorkingOn(input: { taskId: $taskId }) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+
+mutation cancelWorkingOn($taskId: Int!) {
+  cancelWorkingOn(input: { taskId: $taskId }) {
     task {
       ...TaskFragment
     }

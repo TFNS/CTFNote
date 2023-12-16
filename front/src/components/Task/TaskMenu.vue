@@ -68,7 +68,11 @@ export default defineComponent({
       if (!this.me?.profile?.id) {
         return false;
       }
-      return this.task.workOnTasks.includes(this.me?.profile.id);
+      return (
+        this.task.workOnTasks.filter(
+          (w) => w.profileId == this.me?.profile?.id && w.active
+        ).length > 0
+      );
     },
   },
   methods: {

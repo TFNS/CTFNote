@@ -1,6 +1,8 @@
 import {
   CreateTaskInput,
   TaskPatch,
+  WorkingOnFragment,
+  useCancelWorkingOnMutation,
   useCreateTaskForCtfIdMutation,
   useDeleteTaskMutation,
   useStartWorkingOnMutation,
@@ -8,9 +10,18 @@ import {
   useUpdateTaskMutation,
 } from 'src/generated/graphql';
 
-import { Ctf, Id, Task } from './models';
+import { Ctf, Id, Task, WorkingOn, makeId } from './models';
 import { Dialog } from 'quasar';
 import TaskEditDialogVue from '../components/Dialogs/TaskEditDialog.vue';
+
+export function buildWorkingOn(w: WorkingOnFragment): WorkingOn {
+  return {
+    ...w,
+    taskId: makeId(w.taskId),
+    profileId: makeId(w.profileId),
+  };
+}
+
 /* Mutations */
 export function useCreateTask() {
   const { mutate: doCreateTask } = useCreateTaskForCtfIdMutation({});
@@ -37,6 +48,11 @@ export function useStartWorkingOn() {
 export function useStopWorkingOn() {
   const { mutate: doStopWorking } = useStopWorkingOnMutation({});
   return (task: Task) => doStopWorking({ taskId: task.id });
+}
+
+export function useCancelWorkingOn() {
+  const { mutate: doCancelWorking } = useCancelWorkingOnMutation({});
+  return (task: Task) => doCancelWorking({ taskId: task.id });
 }
 
 export function useSolveTaskPopup() {
