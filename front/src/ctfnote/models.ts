@@ -50,7 +50,7 @@ export type Task = {
   flag: string;
   solved: boolean;
   assignedTags: Tag[];
-  workOnTasks: Id<Profile>[];
+  workOnTasks: WorkingOn[];
   ctf?: Ctf | string;
 };
 
@@ -122,4 +122,11 @@ export type Tag = {
   nodeId: string;
   id: Id<Tag>;
   tag: string;
+};
+
+export type WorkingOn = {
+  nodeId: string;
+  taskId: Id<Task>;
+  profileId: Id<Profile>;
+  active: boolean;
 };

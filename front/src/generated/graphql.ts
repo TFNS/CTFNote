@@ -337,6 +337,43 @@ export type CreateTaskPayload = {
   task?: Maybe<Task>;
 };
 
+/** All input for the create `WorkOnTask` mutation. */
+export type CreateWorkOnTaskInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `WorkOnTask` to be created by this mutation. */
+  workOnTask: WorkOnTaskInput;
+};
+
+/** The output of our create `WorkOnTask` mutation. */
+export type CreateWorkOnTaskPayload = {
+  __typename?: 'CreateWorkOnTaskPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Profile` that is related to this `WorkOnTask`. */
+  profile?: Maybe<Profile>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Task` that is related to this `WorkOnTask`. */
+  task?: Maybe<Task>;
+  /** The `WorkOnTask` that was created by this mutation. */
+  workOnTask?: Maybe<WorkOnTask>;
+  /** An edge for our `WorkOnTask`. May be used by Relay 1. */
+  workOnTaskEdge?: Maybe<WorkOnTasksEdge>;
+};
+
+
+/** The output of our create `WorkOnTask` mutation. */
+export type CreateWorkOnTaskPayloadWorkOnTaskEdgeArgs = {
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
+};
+
 export type Ctf = Node & {
   __typename?: 'Ctf';
   ctfUrl?: Maybe<Scalars['String']>;
@@ -913,6 +950,8 @@ export type Mutation = {
   /** Creates a single `Tag`. */
   createTag?: Maybe<CreateTagPayload>;
   createTask?: Maybe<CreateTaskPayload>;
+  /** Creates a single `WorkOnTask`. */
+  createWorkOnTask?: Maybe<CreateWorkOnTaskPayload>;
   /** Deletes a single `AssignedTag` using a unique key. */
   deleteAssignedTag?: Maybe<DeleteAssignedTagPayload>;
   /** Deletes a single `AssignedTag` using its globally unique id. */
@@ -964,6 +1003,10 @@ export type Mutation = {
   /** Updates a single `Task` using its globally unique id and a patch. */
   updateTaskByNodeId?: Maybe<UpdateTaskPayload>;
   updateUserRole?: Maybe<UpdateUserRolePayload>;
+  /** Updates a single `WorkOnTask` using a unique key and a patch. */
+  updateWorkOnTask?: Maybe<UpdateWorkOnTaskPayload>;
+  /** Updates a single `WorkOnTask` using its globally unique id and a patch. */
+  updateWorkOnTaskByNodeId?: Maybe<UpdateWorkOnTaskPayload>;
   uploadCtfLogo: Scalars['String'];
 };
 
@@ -1019,6 +1062,12 @@ export type MutationCreateTagArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateTaskArgs = {
   input?: InputMaybe<CreateTaskInput>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateWorkOnTaskArgs = {
+  input: CreateWorkOnTaskInput;
 };
 
 
@@ -1215,6 +1264,18 @@ export type MutationUpdateUserRoleArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateWorkOnTaskArgs = {
+  input: UpdateWorkOnTaskInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateWorkOnTaskByNodeIdArgs = {
+  input: UpdateWorkOnTaskByNodeIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUploadCtfLogoArgs = {
   logo: Scalars['Upload'];
 };
@@ -1374,6 +1435,7 @@ export type ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyConnection = {
 /** A `Task` edge in the connection, with data from `WorkOnTask`. */
 export type ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyEdge = {
   __typename?: 'ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyEdge';
+  active: Scalars['Boolean'];
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `Task` at the end of the edge. */
@@ -2351,6 +2413,7 @@ export type TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyConnection = {
 /** A `Profile` edge in the connection, with data from `WorkOnTask`. */
 export type TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyEdge = {
   __typename?: 'TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyEdge';
+  active: Scalars['Boolean'];
   /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
   /** The `Profile` at the end of the edge. */
@@ -2710,6 +2773,58 @@ export type UpdateUserRolePayload = {
   role?: Maybe<Role>;
 };
 
+/** All input for the `updateWorkOnTaskByNodeId` mutation. */
+export type UpdateWorkOnTaskByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `WorkOnTask` to be updated. */
+  nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `WorkOnTask` being updated. */
+  patch: WorkOnTaskPatch;
+};
+
+/** All input for the `updateWorkOnTask` mutation. */
+export type UpdateWorkOnTaskInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `WorkOnTask` being updated. */
+  patch: WorkOnTaskPatch;
+  profileId: Scalars['Int'];
+  taskId: Scalars['Int'];
+};
+
+/** The output of our update `WorkOnTask` mutation. */
+export type UpdateWorkOnTaskPayload = {
+  __typename?: 'UpdateWorkOnTaskPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Profile` that is related to this `WorkOnTask`. */
+  profile?: Maybe<Profile>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Task` that is related to this `WorkOnTask`. */
+  task?: Maybe<Task>;
+  /** The `WorkOnTask` that was updated by this mutation. */
+  workOnTask?: Maybe<WorkOnTask>;
+  /** An edge for our `WorkOnTask`. May be used by Relay 1. */
+  workOnTaskEdge?: Maybe<WorkOnTasksEdge>;
+};
+
+
+/** The output of our update `WorkOnTask` mutation. */
+export type UpdateWorkOnTaskPayloadWorkOnTaskEdgeArgs = {
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
+};
+
 export type User = {
   __typename?: 'User';
   id?: Maybe<Scalars['Int']>;
@@ -2755,6 +2870,7 @@ export enum UsersOrderBy {
 
 export type WorkOnTask = Node & {
   __typename?: 'WorkOnTask';
+  active: Scalars['Boolean'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   /** Reads a single `Profile` that is related to this `WorkOnTask`. */
@@ -2773,6 +2889,20 @@ export type WorkOnTaskCondition = {
   /** Checks for equality with the object’s `profileId` field. */
   profileId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `taskId` field. */
+  taskId?: InputMaybe<Scalars['Int']>;
+};
+
+/** An input for mutations affecting `WorkOnTask` */
+export type WorkOnTaskInput = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  profileId: Scalars['Int'];
+  taskId: Scalars['Int'];
+};
+
+/** Represents an update to a `WorkOnTask`. Fields that are set will be updated. */
+export type WorkOnTaskPatch = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  profileId?: InputMaybe<Scalars['Int']>;
   taskId?: InputMaybe<Scalars['Int']>;
 };
 
@@ -2914,7 +3044,7 @@ export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: {
 
 export type CtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string };
 
-export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
+export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
 
 export type CtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2924,14 +3054,14 @@ export type CtfsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConne
 export type SubscribeToCtfSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'AssignedTag', nodeId: string } | { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Tag', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
+export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'AssignedTag', nodeId: string } | { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Tag', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type GetFullCtfQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetFullCtfQuery = { __typename?: 'Query', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | null };
+export type GetFullCtfQuery = { __typename?: 'Query', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | null };
 
 export type IncomingCtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3002,7 +3132,7 @@ export type SubscribeToCtfDeletedSubscription = { __typename?: 'Subscription', l
 export type SubscribeToFlagSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToFlagSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'AssignedTag' } | { __typename?: 'Ctf' } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Tag' } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } } | { __typename?: 'WorkOnTask' } | null } };
+export type SubscribeToFlagSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'AssignedTag' } | { __typename?: 'Ctf' } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Tag' } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | { __typename?: 'WorkOnTask' } | null } };
 
 export type InvitationFragment = { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number };
 
@@ -3086,21 +3216,21 @@ export type SearchTasksQueryVariables = Exact<{
 }>;
 
 
-export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } }> } | null };
+export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> } | null };
 
 export type SearchTagsQueryVariables = Exact<{
   search: Scalars['String'];
 }>;
 
 
-export type SearchTagsQuery = { __typename?: 'Query', tags?: { __typename?: 'TagsConnection', nodes: Array<{ __typename?: 'Tag', tasksByAssignedTagTagIdAndTaskId: { __typename?: 'TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } }> } }> } | null };
+export type SearchTagsQuery = { __typename?: 'Query', tags?: { __typename?: 'TagsConnection', nodes: Array<{ __typename?: 'Tag', tasksByAssignedTagTagIdAndTaskId: { __typename?: 'TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> } }> } | null };
 
 export type SearchAllQueryVariables = Exact<{
   search: Scalars['String'];
 }>;
 
 
-export type SearchAllQuery = { __typename?: 'Query', tags?: { __typename?: 'TagsConnection', nodes: Array<{ __typename?: 'Tag', tasksByAssignedTagTagIdAndTaskId: { __typename?: 'TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } }> } }> } | null, tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } }> } | null, ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
+export type SearchAllQuery = { __typename?: 'Query', tags?: { __typename?: 'TagsConnection', nodes: Array<{ __typename?: 'Tag', tasksByAssignedTagTagIdAndTaskId: { __typename?: 'TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> } }> } | null, tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> } | null, ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null };
 
@@ -3162,7 +3292,7 @@ export type GetTagByIdQuery = { __typename?: 'Query', tag?: { __typename?: 'Tag'
 
 export type AssignedTagsFragment = { __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null };
 
-export type TaskForTagsFragementFragment = { __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } } | null };
+export type TaskForTagsFragementFragment = { __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null };
 
 export type AddTagsForTaskMutationVariables = Exact<{
   tags?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
@@ -3187,23 +3317,23 @@ export type SubscribeToTagDeletedSubscriptionVariables = Exact<{ [key: string]: 
 
 export type SubscribeToTagDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'AssignedTag', nodeId: string } | { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Tag', nodeId: string, id: number, tag: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
-export type WorkingOnFragment = { __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null };
+export type WorkingOnFragment = { __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number };
 
-export type TaskFragment = { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } };
+export type TaskFragment = { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } };
 
 export type GetTasksForCtfIdQueryVariables = Exact<{
   ctfId: Scalars['Int'];
 }>;
 
 
-export type GetTasksForCtfIdQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } }> } | null };
+export type GetTasksForCtfIdQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> } | null };
 
 export type TaskByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } } | null };
+export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null };
 
 export type UpdateTaskMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -3213,7 +3343,7 @@ export type UpdateTaskMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'UpdateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } } | null } | null };
+export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'UpdateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
 export type CreateTaskForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
@@ -3224,7 +3354,7 @@ export type CreateTaskForCtfIdMutationVariables = Exact<{
 }>;
 
 
-export type CreateTaskForCtfIdMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } } | null } | null };
+export type CreateTaskForCtfIdMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
 export type DeleteTaskMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -3238,19 +3368,19 @@ export type StartWorkingOnMutationVariables = Exact<{
 }>;
 
 
-export type StartWorkingOnMutation = { __typename?: 'Mutation', startWorkingOn?: { __typename?: 'StartWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } } | null } | null };
+export type StartWorkingOnMutation = { __typename?: 'Mutation', startWorkingOn?: { __typename?: 'StartWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
 export type StopWorkingOnMutationVariables = Exact<{
   taskId: Scalars['Int'];
 }>;
 
 
-export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } } | null } | null };
+export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
 export type SubscribeToTaskSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'AssignedTag', nodeId: string } | { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Tag', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null, nodeId: string } | null }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
+export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'AssignedTag', nodeId: string } | { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Tag', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type UploadLogoMutationVariables = Exact<{
   logo: Scalars['Upload'];
@@ -3318,11 +3448,10 @@ export const WorkingOnFragmentDoc = gql`
     fragment WorkingOnFragment on WorkOnTask {
   nodeId
   profileId
-  profile {
-    ...ProfileFragment
-  }
+  active
+  taskId
 }
-    ${ProfileFragmentDoc}`;
+    `;
 export const TaskFragmentDoc = gql`
     fragment TaskFragment on Task {
   nodeId
@@ -5429,11 +5558,10 @@ export const WorkingOnFragment = gql`
     fragment WorkingOnFragment on WorkOnTask {
   nodeId
   profileId
-  profile {
-    ...ProfileFragment
-  }
+  active
+  taskId
 }
-    ${ProfileFragment}`;
+    `;
 export const TaskFragment = gql`
     fragment TaskFragment on Task {
   nodeId

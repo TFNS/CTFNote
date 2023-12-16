@@ -1,6 +1,7 @@
 import {
   CreateTaskInput,
   TaskPatch,
+  WorkingOnFragment,
   useCreateTaskForCtfIdMutation,
   useDeleteTaskMutation,
   useStartWorkingOnMutation,
@@ -8,9 +9,18 @@ import {
   useUpdateTaskMutation,
 } from 'src/generated/graphql';
 
-import { Ctf, Id, Task } from './models';
+import { Ctf, Id, Task, WorkingOn, makeId } from './models';
 import { Dialog } from 'quasar';
 import TaskEditDialogVue from '../components/Dialogs/TaskEditDialog.vue';
+
+export function buildWorkingOn(w: WorkingOnFragment): WorkingOn {
+  return {
+    ...w,
+    taskId: makeId(w.taskId),
+    profileId: makeId(w.profileId),
+  };
+}
+
 /* Mutations */
 export function useCreateTask() {
   const { mutate: doCreateTask } = useCreateTaskForCtfIdMutation({});

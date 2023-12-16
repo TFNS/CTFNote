@@ -17,12 +17,12 @@
         <q-card-section class="tooltip-section">
           <q-list dense>
             <q-item
-              v-for="player in players"
-              :key="player.username"
+              v-for="p in playersWithActive"
+              :key="p.player.username"
               tag="label"
             >
               <q-item-section class="text-center">
-                <user-badge :profile="player" />
+                <user-badge :profile="p.player" :active="p.active" />
               </q-item-section>
             </q-item>
           </q-list>
@@ -52,8 +52,20 @@ export default defineComponent({
     showBadge() {
       return this.task.solved || this.players?.length > 0;
     },
+    playersWithActive() {
+      return this.players.map((p) => ({
+        player: p,
+        active:
+          this.task.workOnTasks.filter((w) => w.profileId == p.id && w.active)
+            .length > 0,
+      }));
+    },
     players() {
-      return this.team.filter((p) => this.task.workOnTasks.includes(p.id));
+      return this.team.filter(
+        (p) =>
+          this.task.workOnTasks.filter((w) => w.profileId == p.id && w.active)
+            .length > 0
+      );
     },
     taskIcon() {
       if (this.task.solved) return 'flag';
@@ -71,7 +83,11 @@ export default defineComponent({
     },
     taskIconColor() {
       if (this.task.solved) return 'positive';
-      if (this.task.workOnTasks.some((id) => id == this.me?.profile?.id)) {
+      if (
+        this.task.workOnTasks.filter(
+          (w) => w.profileId == this.me?.profile.id && w.active
+        ).length > 0
+      ) {
         return 'secondary';
       }
       return 'primary';

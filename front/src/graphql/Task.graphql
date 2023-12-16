@@ -3,9 +3,8 @@
 fragment WorkingOnFragment on WorkOnTask {
   nodeId
   profileId
-  profile {
-    ...ProfileFragment
-  }
+  active
+  taskId
 }
 
 # Fragments

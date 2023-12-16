@@ -63,9 +63,13 @@ export default defineComponent({
     onItColor() {
       return this.onIt ? 'secondary' : 'primary';
     },
-    onIt() {
+    onIt(): boolean {
       if (!this.me?.profile?.id) return false;
-      return this.task.workOnTasks.includes(this.me?.profile.id);
+      return (
+        this.task.workOnTasks.filter(
+          (w) => w.profileId == this.me?.profile.id && w.active
+        ).length > 0
+      );
     },
     onItIcon() {
       return this.onIt ? 'person_remove' : 'person_add_alt_1';
