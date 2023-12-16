@@ -108,6 +108,14 @@ mutation stopWorkingOn($taskId: Int!) {
   }
 }
 
+mutation cancelWorkingOn($taskId: Int!) {
+  cancelWorkingOn(input: { taskId: $taskId }) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+
 # Subscriptions
 subscription subscribeToTask {
   listen(topic: "update:tasks") {

@@ -1,6 +1,7 @@
 <template>
   <div class="q-gutter-sm">
     <q-btn
+      v-touch-hold:2000.mouse="handleOnItClick"
       round
       size="sm"
       :title="onItTitle"
@@ -56,6 +57,7 @@ export default defineComponent({
       solveTask: ctfnote.tasks.useSolveTaskPopup(),
       deleteTask: ctfnote.tasks.useDeleteTaskPopup(),
       editTask: ctfnote.tasks.useEditTaskPopup(),
+      cancelWorkingOn: ctfnote.tasks.useCancelWorkingOn(),
     };
   },
 
@@ -85,6 +87,9 @@ export default defineComponent({
       } else {
         void this.stopWorkingOn(this.task);
       }
+    },
+    async handleOnItClick() {
+      await this.cancelWorkingOn(this.task);
     },
   },
 });

@@ -2,6 +2,7 @@ import {
   CreateTaskInput,
   TaskPatch,
   WorkingOnFragment,
+  useCancelWorkingOnMutation,
   useCreateTaskForCtfIdMutation,
   useDeleteTaskMutation,
   useStartWorkingOnMutation,
@@ -47,6 +48,11 @@ export function useStartWorkingOn() {
 export function useStopWorkingOn() {
   const { mutate: doStopWorking } = useStopWorkingOnMutation({});
   return (task: Task) => doStopWorking({ taskId: task.id });
+}
+
+export function useCancelWorkingOn() {
+  const { mutate: doCancelWorking } = useCancelWorkingOnMutation({});
+  return (task: Task) => doCancelWorking({ taskId: task.id });
 }
 
 export function useSolveTaskPopup() {

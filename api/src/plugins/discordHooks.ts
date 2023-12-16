@@ -85,6 +85,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "deleteTask" &&
     fieldContext.scope.fieldName !== "startWorkingOn" &&
     fieldContext.scope.fieldName !== "stopWorkingOn" &&
+    fieldContext.scope.fieldName !== "cancelWorkingOn" &&
     fieldContext.scope.fieldName !== "updateCtf" &&
     fieldContext.scope.fieldName !== "createInvitation" &&
     fieldContext.scope.fieldName !== "deleteInvitation" &&
@@ -199,12 +200,20 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         });
       });
     }
-    if (fieldContext.scope.fieldName === "stopWorkingOn") {
+    if (
+      fieldContext.scope.fieldName === "stopWorkingOn" ||
+      fieldContext.scope.fieldName === "cancelWorkingOn"
+    ) {
       //send a message to the channel that the user stopped working on the task
       const userId = context.jwtClaims.user_id;
       const taskId = args.input.taskId;
 
-      sendStopWorkingOnMessage(guild, userId, taskId).catch((err) => {
+      sendStopWorkingOnMessage(
+        guild,
+        userId,
+        taskId,
+        fieldContext.scope.fieldName === "cancelWorkingOn"
+      ).catch((err) => {
         console.error("Failed sending 'stopped working on' notification.", err);
       });
     }
@@ -316,12 +325,17 @@ export async function sendStartWorkingOnMessage(
 export async function sendStopWorkingOnMessage(
   guild: Guild,
   userId: bigint,
-  task: Task | bigint
+  task: Task | bigint,
+  cancel = false
 ) {
+  let text = "stopped";
+  if (cancel) {
+    text = "cancelled";
+  }
   return sendMessageToTask(
     guild,
     task,
-    `${await convertToUsernameFormat(userId)} stopped working on this task!`
+    `${await convertToUsernameFormat(userId)} ${text} working on this task!`
   );
 }
 

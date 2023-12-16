@@ -106,6 +106,41 @@ export enum AssignedTagsOrderBy {
   TaskIdDesc = 'TASK_ID_DESC'
 }
 
+/** All input for the `cancelWorkingOn` mutation. */
+export type CancelWorkingOnInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  taskId?: InputMaybe<Scalars['Int']>;
+};
+
+/** The output of our `cancelWorkingOn` mutation. */
+export type CancelWorkingOnPayload = {
+  __typename?: 'CancelWorkingOnPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Profile` that is related to this `WorkOnTask`. */
+  profile?: Maybe<Profile>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Task` that is related to this `WorkOnTask`. */
+  task?: Maybe<Task>;
+  workOnTask?: Maybe<WorkOnTask>;
+  /** An edge for our `WorkOnTask`. May be used by Relay 1. */
+  workOnTaskEdge?: Maybe<WorkOnTasksEdge>;
+};
+
+
+/** The output of our `cancelWorkingOn` mutation. */
+export type CancelWorkingOnPayloadWorkOnTaskEdgeArgs = {
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
+};
+
 /** All input for the `changePassword` mutation. */
 export type ChangePasswordInput = {
   /**
@@ -825,6 +860,55 @@ export type DeleteUserPayload = {
   userResponse?: Maybe<UserResponse>;
 };
 
+/** All input for the `deleteWorkOnTaskByNodeId` mutation. */
+export type DeleteWorkOnTaskByNodeIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `WorkOnTask` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** All input for the `deleteWorkOnTask` mutation. */
+export type DeleteWorkOnTaskInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  profileId: Scalars['Int'];
+  taskId: Scalars['Int'];
+};
+
+/** The output of our delete `WorkOnTask` mutation. */
+export type DeleteWorkOnTaskPayload = {
+  __typename?: 'DeleteWorkOnTaskPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  deletedWorkOnTaskNodeId?: Maybe<Scalars['ID']>;
+  /** Reads a single `Profile` that is related to this `WorkOnTask`. */
+  profile?: Maybe<Profile>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Task` that is related to this `WorkOnTask`. */
+  task?: Maybe<Task>;
+  /** The `WorkOnTask` that was deleted by this mutation. */
+  workOnTask?: Maybe<WorkOnTask>;
+  /** An edge for our `WorkOnTask`. May be used by Relay 1. */
+  workOnTaskEdge?: Maybe<WorkOnTasksEdge>;
+};
+
+
+/** The output of our delete `WorkOnTask` mutation. */
+export type DeleteWorkOnTaskPayloadWorkOnTaskEdgeArgs = {
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
+};
+
 export type ImportCtfInput = {
   ctftimeId: Scalars['Int'];
 };
@@ -938,6 +1022,7 @@ export type LoginPayload = {
 export type Mutation = {
   __typename?: 'Mutation';
   addTagsForTask?: Maybe<AddTagsForTaskPayload>;
+  cancelWorkingOn?: Maybe<CancelWorkingOnPayload>;
   changePassword?: Maybe<ChangePasswordPayload>;
   /** Creates a single `AssignedTag`. */
   createAssignedTag?: Maybe<CreateAssignedTagPayload>;
@@ -969,6 +1054,10 @@ export type Mutation = {
   /** Deletes a single `Task` using its globally unique id. */
   deleteTaskByNodeId?: Maybe<DeleteTaskPayload>;
   deleteUser?: Maybe<DeleteUserPayload>;
+  /** Deletes a single `WorkOnTask` using a unique key. */
+  deleteWorkOnTask?: Maybe<DeleteWorkOnTaskPayload>;
+  /** Deletes a single `WorkOnTask` using its globally unique id. */
+  deleteWorkOnTaskByNodeId?: Maybe<DeleteWorkOnTaskPayload>;
   importCtf?: Maybe<ImportCtfPayload>;
   login?: Maybe<LoginPayload>;
   register?: Maybe<RegisterPayload>;
@@ -1014,6 +1103,12 @@ export type Mutation = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationAddTagsForTaskArgs = {
   input: AddTagsForTaskInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCancelWorkingOnArgs = {
+  input: CancelWorkingOnInput;
 };
 
 
@@ -1122,6 +1217,18 @@ export type MutationDeleteTaskByNodeIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserArgs = {
   input: DeleteUserInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteWorkOnTaskArgs = {
+  input: DeleteWorkOnTaskInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteWorkOnTaskByNodeIdArgs = {
+  input: DeleteWorkOnTaskByNodeIdInput;
 };
 
 
@@ -3377,6 +3484,13 @@ export type StopWorkingOnMutationVariables = Exact<{
 
 export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
+export type CancelWorkingOnMutationVariables = Exact<{
+  taskId: Scalars['Int'];
+}>;
+
+
+export type CancelWorkingOnMutation = { __typename?: 'Mutation', cancelWorkingOn?: { __typename?: 'CancelWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
+
 export type SubscribeToTaskSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -5419,6 +5533,37 @@ export function useStopWorkingOnMutation(options: VueApolloComposable.UseMutatio
   return VueApolloComposable.useMutation<StopWorkingOnMutation, StopWorkingOnMutationVariables>(StopWorkingOnDocument, options);
 }
 export type StopWorkingOnMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<StopWorkingOnMutation, StopWorkingOnMutationVariables>;
+export const CancelWorkingOnDocument = gql`
+    mutation cancelWorkingOn($taskId: Int!) {
+  cancelWorkingOn(input: {taskId: $taskId}) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+    ${TaskFragmentDoc}`;
+
+/**
+ * __useCancelWorkingOnMutation__
+ *
+ * To run a mutation, you first call `useCancelWorkingOnMutation` within a Vue component and pass it any options that fit your needs.
+ * When your component renders, `useCancelWorkingOnMutation` returns an object that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - Several other properties: https://v4.apollo.vuejs.org/api/use-mutation.html#return
+ *
+ * @param options that will be passed into the mutation, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/mutation.html#options;
+ *
+ * @example
+ * const { mutate, loading, error, onDone } = useCancelWorkingOnMutation({
+ *   variables: {
+ *     taskId: // value for 'taskId'
+ *   },
+ * });
+ */
+export function useCancelWorkingOnMutation(options: VueApolloComposable.UseMutationOptions<CancelWorkingOnMutation, CancelWorkingOnMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CancelWorkingOnMutation, CancelWorkingOnMutationVariables>> = {}) {
+  return VueApolloComposable.useMutation<CancelWorkingOnMutation, CancelWorkingOnMutationVariables>(CancelWorkingOnDocument, options);
+}
+export type CancelWorkingOnMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<CancelWorkingOnMutation, CancelWorkingOnMutationVariables>;
 export const SubscribeToTaskDocument = gql`
     subscription subscribeToTask {
   listen(topic: "update:tasks") {
@@ -6242,6 +6387,15 @@ export const StartWorkingOn = gql`
 export const StopWorkingOn = gql`
     mutation stopWorkingOn($taskId: Int!) {
   stopWorkingOn(input: {taskId: $taskId}) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+    ${TaskFragment}`;
+export const CancelWorkingOn = gql`
+    mutation cancelWorkingOn($taskId: Int!) {
+  cancelWorkingOn(input: {taskId: $taskId}) {
     task {
       ...TaskFragment
     }
