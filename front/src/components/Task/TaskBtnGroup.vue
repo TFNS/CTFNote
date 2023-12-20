@@ -73,6 +73,12 @@ export default defineComponent({
         ).length > 0
       );
     },
+    workedOnIt(): boolean {
+      return (
+        this.task.workOnTasks.filter((w) => w.profileId == this.me?.profile.id)
+          .length > 0
+      );
+    },
     onItIcon() {
       return this.onIt ? 'person_remove' : 'person_add_alt_1';
     },
@@ -89,7 +95,9 @@ export default defineComponent({
       }
     },
     async handleOnItClick() {
-      await this.cancelWorkingOn(this.task);
+      if (this.workedOnIt) {
+        await this.cancelWorkingOn(this.task);
+      }
     },
   },
 });
