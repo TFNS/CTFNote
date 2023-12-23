@@ -22,6 +22,14 @@ export async function changeDiscordUserRoleForCTF(
   const discordUserId = await getDiscordIdFromUserId(userId);
   if (discordUserId == null) return false;
 
+  return changeDiscordUserRoleForCTFByDiscordId(discordUserId, ctf, operation);
+}
+
+export async function changeDiscordUserRoleForCTFByDiscordId(
+  discordUserId: string,
+  ctf: CTF | string | string[],
+  operation: "add" | "remove"
+): Promise<boolean> {
   const discordClient = getDiscordClient();
   if (!discordClient) return false;
 

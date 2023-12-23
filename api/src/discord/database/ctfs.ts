@@ -159,3 +159,64 @@ export async function getAccessibleCTFsForUser(
     if (!useRequestClient) pgClient.release();
   }
 }
+
+// invite the user to play the CTF, but only if they don't have access yet
+export async function insertInvitation(
+  ctfId: bigint,
+  profileId: bigint
+): Promise<void> {
+  const pgClient = await connectToDatabase();
+
+  const accessibleCTFs = await getAccessibleCTFsForUser(profileId, pgClient);
+  if (accessibleCTFs.find((ctf) => ctf.id === ctfId) != null) {
+    // already has access
+    return;
+  }
+
+  try {
+    // only insert if the user can't play the CTF
+    const query = `INSERT INTO ctfnote.invitation (ctf_id, profile_id) VALUES ($1, $2)`;
+    const values = [ctfId, profileId];
+    await pgClient.query(query, values);
+  } catch (error) {
+    console.error("Failed to insert invitation in the database:", error);
+    return;
+  } finally {
+    pgClient.release();
+  }
+}
+
+export async function getInvitedUsersByCtf(ctfId: bigint): Promise<bigint[]> {
+  const pgClient = await connectToDatabase();
+
+  try {
+    const query = `SELECT profile_id FROM ctfnote.invitation WHERE ctf_id = $1`;
+    const values = [ctfId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows.map((row) => row.profile_id);
+  } catch (error) {
+    console.error("Failed to get invited users from the database:", error);
+    return [];
+  } finally {
+    pgClient.release();
+  }
+}
+
+export async function deleteInvitation(
+  ctfId: bigint,
+  profileId: bigint
+): Promise<void> {
+  const pgClient = await connectToDatabase();
+
+  try {
+    const query = `DELETE FROM ctfnote.invitation WHERE ctf_id = $1 AND profile_id = $2`;
+    const values = [ctfId, profileId];
+    await pgClient.query(query, values);
+  } catch (error) {
+    console.error("Failed to delete invitation from the database:", error);
+    return;
+  } finally {
+    pgClient.release();
+  }
+}

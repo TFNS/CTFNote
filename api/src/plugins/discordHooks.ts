@@ -25,6 +25,7 @@ import {
 } from "../discord/utils/channels";
 import { isCategoryOfCtf } from "../discord/utils/comparison";
 import { GraphQLResolveInfoWithMessages } from "@graphile/operation-hooks";
+import { syncDiscordPermissionsWithCtf } from "../discord/utils/permissionSync";
 
 export async function convertToUsernameFormat(userId: bigint | string) {
   // this is actually the Discord ID and not a CTFNote userId
@@ -91,7 +92,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "deleteInvitation" &&
     fieldContext.scope.fieldName !== "resetDiscordId" &&
     fieldContext.scope.fieldName !== "deleteCtf" &&
-    fieldContext.scope.fieldName !== "updateUserRole"
+    fieldContext.scope.fieldName !== "updateUserRole" &&
+    fieldContext.scope.fieldName !== "setDiscordEventLink"
   ) {
     return null;
   }
@@ -255,6 +257,15 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         changeDiscordUserRoleForCTF(userId, ctf, "add").catch((err) => {
           console.error("Error while adding role to user: ", err);
         });
+      });
+    }
+
+    if (fieldContext.scope.fieldName === "setDiscordEventLink") {
+      const link = args.input.link;
+      const ctfId = args.input.ctfId;
+
+      await syncDiscordPermissionsWithCtf(guild, ctfId, link).catch((err) => {
+        console.error("Failed to sync discord permissions.", err);
       });
     }
 

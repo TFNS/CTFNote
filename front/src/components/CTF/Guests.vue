@@ -33,6 +33,11 @@
         </q-chip>
       </div>
     </div>
+    <div class="row">
+      <div style="width: 26rem">
+        <discord-event-link-sync :ctf="ctf" class="col" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -40,8 +45,10 @@
 import { Ctf, Profile, Role } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent, ref } from 'vue';
+import DiscordEventLinkSync from './DiscordEventLinkSync.vue';
 
 export default defineComponent({
+  components: { DiscordEventLinkSync },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
   },
