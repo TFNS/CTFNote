@@ -6,7 +6,7 @@ import {
   getInvitedUsersByCtf,
   insertInvitation,
 } from "../database/ctfs";
-import { getUserByDiscordId } from "../database/users";
+import { getDiscordIdFromUserId, getUserByDiscordId } from "../database/users";
 import { changeDiscordUserRoleForCTF } from "../commands/linkUser";
 
 export async function syncDiscordPermissionsWithCtf(
@@ -28,11 +28,13 @@ export async function syncDiscordPermissionsWithCtf(
 
   const discordUsersInterested = await event.fetchSubscribers();
 
-  const usersInterested = await Promise.all(
-    discordUsersInterested.map(async function (user) {
-      return await getUserByDiscordId(user.user.id);
-    })
-  );
+  const usersInterested = (
+    await Promise.all(
+      discordUsersInterested.map(async function (user) {
+        return await getUserByDiscordId(user.user.id);
+      })
+    )
+  ).filter((user) => user != null) as Array<bigint>;
 
   // search for users that are invited to the CTF but are not interested in the event
   const invitedUsers = await getInvitedUsersByCtf(ctfId);
@@ -44,6 +46,7 @@ export async function syncDiscordPermissionsWithCtf(
   await Promise.all(
     usersNotInterested.map(async function (user) {
       if (user == null) return;
+      if ((await getDiscordIdFromUserId(user)) == null) return; // don't remove permissions through the Discord sync if the user doesn't have Discord linked
       await deleteInvitation(ctfId, user);
 
       // we just removed the invitation so we expect the user to not have access to the CTF anymore,
