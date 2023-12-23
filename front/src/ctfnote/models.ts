@@ -82,6 +82,7 @@ export type Ctf = {
   credentials: string | null;
   tasks: Task[];
   invitations: CtfInvitation[];
+  discordEventLink: string | null;
 };
 
 export const defaultColorsNames = [

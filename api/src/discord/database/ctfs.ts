@@ -159,3 +159,29 @@ export async function getAccessibleCTFsForUser(
     if (!useRequestClient) pgClient.release();
   }
 }
+
+// invite the user to play the CTF, but only if they don't have access yet
+export async function insertInvitation(
+  ctfId: bigint,
+  profileId: bigint
+): Promise<void> {
+  const pgClient = await connectToDatabase();
+
+  const accessibleCTFs = await getAccessibleCTFsForUser(profileId, pgClient);
+  if (accessibleCTFs.find((ctf) => ctf.id === ctfId) != null) {
+    // already has access
+    return;
+  }
+
+  try {
+    // only insert if the user can't play the CTF
+    const query = `INSERT INTO ctfnote.invitation (ctf_id, profile_id) VALUES ($1, $2)`;
+    const values = [ctfId, profileId];
+    await pgClient.query(query, values);
+  } catch (error) {
+    console.error("Failed to insert invitation in the database:", error);
+    return;
+  } finally {
+    pgClient.release();
+  }
+}

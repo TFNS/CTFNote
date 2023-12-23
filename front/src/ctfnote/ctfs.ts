@@ -22,6 +22,7 @@ import {
   useIncomingCtfsQuery,
   useInviteUserToCtfMutation,
   usePastCtfsQuery,
+  useSetDiscordEventLinkMutation,
   useSubscribeToCtfCreatedSubscription,
   useSubscribeToCtfDeletedSubscription,
   useSubscribeToCtfSubscription,
@@ -113,6 +114,7 @@ export function buildCtf(ctf: CtfFragment): Ctf {
     endTime: extractDate(ctf.endTime),
     tasks: [],
     invitations: [],
+    discordEventLink: ctf.discordEventLink ?? null,
   };
 }
 
@@ -296,6 +298,12 @@ export function useUninviteUserToCtf() {
   const { mutate } = useUninviteUserToCtfMutation({});
   return (ctf: Ctf, profile: Profile) =>
     mutate({ ctfId: ctf.id, profileId: profile.id });
+}
+
+export function useSetDiscordEventLink() {
+  const { mutate } = useSetDiscordEventLinkMutation({});
+  return (ctf: Ctf, discordEventLink: string) =>
+    mutate({ id: ctf.id, link: discordEventLink });
 }
 
 /* Subscription */
