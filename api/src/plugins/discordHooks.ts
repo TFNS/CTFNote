@@ -264,7 +264,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       const link = args.input.link;
       const ctfId = args.input.ctfId;
 
-      syncDiscordPermissionsWithCtf(guild, ctfId, link).catch((err) => {
+      await syncDiscordPermissionsWithCtf(guild, ctfId, link).catch((err) => {
         console.error("Failed to sync discord permissions.", err);
       });
     }

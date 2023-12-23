@@ -12,7 +12,8 @@
         icon="sync"
         color="positive"
         title="Import users from Discord"
-        @click="setDiscordEventLink(ctf, discordEventLink ?? '')"
+        @click="set(ctf, discordEventLink ?? '')"
+        :loading="loading"
       />
     </template>
   </q-input>
@@ -32,7 +33,15 @@ export default defineComponent({
       me: ctfnote.me.injectMe(),
       setDiscordEventLink: ctfnote.ctfs.useSetDiscordEventLink(),
       discordEventLink: ref(props.ctf.discordEventLink),
+      loading: ref(false),
     };
+  },
+  methods: {
+    async set(ctf: Ctf, discordEventLink: string) {
+      this.loading = true;
+      await this.setDiscordEventLink(ctf, discordEventLink);
+      this.loading = false;
+    },
   },
 });
 </script>

@@ -1,5 +1,11 @@
 import { Guild } from "discord.js";
-import { getCtfFromDatabase, insertInvitation } from "../database/ctfs";
+import {
+  deleteInvitation,
+  getAccessibleCTFsForUser,
+  getCtfFromDatabase,
+  getInvitedUsersByCtf,
+  insertInvitation,
+} from "../database/ctfs";
 import { getUserByDiscordId } from "../database/users";
 import { changeDiscordUserRoleForCTF } from "../commands/linkUser";
 
@@ -27,6 +33,29 @@ export async function syncDiscordPermissionsWithCtf(
       return await getUserByDiscordId(user.user.id);
     })
   );
+
+  // search for users that are invited to the CTF but are not interested in the event
+  const invitedUsers = await getInvitedUsersByCtf(ctfId);
+  const usersNotInterested = invitedUsers.filter(
+    (user) => !usersInterested.includes(user)
+  );
+
+  // remove the role from users that are invited to the CTF but are not interested in the event
+  await Promise.all(
+    usersNotInterested.map(async function (user) {
+      if (user == null) return;
+      await deleteInvitation(ctfId, user);
+
+      // we just removed the invitation so we expect the user to not have access to the CTF anymore,
+      // however if the user has member privileges or higher we do not remove the role because the user should still have access
+      const accessibleCTFs = await getAccessibleCTFsForUser(user);
+      if (accessibleCTFs.find((ctf) => ctf.id === ctfId) != null) return;
+
+      changeDiscordUserRoleForCTF(user, ctf, "remove");
+    })
+  );
+
+  // invite the users that are interested in the event but do not have access yet to the CTF
   await Promise.all(
     usersInterested.map(async function (user) {
       if (user == null) return;
