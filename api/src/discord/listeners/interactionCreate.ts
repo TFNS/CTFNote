@@ -69,10 +69,17 @@ export default (client: Client): void => {
             content: `I insist that you create an \`/archive\` first!`,
           });
         } else {
-          await interaction.editReply({
-            content: `Deleted the CTF channels and roles for ${ctfName}`,
-            components: [],
-          });
+          try {
+            await interaction.editReply({
+              content: `Deleted the CTF channels and roles for ${ctfName}`,
+              components: [],
+            });
+          } catch (error) {
+            console.debug(
+              "Failed to update message that CTF was deleted. Probably the command was triggered in a channel that got deleted by the /delete command.",
+              error
+            );
+          }
         }
       }
     }
