@@ -1,15 +1,20 @@
 import { OperationVariables } from '@apollo/client';
-import { UseQueryReturn, useResult } from '@vue/apollo-composable';
+import { UseQueryReturn } from '@vue/apollo-composable';
 import ColorHash from 'color-hash';
 import { DeepNonNullable, DeepRequired } from 'ts-essentials';
-import { inject, InjectionKey, Ref } from 'vue';
+import { computed, inject, InjectionKey } from 'vue';
 
 export function wrapQuery<D, T, U extends OperationVariables>(
   query: UseQueryReturn<T, U>,
   def: D,
   wrapper: (data: DeepRequired<DeepNonNullable<T>>) => D
 ) {
-  const result = useResult<T, D, D>(query.result as Ref<T>, def, wrapper);
+  const result = computed(() => {
+    if (query.result) {
+      return wrapper(query.result as DeepRequired<DeepNonNullable<T>>);
+    }
+    return def;
+  });
 
   const onResult = function (cb: (arg: D) => void) {
     query.onResult((data) => {
