@@ -22,7 +22,6 @@ export default boot(async ({ router, redirect, urlPath }) => {
   const route = router.resolve({ path });
   let logged = false;
 
-
   try {
     logged = !!(await ctfnote.auth.refreshJWT());
   } catch {

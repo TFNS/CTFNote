@@ -1,12 +1,17 @@
 import type { ApolloClientOptions } from '@apollo/client/core';
-import { ApolloLink, from, InMemoryCache, split, TypePolicy } from '@apollo/client/core';
+import {
+  ApolloLink,
+  from,
+  InMemoryCache,
+  split,
+  TypePolicy,
+} from '@apollo/client/core';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createUploadLink } from 'apollo-upload-client';
 import { extractFiles } from 'extract-files';
 import { JWT_KEY } from 'src/ctfnote/auth';
-
 
 const protocol = document.location.protocol == 'https:' ? 'wss:' : 'ws:';
 

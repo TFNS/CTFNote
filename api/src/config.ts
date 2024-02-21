@@ -21,6 +21,7 @@ export type CTFNoteConfig = DeepReadOnly<{
     };
     host: string;
     port: number;
+    migrateOnly: boolean;
   };
   pad: {
     createUrl: string;
@@ -56,6 +57,7 @@ const config: CTFNoteConfig = {
     },
     host: getEnv("DB_HOST"),
     port: getEnvInt("DB_PORT"),
+    migrateOnly: !!process.env["DB_MIGRATE_ONLY"],
   },
   pad: {
     createUrl: getEnv("PAD_CREATE_URL"),

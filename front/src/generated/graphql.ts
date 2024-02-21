@@ -14,21 +14,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A location in a connection that can be used for resuming pagination. */
   Cursor: any;
-  /**
-   * A point in time as described by the [ISO
-   * 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
-   */
   Datetime: string;
-  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: string;
-  /**
-   * A JSON Web Token defined by [RFC 7519](https://tools.ietf.org/html/rfc7519)
-   * which securely represents claims between two parties.
-   */
   Jwt: string;
-  /** The `Upload` scalar type represents a file upload. */
   Upload: File;
 };
 
@@ -2266,33 +2255,33 @@ export enum WorkOnTasksOrderBy {
   TaskIdDesc = 'TASK_ID_DESC'
 }
 
-export type UserFragment = { __typename?: 'User', nodeId?: string | null | undefined, login?: string | null | undefined, role?: Role | null | undefined, id?: number | null | undefined, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined };
+export type UserFragment = { __typename?: 'User', nodeId?: string | null, login?: string | null, role?: Role | null, id?: number | null, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UsersConnection', nodes: Array<{ __typename?: 'User', nodeId?: string | null | undefined, login?: string | null | undefined, role?: Role | null | undefined, id?: number | null | undefined, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } | null | undefined };
+export type GetUsersQuery = { __typename?: 'Query', users?: { __typename?: 'UsersConnection', nodes: Array<{ __typename?: 'User', nodeId?: string | null, login?: string | null, role?: Role | null, id?: number | null, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } | null };
 
 export type CreateInvitationTokenMutationVariables = Exact<{
   role: Role;
 }>;
 
 
-export type CreateInvitationTokenMutation = { __typename?: 'Mutation', createInvitationLink?: { __typename?: 'CreateInvitationLinkPayload', invitationLinkResponse?: { __typename?: 'InvitationLinkResponse', token?: string | null | undefined } | null | undefined } | null | undefined };
+export type CreateInvitationTokenMutation = { __typename?: 'Mutation', createInvitationLink?: { __typename?: 'CreateInvitationLinkPayload', invitationLinkResponse?: { __typename?: 'InvitationLinkResponse', token?: string | null } | null } | null };
 
 export type CreateResetPasswordTokenMutationVariables = Exact<{
   userId: Scalars['Int'];
 }>;
 
 
-export type CreateResetPasswordTokenMutation = { __typename?: 'Mutation', createResetPasswordLink?: { __typename?: 'CreateResetPasswordLinkPayload', resetPasswordLinkResponse?: { __typename?: 'ResetPasswordLinkResponse', token?: string | null | undefined } | null | undefined } | null | undefined };
+export type CreateResetPasswordTokenMutation = { __typename?: 'Mutation', createResetPasswordLink?: { __typename?: 'CreateResetPasswordLinkPayload', resetPasswordLinkResponse?: { __typename?: 'ResetPasswordLinkResponse', token?: string | null } | null } | null };
 
 export type DeleteUserByIdMutationVariables = Exact<{
   userId: Scalars['Int'];
 }>;
 
 
-export type DeleteUserByIdMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'DeleteUserPayload', userResponse?: { __typename?: 'UserResponse', id?: number | null | undefined, login?: string | null | undefined, role?: Role | null | undefined } | null | undefined } | null | undefined };
+export type DeleteUserByIdMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'DeleteUserPayload', userResponse?: { __typename?: 'UserResponse', id?: number | null, login?: string | null, role?: Role | null } | null } | null };
 
 export type UpdateRoleForUserIdMutationVariables = Exact<{
   userId: Scalars['Int'];
@@ -2300,17 +2289,17 @@ export type UpdateRoleForUserIdMutationVariables = Exact<{
 }>;
 
 
-export type UpdateRoleForUserIdMutation = { __typename?: 'Mutation', updateUserRole?: { __typename?: 'UpdateUserRolePayload', role?: Role | null | undefined } | null | undefined };
+export type UpdateRoleForUserIdMutation = { __typename?: 'Mutation', updateUserRole?: { __typename?: 'UpdateUserRolePayload', role?: Role | null } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null };
 
 export type NewTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NewTokenQuery = { __typename?: 'Query', newToken?: string | null | undefined };
+export type NewTokenQuery = { __typename?: 'Query', newToken?: string | null };
 
 export type LoginMutationVariables = Exact<{
   login: Scalars['String'];
@@ -2318,7 +2307,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'LoginPayload', jwt?: string | null | undefined } | null | undefined };
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'LoginPayload', jwt?: string | null } | null };
 
 export type RegisterMutationVariables = Exact<{
   login: Scalars['String'];
@@ -2326,7 +2315,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'RegisterPayload', jwt?: string | null | undefined } | null | undefined };
+export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'RegisterPayload', jwt?: string | null } | null };
 
 export type RegisterWithTokenMutationVariables = Exact<{
   login: Scalars['String'];
@@ -2335,7 +2324,7 @@ export type RegisterWithTokenMutationVariables = Exact<{
 }>;
 
 
-export type RegisterWithTokenMutation = { __typename?: 'Mutation', registerWithToken?: { __typename?: 'RegisterWithTokenPayload', jwt?: string | null | undefined } | null | undefined };
+export type RegisterWithTokenMutation = { __typename?: 'Mutation', registerWithToken?: { __typename?: 'RegisterWithTokenPayload', jwt?: string | null } | null };
 
 export type RegisterWithPasswordMutationVariables = Exact<{
   login: Scalars['String'];
@@ -2344,7 +2333,7 @@ export type RegisterWithPasswordMutationVariables = Exact<{
 }>;
 
 
-export type RegisterWithPasswordMutation = { __typename?: 'Mutation', registerWithPassword?: { __typename?: 'RegisterWithPasswordPayload', jwt?: string | null | undefined } | null | undefined };
+export type RegisterWithPasswordMutation = { __typename?: 'Mutation', registerWithPassword?: { __typename?: 'RegisterWithPasswordPayload', jwt?: string | null } | null };
 
 export type ResetPasswordMutationVariables = Exact<{
   password: Scalars['String'];
@@ -2352,33 +2341,33 @@ export type ResetPasswordMutationVariables = Exact<{
 }>;
 
 
-export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: { __typename?: 'ResetPasswordPayload', jwt?: string | null | undefined } | null | undefined };
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: { __typename?: 'ResetPasswordPayload', jwt?: string | null } | null };
 
-export type CtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string };
+export type CtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string };
 
-export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
+export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
 
 export type CtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CtfsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+export type CtfsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type SubscribeToCtfSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type GetFullCtfQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetFullCtfQuery = { __typename?: 'Query', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | null | undefined };
+export type GetFullCtfQuery = { __typename?: 'Query', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | null };
 
 export type IncomingCtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IncomingCtfsQuery = { __typename?: 'Query', incomingCtf?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+export type IncomingCtfsQuery = { __typename?: 'Query', incomingCtf?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type PastCtfsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -2386,7 +2375,7 @@ export type PastCtfsQueryVariables = Exact<{
 }>;
 
 
-export type PastCtfsQuery = { __typename?: 'Query', pastCtf?: { __typename?: 'CtfsConnection', totalCount: number, nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+export type PastCtfsQuery = { __typename?: 'Query', pastCtf?: { __typename?: 'CtfsConnection', totalCount: number, nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type CreateCtfMutationVariables = Exact<{
   title: Scalars['String'];
@@ -2400,21 +2389,21 @@ export type CreateCtfMutationVariables = Exact<{
 }>;
 
 
-export type CreateCtfMutation = { __typename?: 'Mutation', createCtf?: { __typename?: 'CreateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined } | null | undefined };
+export type CreateCtfMutation = { __typename?: 'Mutation', createCtf?: { __typename?: 'CreateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null } | null };
 
 export type DeleteCtfbyIdMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteCtfbyIdMutation = { __typename?: 'Mutation', deleteCtf?: { __typename?: 'DeleteCtfPayload', deletedCtfNodeId?: string | null | undefined } | null | undefined };
+export type DeleteCtfbyIdMutation = { __typename?: 'Mutation', deleteCtf?: { __typename?: 'DeleteCtfPayload', deletedCtfNodeId?: string | null } | null };
 
 export type ImportctfMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type ImportctfMutation = { __typename?: 'Mutation', importCtf?: { __typename?: 'ImportCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined } | null | undefined };
+export type ImportctfMutation = { __typename?: 'Mutation', importCtf?: { __typename?: 'ImportCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null } | null };
 
 export type UpdateCtfByIdMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2429,22 +2418,22 @@ export type UpdateCtfByIdMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCtfByIdMutation = { __typename?: 'Mutation', updateCtf?: { __typename?: 'UpdateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined } | null | undefined };
+export type UpdateCtfByIdMutation = { __typename?: 'Mutation', updateCtf?: { __typename?: 'UpdateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null } | null };
 
 export type SubscribeToCtfCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null | undefined } };
+export type SubscribeToCtfCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null } };
 
 export type SubscribeToCtfDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToCtfDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null | undefined } };
+export type SubscribeToCtfDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task' } | { __typename?: 'WorkOnTask' } | null } };
 
 export type SubscribeToFlagSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToFlagSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf' } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | { __typename?: 'WorkOnTask' } | null | undefined } };
+export type SubscribeToFlagSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf' } | { __typename?: 'CtfSecret' } | { __typename?: 'Invitation' } | { __typename?: 'Profile' } | { __typename?: 'Query' } | { __typename?: 'Setting' } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | { __typename?: 'WorkOnTask' } | null } };
 
 export type InvitationFragment = { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number };
 
@@ -2454,7 +2443,7 @@ export type InviteUserToCtfMutationVariables = Exact<{
 }>;
 
 
-export type InviteUserToCtfMutation = { __typename?: 'Mutation', createInvitation?: { __typename?: 'CreateInvitationPayload', invitation?: { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number } | null | undefined } | null | undefined };
+export type InviteUserToCtfMutation = { __typename?: 'Mutation', createInvitation?: { __typename?: 'CreateInvitationPayload', invitation?: { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number } | null } | null };
 
 export type UninviteUserToCtfMutationVariables = Exact<{
   ctfId: Scalars['Int'];
@@ -2462,9 +2451,9 @@ export type UninviteUserToCtfMutationVariables = Exact<{
 }>;
 
 
-export type UninviteUserToCtfMutation = { __typename?: 'Mutation', deleteInvitation?: { __typename?: 'DeleteInvitationPayload', deletedInvitationNodeId?: string | null | undefined } | null | undefined };
+export type UninviteUserToCtfMutation = { __typename?: 'Mutation', deleteInvitation?: { __typename?: 'DeleteInvitationPayload', deletedInvitationNodeId?: string | null } | null };
 
-export type ProfileFragment = { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string };
+export type ProfileFragment = { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string };
 
 export type UpdatePasswordMutationVariables = Exact<{
   oldPassword: Scalars['String'];
@@ -2472,7 +2461,7 @@ export type UpdatePasswordMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePasswordMutation = { __typename?: 'Mutation', changePassword?: { __typename?: 'ChangePasswordPayload', changePasswordResponse?: { __typename?: 'ChangePasswordResponse', ok?: boolean | null | undefined } | null | undefined } | null | undefined };
+export type UpdatePasswordMutation = { __typename?: 'Mutation', changePassword?: { __typename?: 'ChangePasswordPayload', changePasswordResponse?: { __typename?: 'ChangePasswordResponse', ok?: boolean | null } | null } | null };
 
 export type UpdateProfileMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2480,50 +2469,50 @@ export type UpdateProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'UpdateProfilePayload', profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined } | null | undefined };
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'UpdateProfilePayload', profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null } | null };
 
 export type GetTeamQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTeamQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string }> } | null | undefined };
+export type GetTeamQuery = { __typename?: 'Query', profiles?: { __typename?: 'ProfilesConnection', nodes: Array<{ __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string }> } | null };
 
 export type SubscribeToProfileSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToProfileSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SubscribeToProfileCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToProfileCreatedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SubscribeToProfileDeletedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null | undefined, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, color?: string | null, description: string, role?: Role | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SearchCtFsQueryVariables = Exact<{
   search: Scalars['String'];
 }>;
 
 
-export type SearchCtFsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string }> } | null | undefined };
+export type SearchCtFsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string }> } | null };
 
 export type SearchTasksQueryVariables = Exact<{
   search: Scalars['String'];
 }>;
 
 
-export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null | undefined, ctfUrl?: string | null | undefined, ctftimeUrl?: string | null | undefined, description: string, endTime: string, logoUrl?: string | null | undefined, startTime: string, weight: number, title: string } | null | undefined, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> } | null | undefined };
+export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string } | null, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> } | null };
 
-export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined };
+export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null };
 
 export type GetCredentialsForCtfIdQueryVariables = Exact<{
   ctfId: Scalars['Int'];
 }>;
 
 
-export type GetCredentialsForCtfIdQuery = { __typename?: 'Query', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined };
+export type GetCredentialsForCtfIdQuery = { __typename?: 'Query', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null };
 
 export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
@@ -2531,7 +2520,7 @@ export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCredentialsForCtfIdMutation = { __typename?: 'Mutation', updateCtfSecret?: { __typename?: 'UpdateCtfSecretPayload', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null | undefined } | null | undefined } | null | undefined };
+export type UpdateCredentialsForCtfIdMutation = { __typename?: 'Mutation', updateCtfSecret?: { __typename?: 'UpdateCtfSecretPayload', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null } | null };
 
 export type SettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
 
@@ -2540,12 +2529,12 @@ export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string
 export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null | undefined };
+export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null };
 
 export type GetAdminSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null | undefined };
+export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null };
 
 export type UpdateSettingsMutationVariables = Exact<{
   nodeId: Scalars['ID'];
@@ -2553,25 +2542,25 @@ export type UpdateSettingsMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string } | null | undefined } | null | undefined };
+export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string } | null } | null };
 
-export type WorkingOnFragment = { __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined };
+export type WorkingOnFragment = { __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null };
 
-export type TaskFragment = { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } };
+export type TaskFragment = { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } };
 
 export type GetTasksForCtfIdQueryVariables = Exact<{
   ctfId: Scalars['Int'];
 }>;
 
 
-export type GetTasksForCtfIdQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } }> } | null | undefined };
+export type GetTasksForCtfIdQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } }> } | null };
 
 export type TaskByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined };
+export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null };
 
 export type UpdateTaskMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2582,7 +2571,7 @@ export type UpdateTaskMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'UpdateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
+export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'UpdateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null } | null };
 
 export type CreateTaskForCtfIdMutationVariables = Exact<{
   ctfId: Scalars['Int'];
@@ -2593,33 +2582,33 @@ export type CreateTaskForCtfIdMutationVariables = Exact<{
 }>;
 
 
-export type CreateTaskForCtfIdMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
+export type CreateTaskForCtfIdMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null } | null };
 
 export type DeleteTaskMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', deletedTaskNodeId?: string | null | undefined } | null | undefined };
+export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', deletedTaskNodeId?: string | null } | null };
 
 export type StartWorkingOnMutationVariables = Exact<{
   taskId: Scalars['Int'];
 }>;
 
 
-export type StartWorkingOnMutation = { __typename?: 'Mutation', startWorkingOn?: { __typename?: 'StartWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
+export type StartWorkingOnMutation = { __typename?: 'Mutation', startWorkingOn?: { __typename?: 'StartWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null } | null };
 
 export type StopWorkingOnMutationVariables = Exact<{
   taskId: Scalars['Int'];
 }>;
 
 
-export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | null | undefined } | null | undefined };
+export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | null } | null };
 
 export type SubscribeToTaskSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null | undefined, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null | undefined, description: string, role?: Role | null | undefined, nodeId: string } | null | undefined }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null | undefined } };
+export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, category: string, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, profile?: { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string } | null }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type UploadLogoMutationVariables = Exact<{
   logo: Scalars['Upload'];
@@ -2766,6 +2755,9 @@ export const GetUsersDocument = gql`
 export function useGetUsersQuery(options: VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, {}, options);
 }
+export function useGetUsersLazyQuery(options: VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetUsersQuery, GetUsersQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetUsersQuery, GetUsersQueryVariables>(GetUsersDocument, {}, options);
+}
 export type GetUsersQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetUsersQuery, GetUsersQueryVariables>;
 export const CreateInvitationTokenDocument = gql`
     mutation createInvitationToken($role: Role!) {
@@ -2794,7 +2786,7 @@ export const CreateInvitationTokenDocument = gql`
  *   },
  * });
  */
-export function useCreateInvitationTokenMutation(options: VueApolloComposable.UseMutationOptions<CreateInvitationTokenMutation, CreateInvitationTokenMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CreateInvitationTokenMutation, CreateInvitationTokenMutationVariables>>) {
+export function useCreateInvitationTokenMutation(options: VueApolloComposable.UseMutationOptions<CreateInvitationTokenMutation, CreateInvitationTokenMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CreateInvitationTokenMutation, CreateInvitationTokenMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<CreateInvitationTokenMutation, CreateInvitationTokenMutationVariables>(CreateInvitationTokenDocument, options);
 }
 export type CreateInvitationTokenMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<CreateInvitationTokenMutation, CreateInvitationTokenMutationVariables>;
@@ -2825,7 +2817,7 @@ export const CreateResetPasswordTokenDocument = gql`
  *   },
  * });
  */
-export function useCreateResetPasswordTokenMutation(options: VueApolloComposable.UseMutationOptions<CreateResetPasswordTokenMutation, CreateResetPasswordTokenMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CreateResetPasswordTokenMutation, CreateResetPasswordTokenMutationVariables>>) {
+export function useCreateResetPasswordTokenMutation(options: VueApolloComposable.UseMutationOptions<CreateResetPasswordTokenMutation, CreateResetPasswordTokenMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CreateResetPasswordTokenMutation, CreateResetPasswordTokenMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<CreateResetPasswordTokenMutation, CreateResetPasswordTokenMutationVariables>(CreateResetPasswordTokenDocument, options);
 }
 export type CreateResetPasswordTokenMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<CreateResetPasswordTokenMutation, CreateResetPasswordTokenMutationVariables>;
@@ -2858,7 +2850,7 @@ export const DeleteUserByIdDocument = gql`
  *   },
  * });
  */
-export function useDeleteUserByIdMutation(options: VueApolloComposable.UseMutationOptions<DeleteUserByIdMutation, DeleteUserByIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<DeleteUserByIdMutation, DeleteUserByIdMutationVariables>>) {
+export function useDeleteUserByIdMutation(options: VueApolloComposable.UseMutationOptions<DeleteUserByIdMutation, DeleteUserByIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<DeleteUserByIdMutation, DeleteUserByIdMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<DeleteUserByIdMutation, DeleteUserByIdMutationVariables>(DeleteUserByIdDocument, options);
 }
 export type DeleteUserByIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<DeleteUserByIdMutation, DeleteUserByIdMutationVariables>;
@@ -2888,7 +2880,7 @@ export const UpdateRoleForUserIdDocument = gql`
  *   },
  * });
  */
-export function useUpdateRoleForUserIdMutation(options: VueApolloComposable.UseMutationOptions<UpdateRoleForUserIdMutation, UpdateRoleForUserIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateRoleForUserIdMutation, UpdateRoleForUserIdMutationVariables>>) {
+export function useUpdateRoleForUserIdMutation(options: VueApolloComposable.UseMutationOptions<UpdateRoleForUserIdMutation, UpdateRoleForUserIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateRoleForUserIdMutation, UpdateRoleForUserIdMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UpdateRoleForUserIdMutation, UpdateRoleForUserIdMutationVariables>(UpdateRoleForUserIdDocument, options);
 }
 export type UpdateRoleForUserIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateRoleForUserIdMutation, UpdateRoleForUserIdMutationVariables>;
@@ -2915,6 +2907,9 @@ export const MeDocument = gql`
 export function useMeQuery(options: VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<MeQuery, MeQueryVariables>(MeDocument, {}, options);
 }
+export function useMeLazyQuery(options: VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<MeQuery, MeQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, {}, options);
+}
 export type MeQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<MeQuery, MeQueryVariables>;
 export const NewTokenDocument = gql`
     query newToken {
@@ -2936,6 +2931,9 @@ export const NewTokenDocument = gql`
  */
 export function useNewTokenQuery(options: VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<NewTokenQuery, NewTokenQueryVariables>(NewTokenDocument, {}, options);
+}
+export function useNewTokenLazyQuery(options: VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<NewTokenQuery, NewTokenQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<NewTokenQuery, NewTokenQueryVariables>(NewTokenDocument, {}, options);
 }
 export type NewTokenQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<NewTokenQuery, NewTokenQueryVariables>;
 export const LoginDocument = gql`
@@ -2964,7 +2962,7 @@ export const LoginDocument = gql`
  *   },
  * });
  */
-export function useLoginMutation(options: VueApolloComposable.UseMutationOptions<LoginMutation, LoginMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<LoginMutation, LoginMutationVariables>>) {
+export function useLoginMutation(options: VueApolloComposable.UseMutationOptions<LoginMutation, LoginMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<LoginMutation, LoginMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
 }
 export type LoginMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<LoginMutation, LoginMutationVariables>;
@@ -2994,7 +2992,7 @@ export const RegisterDocument = gql`
  *   },
  * });
  */
-export function useRegisterMutation(options: VueApolloComposable.UseMutationOptions<RegisterMutation, RegisterMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<RegisterMutation, RegisterMutationVariables>>) {
+export function useRegisterMutation(options: VueApolloComposable.UseMutationOptions<RegisterMutation, RegisterMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<RegisterMutation, RegisterMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
 }
 export type RegisterMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<RegisterMutation, RegisterMutationVariables>;
@@ -3025,7 +3023,7 @@ export const RegisterWithTokenDocument = gql`
  *   },
  * });
  */
-export function useRegisterWithTokenMutation(options: VueApolloComposable.UseMutationOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>>) {
+export function useRegisterWithTokenMutation(options: VueApolloComposable.UseMutationOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>(RegisterWithTokenDocument, options);
 }
 export type RegisterWithTokenMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>;
@@ -3058,7 +3056,7 @@ export const RegisterWithPasswordDocument = gql`
  *   },
  * });
  */
-export function useRegisterWithPasswordMutation(options: VueApolloComposable.UseMutationOptions<RegisterWithPasswordMutation, RegisterWithPasswordMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<RegisterWithPasswordMutation, RegisterWithPasswordMutationVariables>>) {
+export function useRegisterWithPasswordMutation(options: VueApolloComposable.UseMutationOptions<RegisterWithPasswordMutation, RegisterWithPasswordMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<RegisterWithPasswordMutation, RegisterWithPasswordMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<RegisterWithPasswordMutation, RegisterWithPasswordMutationVariables>(RegisterWithPasswordDocument, options);
 }
 export type RegisterWithPasswordMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<RegisterWithPasswordMutation, RegisterWithPasswordMutationVariables>;
@@ -3088,7 +3086,7 @@ export const ResetPasswordDocument = gql`
  *   },
  * });
  */
-export function useResetPasswordMutation(options: VueApolloComposable.UseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>>) {
+export function useResetPasswordMutation(options: VueApolloComposable.UseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, options);
 }
 export type ResetPasswordMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<ResetPasswordMutation, ResetPasswordMutationVariables>;
@@ -3116,6 +3114,9 @@ export const CtfsDocument = gql`
  */
 export function useCtfsQuery(options: VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<CtfsQuery, CtfsQueryVariables>(CtfsDocument, {}, options);
+}
+export function useCtfsLazyQuery(options: VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtfsQuery, CtfsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<CtfsQuery, CtfsQueryVariables>(CtfsDocument, {}, options);
 }
 export type CtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtfsQuery, CtfsQueryVariables>;
 export const SubscribeToCtfDocument = gql`
@@ -3174,6 +3175,9 @@ export const GetFullCtfDocument = gql`
 export function useGetFullCtfQuery(variables: GetFullCtfQueryVariables | VueCompositionApi.Ref<GetFullCtfQueryVariables> | ReactiveFunction<GetFullCtfQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetFullCtfQuery, GetFullCtfQueryVariables>(GetFullCtfDocument, variables, options);
 }
+export function useGetFullCtfLazyQuery(variables: GetFullCtfQueryVariables | VueCompositionApi.Ref<GetFullCtfQueryVariables> | ReactiveFunction<GetFullCtfQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetFullCtfQuery, GetFullCtfQueryVariables>(GetFullCtfDocument, variables, options);
+}
 export type GetFullCtfQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetFullCtfQuery, GetFullCtfQueryVariables>;
 export const IncomingCtfsDocument = gql`
     query IncomingCtfs {
@@ -3199,6 +3203,9 @@ export const IncomingCtfsDocument = gql`
  */
 export function useIncomingCtfsQuery(options: VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<IncomingCtfsQuery, IncomingCtfsQueryVariables>(IncomingCtfsDocument, {}, options);
+}
+export function useIncomingCtfsLazyQuery(options: VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<IncomingCtfsQuery, IncomingCtfsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<IncomingCtfsQuery, IncomingCtfsQueryVariables>(IncomingCtfsDocument, {}, options);
 }
 export type IncomingCtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<IncomingCtfsQuery, IncomingCtfsQueryVariables>;
 export const PastCtfsDocument = gql`
@@ -3230,6 +3237,9 @@ export const PastCtfsDocument = gql`
  */
 export function usePastCtfsQuery(variables: PastCtfsQueryVariables | VueCompositionApi.Ref<PastCtfsQueryVariables> | ReactiveFunction<PastCtfsQueryVariables> = {}, options: VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<PastCtfsQuery, PastCtfsQueryVariables>(PastCtfsDocument, variables, options);
+}
+export function usePastCtfsLazyQuery(variables: PastCtfsQueryVariables | VueCompositionApi.Ref<PastCtfsQueryVariables> | ReactiveFunction<PastCtfsQueryVariables> = {}, options: VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<PastCtfsQuery, PastCtfsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<PastCtfsQuery, PastCtfsQueryVariables>(PastCtfsDocument, variables, options);
 }
 export type PastCtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<PastCtfsQuery, PastCtfsQueryVariables>;
 export const CreateCtfDocument = gql`
@@ -3268,7 +3278,7 @@ export const CreateCtfDocument = gql`
  *   },
  * });
  */
-export function useCreateCtfMutation(options: VueApolloComposable.UseMutationOptions<CreateCtfMutation, CreateCtfMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CreateCtfMutation, CreateCtfMutationVariables>>) {
+export function useCreateCtfMutation(options: VueApolloComposable.UseMutationOptions<CreateCtfMutation, CreateCtfMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CreateCtfMutation, CreateCtfMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<CreateCtfMutation, CreateCtfMutationVariables>(CreateCtfDocument, options);
 }
 export type CreateCtfMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<CreateCtfMutation, CreateCtfMutationVariables>;
@@ -3297,7 +3307,7 @@ export const DeleteCtfbyIdDocument = gql`
  *   },
  * });
  */
-export function useDeleteCtfbyIdMutation(options: VueApolloComposable.UseMutationOptions<DeleteCtfbyIdMutation, DeleteCtfbyIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<DeleteCtfbyIdMutation, DeleteCtfbyIdMutationVariables>>) {
+export function useDeleteCtfbyIdMutation(options: VueApolloComposable.UseMutationOptions<DeleteCtfbyIdMutation, DeleteCtfbyIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<DeleteCtfbyIdMutation, DeleteCtfbyIdMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<DeleteCtfbyIdMutation, DeleteCtfbyIdMutationVariables>(DeleteCtfbyIdDocument, options);
 }
 export type DeleteCtfbyIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<DeleteCtfbyIdMutation, DeleteCtfbyIdMutationVariables>;
@@ -3328,7 +3338,7 @@ export const ImportctfDocument = gql`
  *   },
  * });
  */
-export function useImportctfMutation(options: VueApolloComposable.UseMutationOptions<ImportctfMutation, ImportctfMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<ImportctfMutation, ImportctfMutationVariables>>) {
+export function useImportctfMutation(options: VueApolloComposable.UseMutationOptions<ImportctfMutation, ImportctfMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<ImportctfMutation, ImportctfMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<ImportctfMutation, ImportctfMutationVariables>(ImportctfDocument, options);
 }
 export type ImportctfMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<ImportctfMutation, ImportctfMutationVariables>;
@@ -3369,7 +3379,7 @@ export const UpdateCtfByIdDocument = gql`
  *   },
  * });
  */
-export function useUpdateCtfByIdMutation(options: VueApolloComposable.UseMutationOptions<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables>>) {
+export function useUpdateCtfByIdMutation(options: VueApolloComposable.UseMutationOptions<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables>(UpdateCtfByIdDocument, options);
 }
 export type UpdateCtfByIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateCtfByIdMutation, UpdateCtfByIdMutationVariables>;
@@ -3488,7 +3498,7 @@ export const InviteUserToCtfDocument = gql`
  *   },
  * });
  */
-export function useInviteUserToCtfMutation(options: VueApolloComposable.UseMutationOptions<InviteUserToCtfMutation, InviteUserToCtfMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<InviteUserToCtfMutation, InviteUserToCtfMutationVariables>>) {
+export function useInviteUserToCtfMutation(options: VueApolloComposable.UseMutationOptions<InviteUserToCtfMutation, InviteUserToCtfMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<InviteUserToCtfMutation, InviteUserToCtfMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<InviteUserToCtfMutation, InviteUserToCtfMutationVariables>(InviteUserToCtfDocument, options);
 }
 export type InviteUserToCtfMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<InviteUserToCtfMutation, InviteUserToCtfMutationVariables>;
@@ -3518,7 +3528,7 @@ export const UninviteUserToCtfDocument = gql`
  *   },
  * });
  */
-export function useUninviteUserToCtfMutation(options: VueApolloComposable.UseMutationOptions<UninviteUserToCtfMutation, UninviteUserToCtfMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UninviteUserToCtfMutation, UninviteUserToCtfMutationVariables>>) {
+export function useUninviteUserToCtfMutation(options: VueApolloComposable.UseMutationOptions<UninviteUserToCtfMutation, UninviteUserToCtfMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UninviteUserToCtfMutation, UninviteUserToCtfMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UninviteUserToCtfMutation, UninviteUserToCtfMutationVariables>(UninviteUserToCtfDocument, options);
 }
 export type UninviteUserToCtfMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UninviteUserToCtfMutation, UninviteUserToCtfMutationVariables>;
@@ -3550,7 +3560,7 @@ export const UpdatePasswordDocument = gql`
  *   },
  * });
  */
-export function useUpdatePasswordMutation(options: VueApolloComposable.UseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>>) {
+export function useUpdatePasswordMutation(options: VueApolloComposable.UseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, options);
 }
 export type UpdatePasswordMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
@@ -3582,7 +3592,7 @@ export const UpdateProfileDocument = gql`
  *   },
  * });
  */
-export function useUpdateProfileMutation(options: VueApolloComposable.UseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>>) {
+export function useUpdateProfileMutation(options: VueApolloComposable.UseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
 }
 export type UpdateProfileMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateProfileMutation, UpdateProfileMutationVariables>;
@@ -3610,6 +3620,9 @@ export const GetTeamDocument = gql`
  */
 export function useGetTeamQuery(options: VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetTeamQuery, GetTeamQueryVariables>(GetTeamDocument, {}, options);
+}
+export function useGetTeamLazyQuery(options: VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTeamQuery, GetTeamQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetTeamQuery, GetTeamQueryVariables>(GetTeamDocument, {}, options);
 }
 export type GetTeamQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTeamQuery, GetTeamQueryVariables>;
 export const SubscribeToProfileDocument = gql`
@@ -3729,6 +3742,9 @@ export const SearchCtFsDocument = gql`
 export function useSearchCtFsQuery(variables: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<SearchCtFsQuery, SearchCtFsQueryVariables>(SearchCtFsDocument, variables, options);
 }
+export function useSearchCtFsLazyQuery(variables: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<SearchCtFsQuery, SearchCtFsQueryVariables>(SearchCtFsDocument, variables, options);
+}
 export type SearchCtFsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchCtFsQuery, SearchCtFsQueryVariables>;
 export const SearchTasksDocument = gql`
     query SearchTasks($search: String!) {
@@ -3762,6 +3778,9 @@ ${CtfFragmentDoc}`;
 export function useSearchTasksQuery(variables: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
 }
+export function useSearchTasksLazyQuery(variables: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
+}
 export type SearchTasksQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchTasksQuery, SearchTasksQueryVariables>;
 export const GetCredentialsForCtfIdDocument = gql`
     query getCredentialsForCtfId($ctfId: Int!) {
@@ -3788,6 +3807,9 @@ export const GetCredentialsForCtfIdDocument = gql`
  */
 export function useGetCredentialsForCtfIdQuery(variables: GetCredentialsForCtfIdQueryVariables | VueCompositionApi.Ref<GetCredentialsForCtfIdQueryVariables> | ReactiveFunction<GetCredentialsForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>(GetCredentialsForCtfIdDocument, variables, options);
+}
+export function useGetCredentialsForCtfIdLazyQuery(variables: GetCredentialsForCtfIdQueryVariables | VueCompositionApi.Ref<GetCredentialsForCtfIdQueryVariables> | ReactiveFunction<GetCredentialsForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>(GetCredentialsForCtfIdDocument, variables, options);
 }
 export type GetCredentialsForCtfIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>;
 export const UpdateCredentialsForCtfIdDocument = gql`
@@ -3818,7 +3840,7 @@ export const UpdateCredentialsForCtfIdDocument = gql`
  *   },
  * });
  */
-export function useUpdateCredentialsForCtfIdMutation(options: VueApolloComposable.UseMutationOptions<UpdateCredentialsForCtfIdMutation, UpdateCredentialsForCtfIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateCredentialsForCtfIdMutation, UpdateCredentialsForCtfIdMutationVariables>>) {
+export function useUpdateCredentialsForCtfIdMutation(options: VueApolloComposable.UseMutationOptions<UpdateCredentialsForCtfIdMutation, UpdateCredentialsForCtfIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateCredentialsForCtfIdMutation, UpdateCredentialsForCtfIdMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UpdateCredentialsForCtfIdMutation, UpdateCredentialsForCtfIdMutationVariables>(UpdateCredentialsForCtfIdDocument, options);
 }
 export type UpdateCredentialsForCtfIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateCredentialsForCtfIdMutation, UpdateCredentialsForCtfIdMutationVariables>;
@@ -3847,6 +3869,9 @@ export const GetSettingsDocument = gql`
 export function useGetSettingsQuery(options: VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetSettingsQuery, GetSettingsQueryVariables>(GetSettingsDocument, {}, options);
 }
+export function useGetSettingsLazyQuery(options: VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetSettingsQuery, GetSettingsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetSettingsQuery, GetSettingsQueryVariables>(GetSettingsDocument, {}, options);
+}
 export type GetSettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetSettingsQuery, GetSettingsQueryVariables>;
 export const GetAdminSettingsDocument = gql`
     query getAdminSettings {
@@ -3872,6 +3897,9 @@ export const GetAdminSettingsDocument = gql`
  */
 export function useGetAdminSettingsQuery(options: VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>(GetAdminSettingsDocument, {}, options);
+}
+export function useGetAdminSettingsLazyQuery(options: VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>(GetAdminSettingsDocument, {}, options);
 }
 export type GetAdminSettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetAdminSettingsQuery, GetAdminSettingsQueryVariables>;
 export const UpdateSettingsDocument = gql`
@@ -3902,7 +3930,7 @@ export const UpdateSettingsDocument = gql`
  *   },
  * });
  */
-export function useUpdateSettingsMutation(options: VueApolloComposable.UseMutationOptions<UpdateSettingsMutation, UpdateSettingsMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateSettingsMutation, UpdateSettingsMutationVariables>>) {
+export function useUpdateSettingsMutation(options: VueApolloComposable.UseMutationOptions<UpdateSettingsMutation, UpdateSettingsMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateSettingsMutation, UpdateSettingsMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UpdateSettingsMutation, UpdateSettingsMutationVariables>(UpdateSettingsDocument, options);
 }
 export type UpdateSettingsMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateSettingsMutation, UpdateSettingsMutationVariables>;
@@ -3934,6 +3962,9 @@ export const GetTasksForCtfIdDocument = gql`
 export function useGetTasksForCtfIdQuery(variables: GetTasksForCtfIdQueryVariables | VueCompositionApi.Ref<GetTasksForCtfIdQueryVariables> | ReactiveFunction<GetTasksForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>(GetTasksForCtfIdDocument, variables, options);
 }
+export function useGetTasksForCtfIdLazyQuery(variables: GetTasksForCtfIdQueryVariables | VueCompositionApi.Ref<GetTasksForCtfIdQueryVariables> | ReactiveFunction<GetTasksForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>(GetTasksForCtfIdDocument, variables, options);
+}
 export type GetTasksForCtfIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>;
 export const TaskByIdDocument = gql`
     query taskById($id: Int!) {
@@ -3960,6 +3991,9 @@ export const TaskByIdDocument = gql`
  */
 export function useTaskByIdQuery(variables: TaskByIdQueryVariables | VueCompositionApi.Ref<TaskByIdQueryVariables> | ReactiveFunction<TaskByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<TaskByIdQuery, TaskByIdQueryVariables>(TaskByIdDocument, variables, options);
+}
+export function useTaskByIdLazyQuery(variables: TaskByIdQueryVariables | VueCompositionApi.Ref<TaskByIdQueryVariables> | ReactiveFunction<TaskByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<TaskByIdQuery, TaskByIdQueryVariables>(TaskByIdDocument, variables, options);
 }
 export type TaskByIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<TaskByIdQuery, TaskByIdQueryVariables>;
 export const UpdateTaskDocument = gql`
@@ -3995,7 +4029,7 @@ export const UpdateTaskDocument = gql`
  *   },
  * });
  */
-export function useUpdateTaskMutation(options: VueApolloComposable.UseMutationOptions<UpdateTaskMutation, UpdateTaskMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateTaskMutation, UpdateTaskMutationVariables>>) {
+export function useUpdateTaskMutation(options: VueApolloComposable.UseMutationOptions<UpdateTaskMutation, UpdateTaskMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UpdateTaskMutation, UpdateTaskMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UpdateTaskMutation, UpdateTaskMutationVariables>(UpdateTaskDocument, options);
 }
 export type UpdateTaskMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateTaskMutation, UpdateTaskMutationVariables>;
@@ -4032,7 +4066,7 @@ export const CreateTaskForCtfIdDocument = gql`
  *   },
  * });
  */
-export function useCreateTaskForCtfIdMutation(options: VueApolloComposable.UseMutationOptions<CreateTaskForCtfIdMutation, CreateTaskForCtfIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CreateTaskForCtfIdMutation, CreateTaskForCtfIdMutationVariables>>) {
+export function useCreateTaskForCtfIdMutation(options: VueApolloComposable.UseMutationOptions<CreateTaskForCtfIdMutation, CreateTaskForCtfIdMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<CreateTaskForCtfIdMutation, CreateTaskForCtfIdMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<CreateTaskForCtfIdMutation, CreateTaskForCtfIdMutationVariables>(CreateTaskForCtfIdDocument, options);
 }
 export type CreateTaskForCtfIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<CreateTaskForCtfIdMutation, CreateTaskForCtfIdMutationVariables>;
@@ -4061,7 +4095,7 @@ export const DeleteTaskDocument = gql`
  *   },
  * });
  */
-export function useDeleteTaskMutation(options: VueApolloComposable.UseMutationOptions<DeleteTaskMutation, DeleteTaskMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<DeleteTaskMutation, DeleteTaskMutationVariables>>) {
+export function useDeleteTaskMutation(options: VueApolloComposable.UseMutationOptions<DeleteTaskMutation, DeleteTaskMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<DeleteTaskMutation, DeleteTaskMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<DeleteTaskMutation, DeleteTaskMutationVariables>(DeleteTaskDocument, options);
 }
 export type DeleteTaskMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<DeleteTaskMutation, DeleteTaskMutationVariables>;
@@ -4092,7 +4126,7 @@ export const StartWorkingOnDocument = gql`
  *   },
  * });
  */
-export function useStartWorkingOnMutation(options: VueApolloComposable.UseMutationOptions<StartWorkingOnMutation, StartWorkingOnMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<StartWorkingOnMutation, StartWorkingOnMutationVariables>>) {
+export function useStartWorkingOnMutation(options: VueApolloComposable.UseMutationOptions<StartWorkingOnMutation, StartWorkingOnMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<StartWorkingOnMutation, StartWorkingOnMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<StartWorkingOnMutation, StartWorkingOnMutationVariables>(StartWorkingOnDocument, options);
 }
 export type StartWorkingOnMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<StartWorkingOnMutation, StartWorkingOnMutationVariables>;
@@ -4123,7 +4157,7 @@ export const StopWorkingOnDocument = gql`
  *   },
  * });
  */
-export function useStopWorkingOnMutation(options: VueApolloComposable.UseMutationOptions<StopWorkingOnMutation, StopWorkingOnMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<StopWorkingOnMutation, StopWorkingOnMutationVariables>>) {
+export function useStopWorkingOnMutation(options: VueApolloComposable.UseMutationOptions<StopWorkingOnMutation, StopWorkingOnMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<StopWorkingOnMutation, StopWorkingOnMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<StopWorkingOnMutation, StopWorkingOnMutationVariables>(StopWorkingOnDocument, options);
 }
 export type StopWorkingOnMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<StopWorkingOnMutation, StopWorkingOnMutationVariables>;
@@ -4179,7 +4213,7 @@ export const UploadLogoDocument = gql`
  *   },
  * });
  */
-export function useUploadLogoMutation(options: VueApolloComposable.UseMutationOptions<UploadLogoMutation, UploadLogoMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UploadLogoMutation, UploadLogoMutationVariables>>) {
+export function useUploadLogoMutation(options: VueApolloComposable.UseMutationOptions<UploadLogoMutation, UploadLogoMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UploadLogoMutation, UploadLogoMutationVariables>> = {}) {
   return VueApolloComposable.useMutation<UploadLogoMutation, UploadLogoMutationVariables>(UploadLogoDocument, options);
 }
 export type UploadLogoMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UploadLogoMutation, UploadLogoMutationVariables>;

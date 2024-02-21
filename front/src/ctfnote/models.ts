@@ -90,7 +90,7 @@ export const defaultColorsNames = [
   'warning',
 ] as const;
 
-export type SettingsColor = typeof defaultColorsNames[number];
+export type SettingsColor = (typeof defaultColorsNames)[number];
 export type SettingsColorMap = Record<SettingsColor, string>;
 export type Settings = {
   registrationAllowed: boolean;
