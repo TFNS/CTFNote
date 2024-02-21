@@ -14,13 +14,17 @@ export type Maybe<T> = T | null;
 
 /* CTFNote Types */
 
-export type Profile = {
+export type PublicProfile = {
   id: Id<Profile>;
   username: string;
   role: Role;
   description: string;
   color: string;
   nodeId: string;
+};
+
+export type Profile = PublicProfile & {
+  lastactive: string;
 };
 
 export type Me = {
