@@ -47,7 +47,14 @@
         :tasks="sortedTasks"
         :display-mode="displayMode"
       />
-      <task-table v-else :ctf="ctf" :tasks="sortedTasks" />
+      <task-table-dense
+        v-else-if="displayMode == 'tabledense'"
+        :ctf="ctf"
+        :tasks="sortedTasks" />
+      <task-table
+        v-else
+        :ctf="ctf"
+        :tasks="sortedTasks" />
     </template>
     <div v-else class="text-center col">
       <div class="row q-gutter-md justify-center">
@@ -112,16 +119,17 @@ import TaskImportDialogVue from '../Dialogs/TaskImportDialog.vue';
 import TaskExportDialogVue from '../Dialogs/TaskExportDialog.vue';
 import TaskCards from './TaskCards.vue';
 import TaskTable from './TaskTable.vue';
+import TaskTableDense from './TaskTableDense.vue';
 import keys from '../../injectionKeys';
 import { tagsSortFn } from 'src/ctfnote/tags';
 import { Platform } from 'quasar';
 
-const displayOptions = ['classic', 'dense', 'ultradense', 'table'] as const;
+const displayOptions = ['classic', 'dense', 'ultradense', 'table', 'tabledense'] as const;
 
 export type DisplayMode = (typeof displayOptions)[number];
 
 export default defineComponent({
-  components: { TaskCards, TaskTable },
+  components: { TaskCards, TaskTable, TaskTableDense },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
   },
@@ -193,7 +201,7 @@ export default defineComponent({
       return this.ctf.tasks;
     },
     useCard() {
-      return this.displayMode != 'table';
+      return this.displayMode != 'table' && this.displayMode != 'tabledense';
     },
     tags() {
       return [
