@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <q-chip :style="style" text-color="white" class="text-center outer-chip">
-      <span class="user-chip">
-        {{ profile.username }}
-      </span>
-    </q-chip>
-  </div>
+  <q-chip :style="style" text-color="white" class="text-center outer-chip">
+    <span class="user-chip">
+      {{ profile.username }}
+    </span>
+  </q-chip>
 </template>
 
 <script lang="ts">

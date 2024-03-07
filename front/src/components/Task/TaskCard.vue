@@ -20,7 +20,9 @@
     </q-card-section>
     <q-separator v-show="!isUltraDense" inset />
     <q-card-section v-if="!isDense">
-      <task-player-list :task="task" style="min-height: 36px" />
+      <div class="row" style="min-height: 36px">
+        <task-player-list :task="task" />
+      </div>
     </q-card-section>
     <q-card-section v-show="!isUltraDense" class="q-mb-xs">
       <div
