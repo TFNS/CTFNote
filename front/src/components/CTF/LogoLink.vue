@@ -23,7 +23,10 @@ export default defineComponent({
   computed: {
     style() {
       return this.ctf.logoUrl
-        ? { '--logo-url': `url(${this.ctf.logoUrl})` }
+        ? {
+            '--logo-url': `url(${this.ctf.logoUrl})`,
+            'background-color': '#000'
+          }
         : { 'background-color': 'var(--q-primary)' };
     },
     icon() {
@@ -38,5 +41,6 @@ export default defineComponent({
   background: var(--logo-url);
   background-size: cover;
   background-origin: 50% 50%;
+  background-position: center;
 }
 </style>
