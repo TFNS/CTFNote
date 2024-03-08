@@ -3,16 +3,11 @@
     <template v-if="$q.screen.gt.sm">
       <q-separator dark vertical />
       <div class="row items-center justify-center">
-        <q-btn
-          class="q-mr-sm"
-          type="a"
-          target="_blank"
-          :href="ctf.ctfUrl"
+        <logo-link
           flat
-          icon="language"
-          size="sm"
-          round
-        />
+          dense
+          class="q-mr-sm logo-link"
+          :ctf="ctf" />
         <q-btn flat no-caps :to="ctf.tasksLink">{{ ctf.title }}</q-btn>
       </div>
     </template>
@@ -26,10 +21,11 @@ import { Id, Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { Task } from 'src/generated/graphql';
 import { defineComponent } from 'vue';
+import LogoLink from '../CTF/LogoLink.vue';
 import TaskListMenu from '../Utils/TaskListMenu.vue';
 
 export default defineComponent({
-  components: { TaskListMenu },
+  components: { LogoLink, TaskListMenu },
   props: {
     ctfId: { type: Number as unknown as () => Id<Ctf>, required: true },
     taskId: { type: Number as unknown as () => Id<Task> | null, default: null },
@@ -41,4 +37,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+  .logo-link >>> .q-icon {
+    transform: scale(0.8);
+  }
+</style>
