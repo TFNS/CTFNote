@@ -6,9 +6,17 @@
         <logo-link
           flat
           dense
-          class="q-mr-sm logo-link"
-          :ctf="ctf" />
-        <q-btn flat no-caps :to="ctf.tasksLink">{{ ctf.title }}</q-btn>
+          class="q-mx-sm logo-link"
+          :ctf="ctf"
+        />
+        <q-btn
+          flat
+          no-caps
+          style="padding-left: 12px; padding-right: 12px;"
+          :to="ctf.tasksLink"
+        >
+          {{ ctf.title }}
+        </q-btn>
       </div>
     </template>
     <q-separator v-show="ctf.tasks.length" dark vertical />

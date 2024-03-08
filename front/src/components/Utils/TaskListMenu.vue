@@ -1,6 +1,10 @@
 <template>
-  <div class="text-h6">
-    <q-btn-dropdown stretch flat round>
+  <div>
+    <q-btn-dropdown
+      flat
+      no-caps
+      style="padding-left: 14px; padding-right: 8px;"
+    >
       <template #label>
         <div class="row q-gutter-md items-center">
           <task-menu v-if="task" :task="task" :context-menu="true" />
@@ -59,7 +63,7 @@ export default defineComponent({
       if (this.task) {
         return this.task.title;
       }
-      return 'Open task';
+      return 'Open Task';
     },
     sortedTasks() {
       return this.ctf.tasks
