@@ -35,7 +35,7 @@ export default defineComponent({
     );
     onFlag((task) =>
       globalNotify({
-        message: `Task ${task.title} solved!$`,
+        message: `Task ${task.title} solved!`,
         icon: 'flag',
         tag: `onFlag:${task.ctfId}:${task.id}`,
       })
