@@ -24,7 +24,9 @@
         icon="search"
         class="q-mr-xs"
         @click="openSearchDialog()"
-      />
+      >
+        <q-tooltip>Global search</q-tooltip>
+      </q-btn>
       <q-btn-dropdown
         flat
         no-caps

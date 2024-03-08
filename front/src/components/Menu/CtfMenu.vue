@@ -20,6 +20,7 @@
         style="padding-left: 12px; padding-right: 12px;"
         :to="ctf.tasksLink"
       >
+        <q-tooltip>Open tasks view</q-tooltip>
         <div class="ellipsis" style="max-width: 285px;">
           {{ ctf.title }}
         </div>
@@ -32,7 +33,9 @@
         icon="toc"
         class="q-mr-xs"
         :to="ctf.tasksLink"
-      />
+      >
+        <q-tooltip>Open tasks view</q-tooltip>
+      </q-btn>
     </div>
 
     <q-separator v-if="$q.screen.gt.xs" v-show="ctf.tasks.length" dark vertical />
