@@ -1,10 +1,12 @@
 <template>
-  <user-badge
-    v-for="p in playersWithActive"
-    :key="p.player.nodeId"
-    :profile="p.player"
-    :active="p.active"
-  />
+  <div class="row">
+    <user-badge
+      v-for="p in playersWithActive"
+      :key="p.player.nodeId"
+      :profile="p.player"
+      :active="p.active"
+    />
+  </div>
 </template>
 
 <script lang="ts">
