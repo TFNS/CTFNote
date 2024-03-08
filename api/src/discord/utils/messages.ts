@@ -176,6 +176,8 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
       const channel = messages[0].channel;
       if (channel.type !== ChannelType.GuildText) return;
 
+      if (messages.length < 2) return; // don't include channels with one message, since that is only the bot message
+
       result.push(`## ${channel.name}`);
 
       messages.forEach((message) => {
