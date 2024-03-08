@@ -27,44 +27,39 @@
       />
       <q-btn-dropdown
         flat
+        no-caps
         :label="dropDownLabel"
-        split
-        align="right"
-        content-class="drop-menu"
-        :to="{ name: dropDownLink }"
+        class="q-pr-sm"
+        :class="{ 'q-pl-sm': dropDownLabel == undefined }"
       >
-        <q-list class="text-center">
+      <q-list class="text-center" dense>
           <slot name="dropdown" />
-          <q-item>
-            <q-item-section>
-              <div>
-                <q-toggle
-                  v-model="darkMode"
-                  title="Switch theme"
-                  size="lg"
-                  checked-icon="brightness_3"
-                  unchecked-icon="brightness_7"
-                />
-              </div>
-            </q-item-section>
+
+          <q-separator v-if="showLogout" inset spaced />
+
+          <q-item style="padding-left: 4px;">
+            <q-toggle
+              v-model="darkMode"
+              label="Switch theme"
+              checked-icon="brightness_3"
+              unchecked-icon="brightness_7"
+            />
           </q-item>
-          <q-item>
-            <q-item-section>
-              <div>
-                <q-toggle
-                  v-model="liveMode"
-                  title="Show secrets"
-                  size="lg"
-                  checked-icon="visibility"
-                  unchecked-icon="visibility_off"
-                />
-              </div>
-            </q-item-section>
+          <q-item style="padding-left: 4px;" v-if="showLogout">
+            <q-toggle
+              v-model="liveMode"
+              label="Show secrets"
+              checked-icon="visibility"
+              unchecked-icon="visibility_off"
+            />
           </q-item>
 
           <q-separator v-if="showLogout" inset spaced />
 
           <q-item v-if="showLogout" clickable @click="logout">
+            <q-item-section side>
+              <q-avatar icon="logout" />
+            </q-item-section>
             <q-item-section>
               <q-item-label>Logout</q-item-label>
             </q-item-section>
@@ -86,7 +81,7 @@ import SearchDialogVue from '../Dialogs/SearchDialog.vue';
 export default defineComponent({
   components: { CtfNoteLink },
   props: {
-    dropDownLabel: { type: String, required: true },
+    dropDownLabel: { type: String },
     dropDownLink: { type: String, required: true },
     showLogout: { type: Boolean, default: false },
     showSearch: { type: Boolean, default: false },
@@ -125,7 +120,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
   .ctfnote-logo-xs {
     padding-left: 8px;
     padding-right: 8px;
@@ -134,9 +129,5 @@ export default defineComponent({
   .ctfnote-logo-lg {
     padding-left: 8px;
     padding-right: 11px;
-  }
-
-  .drop-menu {
-    min-width: 150px !important;
   }
 </style>
