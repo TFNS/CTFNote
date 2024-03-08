@@ -1,6 +1,6 @@
 <template>
   <base-menu-bar
-    :drop-down-label="me.profile.username"
+    :drop-down-label="$q.screen.gt.xs ? me.profile.username : undefined"
     drop-down-link="settings"
     :show-logout="true"
     :show-search="true"

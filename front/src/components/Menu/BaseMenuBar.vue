@@ -29,6 +29,8 @@
         flat
         no-caps
         :label="dropDownLabel"
+        :dropdown-icon="$q.screen.xs && showLogout ? 'more_vert' : 'arrow_drop_down'"
+        :no-icon-animation="$q.screen.xs && showLogout"
         class="q-pr-sm"
         :class="{ 'q-pl-sm': dropDownLabel == undefined }"
       >
@@ -45,7 +47,7 @@
               unchecked-icon="brightness_7"
             />
           </q-item>
-          <q-item style="padding-left: 4px;" v-if="showLogout">
+          <q-item v-if="showLogout" style="padding-left: 4px;">
             <q-toggle
               v-model="liveMode"
               label="Show secrets"
@@ -81,7 +83,7 @@ import SearchDialogVue from '../Dialogs/SearchDialog.vue';
 export default defineComponent({
   components: { CtfNoteLink },
   props: {
-    dropDownLabel: { type: String },
+    dropDownLabel: { type: String, default: undefined },
     dropDownLink: { type: String, required: true },
     showLogout: { type: Boolean, default: false },
     showSearch: { type: Boolean, default: false },
