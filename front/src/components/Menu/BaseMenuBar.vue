@@ -7,16 +7,16 @@
           <q-btn v-if="$q.screen.gt.xs" flat no-caps>CTFNote</q-btn>
         </ctf-note-link>
         <slot name="after-title" />
-        <q-btn
-          v-if="showSearch"
-          flat
-          round
-          dense
-          icon="search"
-          class="q-mr-xs"
-          @click="openSearchDialog()"
-        />
       </q-toolbar-title>
+      <q-btn
+        v-if="showSearch"
+        flat
+        round
+        dense
+        icon="search"
+        class="q-mr-xs"
+        @click="openSearchDialog()"
+      />
       <q-btn-dropdown
         flat
         :label="dropDownLabel"
