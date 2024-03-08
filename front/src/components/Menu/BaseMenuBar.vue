@@ -3,8 +3,16 @@
     <q-toolbar>
       <q-toolbar-title class="row items-center q-gutter-md">
         <ctf-note-link name="index" class="text-white" underline>
-          <q-img src="/favicon-transparent.svg" width="30px" class="q-mr-md" />
-          <q-btn v-if="$q.screen.gt.xs" flat no-caps>CTFNote</q-btn>
+          <q-btn
+            flat
+            no-caps
+            :class="{ 'ctfnote-logo-xs': $q.screen.xs, 'ctfnote-logo-lg': $q.screen.gt.xs }">
+            <q-img
+              src="/favicon-transparent.svg"
+              width="30px"
+              :class="{ 'q-mr-sm': $q.screen.gt.xs }" />
+            <span v-if="$q.screen.gt.xs">CTFNote</span>
+          </q-btn>
         </ctf-note-link>
         <slot name="after-title" />
       </q-toolbar-title>
@@ -118,7 +126,17 @@ export default defineComponent({
 </script>
 
 <style>
-.drop-menu {
-  min-width: 150px !important;
-}
+  .ctfnote-logo-xs {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .ctfnote-logo-lg {
+    padding-left: 8px;
+    padding-right: 11px;
+  }
+
+  .drop-menu {
+    min-width: 150px !important;
+  }
 </style>
