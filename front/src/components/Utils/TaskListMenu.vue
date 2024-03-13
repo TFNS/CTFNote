@@ -8,17 +8,17 @@
       </template>
       <template #default>
         <q-list>
-          <q-item v-for="t of sortedTasks" :key="t.nodeId" clickable>
-            <task-menu v-if="t" :task="t" :context-menu="true" />
-            <q-item-section @click="taskLink(t)">
+          <q-item v-for="task of sortedTasks" :key="task.nodeId" clickable>
+            <task-menu v-if="task" :task="task" :context-menu="true" />
+            <q-item-section @click="taskLink(task)">
               <q-item-label>
                 <div class="row" style="max-width: 200px">
                   <div class="col">
                     <div class="ellipsis">
-                      {{ t.title }}
+                      {{ task.title }}
                     </div>
                   </div>
-                  <div v-show="t.solved" class="col col-auto q-ml-xs">
+                  <div v-show="task.solved" class="col col-auto q-ml-xs">
                     <q-badge icon="flag" color="green" rounded>
                       <q-icon name="flag" />
                     </q-badge>
@@ -47,12 +47,12 @@ export default defineComponent({
     taskId: { type: Number, default: null },
   },
   computed: {
-    task() {
+    currentTask() {
       return this.ctf.tasks.find((t) => t.id == this.taskId);
     },
     title() {
-      if (this.task) {
-        return this.task.title;
+      if (this.currentTask) {
+        return this.currentTask.title;
       }
       return 'Open task';
     },
