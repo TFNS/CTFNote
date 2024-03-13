@@ -2,8 +2,17 @@
   <div class="text-h6">
     <q-btn-dropdown stretch flat round>
       <template #label>
-        <div class="row q-gutter-md items-center">
+        <div class="row q-gutter-sm items-center">
+          <task-menu v-if="currentTask" :task="currentTask" :context-menu="true" />
+
           <div>{{ title }}</div>
+
+          <task-tags-list-condensed
+            v-if="currentTask"
+            style="text-transform: none; font-weight: normal;"
+            dense
+            :tags="currentTask.assignedTags"
+          />
         </div>
       </template>
       <template #default>
