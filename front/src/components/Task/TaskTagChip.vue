@@ -1,6 +1,16 @@
 <template>
-  <q-chip class="text-white" clickable :style="style" @click="filterTag(name)">
-    {{ name }}
+  <q-chip
+    class="text-white"
+    clickable
+    :style="style"
+    @click="filterTag(name)"
+  >
+    <span
+      style="max-width: 120px"
+      class="ellipsis"
+    >
+      {{ name }}
+    </span>
   </q-chip>
 </template>
 
@@ -25,5 +35,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>
