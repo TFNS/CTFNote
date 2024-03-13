@@ -3,6 +3,7 @@
     <task-tag-chip
       v-if="first_tag !== undefined"
       :name="first_tag.tag"
+      :dense="dense"
     />
 
     <q-chip
@@ -10,6 +11,7 @@
       text-color="white"
       color="black"
       class="non-selectable"
+      :dense="dense"
     >
       <q-tooltip
         anchor="center right"
@@ -19,17 +21,18 @@
         transition-show="fade"
         transition-hide="fade"
       >
-        <q-card bordered style="border-radius: 46px !important;">
+        <q-card bordered style="border-radius: 23px !important;">
           <q-card-section class="tooltip-section" style="padding: 4px;">
             <task-tag-chip
               v-for="tag in remaining_tags"  
               :key="tag.nodeId"
               :name="tag.tag"
+              :dense="dense"
             />
           </q-card-section>
         </q-card>
       </q-tooltip>
-      
+
       <span class="tag-chip">
         +{{ tags.length - 1 }}
       </span>
@@ -47,6 +50,7 @@ export default defineComponent({
     TaskTagChip,
   },
   props: {
+    dense: { type: Boolean, default: false },
     tags: { type: Object as () => Tag[], required: true },
   },
   setup() {
