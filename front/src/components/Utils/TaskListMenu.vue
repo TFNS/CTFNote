@@ -8,9 +8,10 @@
       </template>
       <template #default>
         <q-list>
-          <q-item v-for="task of sortedTasks" :key="task.nodeId" clickable>
+          <q-item v-for="task of sortedTasks" :key="task.nodeId" @click="taskLink(task)" clickable>
             <task-menu v-if="task" :task="task" :context-menu="true" />
-            <q-item-section @click="taskLink(task)">
+
+            <q-item-section>
               <q-item-label>
                 <div class="row" style="max-width: 200px">
                   <div class="col">
@@ -26,6 +27,10 @@
                 </div>
               </q-item-label>
             </q-item-section>
+
+            <q-item-section side>
+              <task-tags-list-condensed :tags="task.assignedTags" />
+            </q-item-section>
           </q-item>
         </q-list>
       </template>
@@ -38,10 +43,14 @@ import { Ctf, Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import TaskMenu from '../Task/TaskMenu.vue';
+import TaskTagsListCondensed from '../Task/TaskTagsListCondensed.vue';
 import { tagsSortFn } from 'src/ctfnote/tags';
 
 export default defineComponent({
-  components: { TaskMenu },
+  components: {
+    TaskMenu,
+    TaskTagsListCondensed,
+  },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
     taskId: { type: Number, default: null },

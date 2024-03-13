@@ -25,7 +25,7 @@ export default defineComponent({
   },
   setup() {
     return {
-      filterTag: injectStrict(keys.filterTag),
+      filterTag: injectStrict(keys.filterTag, () => {return null;}),
     };
   },
   computed: {
