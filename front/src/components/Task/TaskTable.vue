@@ -40,7 +40,7 @@
           </ctf-note-link>
         </q-td>
         <q-td key="actions" :props="props" class="no-click" auto-width>
-          <task-btn-group :task="props.row" />
+          <task-btn-group style="width: 76px" :task="props.row" />
         </q-td>
       </q-tr>
     </template>
@@ -97,7 +97,6 @@ export default defineComponent({
       col('actions', {
         label: '',
         align: 'right',
-        style: 'width:120px;max-width:120px;',
       }),
     ];
     const pagination = {
