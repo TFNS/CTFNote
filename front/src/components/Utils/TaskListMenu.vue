@@ -16,15 +16,15 @@
         </div>
       </template>
       <template #default>
-        <q-list dense>
-          <q-item v-for="task of sortedTasks" :key="task.nodeId" clickable style="height: 40px" @click="taskLink(task)">
+        <q-list>
+          <q-item v-for="task of sortedTasks" :key="task.nodeId" clickable style="height: 46px" @click="taskLink(task)">
             <task-menu v-if="task" :task="task" :context-menu="true" />
 
             <q-item-section>
               <q-item-label>
                 <div class="row" style="max-width: 400px">
                   <div style="width: 24px" class="col col-auto q-mr-md">
-                    <task-badge dense :task="task" />
+                    <task-badge :task="task" />
                   </div>
 
                   <div class="col">
@@ -38,7 +38,7 @@
             </q-item-section>
 
             <q-item-section side>
-              <task-tags-list-condensed dense :tags="task.assignedTags" />
+              <task-tags-list-condensed :tags="task.assignedTags" />
             </q-item-section>
           </q-item>
         </q-list>

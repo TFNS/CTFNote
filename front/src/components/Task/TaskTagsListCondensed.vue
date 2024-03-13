@@ -71,6 +71,6 @@ export default defineComponent({
 
 <style>
   .tag-smaller-width span {
-    max-width: 84px !important;
+    max-width: 71px !important;
   }
 </style>

@@ -24,7 +24,7 @@
               tag="label"
             >
               <q-item-section class="text-center">
-                <user-badge :dense="dense" :profile="p.player" :active="p.active" />
+                <user-badge :profile="p.player" :active="p.active" />
               </q-item-section>
             </q-item>
           </q-list>
@@ -44,7 +44,6 @@ export default defineComponent({
   components: { UserBadge },
   props: {
     task: { type: Object as () => Task, required: true },
-    dense: { type: Boolean, default: false },
     displayInCorner: { type: Boolean, default: false },
   },
   setup() {

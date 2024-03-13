@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-chip :dense="dense" :style="style" text-color="white" class="text-center outer-chip">
+    <q-chip :style="style" text-color="white" class="text-center outer-chip">
       <span class="user-chip">
         {{ profile.username }}
       </span>
@@ -16,7 +16,6 @@ export default defineComponent({
   props: {
     profile: { type: Object as () => PublicProfile, required: true },
     active: { type: Boolean, default: true },
-    dense: { type: Boolean, default: false },
   },
   setup() {
     return {};
