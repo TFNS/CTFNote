@@ -2,6 +2,7 @@
   <div class="row">
     <task-tag-chip
       v-if="first_tag !== undefined"
+      :class="{ 'tag-smaller-width': tags.length > 1 }"
       :name="first_tag.tag"
       :dense="dense"
     />
@@ -25,7 +26,7 @@
         <q-card bordered style="border-radius: 23px !important;">
           <q-card-section class="tooltip-section" style="padding: 4px;">
             <task-tag-chip
-              v-for="tag in remaining_tags"  
+              v-for="tag in remaining_tags"
               :key="tag.nodeId"
               :name="tag.tag"
               :dense="dense"
@@ -67,3 +68,9 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+  .tag-smaller-width span {
+    max-width: 84px !important;
+  }
+</style>
