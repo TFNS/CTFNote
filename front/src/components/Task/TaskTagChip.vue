@@ -1,7 +1,8 @@
 <template>
   <q-chip
     class="text-white"
-    clickable
+    :clickable="clickable"
+    :ripple="clickable"
     :style="style"
     @click="filterTag(name)"
   >
@@ -24,8 +25,21 @@ export default defineComponent({
     name: { type: String, default: '?' },
   },
   setup() {
+    let filterTag;
+    let clickable;
+
+    // Check if keys.filterTag exists
+    try {
+      filterTag = injectStrict(keys.filterTag);
+      clickable = true;
+    } catch (e) {
+      filterTag = () => {return null;};
+      clickable = false;
+    }
+
     return {
-      filterTag: injectStrict(keys.filterTag, () => {return null;}),
+      filterTag,
+      clickable,
     };
   },
   computed: {

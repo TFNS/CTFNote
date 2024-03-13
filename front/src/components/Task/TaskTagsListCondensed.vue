@@ -11,6 +11,7 @@
       text-color="white"
       color="black"
       class="non-selectable"
+      :ripple="false"
       :dense="dense"
     >
       <q-tooltip
