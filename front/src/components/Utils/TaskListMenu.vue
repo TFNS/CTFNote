@@ -3,13 +3,13 @@
     <q-btn-dropdown stretch flat round>
       <template #label>
         <div class="row q-gutter-md items-center">
-          <task-menu v-if="task" :task="task" :context-menu="true" />
           <div>{{ title }}</div>
         </div>
       </template>
       <template #default>
         <q-list>
           <q-item v-for="t of sortedTasks" :key="t.nodeId" clickable>
+            <task-menu v-if="t" :task="t" :context-menu="true" />
             <q-item-section @click="taskLink(t)">
               <q-item-label>
                 <div class="row" style="max-width: 200px">
@@ -25,11 +25,6 @@
                   </div>
                 </div>
               </q-item-label>
-            </q-item-section>
-            <q-item-section side>
-              <q-btn icon="settings" flat round>
-                <task-menu v-if="t" :task="t" :context-menu="false" />
-              </q-btn>
             </q-item-section>
           </q-item>
         </q-list>
