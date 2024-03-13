@@ -1,19 +1,21 @@
 <template>
   <q-badge
     v-if="showBadge"
-    class="solved-badge"
-    floating
+    :class="{ 'solved-badge': displayInCorner }"
+    :floating="displayInCorner"
     :color="taskIconColor"
   >
     <q-icon :name="taskIcon" />
     <q-tooltip
       v-if="players.length"
-      anchor="top right"
-      self="top left"
+      anchor="center left"
+      self="center right"
       :offset="[0, 0]"
       class="transparent"
+      transition-show="fade"
+      transition-hide="fade"
     >
-      <q-card dense bordered>
+      <q-card bordered style="border-radius: 23px !important;">
         <q-card-section class="tooltip-section">
           <q-list dense>
             <q-item
@@ -22,7 +24,7 @@
               tag="label"
             >
               <q-item-section class="text-center">
-                <user-badge :profile="p.player" :active="p.active" />
+                <user-badge :dense="dense" :profile="p.player" :active="p.active" />
               </q-item-section>
             </q-item>
           </q-list>
@@ -42,6 +44,8 @@ export default defineComponent({
   components: { UserBadge },
   props: {
     task: { type: Object as () => Task, required: true },
+    dense: { type: Boolean, default: false },
+    displayInCorner: { type: Boolean, default: false },
   },
   setup() {
     const team = ctfnote.profiles.injectTeam();
@@ -105,6 +109,6 @@ export default defineComponent({
 }
 .tooltip-section,
 .tooltip-section label {
-  padding: 2px 4px !important;
+  padding: 2px 2px !important;
 }
 </style>

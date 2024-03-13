@@ -24,9 +24,7 @@
               <q-item-label>
                 <div class="row" style="max-width: 400px">
                   <div style="width: 24px" class="col col-auto q-mr-md">
-                    <q-badge v-show="task.solved" icon="flag" color="positive">
-                      <q-icon name="flag" />
-                    </q-badge>
+                    <task-badge dense :task="task" />
                   </div>
 
                   <div class="col">
@@ -54,12 +52,14 @@ import { Ctf, Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import TaskMenu from '../Task/TaskMenu.vue';
+import TaskBadge from '../Task/TaskBadge.vue';
 import TaskTagsListCondensed from '../Task/TaskTagsListCondensed.vue';
 import { tagsSortFn } from 'src/ctfnote/tags';
 
 export default defineComponent({
   components: {
     TaskMenu,
+    TaskBadge,
     TaskTagsListCondensed,
   },
   props: {
