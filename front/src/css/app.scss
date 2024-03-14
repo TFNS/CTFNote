@@ -24,3 +24,21 @@ body.live-mode .blur {
     color: $primary;
   }
 }
+
+// Add border radius to filled input design
+.q-field--filled .q-field__control {
+  border-radius: 4px;
+}
+
+// Curve animate line below text fields around border radius
+.q-field--filled .q-field__control::after {
+  height: 20px;
+  background: transparent;
+  border-bottom: 2px solid currentColor !important;
+  border-radius: 4px;
+}
+
+// Set default highlighted label color to white on dark theme
+.q-field--filled.q-field--dark .q-field__control-container {
+  color: white;
+}
