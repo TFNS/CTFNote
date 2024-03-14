@@ -1,23 +1,32 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide">
-    <q-card style="min-width: 80%">
-      <q-card-section class="text-h6"> Search for CTF/Task </q-card-section>
-      <q-separator />
-      <q-card-section>
+  <q-dialog position="top" ref="dialogRef" @hide="onDialogHide">
+    <q-card style="width: 100%; max-width: 1000px">
+      <q-card-section class="row items-center no-wrap">
+          <div class="text-h6 ellipsis">
+            Global search
+          </div>
+          <q-space />
+          <q-chip square dense class="keycap q-ml-md">ctrl</q-chip>+<q-chip square dense class="keycap">k</q-chip>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
         <q-input
           v-model="searchText"
           filled
-          label="What are you searching for?"
-          hint="Search for tag or title of CTF or task"
+          label="Search for CTF, task or tag"
           autofocus
           :loading="loading"
           @update:model-value="onSearchChange"
           @keypress.enter="submit"
-        />
+        >
+          <template v-slot:prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
       </q-card-section>
 
-      <q-card-section v-if="!!items.length">
-        <q-list bordered separator>
+      <q-card-section class="q-pt-none" v-if="!!items.length">
+        <q-list bordered separator style="border-radius: 4px;">
           <q-item
             v-for="(item, i) in items"
             :key="item.nodeId"
@@ -26,26 +35,26 @@
             class="col"
             @click="onItemSelected(item)"
           >
-            <q-item-section class="col-3">
+            <q-item-section side top class="justify-center" style="width: 54px;">
+              <q-badge v-if="item.__typename == 'Ctf'" color="primary" label="CTF" style="margin: auto;" />
+              <q-badge v-else color="secondary" :label="item.__typename" />
+            </q-item-section>
+
+            <q-item-section>
               <span>
                 {{ !!item.ctf ? item.ctf.title + ' / ' : '' }}
                 <b>{{ item.title }}</b>
               </span>
             </q-item-section>
-            <q-item-section side class="col-8">
+
+            <q-item-section side>
               <task-tags-list
                 v-if="item.assignedTags"
                 :tags="item.assignedTags"
-              ></task-tags-list>
-            </q-item-section>
-            <q-item-section side top class="col-1">
-              <q-badge color="teal" :label="item.__typename" />
+              />
             </q-item-section>
           </q-item>
         </q-list>
-      </q-card-section>
-      <q-card-section>
-        <span>This search bar can also be opened by using CTRL+K</span>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -176,4 +185,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.keycap {
+  background-color: rgba(200, 200, 200, 0.4);
+}
+</style>
