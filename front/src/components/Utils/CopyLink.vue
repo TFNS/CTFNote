@@ -6,7 +6,7 @@
     :model-value="link"
     readonly
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <q-icon name="link" />
     </template>
     <template #after>

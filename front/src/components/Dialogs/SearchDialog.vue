@@ -1,5 +1,5 @@
 <template>
-  <q-dialog position="top" ref="dialogRef" @hide="onDialogHide">
+  <q-dialog ref="dialogRef" position="top" @hide="onDialogHide">
     <q-card style="width: 100%; max-width: 1000px">
       <q-card-section class="row items-center no-wrap">
           <div class="text-h6 ellipsis">
@@ -19,13 +19,13 @@
           @update:model-value="onSearchChange"
           @keypress.enter="submit"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <q-icon name="search" />
           </template>
         </q-input>
       </q-card-section>
 
-      <q-card-section class="q-pt-none" v-if="!!items.length">
+      <q-card-section v-if="!!items.length" class="q-pt-none">
         <q-list bordered separator style="border-radius: 4px;">
           <q-item
             v-for="(item, i) in items"

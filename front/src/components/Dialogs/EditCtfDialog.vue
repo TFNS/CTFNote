@@ -1,5 +1,5 @@
 <template>
-  <q-dialog no-backdrop-dismiss ref="dialogRef" @hide="onDialogHide">
+  <q-dialog ref="dialogRef" no-backdrop-dismiss @hide="onDialogHide">
     <q-card class="q-dialog-plugin ctfnote-dialog">
       <q-form @submit="submit">
         <q-card-section class="row items-center no-wrap">
@@ -15,14 +15,14 @@
             <div class="row q-col-gutter-sm">
               <div class="col">
                 <q-input v-model="form.title" required label="Title" filled dense>
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <q-icon name="title" />
                   </template>
                 </q-input>
               </div>
               <div class="col">
                 <q-input v-model="form.ctfUrl" label="CTF link" filled dense>
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <q-icon name="link" />
                   </template>
                 </q-input>
@@ -31,16 +31,16 @@
             
             <div class="row q-col-gutter-sm">
               <div class="col">
-                <logo-field dense v-model="form.logoUrl" />
+                <logo-field v-model="form.logoUrl" dense />
               </div>
             </div>
 
             <div class="row q-col-gutter-sm q-mb-sm">
               <div class="col">
                 <datetime-input
+                  v-model="form.startTime"
                   filled
                   dense
-                  v-model="form.startTime"
                   label="Start on"
                   class="datetime-input-no-error"
                   @update:model-value="
@@ -57,9 +57,9 @@
               </div>
               <div class="col">
                 <datetime-input
+                  v-model="form.endTime"
                   filled
                   dense
-                  v-model="form.endTime"
                   label="End on"
                   lazy-rules
                   :class="{ 'datetime-input-no-error': checkValidDateRange }"
@@ -75,7 +75,7 @@
             <div class="row q-col-gutter-sm q-mb-sm">
               <div class="col">
                 <q-input v-model="form.ctftimeUrl" label="CTFTime Link" filled dense>
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <q-icon name="schedule" />
                   </template>
                 </q-input>
@@ -90,7 +90,7 @@
                   filled
                   dense
                 >
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <q-icon name="fitness_center" />
                   </template>
                 </q-input>
@@ -100,8 +100,8 @@
             <div class="row q-col-gutter-md">
               <div class="col">
                 <q-input
-                  filled
                   v-model="form.description"
+                  filled
                   type="textarea"
                   label="Description (Markdown)"
                 />

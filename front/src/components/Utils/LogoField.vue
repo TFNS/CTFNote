@@ -1,7 +1,7 @@
 <template>
   <div>
-    <q-input dense filled v-model="model" clearable label="Logo link">
-      <template v-slot:prepend>
+    <q-input v-model="model" dense filled clearable label="Logo link">
+      <template #prepend>
         <q-icon name="image" />
       </template>
       <template #after>

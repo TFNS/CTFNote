@@ -11,14 +11,14 @@
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="role" class="full-width q-pt-none q-pb-md">
             <select-role
+              v-model="role"
               filled
               dense
               options-dense
               class="q-pb-xs"
-              v-model="role"
               label="Role"
             >
-            <template v-slot:prepend>
+            <template #prepend>
               <q-icon name="people_alt" />
             </template>
             </select-role>

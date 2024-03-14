@@ -14,7 +14,7 @@
           autofocus
           @keypress.enter="submit"
         >
-          <template v-slot:prepend>
+          <template #prepend>
             <q-icon name="schedule" />
           </template>
         </q-input>
