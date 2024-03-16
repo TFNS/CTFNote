@@ -46,24 +46,26 @@ export default defineComponent({
         .dialog({
           title: 'Edit credentials',
           color: 'primary',
+          class: 'compact-dialog',
           prompt: {
             model: this.ctf.credentials ?? '',
             type: 'textarea',
+            label: 'Credentials (Markdown)',
+            filled: true,
           },
           ok: {
-            label: 'save',
+            label: 'Save',
             color: 'positive',
           },
           cancel: {
             label: 'Cancel',
-            color: 'warning',
             flat: true,
           },
         })
         .onOk((credentials: string) => {
           const opts = {
             message: 'Credentials updated!',
-            icon: 'lock',
+            icon: 'key',
           };
           void this.resolveAndNotify(
             this.updateCtfCredentials(this.ctf, credentials),

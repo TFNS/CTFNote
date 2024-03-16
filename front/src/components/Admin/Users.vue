@@ -158,16 +158,18 @@ export default defineComponent({
     removeUser(user: User) {
       this.$q
         .dialog({
-          title: `Delete ${user.login ?? ''} ?`,
+          title: `Delete ${user.login ?? ''}?`,
           message: 'This operation is irreversible.',
+          color: 'primary',
+          class: 'compact-dialog',
           cancel: {
             label: 'Cancel',
-            color: 'warning',
             flat: true,
           },
           ok: {
             label: `Delete ${user.login}`,
             color: 'negative',
+            flat: true,
           },
         })
         .onOk(() => {
@@ -199,19 +201,20 @@ export default defineComponent({
       if (profile.id == this.me?.profile?.id) {
         this.$q
           .dialog({
-            title: 'Are you sure ?',
-            color: 'negative',
+            title: 'Are you sure?',
+            color: 'primary',
+            class: 'compact-dialog',
             message:
-              'You are about to modify your own role, do you want to continue ?',
+              'You are about to modify your own role, do you want to continue?',
 
             cancel: {
               label: 'Cancel',
-              color: 'warning',
               flat: true,
             },
             ok: {
               label: `Change to ${roleStr}`,
               color: 'negative',
+              flat: true,
             },
           })
           .onOk(() => {
