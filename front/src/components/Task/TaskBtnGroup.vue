@@ -1,43 +1,11 @@
 <template>
   <div>
-    <div v-if="!dense" class="q-gutter-sm">
+    <component
+      :is="group ? 'q-btn-group' : 'div'"
+      :class="{ 'q-gutter-sm': !group }"
+    >
       <q-btn
-        v-touch-hold:2000.mouse="handleOnItClick"
-        round
-        size="sm"
-        :title="onItTitle"
-        :icon="onItIcon"
-        :color="onItColor"
-        @click="updateOnIt(!onIt)"
-      />
-      <q-btn
-        round
-        size="sm"
-        title="Enter flag"
-        icon="flag"
-        color="positive"
-        @click="solveTask(task)"
-      />
-      <q-btn
-        round
-        size="sm"
-        :title="`Edit ${task.title}`"
-        icon="edit"
-        color="warning"
-        @click="editTask(task)"
-      />
-      <q-btn
-        round
-        size="sm"
-        :title="`Delete ${task.title}`"
-        icon="delete"
-        color="negative"
-        @click="deleteTask(task)"
-      />
-    </div>
-
-    <q-btn-group v-if="dense">
-      <q-btn
+        v-if="showOpenTaskBtn"
         :to="openTaskRoute"
         round
         size="sm"
@@ -78,7 +46,7 @@
         color="negative"
         @click="deleteTask(task)"
       />
-    </q-btn-group>
+    </component>
   </div>
 </template>
 
@@ -90,7 +58,8 @@ import { RouteLocationRaw } from 'vue-router';
 
 export default defineComponent({
   props: {
-    dense: { type: Boolean, required: false },
+    group: { type: Boolean, required: false },
+    showOpenTaskBtn: { type: Boolean, required: false },
     task: { type: Object as () => Task, required: true },
   },
   setup() {
@@ -117,7 +86,7 @@ export default defineComponent({
       return { name: 'task', params };
     },
     onItColor() {
-      if (this.dense) {
+      if (this.group) {
         return this.onIt ? 'indigo-10' : 'indigo';
       }
       return this.onIt ? 'secondary' : 'primary';

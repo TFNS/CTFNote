@@ -45,7 +45,13 @@
         </q-td>
 
         <q-td key="actions" :props="props" class="no-click" auto-width>
-          <task-btn-group dense :ctf="ctf" :task="props.row" />
+          <task-btn-group
+            dense
+            group
+            show-open-task-btn
+            :ctf="ctf"
+            :task="props.row"
+          />
         </q-td>
       </q-tr>
     </template>
