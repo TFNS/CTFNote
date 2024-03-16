@@ -22,6 +22,7 @@ import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import EditCtfDialogVue from '../Dialogs/EditCtfDialog.vue';
+import { Dialog } from 'quasar';
 
 export default defineComponent({
   props: {
@@ -44,21 +45,28 @@ export default defineComponent({
       });
     },
     openDeleteCtfDialog() {
-      this.$q
-        .dialog({
-          title: `Delete ${this.ctf.title} ?`,
+      Dialog.create({
+        title: `Delete ${this.ctf.title}?`,
+        color: 'primary',
+        class: 'compact-dialog',
+        message: 'This will delete all the tasks, but not the pads.',
+        cancel: {
+          label: 'Cancel',
+          flat: true,
+        },
+        ok: {
           color: 'negative',
-          message: 'This will delete all the tasks, but not the pads.',
-          ok: 'Delete',
-          cancel: true,
-        })
-        .onOk(() => {
-          const opts = {
-            message: `CTF ${this.ctf.title} deleted!`,
-            icon: 'delete',
-          };
-          void this.resolveAndNotify(this.deleteCtf(this.ctf), opts);
-        });
+          label: 'Delete',
+          flat: true,
+        },
+      })
+      .onOk(() => {
+        const opts = {
+          message: `CTF ${this.ctf.title} deleted!`,
+          icon: 'delete',
+        };
+        void this.resolveAndNotify(this.deleteCtf(this.ctf), opts);
+      });
     },
   },
 });

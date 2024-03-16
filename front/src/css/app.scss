@@ -56,7 +56,8 @@ body.live-mode .blur {
   overflow: hidden;
 }
 
-.compact-dialog .q-dialog-plugin__form {
+.compact-dialog .q-dialog-plugin__form,
+.compact-dialog .q-dialog__message {
   padding-bottom: 8px;
 }
 

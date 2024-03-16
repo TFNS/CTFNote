@@ -86,10 +86,18 @@ export function useDeleteTaskPopup() {
   return (task: Task) => {
     Dialog.create({
       title: `Delete ${task.title}?`,
-      color: 'negative',
+      color: 'primary',
+      class: 'compact-dialog',
       message: 'This will delete the task, but not the pads.',
-      ok: 'Delete',
-      cancel: true,
+      cancel: {
+        label: 'Cancel',
+        flat: true,
+      },
+      ok: {
+        color: 'negative',
+        label: 'Delete',
+        flat: true,
+      },
     }).onOk(() => {
       void deleteTask(task);
     });
