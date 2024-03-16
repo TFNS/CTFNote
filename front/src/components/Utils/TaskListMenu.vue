@@ -1,10 +1,6 @@
 <template>
   <div>
-    <q-btn-dropdown
-      flat
-      no-caps
-      style="padding-left: 14px; padding-right: 8px;"
-    >
+    <q-btn-dropdown flat no-caps style="padding-left: 14px; padding-right: 8px">
       <template #label>
         <div class="row q-gutter-md items-center">
           <task-menu v-if="task" :task="task" :context-menu="true" />
@@ -14,7 +10,7 @@
               'task-list-label-xs': $q.screen.xs,
               'task-list-label-sm': $q.screen.sm,
               'task-list-label-md': $q.screen.gt.sm,
-              }"
+            }"
           >
             {{ title }}
           </div>
@@ -107,20 +103,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .task-list-label {
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
+.task-list-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
-  .task-list-label-xs {
-    max-width: calc(100vw - 305px);
-  }
+.task-list-label-xs {
+  max-width: calc(100vw - 305px);
+}
 
-  .task-list-label-sm {
-    max-width: calc(100vw - 490px);
-  }
+.task-list-label-sm {
+  max-width: calc(100vw - 490px);
+}
 
-  .task-list-label-md {
-    max-width: calc(100vw - 765px);
-  }
+.task-list-label-md {
+  max-width: calc(100vw - 765px);
+}
 </style>

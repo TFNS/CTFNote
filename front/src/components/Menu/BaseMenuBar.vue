@@ -6,11 +6,16 @@
           <q-btn
             flat
             no-caps
-            :class="{ 'ctfnote-logo-xs': $q.screen.xs, 'ctfnote-logo-lg': $q.screen.gt.xs }">
+            :class="{
+              'ctfnote-logo-xs': $q.screen.xs,
+              'ctfnote-logo-lg': $q.screen.gt.xs,
+            }"
+          >
             <q-img
               src="/favicon-transparent.svg"
               width="30px"
-              :class="{ 'q-mr-sm': $q.screen.gt.xs }" />
+              :class="{ 'q-mr-sm': $q.screen.gt.xs }"
+            />
             <span v-if="$q.screen.gt.xs">CTFNote</span>
           </q-btn>
         </ctf-note-link>
@@ -31,17 +36,19 @@
         flat
         no-caps
         :label="dropDownLabel"
-        :dropdown-icon="$q.screen.xs && showLogout ? 'more_vert' : 'arrow_drop_down'"
+        :dropdown-icon="
+          $q.screen.xs && showLogout ? 'more_vert' : 'arrow_drop_down'
+        "
         :no-icon-animation="$q.screen.xs && showLogout"
         class="q-pr-sm"
         :class="{ 'q-pl-sm': dropDownLabel == undefined }"
       >
-      <q-list class="text-center" dense>
+        <q-list class="text-center" dense>
           <slot name="dropdown" />
 
           <q-separator v-if="showLogout" inset spaced />
 
-          <q-item style="padding-left: 4px;">
+          <q-item style="padding-left: 4px">
             <q-toggle
               v-model="darkMode"
               label="Switch theme"
@@ -49,7 +56,7 @@
               unchecked-icon="brightness_7"
             />
           </q-item>
-          <q-item v-if="showLogout" style="padding-left: 4px;">
+          <q-item v-if="showLogout" style="padding-left: 4px">
             <q-toggle
               v-model="liveMode"
               label="Show secrets"
@@ -125,13 +132,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .ctfnote-logo-xs {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
+.ctfnote-logo-xs {
+  padding-left: 8px;
+  padding-right: 8px;
+}
 
-  .ctfnote-logo-lg {
-    padding-left: 8px;
-    padding-right: 11px;
-  }
+.ctfnote-logo-lg {
+  padding-left: 8px;
+  padding-right: 11px;
+}
 </style>

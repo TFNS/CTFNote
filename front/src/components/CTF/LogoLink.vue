@@ -11,12 +11,8 @@
     round
   >
     <q-tooltip>
-      <span v-if="ctf.ctfUrl">
-        Browse CTF website
-      </span>
-      <span v-else>
-        No CTF website set
-      </span>
+      <span v-if="ctf.ctfUrl"> Browse CTF website </span>
+      <span v-else> No CTF website set </span>
     </q-tooltip>
   </q-btn>
 </template>
@@ -34,7 +30,7 @@ export default defineComponent({
       return this.ctf.logoUrl
         ? {
             '--logo-url': `url(${this.ctf.logoUrl})`,
-            'background-color': '#000'
+            'background-color': '#000',
           }
         : { 'background-color': 'var(--q-primary)' };
     },
@@ -46,18 +42,18 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .logo {
-    background: var(--logo-url);
-    background-size: cover;
-    background-origin: 50% 50%;
-    background-position: center;
-  }
+.logo {
+  background: var(--logo-url);
+  background-size: cover;
+  background-origin: 50% 50%;
+  background-position: center;
+}
 
-  .no-hover {
-    cursor: default;
-  }
+.no-hover {
+  cursor: default;
+}
 
-  .no-hover >>> .q-focus-helper {
-    display: none;
-  }
+.no-hover >>> .q-focus-helper {
+  display: none;
+}
 </style>

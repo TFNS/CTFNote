@@ -6,22 +6,17 @@
       class="row items-center justify-center"
       :class="{ 'no-left-margin': $q.screen.xs }"
     >
-      <logo-link
-        flat
-        dense
-        class="q-mx-sm logo-link"
-        :ctf="ctf"
-      />
+      <logo-link flat dense class="q-mx-sm logo-link" :ctf="ctf" />
 
       <q-btn
         v-if="$q.screen.gt.sm"
         flat
         no-caps
-        style="padding-left: 12px; padding-right: 12px;"
+        style="padding-left: 12px; padding-right: 12px"
         :to="ctf.tasksLink"
       >
         <q-tooltip>Open tasks view</q-tooltip>
-        <div class="ellipsis" style="max-width: 285px;">
+        <div class="ellipsis" style="max-width: 285px">
           {{ ctf.title }}
         </div>
       </q-btn>
@@ -38,7 +33,12 @@
       </q-btn>
     </div>
 
-    <q-separator v-if="$q.screen.gt.xs" v-show="ctf.tasks.length" dark vertical />
+    <q-separator
+      v-if="$q.screen.gt.xs"
+      v-show="ctf.tasks.length"
+      dark
+      vertical
+    />
 
     <task-list-menu
       v-show="ctf.tasks.length"
@@ -71,11 +71,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .logo-link >>> .q-icon {
-    transform: scale(0.8);
-  }
+.logo-link >>> .q-icon {
+  transform: scale(0.8);
+}
 
-  .no-left-margin {
-    margin-left: 0px
-  }
+.no-left-margin {
+  margin-left: 0px;
+}
 </style>
