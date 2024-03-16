@@ -9,14 +9,14 @@
           <q-space />
           <q-btn v-close-popup icon="close" flat round dense />
         </q-card-section>
-        <q-card-section class="q-pt-none">
+
+        <q-card-section class="q-pt-none q-gutter-sm">
           <q-input v-model="form.title" filled dense required label="Title">
             <template #prepend>
               <q-icon name="title" />
             </template>
           </q-input>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
+
           <q-select
             v-model="form.tags"
             filled
@@ -36,8 +36,7 @@
               <q-icon name="label" />
             </template>
           </q-select>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
+
           <q-input
             v-model="form.description"
             filled
@@ -45,8 +44,7 @@
             label="Description"
             type="textarea"
           />
-        </q-card-section>
-        <q-card-section class="q-pt-none">
+
           <q-input v-model="form.flag" filled dense label="Flag">
             <template #prepend>
               <q-icon name="flag" />

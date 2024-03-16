@@ -12,9 +12,15 @@
 
         <q-card-section>
           <div class="col q-col-gutter-sm">
-            <div class="row q-col-gutter-sm">
+            <div class="row q-pt-none q-col-gutter-sm">
               <div class="col">
-                <q-input v-model="form.title" required label="Title" filled dense>
+                <q-input
+                  v-model="form.title"
+                  required
+                  label="Title"
+                  filled
+                  dense
+                >
                   <template #prepend>
                     <q-icon name="title" />
                   </template>
@@ -28,7 +34,7 @@
                 </q-input>
               </div>
             </div>
-            
+
             <div class="row q-col-gutter-sm">
               <div class="col">
                 <logo-field v-model="form.logoUrl" dense />
@@ -71,10 +77,15 @@
                 />
               </div>
             </div>
-            
+
             <div class="row q-col-gutter-sm q-mb-sm">
               <div class="col">
-                <q-input v-model="form.ctftimeUrl" label="CTFTime Link" filled dense>
+                <q-input
+                  v-model="form.ctftimeUrl"
+                  label="CTFTime Link"
+                  filled
+                  dense
+                >
                   <template #prepend>
                     <q-icon name="schedule" />
                   </template>
@@ -86,7 +97,7 @@
                   step="0.01"
                   type="number"
                   label="Weight"
-                  style="width: 140px;"
+                  style="width: 140px"
                   filled
                   dense
                 >
@@ -173,7 +184,7 @@ export default defineComponent({
     },
     checkValidDateRange() {
       return this.form.endTime && this.form.endTime >= this.form.startTime;
-    }
+    },
   },
   methods: {
     submit() {
