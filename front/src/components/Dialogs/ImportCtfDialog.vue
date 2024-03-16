@@ -15,7 +15,9 @@
           @keypress.enter="submit"
         >
           <template #prepend>
-            <q-icon name="schedule" />
+            <div class="q-icon svg-icon">
+              <img src="/ctftime-icon.svg" />
+            </div>
           </template>
         </q-input>
       </q-card-section>

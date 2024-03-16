@@ -30,6 +30,15 @@ body.live-mode .blur {
   }
 }
 
+.body--light .svg-icon {
+  filter: brightness(0);
+  opacity: 0.54;
+}
+
+.body--dark .svg-icon {
+  opacity: 0.7;
+}
+
 // Add border radius to filled input design
 .q-field--filled .q-field__control {
   border-radius: 4px;
