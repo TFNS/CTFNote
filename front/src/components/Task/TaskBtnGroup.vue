@@ -11,7 +11,7 @@
         size="sm"
         :title="`Open ${task.title}`"
         icon="edit_note"
-        color="primary"
+        color="accent"
       />
       <q-btn
         v-touch-hold:2000.mouse="handleOnItClick"
@@ -86,9 +86,6 @@ export default defineComponent({
       return { name: 'task', params };
     },
     onItColor() {
-      if (this.group) {
-        return this.onIt ? 'indigo-10' : 'indigo';
-      }
       return this.onIt ? 'secondary' : 'primary';
     },
     onIt(): boolean {
