@@ -15,7 +15,7 @@
         style="padding-left: 12px; padding-right: 12px"
         :to="ctf.tasksLink"
       >
-        <q-tooltip>Open tasks view</q-tooltip>
+        <q-tooltip :delay="400">Open tasks view</q-tooltip>
         <div class="ellipsis" style="max-width: 285px">
           {{ ctf.title }}
         </div>

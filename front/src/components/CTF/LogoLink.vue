@@ -10,7 +10,7 @@
     :ripple="false"
     round
   >
-    <q-tooltip>
+    <q-tooltip :delay="400">
       <span v-if="ctf.ctfUrl"> Browse CTF website </span>
       <span v-else> No CTF website set </span>
     </q-tooltip>

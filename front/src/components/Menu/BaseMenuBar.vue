@@ -30,7 +30,7 @@
         class="q-mr-xs"
         @click="openSearchDialog()"
       >
-        <q-tooltip>Global search</q-tooltip>
+        <q-tooltip :delay="400">Global search</q-tooltip>
       </q-btn>
       <q-btn-dropdown
         flat
