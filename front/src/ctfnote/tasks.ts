@@ -59,20 +59,21 @@ export function useSolveTaskPopup() {
   const updateTask = useUpdateTask();
   return (task: Task) => {
     Dialog.create({
-      title: 'Flag:',
+      title: 'Submit flag for ' + task.title,
       color: 'primary',
-      cancel: {
-        label: 'cancel',
-        color: 'warning',
-        flat: true,
-      },
+      class: 'compact-dialog',
       prompt: {
         model: task.flag ?? '',
         type: 'text',
+        filled: true,
+      },
+      cancel: {
+        label: 'Cancel',
+        flat: true,
       },
       ok: {
         color: 'positive',
-        label: 'save',
+        label: 'Save',
       },
     }).onOk((flag: string) => {
       void updateTask(task, { flag });
