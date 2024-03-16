@@ -18,7 +18,7 @@
           class="no-click"
           auto-width
         >
-          <task-tags-list :tags="props.row.assignedTags" />
+          <task-tags-list class="no-wrap" :tags="props.row.assignedTags" />
         </q-td>
 
         <q-td key="solved" :props="props" auto-width>
