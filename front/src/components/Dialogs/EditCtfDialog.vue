@@ -10,7 +10,7 @@
           <q-btn v-close-popup icon="close" flat round dense />
         </q-card-section>
 
-        <q-card-section>
+        <q-card-section class="q-pb-sm">
           <div class="col q-col-gutter-sm">
             <div class="row q-pt-none q-col-gutter-sm">
               <div class="col">

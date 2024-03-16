@@ -10,7 +10,7 @@
           <q-btn v-close-popup icon="close" flat round dense />
         </q-card-section>
 
-        <q-card-section class="q-pt-none q-gutter-sm">
+        <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
           <q-input v-model="form.title" filled dense required label="Title">
             <template #prepend>
               <q-icon name="title" />

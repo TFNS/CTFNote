@@ -7,7 +7,7 @@
         <q-btn v-close-popup icon="close" flat round dense />
       </q-card-section>
 
-      <q-card-section class="q-col-gutter-sm q-pt-none">
+      <q-card-section class="q-pt-none q-pb-sm q-col-gutter-sm">
         <q-select
           v-model="currentFormatOption"
           filled
