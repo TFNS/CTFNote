@@ -29,6 +29,8 @@ RUN yarn run build
 FROM node@${NODE_DIGEST} as clean
 # Import our shared args
 ARG NODE_ENV
+ARG DB_HOST
+ARG DB_PORT
 
 # Copy over selectively just the tings we need, try and avoid the rest
 COPY --from=builder /app/package.json /app/yarn.lock /app/.yarnrc.yml /app/start.sh /app/
@@ -58,4 +60,4 @@ RUN chown node /app/uploads
 ENV GRAPHILE_TURBO=1
 ENV NODE_ENV=$NODE_ENV
 USER node
-CMD ./start.sh db 5432 yarn start
+CMD ./start.sh ${DB_HOST} ${DB_PORT} yarn start
