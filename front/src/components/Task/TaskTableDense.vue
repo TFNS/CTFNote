@@ -11,7 +11,13 @@
       <q-tr v-show="isTaskVisible(props.row)" :props="props">
         <task-menu :task="props.row" :context-menu="true" />
 
-        <q-td key="tags" style="padding-left: 12px" :props="props" class="no-click" auto-width>
+        <q-td
+          key="tags"
+          style="padding-left: 12px"
+          :props="props"
+          class="no-click"
+          auto-width
+        >
           <task-tags-list :tags="props.row.assignedTags" />
         </q-td>
 
@@ -28,20 +34,18 @@
         </q-td>
 
         <q-td key="description" :props="props">
-          <div v-if="props.row.solved" class="blur q-py-xs">{{ props.row.flag }}</div>
+          <div v-if="props.row.solved" class="blur q-py-xs">
+            {{ props.row.flag }}
+          </div>
           <div v-else class="q-py-xs">{{ props.row.description || '…' }}</div>
         </q-td>
 
         <q-td key="players" :props="props">
           <task-player-list :task="props.row" />
         </q-td>
-        
+
         <q-td key="actions" :props="props" class="no-click" auto-width>
-          <task-btn-group
-            dense
-            :ctf="ctf"
-            :task="props.row"
-          />
+          <task-btn-group dense :ctf="ctf" :task="props.row" />
         </q-td>
       </q-tr>
     </template>
@@ -92,7 +96,7 @@ export default defineComponent({
       col('players', { align: 'center' }),
       col('actions', {
         label: '',
-        align: 'right'
+        align: 'right',
       }),
     ];
     const pagination = {

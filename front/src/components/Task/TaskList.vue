@@ -50,11 +50,9 @@
       <task-table-dense
         v-else-if="displayMode == 'tabledense'"
         :ctf="ctf"
-        :tasks="sortedTasks" />
-      <task-table
-        v-else
-        :ctf="ctf"
-        :tasks="sortedTasks" />
+        :tasks="sortedTasks"
+      />
+      <task-table v-else :ctf="ctf" :tasks="sortedTasks" />
     </template>
     <div v-else class="text-center col">
       <div class="row q-gutter-md justify-center">
@@ -124,7 +122,13 @@ import keys from '../../injectionKeys';
 import { tagsSortFn } from 'src/ctfnote/tags';
 import { Platform } from 'quasar';
 
-const displayOptions = ['classic', 'dense', 'ultradense', 'table', 'tabledense'] as const;
+const displayOptions = [
+  'classic',
+  'dense',
+  'ultradense',
+  'table',
+  'tabledense',
+] as const;
 
 export type DisplayMode = (typeof displayOptions)[number];
 
