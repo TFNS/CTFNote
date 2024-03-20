@@ -2,8 +2,9 @@
   <div>
     <q-btn-dropdown flat no-caps style="padding-left: 14px; padding-right: 8px">
       <template #label>
-        <div class="row q-gutter-md items-center">
+        <div class="row q-gutter-sm items-center">
           <task-menu v-if="currentTask" :task="currentTask" :context-menu="true" />
+
           <div
             class="task-list-label"
             :class="{
@@ -16,7 +17,7 @@
           </div>
 
           <task-tags-list-condensed
-            v-if="currentTask"
+            v-if="currentTask && $q.screen.gt.sm"
             style="text-transform: none; font-weight: normal;"
             dense
             :tags="currentTask.assignedTags"
@@ -131,6 +132,6 @@ export default defineComponent({
 }
 
 .task-list-label-md {
-  max-width: calc(100vw - 765px);
+  max-width: calc(100vw - 910px);
 }
 </style>
