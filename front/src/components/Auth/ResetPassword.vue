@@ -4,14 +4,35 @@
       <q-card-section>
         <div class="text-h6">Reset password</div>
       </q-card-section>
-      <q-card-section class="q-gutter-md">
-        <password-input v-model="password" required />
-        <q-input filled readonly required :model-value="token" label="Token" />
+
+      <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
+        <password-input
+          v-model="password"
+          label="New password"
+          dense
+          required
+        />
+        <q-input
+          filled
+          dense
+          readonly
+          required
+          :model-value="token"
+          label="Password reset token"
+        >
+          <template #prepend>
+            <q-icon name="key" />
+          </template>
+        </q-input>
       </q-card-section>
-      <q-card-actions class="q-pr-md q-pb-md" align="right">
-        <div class="col col-auto">
-          <q-btn type="submit" label="Reset" color="primary" />
-        </div>
+
+      <q-card-actions class="row q-px-md q-pb-md">
+        <q-btn
+          type="submit"
+          label="Reset password"
+          color="primary"
+          class="full-width"
+        />
       </q-card-actions>
     </q-form>
   </q-card>
