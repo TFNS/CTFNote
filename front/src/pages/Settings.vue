@@ -2,8 +2,7 @@
   <q-page>
     <q-tabs
       model-value="Profile"
-      class="bg-light"
-      indicator-color="primary"
+      indicator-color="secondary"
       dense
       align="left"
     >
