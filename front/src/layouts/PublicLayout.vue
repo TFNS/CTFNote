@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <base-menu-bar drop-down-link="auth-login" />
     <q-page-container>
-      <q-page padding class="column justify-center items-center">
+      <q-page padding class="column justify-center items-center q-pa-lg">
         <div class="auth" :class="{ 'auth-icon': $q.screen.width >= 464 }">
           <router-view />
         </div>
