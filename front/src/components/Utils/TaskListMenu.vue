@@ -24,7 +24,7 @@
         </div>
       </template>
       <template #default>
-        <q-list>
+        <q-list dense>
           <q-item v-for="task of sortedTasks" :key="task.nodeId" clickable style="height: 46px" @click="taskLink(task)">
             <task-menu v-if="task" :task="task" :context-menu="true" />
 
