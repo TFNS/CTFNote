@@ -1,11 +1,19 @@
 <template>
-  <div class="text-h6">
-    <q-btn-dropdown stretch flat round>
+  <div>
+    <q-btn-dropdown flat no-caps style="padding-left: 14px; padding-right: 8px">
       <template #label>
-        <div class="row q-gutter-sm items-center">
+        <div class="row q-gutter-md items-center">
           <task-menu v-if="currentTask" :task="currentTask" :context-menu="true" />
-
-          <div>{{ title }}</div>
+          <div
+            class="task-list-label"
+            :class="{
+              'task-list-label-xs': $q.screen.xs,
+              'task-list-label-sm': $q.screen.sm,
+              'task-list-label-md': $q.screen.gt.sm,
+            }"
+          >
+            {{ title }}
+          </div>
 
           <task-tags-list-condensed
             v-if="currentTask"
@@ -74,7 +82,7 @@ export default defineComponent({
       if (this.currentTask) {
         return this.currentTask.title;
       }
-      return 'Open task';
+      return 'Open Task';
     },
     sortedTasks() {
       return this.ctf.tasks
@@ -108,4 +116,21 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.task-list-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.task-list-label-xs {
+  max-width: calc(100vw - 305px);
+}
+
+.task-list-label-sm {
+  max-width: calc(100vw - 490px);
+}
+
+.task-list-label-md {
+  max-width: calc(100vw - 765px);
+}
+</style>

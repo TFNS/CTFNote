@@ -1,38 +1,52 @@
 <template>
-  <div class="q-gutter-sm">
-    <q-btn
-      v-touch-hold:2000.mouse="handleOnItClick"
-      round
-      size="sm"
-      :title="onItTitle"
-      :icon="onItIcon"
-      :color="onItColor"
-      @click="updateOnIt(!onIt)"
-    />
-    <q-btn
-      round
-      size="sm"
-      title="Enter flag"
-      icon="flag"
-      color="positive"
-      @click="solveTask(task)"
-    />
-    <q-btn
-      round
-      size="sm"
-      :title="`Edit ${task.title}`"
-      icon="edit"
-      color="warning"
-      @click="editTask(task)"
-    />
-    <q-btn
-      round
-      size="sm"
-      :title="`Delete ${task.title}`"
-      icon="delete"
-      color="negative"
-      @click="deleteTask(task)"
-    />
+  <div>
+    <component
+      :is="group ? 'q-btn-group' : 'div'"
+      :class="{ 'q-gutter-sm': !group }"
+    >
+      <q-btn
+        v-if="showOpenTaskBtn"
+        :to="openTaskRoute"
+        round
+        size="sm"
+        :title="`Open ${task.title}`"
+        icon="edit_note"
+        color="accent"
+      />
+      <q-btn
+        v-touch-hold:2000.mouse="handleOnItClick"
+        round
+        size="sm"
+        :title="onItTitle"
+        :icon="onItIcon"
+        :color="onItColor"
+        @click="updateOnIt(!onIt)"
+      />
+      <q-btn
+        round
+        size="sm"
+        title="Enter flag"
+        icon="flag"
+        color="positive"
+        @click="solveTask(task)"
+      />
+      <q-btn
+        round
+        size="sm"
+        :title="`Edit ${task.title}`"
+        icon="edit"
+        color="warning"
+        @click="editTask(task)"
+      />
+      <q-btn
+        round
+        size="sm"
+        :title="`Delete ${task.title}`"
+        icon="delete"
+        color="negative"
+        @click="deleteTask(task)"
+      />
+    </component>
   </div>
 </template>
 
@@ -40,9 +54,12 @@
 import ctfnote from 'src/ctfnote';
 import { Task } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
+import { RouteLocationRaw } from 'vue-router';
 
 export default defineComponent({
   props: {
+    group: { type: Boolean, required: false },
+    showOpenTaskBtn: { type: Boolean, required: false },
     task: { type: Object as () => Task, required: true },
   },
   setup() {
@@ -62,6 +79,12 @@ export default defineComponent({
   },
 
   computed: {
+    openTaskRoute(): RouteLocationRaw {
+      const params: Record<string, string> = {};
+      params['taskId'] = this.task.id.toString();
+      params['taskSlug'] = this.task.slug;
+      return { name: 'task', params };
+    },
     onItColor() {
       return this.onIt ? 'secondary' : 'primary';
     },
