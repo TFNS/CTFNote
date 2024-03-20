@@ -14,7 +14,7 @@
             class="full-width q-pt-none"
             style="height: 401px"
           >
-            <q-form class="q-gutter-sm">
+            <div class="q-gutter-sm">
               <q-select
                 filled
                 dense
@@ -43,7 +43,7 @@
                 :hint="currentParser.value.hint"
                 @paste="onPaste"
               />
-            </q-form>
+            </div>
           </q-tab-panel>
 
           <q-tab-panel name="confirm" class="full-width no-padding">
