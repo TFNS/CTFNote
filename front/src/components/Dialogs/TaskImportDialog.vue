@@ -56,17 +56,17 @@
               :rows-per-page-options="[0]"
               :rows="parsedTasks"
             >
-              <template #body-cell-tags="{ row }">
-                <q-td auto-width>
-                  <task-tags-list
-                    class="no-wrap"
-                    :tags="computeTags(row['tags'])"
-                  />
-                </q-td>
-              </template>
               <template #body-cell-keep="{ row }">
                 <q-td auto-width class="text-center">
                   <q-checkbox dense v-model="row['keep']" />
+                </q-td>
+              </template>
+              <template #body-cell-tags="{ row }">
+                <q-td auto-width style="padding-right: 12px">
+                  <task-tags-list
+                    class="no-wrap justify-end"
+                    :tags="computeTags(row['tags'])"
+                  />
                 </q-td>
               </template>
             </q-table>
@@ -112,7 +112,13 @@ export default defineComponent({
     const columns = [
       { name: 'keep', label: '', field: 'keep' },
       { name: 'title', label: 'Title', field: 'title', align: 'left' },
-      { name: 'tags', label: 'Tags', field: 'tags', align: 'left' },
+      {
+        name: 'tags',
+        label: 'Tags',
+        field: 'tags',
+        align: 'right',
+        headerStyle: 'padding-right: 28px;',
+      },
     ];
     return {
       createTask: ctfnote.tasks.useCreateTask(),
@@ -194,7 +200,7 @@ export default defineComponent({
         return { ...task, keep: !taskSet.has(hash) };
       });
     },
-    computeTags(tags: { nodeId: number; tag: string; }[]) {
+    computeTags(tags: { nodeId: number; tag: string }[]) {
       return tags.map((tag, index) => ({
         nodeId: index,
         tag: tag,
