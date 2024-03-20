@@ -65,6 +65,7 @@ export function useSolveTaskPopup() {
       prompt: {
         model: task.flag ?? '',
         type: 'text',
+        label: 'Flag',
         filled: true,
       },
       cancel: {
