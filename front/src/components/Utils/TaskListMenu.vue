@@ -3,7 +3,11 @@
     <q-btn-dropdown flat no-caps style="padding-left: 14px; padding-right: 8px">
       <template #label>
         <div class="row q-gutter-sm items-center">
-          <task-menu v-if="currentTask" :task="currentTask" :context-menu="true" />
+          <task-menu
+            v-if="currentTask"
+            :task="currentTask"
+            :context-menu="true"
+          />
 
           <div
             class="task-list-label"
@@ -18,7 +22,7 @@
 
           <task-tags-list-condensed
             v-if="currentTask && $q.screen.gt.sm"
-            style="text-transform: none; font-weight: normal;"
+            style="text-transform: none; font-weight: normal"
             dense
             :tags="currentTask.assignedTags"
           />
@@ -26,7 +30,13 @@
       </template>
       <template #default>
         <q-list dense>
-          <q-item v-for="task of sortedTasks" :key="task.nodeId" clickable style="height: 46px" @click="taskLink(task)">
+          <q-item
+            v-for="task of sortedTasks"
+            :key="task.nodeId"
+            clickable
+            style="height: 46px"
+            @click="taskLink(task)"
+          >
             <task-menu v-if="task" :task="task" :context-menu="true" />
 
             <q-item-section>
@@ -41,12 +51,11 @@
                       {{ task.title }}
                     </div>
                   </div>
-                  
                 </div>
               </q-item-label>
             </q-item-section>
 
-            <q-item-section side>
+            <q-item-section v-if="$q.screen.gt.xs" side>
               <task-tags-list-condensed :tags="task.assignedTags" />
             </q-item-section>
           </q-item>
