@@ -56,17 +56,17 @@
               :rows-per-page-options="[0]"
               :rows="parsedTasks"
             >
-              <template #body-cell-keep="{ row }">
-                <q-td auto-width class="text-center">
-                  <q-checkbox dense v-model="row['keep']" />
-                </q-td>
-              </template>
               <template #body-cell-tags="{ row }">
                 <q-td auto-width>
                   <task-tags-list
                     class="no-wrap"
                     :tags="computeTags(row['tags'])"
                   />
+                </q-td>
+              </template>
+              <template #body-cell-keep="{ row }">
+                <q-td auto-width class="text-center">
+                  <q-checkbox dense v-model="row['keep']" />
                 </q-td>
               </template>
             </q-table>
@@ -111,8 +111,8 @@ export default defineComponent({
 
     const columns = [
       { name: 'keep', label: '', field: 'keep' },
-      { name: 'tags', label: 'Tags', field: 'tags', align: 'left' },
       { name: 'title', label: 'Title', field: 'title', align: 'left' },
+      { name: 'tags', label: 'Tags', field: 'tags', align: 'left' },
     ];
     return {
       createTask: ctfnote.tasks.useCreateTask(),
