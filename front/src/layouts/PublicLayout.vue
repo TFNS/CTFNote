@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <base-menu-bar drop-down-label="Login" drop-down-link="auth-login" />
+    <base-menu-bar drop-down-link="auth-login" />
     <q-page-container>
       <q-page padding class="row justify-center">
         <div class="col-md-4 col-sm-12 q-mt-lg auth">

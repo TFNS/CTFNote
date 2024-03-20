@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Ctf, Id, Task } from 'src/ctfnote/models';
-import { computed, defineComponent, watch } from 'vue';
+import { computed, defineComponent, onMounted, watch } from 'vue';
 
 export default defineComponent({
   props: {
@@ -28,6 +28,17 @@ export default defineComponent({
       },
       { immediate: true }
     );
+
+    onMounted(() => {
+      const taskFrame = window.frames[0];
+      taskFrame.addEventListener('DOMContentLoaded', () => {
+        // inject hotkey script with some CTFNote code to catch hotkey for search dialog
+        // and communicate that with the parent window
+        const hotkeyScript = taskFrame.document.createElement('script');
+        hotkeyScript.src = '/pad/js/hotkeys-iframe.js'; // this won't exist in development but will in production
+        taskFrame.document.body.appendChild(hotkeyScript);
+      });
+    });
 
     return { task };
   },

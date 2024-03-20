@@ -13,23 +13,36 @@ export default function useSearchDialog() {
   const unlock = () => (openedSearch.value = false);
   const locked = computed(() => openedSearch.value);
 
+  function showSearchDialog() {
+    // If the dialog is already opened, don't do anything
+    if (locked.value) return;
+
+    lock();
+
+    $q.dialog({
+      component: SearchDialog,
+    })
+      .onCancel(unlock)
+      .onDismiss(unlock)
+      .onOk(unlock);
+  }
+
   // Handle search shortcuts
   onMounted(() => {
     hotkeys('ctrl+k, command+k', function (event) {
       event.stopImmediatePropagation();
       event.preventDefault();
 
-      // If the dialog is already opened, don't do anything
-      if (locked.value) return;
+      showSearchDialog();
+    });
 
-      lock();
-
-      $q.dialog({
-        component: SearchDialog,
-      })
-        .onCancel(unlock)
-        .onDismiss(unlock)
-        .onOk(unlock);
+    // handle incoming post message for event showSearchDialog
+    // this is used to open the search dialog from the task iframe
+    window.addEventListener('message', (event) => {
+      if (event.origin !== window.location.origin) return;
+      if (event.data === 'showSearchDialog') {
+        showSearchDialog();
+      }
     });
   });
 
