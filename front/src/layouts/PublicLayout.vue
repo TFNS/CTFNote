@@ -3,7 +3,7 @@
     <base-menu-bar drop-down-link="auth-login" />
     <q-page-container>
       <q-page padding class="row justify-center">
-        <div class="col-md-4 col-sm-12 q-mt-lg auth">
+        <div class="q-mt-lg auth">
           <router-view />
         </div>
       </q-page>
@@ -33,7 +33,9 @@ export default defineComponent({
 <style scoped>
 .auth {
   position: relative;
+  width: 350px;
 }
+
 .auth::before {
   --size: 40px;
   content: '';
