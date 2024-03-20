@@ -16,22 +16,22 @@
           >
             <div class="q-gutter-sm">
               <q-select
+                v-model="currentParser"
                 filled
                 dense
-                v-model="currentParser"
                 label="Type"
                 options-dense
                 :options="parserOptions"
               >
-                <template v-slot:prepend>
+                <template #prepend>
                   <q-icon name="data_object" />
                 </template>
               </q-select>
 
               <q-input
+                v-model="model"
                 filled
                 dense
-                v-model="model"
                 label="Data"
                 type="textarea"
                 spellcheck="false"
@@ -58,7 +58,7 @@
             >
               <template #body-cell-keep="{ row }">
                 <q-td auto-width class="text-center">
-                  <q-checkbox dense v-model="row['keep']" />
+                  <q-checkbox v-model="row['keep']" dense />
                 </q-td>
               </template>
               <template #body-cell-tags="{ row }">
