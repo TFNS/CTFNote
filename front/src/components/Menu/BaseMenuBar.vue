@@ -7,16 +7,16 @@
             flat
             no-caps
             :class="{
-              'ctfnote-logo-xs': $q.screen.xs,
-              'ctfnote-logo-lg': $q.screen.gt.xs,
+              'ctfnote-logo-xs': $q.screen.xs && showLogout,
+              'ctfnote-logo-lg': $q.screen.gt.xs || !showLogout,
             }"
           >
             <q-img
               src="/favicon-transparent.svg"
               width="30px"
-              :class="{ 'q-mr-sm': $q.screen.gt.xs }"
+              :class="{ 'q-mr-sm': $q.screen.gt.xs || !showLogout }"
             />
-            <span v-if="$q.screen.gt.xs">CTFNote</span>
+            <span v-if="$q.screen.gt.xs || !showLogout">CTFNote</span>
           </q-btn>
         </ctf-note-link>
         <slot name="after-title" />
