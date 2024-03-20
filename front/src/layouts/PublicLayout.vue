@@ -2,8 +2,8 @@
   <q-layout view="lHh Lpr lFf">
     <base-menu-bar drop-down-link="auth-login" />
     <q-page-container>
-      <q-page padding class="row justify-center">
-        <div class="q-mt-lg auth">
+      <q-page padding class="column justify-center items-center">
+        <div class="auth">
           <router-view />
         </div>
       </q-page>
