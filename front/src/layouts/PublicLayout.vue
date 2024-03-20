@@ -3,7 +3,7 @@
     <base-menu-bar drop-down-link="auth-login" />
     <q-page-container>
       <q-page padding class="column justify-center items-center">
-        <div class="auth">
+        <div class="auth" :class="{ 'auth-icon': $q.screen.width >= 464 }">
           <router-view />
         </div>
       </q-page>
@@ -36,7 +36,7 @@ export default defineComponent({
   width: 350px;
 }
 
-.auth::before {
+.auth-icon::before {
   --size: 40px;
   content: '';
   width: var(--size);
