@@ -1,7 +1,7 @@
 <template>
   <div class="row q-gutter-md">
     <div class="col">
-      <q-card bordered>
+      <q-card>
         <q-card-section class="text-h6"> Colors </q-card-section>
 
         <q-card-section class="row q-pt-none q-gutter-md">

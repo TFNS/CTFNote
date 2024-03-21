@@ -1,5 +1,5 @@
 <template>
-  <q-card bordered>
+  <q-card>
     <q-card-section>
       <div class="row q-gutter-md">
         <div class="text-h6">Registered users</div>

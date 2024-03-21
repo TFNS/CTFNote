@@ -1,7 +1,7 @@
 <template>
   <div class="row q-col-gutter-md">
     <div class="col-md-6 col-xs-12">
-      <q-card bordered class="q-mb-md">
+      <q-card class="q-mb-md">
         <q-card-section>
           <div class="text-h6">Registration</div>
         </q-card-section>
@@ -17,7 +17,7 @@
         </q-card-section>
       </q-card>
 
-      <q-card bordered>
+      <q-card>
         <q-card-section>
           <div class="text-h6">Registration with password</div>
         </q-card-section>
@@ -70,7 +70,7 @@
     </div>
 
     <div class="col-md-6 col-xs-12">
-      <q-card bordered>
+      <q-card>
         <q-card-section>
           <div class="text-h6">Calendar password</div>
         </q-card-section>

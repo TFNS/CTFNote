@@ -12,7 +12,7 @@
     <div class="q-pa-md">
       <div class="row q-col-gutter-md">
         <div class="col-md-6 col-xs-12">
-          <q-card v-if="me" bordered>
+          <q-card v-if="me">
             <q-form @submit="changeProfile">
               <q-card-section class="row justify-between">
                 <div class="text-h6">Change Profile</div>
@@ -70,7 +70,7 @@
             </q-form>
           </q-card>
 
-          <q-card bordered class="q-mt-md">
+          <q-card class="q-mt-md">
             <q-form @submit="changePassword">
               <q-card-section>
                 <div class="text-h6">Change password</div>
@@ -116,7 +116,7 @@
           </q-card>
         </div>
         <div class="col-md-6 col-xs-12">
-          <q-card bordered>
+          <q-card>
             <q-card-section>
               <div class="text-h6">Notifications</div>
             </q-card-section>
@@ -131,7 +131,7 @@
             </q-card-section>
           </q-card>
 
-          <q-card bordered class="q-mt-md">
+          <q-card class="q-mt-md">
             <q-card-section>
               <div class="text-h6">Link your Discord account</div>
             </q-card-section>
