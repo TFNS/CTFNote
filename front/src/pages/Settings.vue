@@ -16,28 +16,29 @@
             <q-form @submit="changeProfile">
               <q-card-section class="row justify-between">
                 <div class="text-h6">Change Profile</div>
-                <user-badge class="q-ma-none" :profile="tmpProfile" />
+                <user-badge style="margin-top: 2px;" class="q-ma-none" :profile="tmpProfile" />
               </q-card-section>
 
               <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
-                <div class="col">
-                  <q-input
-                    v-model="username"
-                    filled
-                    label="Username"
-                    hint="Displayed name"
-                    lazy-rules
-                    :rules="[
-                      (val) =>
-                        (val && val.length > 0) || 'Please type something',
-                    ]"
-                    @keyup.enter="changeProfile"
-                  >
-                  </q-input>
-                </div>
+                <div class="row">
+                  <div class="col q-pr-sm">
+                    <q-input
+                      v-model="username"
+                      filled
+                      dense
+                      label="Display name"
+                      lazy-rules
+                      @keyup.enter="changeProfile"
+                    >
+                      <template #prepend>
+                        <q-icon name="badge" />
+                      </template>
+                    </q-input>
+                  </div>
 
-                <div class="col">
-                  <color-picker v-model="color" label="color" />
+                  <div class="col" style="max-width: 40px">
+                    <color-picker v-model="color" icon="palette" />
+                  </div>
                 </div>
 
                 <div class="col">
@@ -45,6 +46,7 @@
                     v-model="description"
                     type="textarea"
                     filled
+                    dense
                     label="Description"
                   >
                   </q-input>
@@ -74,19 +76,27 @@
               <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
                 <password-input
                   v-model="oldPassword"
+                  dense
                   required
                   autocomplete="current-password"
-                  label="Old Password"
-                  hint="The password you currently use"
-                />
+                  label="Old password"
+                >
+                  <template #prepend>
+                    <q-icon name="key" />
+                  </template>
+                </password-input>
                 <password-input
                   v-model="newPassword"
+                  dense
                   required
                   autocomplete="new-password"
-                  label="New Password"
-                  hint="The new password you want to use"
+                  label="New password"
                   @keyup.enter="changePassword"
-                />
+                >
+                  <template #prepend>
+                    <q-icon name="key" />
+                  </template>
+                </password-input>
               </q-card-section>
 
               <q-card-actions align="right" class="q-px-md q-pb-md">
@@ -134,11 +144,16 @@
               <password-input
                 v-if="me?.profile.discordId == null"
                 v-model="profileToken"
+                dense
                 read-only
-                label="Your personal CTFNote token"
+                label="Personal CTFNote token"
                 hint="Give this token to the CTFNote bot to link your account by using /link"
                 @update:visibility="pollMe"
-              />
+              >
+                <template #prepend>
+                  <q-icon name="smart_toy" />
+                </template>
+              </password-input>
             </q-card-section>
 
             <q-card-actions align="right" class="q-px-md q-pb-md q-pt-none">
@@ -320,5 +335,12 @@ export default defineComponent({
 .q-tab {
   min-width: 200px;
   padding-top: 5px;
+}
+</style>
+
+<style>
+.btn-pick-color {
+  height: 40px !important;
+  width: 40px !important;
 }
 </style>
