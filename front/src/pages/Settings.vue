@@ -16,7 +16,11 @@
             <q-form @submit="changeProfile">
               <q-card-section class="row justify-between">
                 <div class="text-h6">Change Profile</div>
-                <user-badge style="margin-top: 2px;" class="q-ma-none" :profile="tmpProfile" />
+                <user-badge
+                  style="margin-top: 2px"
+                  class="q-ma-none"
+                  :profile="tmpProfile"
+                />
               </q-card-section>
 
               <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
@@ -65,12 +69,11 @@
               </q-card-actions>
             </q-form>
           </q-card>
-        </div>
-        <div class="col-md-6 col-xs-12">
-          <q-card bordered>
+
+          <q-card bordered class="q-mt-md">
             <q-form @submit="changePassword">
               <q-card-section>
-                <div class="text-h6">Change Password</div>
+                <div class="text-h6">Change password</div>
               </q-card-section>
 
               <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
@@ -111,8 +114,9 @@
               </q-card-actions>
             </q-form>
           </q-card>
-
-          <q-card bordered class="q-mt-md">
+        </div>
+        <div class="col-md-6 col-xs-12">
+          <q-card bordered>
             <q-card-section>
               <div class="text-h6">Notifications</div>
             </q-card-section>
