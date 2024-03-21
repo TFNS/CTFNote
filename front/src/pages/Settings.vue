@@ -157,7 +157,7 @@
                 @update:visibility="pollMe"
               >
                 <template #prepend>
-                  <q-icon name="smart_toy" />
+                  <q-icon name="discord" />
                 </template>
               </password-input>
             </q-card-section>
