@@ -30,6 +30,7 @@
           />
 
           <select-role
+            v-if="registrationPasswordAllowed"
             v-model="registrationDefaultRole"
             filled
             dense
@@ -43,6 +44,7 @@
           </select-role>
 
           <password-input
+            v-if="registrationPasswordAllowed"
             v-model="registrationPassword"
             dense
             :disable="!registrationPasswordAllowed"
@@ -70,7 +72,7 @@
     <div class="col-md-6 col-xs-12">
       <q-card bordered>
         <q-card-section>
-          <div class="text-h6">Calendar Password</div>
+          <div class="text-h6">Calendar password</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none q-gutter-sm">
@@ -81,6 +83,7 @@
           />
 
           <password-input
+            v-if="icalPasswordRequired"
             v-model="icalPassword"
             dense
             :disable="!icalPasswordRequired"
