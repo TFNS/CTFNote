@@ -5,7 +5,8 @@
         <q-card-section>
           <div class="text-h6">Registration</div>
         </q-card-section>
-        <q-card-section>
+
+        <q-card-section class="q-pt-none">
           <div>
             <q-toggle
               v-model="registrationAllowed"
@@ -15,45 +16,47 @@
           </div>
         </q-card-section>
       </q-card>
+
       <q-card bordered>
         <q-card-section>
           <div class="text-h6">Calendar Password</div>
         </q-card-section>
-        <q-card-section>
-          <div>
-            <q-toggle
-              v-model="icalPasswordRequired"
-              left-label
-              label="Require password to access iCalendar"
-            />
-            <password-input
-              v-model="icalPassword"
-              :disable="!icalPasswordRequired"
-            >
-              <template #after>
-                <q-btn
-                  icon="save"
-                  round
-                  :color="
-                    icalPassword == adminSettings.icalPassword
-                      ? 'grey-5'
-                      : 'positive'
-                  "
-                  :disabled="icalPassword == adminSettings.icalPassword"
-                  @click="updateIcalPassword"
-                />
-              </template>
-            </password-input>
-          </div>
+
+        <q-card-section class="q-pt-none q-gutter-sm">
+          <q-toggle
+            v-model="icalPasswordRequired"
+            left-label
+            label="Require password to access iCalendar"
+          />
+          <password-input
+            v-model="icalPassword"
+            :disable="!icalPasswordRequired"
+          >
+            <template #after>
+              <q-btn
+                icon="save"
+                round
+                :color="
+                  icalPassword == adminSettings.icalPassword
+                    ? 'grey-5'
+                    : 'positive'
+                "
+                :disabled="icalPassword == adminSettings.icalPassword"
+                @click="updateIcalPassword"
+              />
+            </template>
+          </password-input>
         </q-card-section>
       </q-card>
     </div>
+
     <div class="col-md-6 col-xs-12">
       <q-card bordered>
         <q-card-section>
           <div class="text-h6">Registration with password</div>
         </q-card-section>
-        <q-card-section class="q-gutter-sm">
+        
+        <q-card-section class="q-pt-none q-gutter-sm">
           <q-toggle
             v-model="registrationPasswordAllowed"
             left-label
