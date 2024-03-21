@@ -16,10 +16,11 @@
         </div>
       </div>
     </q-card-section>
-    <q-card-section>
+
+    <q-card-section class="q-pa-none">
       <q-table
         flat
-        bordered
+        dense
         :rows-per-page-options="[0]"
         :loading="loading"
         :columns="columns"
@@ -27,29 +28,31 @@
         hide-pagination
       >
         <template #body-cell-id="{ value }">
-          <q-td auto-width class="text-right">
+          <q-td auto-width>
             {{ value }}
           </q-td>
         </template>
         <template #body-cell-login="{ value }">
-          <q-td class="text-right">
-            {{ value }}
-          </q-td>
-        </template>
-        <template #body-cell-lastactive="{ value }">
-          <q-td class="text-right">
+          <q-td>
             {{ value }}
           </q-td>
         </template>
         <template #body-cell-username="{ value }">
-          <q-td class="text-right">
+          <q-td>
+            {{ value }}
+          </q-td>
+        </template>
+        <template #body-cell-lastactive="{ value }">
+          <q-td style="width: 150px; max-width: 150px">
             {{ value }}
           </q-td>
         </template>
         <template #body-cell-role="{ row, value }">
-          <q-td>
+          <q-td style="width: 140px; max-width: 140px">
             <select-role
+              filled
               dense
+              options-dense
               :model-value="value"
               @update:model-value="(v) => updateRole(row, v)"
             />
@@ -105,8 +108,22 @@ const columns = [
     label: 'ID',
     field: (u: User) => u.profile.id,
     sortable: true,
+    align: 'left',
   },
-  { name: 'login', label: 'Login', field: 'login', sortable: true },
+  {
+    name: 'Username',
+    label: 'Username',
+    field: 'login',
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'displayname',
+    label: 'Display name',
+    field: (u: User) => u.profile.username,
+    sortable: true,
+    align: 'left',
+  },
   {
     name: 'lastactive',
     label: 'Last active',
@@ -114,19 +131,22 @@ const columns = [
       return date.formatDate(u.profile.lastactive, 'YYYY-MM-DD HH:mm:ss');
     },
     sortable: true,
+    align: 'left',
   },
   {
-    name: 'username',
-    label: 'Username',
-    field: (u: User) => u.profile.username,
+    name: 'role',
+    label: 'Role',
+    field: 'role',
     sortable: true,
+    align: 'left',
   },
-  { name: 'role', label: 'Role', field: 'role', sortable: true },
   {
     name: 'discordId',
+    style: 'width: 160px; max-width: 160px; font-family: monospace;',
     label: 'Discord ID',
     field: (u: User) => u.profile.discordId,
     sortable: true,
+    align: 'left',
   },
   { name: 'btns' },
 ];
@@ -224,5 +244,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped></style>
