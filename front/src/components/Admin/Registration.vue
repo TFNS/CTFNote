@@ -19,41 +19,6 @@
 
       <q-card bordered>
         <q-card-section>
-          <div class="text-h6">Calendar Password</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none q-gutter-sm">
-          <q-toggle
-            v-model="icalPasswordRequired"
-            left-label
-            label="Require password to access iCalendar"
-          />
-
-          <password-input
-            v-model="icalPassword"
-            dense
-            :disable="!icalPasswordRequired"
-          >
-            <template #prepend>
-              <q-icon name="key" />
-            </template>
-            <template #after>
-              <q-btn
-                icon="save"
-                class="ctfnote-input-button"
-                color="positive"
-                :disabled="icalPassword == adminSettings.icalPassword"
-                @click="updateIcalPassword"
-              />
-            </template>
-          </password-input>
-        </q-card-section>
-      </q-card>
-    </div>
-
-    <div class="col-md-6 col-xs-12">
-      <q-card bordered>
-        <q-card-section>
           <div class="text-h6">Registration with password</div>
         </q-card-section>
 
@@ -95,6 +60,41 @@
                   registrationPassword == adminSettings.registrationPassword
                 "
                 @click="updateRegistrationPassword"
+              />
+            </template>
+          </password-input>
+        </q-card-section>
+      </q-card>
+    </div>
+
+    <div class="col-md-6 col-xs-12">
+      <q-card bordered>
+        <q-card-section>
+          <div class="text-h6">Calendar Password</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none q-gutter-sm">
+          <q-toggle
+            v-model="icalPasswordRequired"
+            left-label
+            label="Require password to access iCalendar"
+          />
+
+          <password-input
+            v-model="icalPassword"
+            dense
+            :disable="!icalPasswordRequired"
+          >
+            <template #prepend>
+              <q-icon name="key" />
+            </template>
+            <template #after>
+              <q-btn
+                icon="save"
+                class="ctfnote-input-button"
+                color="positive"
+                :disabled="icalPassword == adminSettings.icalPassword"
+                @click="updateIcalPassword"
               />
             </template>
           </password-input>
