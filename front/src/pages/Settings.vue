@@ -341,10 +341,3 @@ export default defineComponent({
   padding-top: 5px;
 }
 </style>
-
-<style>
-.btn-pick-color {
-  height: 40px !important;
-  width: 40px !important;
-}
-</style>

@@ -4,7 +4,7 @@
       <q-btn
         :icon="icon"
         class="btn-pick-color q-pa-none"
-        :class="{ 'no-icon': !icon }"
+        :class="{ icon: icon, 'no-icon': !icon }"
         :style="style"
       >
         <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -62,6 +62,11 @@ export default defineComponent({
 
 .no-icon {
   font-size: 0px;
+}
+
+.btn-pick-color.icon {
+  height: 40px !important;
+  width: 40px !important;
 }
 </style>
 
