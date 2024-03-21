@@ -28,19 +28,20 @@
             left-label
             label="Require password to access iCalendar"
           />
+
           <password-input
             v-model="icalPassword"
+            dense
             :disable="!icalPasswordRequired"
           >
+            <template #prepend>
+              <q-icon name="key" />
+            </template>
             <template #after>
               <q-btn
                 icon="save"
-                round
-                :color="
-                  icalPassword == adminSettings.icalPassword
-                    ? 'grey-5'
-                    : 'positive'
-                "
+                class="ctfnote-input-button"
+                color="positive"
                 :disabled="icalPassword == adminSettings.icalPassword"
                 @click="updateIcalPassword"
               />
@@ -55,33 +56,41 @@
         <q-card-section>
           <div class="text-h6">Registration with password</div>
         </q-card-section>
-        
+
         <q-card-section class="q-pt-none q-gutter-sm">
           <q-toggle
             v-model="registrationPasswordAllowed"
             left-label
             label="Allow registration with password on CTFNote"
           />
+
           <select-role
             v-model="registrationDefaultRole"
+            filled
+            dense
+            options-dense
             :disable="!registrationPasswordAllowed"
             label="Default role"
-          />
+          >
+            <template #prepend>
+              <q-icon name="people_alt" />
+            </template>
+          </select-role>
+
           <password-input
             v-model="registrationPassword"
+            dense
             :disable="!registrationPasswordAllowed"
-            :filled="false"
             label="Registration password"
           >
+            <template #prepend>
+              <q-icon name="key" />
+            </template>
             <template #after>
               <q-btn
                 icon="save"
-                round
-                :color="
-                  registrationPassword == adminSettings.registrationPassword
-                    ? 'grey-5'
-                    : 'positive'
-                "
+                class="ctfnote-input-button"
+                color="positive"
                 :disabled="
                   registrationPassword == adminSettings.registrationPassword
                 "
