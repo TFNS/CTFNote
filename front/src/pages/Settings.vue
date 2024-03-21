@@ -126,6 +126,8 @@
                 :model-value="systemNotificationEnabled"
                 label="Use browser notifications"
                 left-label
+                checked-icon="notifications_active"
+                unchecked-icon="notifications_off"
                 @click="toggleNotification"
               />
             </q-card-section>
