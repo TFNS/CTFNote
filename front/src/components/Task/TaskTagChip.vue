@@ -6,10 +6,7 @@
     :style="style"
     @click="filterTag(name)"
   >
-    <span
-      style="max-width: 120px"
-      class="ellipsis"
-    >
+    <span style="max-width: 120px" class="ellipsis">
       {{ name }}
     </span>
   </q-chip>
@@ -33,7 +30,9 @@ export default defineComponent({
       filterTag = injectStrict(keys.filterTag);
       clickable = true;
     } catch (e) {
-      filterTag = () => {return null;};
+      filterTag = () => {
+        return null;
+      };
       clickable = false;
     }
 

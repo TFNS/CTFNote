@@ -6,7 +6,7 @@
           <div class="text-h6">Create a new invitation link</div>
         </div>
       </q-card-section>
-      
+
       <q-card-section class="q-pa-none">
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="role" class="full-width q-pt-none q-pb-md">
@@ -18,12 +18,12 @@
               class="q-pb-xs"
               label="Role"
             >
-            <template #prepend>
-              <q-icon name="people_alt" />
-            </template>
+              <template #prepend>
+                <q-icon name="people_alt" />
+              </template>
             </select-role>
           </q-tab-panel>
-          
+
           <q-tab-panel name="link" class="full-width q-py-none">
             <copy-link v-if="link" :link="link" dense />
           </q-tab-panel>
