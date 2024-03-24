@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 100 99.999998"
+   xml:space="preserve"
+   id="svg8"
+   width="100"
+   height="100"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs8" />
+<style
+   type="text/css"
+   id="style1">
+	.st0{fill:#FFFFFF;}
+</style>
+<g
+   id="Layer_1"
+   transform="matrix(1.889169,0,0,1.889169,-157.52521,-5.6360253)">
+<path
+   class="st0"
+   d="m 90,11 v 36.9 h 39.7 V 11 Z m 34.29,31.87 H 95.42 V 16.03 h 28.87 z"
+   id="path7" /><polygon
+   class="st0"
+   points="145.16,23.57 138.1,23.57 153.91,39.38 147.8,45.48 151.83,49.05 161.24,39.65 "
+   id="polygon8"
+   transform="translate(-45.54,-10.02)" /></g>
+</svg>
