@@ -2,7 +2,7 @@
   <q-card bordered class="task" :class="{ solved: task.solved }">
     <task-menu :task="task" :context-menu="true" />
     <q-card-section>
-      <task-badge :task="task" />
+      <task-badge display-in-corner :task="task" />
       <div class="col justify-between">
         <ctf-note-link
           tag="a"
