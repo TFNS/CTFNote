@@ -20,7 +20,8 @@
             {{ title }}
           </div>
 
-          <task-tags-list-condensed
+          <task-tags-list
+            condensed
             v-if="currentTask && $q.screen.gt.sm"
             style="text-transform: none; font-weight: normal"
             dense
@@ -56,7 +57,7 @@
             </q-item-section>
 
             <q-item-section v-if="$q.screen.gt.xs" side>
-              <task-tags-list-condensed :tags="task.assignedTags" />
+              <task-tags-list condensed :tags="task.assignedTags" />
             </q-item-section>
           </q-item>
         </q-list>
@@ -71,14 +72,14 @@ import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import TaskMenu from '../Task/TaskMenu.vue';
 import TaskBadge from '../Task/TaskBadge.vue';
-import TaskTagsListCondensed from '../Task/TaskTagsListCondensed.vue';
+import TaskTagsList from '../Task/TaskTagsList.vue';
 import { tagsSortFn } from 'src/ctfnote/tags';
 
 export default defineComponent({
   components: {
     TaskMenu,
     TaskBadge,
-    TaskTagsListCondensed,
+    TaskTagsList,
   },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
