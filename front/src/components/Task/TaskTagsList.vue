@@ -10,7 +10,7 @@
     <q-chip
       v-if="hidden_tags.length >= 1"
       text-color="white"
-      color="black"
+      color="accent"
       class="non-selectable"
       :ripple="false"
       :dense="dense"
