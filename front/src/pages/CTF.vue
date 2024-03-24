@@ -11,7 +11,8 @@
       <q-route-tab :to="ctf.tasksLink" label="Tasks" :disable="!ctf.granted" />
       <q-route-tab v-show="me.isMember" :to="ctf.guestsLink" label="Guests" />
     </q-tabs>
-    <q-card>
+
+    <q-card square>
       <q-separator />
       <q-card-section>
         <router-view :ctf="ctf" />
