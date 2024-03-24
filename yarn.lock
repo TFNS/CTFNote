@@ -2,14 +2,14 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 6
-  cacheKey: 8
+  version: 8
+  cacheKey: 10
 
 "ctfnote@workspace:.":
   version: 0.0.0-use.local
   resolution: "ctfnote@workspace:."
   dependencies:
-    husky: ^8.0.3
+    husky: "npm:^8.0.3"
   languageName: unknown
   linkType: soft
 
@@ -18,6 +18,6 @@ __metadata:
   resolution: "husky@npm:8.0.3"
   bin:
     husky: lib/bin.js
-  checksum: 837bc7e4413e58c1f2946d38fb050f5d7324c6f16b0fd66411ffce5703b294bd21429e8ba58711cd331951ee86ed529c5be4f76805959ff668a337dbfa82a1b0
+  checksum: 10/b754cf70fdc97c3b60fec5b80056b9c11436464953b1691bf2b5dcf0081fb6685d2c5f47abb8b2b1c49f504aabea5321fdd6496f8b755d9f6e7525a493406abb
   languageName: node
   linkType: hard
