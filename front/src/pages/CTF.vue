@@ -13,7 +13,6 @@
     </q-tabs>
 
     <q-card square>
-      <q-separator />
       <q-card-section>
         <router-view :ctf="ctf" />
       </q-card-section>
