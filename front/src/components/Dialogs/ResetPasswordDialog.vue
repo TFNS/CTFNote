@@ -1,29 +1,26 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card class="q-dialog-plugin ctfnote-dialog">
-      <q-card-section>
-        <div class="row q-gutter-md">
-          <div class="text-h6">Reset password link for {{ user.login }}</div>
-          <q-space />
-          <q-btn v-close-popup icon="close" ripple flat round dense />
-        </div>
+      <q-card-section class="text-h6">
+        Reset password link for {{ user.login }}
       </q-card-section>
-      <q-separator />
+
       <q-card-section>
-        <copy-link :link="link">
+        <copy-link dense class="q-pb-none" :link="link">
           <template #after>
             <q-btn
               icon="lock_reset"
               color="positive"
-              round
+              class="ctfnote-input-button"
               @click="createLink"
             />
           </template>
         </copy-link>
       </q-card-section>
-      <q-card-actions class="q-pr-md q-pb-md" align="right">
-        <q-btn v-if="link" v-close-popup color="positive" label="Close" />
-        <q-btn v-else v-close-popup flat color="warning" label="Cancel" />
+
+      <q-card-actions align="right" class="q-px-md q-pb-md">
+        <q-btn v-if="link" v-close-popup color="primary" label="Close" />
+        <q-btn v-else v-close-popup flat color="primary" label="Cancel" />
       </q-card-actions>
     </q-card>
   </q-dialog>

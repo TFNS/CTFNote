@@ -2,8 +2,13 @@
   <div>
     <q-btn-dropdown flat no-caps style="padding-left: 14px; padding-right: 8px">
       <template #label>
-        <div class="row q-gutter-md items-center">
-          <task-menu v-if="task" :task="task" :context-menu="true" />
+        <div class="row q-gutter-sm items-center">
+          <task-menu
+            v-if="currentTask"
+            :task="currentTask"
+            :context-menu="true"
+          />
+
           <div
             class="task-list-label"
             :class="{
@@ -14,31 +19,45 @@
           >
             {{ title }}
           </div>
+
+          <task-tags-list
+            condensed
+            v-if="currentTask && $q.screen.gt.sm"
+            style="text-transform: none; font-weight: normal"
+            dense
+            :tags="currentTask.assignedTags"
+          />
         </div>
       </template>
       <template #default>
-        <q-list>
-          <q-item v-for="t of sortedTasks" :key="t.nodeId" clickable>
-            <q-item-section @click="taskLink(t)">
+        <q-list dense>
+          <q-item
+            v-for="task of sortedTasks"
+            :key="task.nodeId"
+            clickable
+            style="height: 46px"
+            @click="taskLink(task)"
+          >
+            <task-menu v-if="task" :task="task" :context-menu="true" />
+
+            <q-item-section>
               <q-item-label>
-                <div class="row" style="max-width: 200px">
+                <div class="row" style="max-width: 400px">
+                  <div style="width: 24px" class="col col-auto q-mr-md">
+                    <task-badge :task="task" />
+                  </div>
+
                   <div class="col">
                     <div class="ellipsis">
-                      {{ t.title }}
+                      {{ task.title }}
                     </div>
-                  </div>
-                  <div v-show="t.solved" class="col col-auto q-ml-xs">
-                    <q-badge icon="flag" color="green" rounded>
-                      <q-icon name="flag" />
-                    </q-badge>
                   </div>
                 </div>
               </q-item-label>
             </q-item-section>
-            <q-item-section side>
-              <q-btn icon="settings" flat round>
-                <task-menu v-if="t" :task="t" :context-menu="false" />
-              </q-btn>
+
+            <q-item-section v-if="$q.screen.gt.xs" side>
+              <task-tags-list condensed :tags="task.assignedTags" />
             </q-item-section>
           </q-item>
         </q-list>
@@ -52,21 +71,27 @@ import { Ctf, Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import TaskMenu from '../Task/TaskMenu.vue';
+import TaskBadge from '../Task/TaskBadge.vue';
+import TaskTagsList from '../Task/TaskTagsList.vue';
 import { tagsSortFn } from 'src/ctfnote/tags';
 
 export default defineComponent({
-  components: { TaskMenu },
+  components: {
+    TaskMenu,
+    TaskBadge,
+    TaskTagsList,
+  },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
     taskId: { type: Number, default: null },
   },
   computed: {
-    task() {
+    currentTask() {
       return this.ctf.tasks.find((t) => t.id == this.taskId);
     },
     title() {
-      if (this.task) {
-        return this.task.title;
+      if (this.currentTask) {
+        return this.currentTask.title;
       }
       return 'Open Task';
     },
@@ -117,6 +142,6 @@ export default defineComponent({
 }
 
 .task-list-label-md {
-  max-width: calc(100vw - 765px);
+  max-width: calc(100vw - 910px);
 }
 </style>

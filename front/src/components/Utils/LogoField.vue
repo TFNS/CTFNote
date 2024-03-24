@@ -1,8 +1,17 @@
 <template>
   <div>
-    <q-input v-model="model" clearable label="Logo link">
+    <q-input v-model="model" dense filled clearable label="Logo link">
+      <template #prepend>
+        <q-icon name="image" />
+      </template>
       <template #after>
-        <q-btn round color="primary" icon="backup" @click="openPicker" />
+        <q-btn
+          unelevated
+          color="primary"
+          class="ctfnote-input-button"
+          icon="backup"
+          @click="openPicker"
+        />
       </template>
     </q-input>
     <q-file

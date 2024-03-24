@@ -59,20 +59,22 @@ export function useSolveTaskPopup() {
   const updateTask = useUpdateTask();
   return (task: Task) => {
     Dialog.create({
-      title: 'Flag:',
+      title: 'Submit flag for ' + task.title,
       color: 'primary',
-      cancel: {
-        label: 'cancel',
-        color: 'warning',
-        flat: true,
-      },
+      class: 'compact-dialog',
       prompt: {
         model: task.flag ?? '',
         type: 'text',
+        label: 'Flag',
+        filled: true,
+      },
+      cancel: {
+        label: 'Cancel',
+        flat: true,
       },
       ok: {
         color: 'positive',
-        label: 'save',
+        label: 'Save',
       },
     }).onOk((flag: string) => {
       void updateTask(task, { flag });
@@ -85,10 +87,18 @@ export function useDeleteTaskPopup() {
   return (task: Task) => {
     Dialog.create({
       title: `Delete ${task.title}?`,
-      color: 'negative',
+      color: 'primary',
+      class: 'compact-dialog',
       message: 'This will delete the task, but not the pads.',
-      ok: 'Delete',
-      cancel: true,
+      cancel: {
+        label: 'Cancel',
+        flat: true,
+      },
+      ok: {
+        color: 'negative',
+        label: 'Delete',
+        flat: true,
+      },
     }).onOk(() => {
       void deleteTask(task);
     });
