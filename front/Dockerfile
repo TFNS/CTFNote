@@ -1,4 +1,4 @@
-FROM node@sha256:1a9a71ea86aad332aa7740316d4111ee1bd4e890df47d3b5eff3e5bded3b3d10 AS build-deps
+FROM node@18.19.1 AS build-deps
 
 RUN apk add --no-cache python3 make g++
 RUN mkdir -p /usr/src/app
