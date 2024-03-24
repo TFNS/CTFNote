@@ -32,7 +32,7 @@ export default defineComponent({
     ctf: { type: Object as () => Ctf, required: true },
     contextMenu: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   setup() {
