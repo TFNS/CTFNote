@@ -2,8 +2,8 @@
   <div class="row">
     <task-tag-chip
       v-for="tag in visible_tags"
-      :dense="dense"
       :key="tag.nodeId"
+      :dense="dense"
       :name="tag.tag"
     />
 
