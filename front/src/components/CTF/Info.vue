@@ -25,15 +25,20 @@
         </div>
       </div>
 
-      <div class="col row q-gutter-sm">
-        <q-chip color="primary" class="q-ml-none" :ripple="false"
-          ><span class="text-weight-bold">Start:</span>&nbsp;{{
-            startTime
-          }}</q-chip
+      <div class="col row q-gutter-sm" style="margin-top: 14px">
+        <q-chip
+          color="primary"
+          text-color="white"
+          class="q-ml-none"
+          :ripple="false"
         >
-        <q-chip color="primary" :ripple="false"
-          ><span class="text-weight-bold">End:</span>&nbsp;{{ endTime }}</q-chip
-        >
+          <span class="text-weight-bold">Start:</span>&nbsp;
+          {{ startTime }}
+        </q-chip>
+        <q-chip color="primary" text-color="white" :ripple="false">
+          <span class="text-weight-bold">End:</span>&nbsp;
+          {{ endTime }}
+        </q-chip>
 
         <q-space />
 
