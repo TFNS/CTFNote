@@ -8,13 +8,13 @@
     "start": "NODE_ENV=production node dist/index.js",
     "build": "tsc",
     "lint": "eslint --fix 'src/**/*.ts'",
-    "format": "prettier --write 'src/**/*.ts'",
+    "format": "prettier --config ../.prettierrc --write 'src/**/*.ts'",
     "dev": "DEBUG=postgraphile:postgres:error NODE_ENV=development nodemon src/index.ts",
     "dev:migrate": "DATABASE_URL= yarn run db-migrate -e dev up"
   },
   "lint-staged": {
     "src/**/*.{ts,css,html,vue}": [
-      "yarn run prettier --write"
+      "yarn run prettier --config ../.prettierrc --write"
     ]
   },
   "dependencies": {
