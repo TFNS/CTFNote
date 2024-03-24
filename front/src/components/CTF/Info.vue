@@ -10,7 +10,7 @@
           <div class="text-h4">
             {{ ctf.title }}
           </div>
-          
+
           <q-space />
 
           <template v-if="me.isManager">
@@ -58,13 +58,21 @@
             </div>
           </div>
 
-          <q-separator vertical />
-
-          <div class="col">
-            <info-credentials :ctf="ctf" />
-          </div>
+          <template v-if="$q.screen.gt.xs">
+            <q-separator vertical />
+            <div class="col">
+              <info-credentials :ctf="ctf" />
+            </div>
+          </template>
         </div>
       </div>
+
+      <template v-if="$q.screen.xs">
+        <q-separator />
+        <div class="col">
+          <info-credentials :ctf="ctf" />
+        </div>
+      </template>
     </div>
   </div>
 </template>
