@@ -1,32 +1,44 @@
 <template>
   <div class="background-logo" :style="style">
-    <div class="column q-px-md">
-      <div class="col q-py-md">
-        <div class="row q-gutter-md items-center">
+    <div class="column q-gutter-md">
+      <div class="col">
+        <div
+          class="row q-gutter-md items-start no-wrap"
+          style="width: calc(100vw - 16px)"
+        >
           <logo-link :ctf="ctf" />
           <div class="text-h4">
             {{ ctf.title }}
           </div>
+          <q-space />
           <btn-edit v-if="me.isManager" round :ctf="ctf" />
           <btn-delete v-if="me.isManager" round :ctf="ctf" />
-          <q-space />
-          <template v-if="ctf.ctftimeUrl">
-            <weight-badge :ctf="ctf" />
-            <ctf-time-link :ctf="ctf" />
-          </template>
         </div>
       </div>
-      <div class="col q-py-md">
-        <div class="q-gutter-md items-center">
-          <div>Start: {{ startTime }}</div>
-          <div>End: {{ endTime }}</div>
+
+      <div class="col row q-gutter-sm">
+        <q-chip color="primary" class="q-ml-none" :ripple="false"
+          ><span class="text-weight-bold">Start:</span>&nbsp;{{
+            startTime
+          }}</q-chip
+        >
+        <q-chip color="primary" :ripple="false"
+          ><span class="text-weight-bold">End:</span>&nbsp;{{ endTime }}</q-chip
+        >
+
+        <q-space />
+
+        <div v-if="ctf.ctftimeUrl" class="row no-wrap justify-center q-ml-auto">
+          <weight-badge :ctf="ctf" class="q-ml-none q-my-none q-mr-md" />
+          <ctf-time-link height="28" :ctf="ctf" />
         </div>
       </div>
-      <div class="col q-py-md">
+
+      <div class="col">
         <div class="row q-gutter-md">
           <div class="col">
             <div class="q-gutter-sm">
-              <div class="row items-center q-gutter-md q-pa-sm">
+              <div class="row q-gutter-md q-pl-sm">
                 <div class="text-h6">Description</div>
               </div>
               <div class="row">
@@ -36,7 +48,9 @@
               </div>
             </div>
           </div>
+
           <q-separator vertical />
+
           <div class="col">
             <info-credentials :ctf="ctf" />
           </div>
@@ -62,10 +76,10 @@ export default defineComponent({
   components: {
     BtnEdit,
     BtnDelete,
-    WeightBadge,
     CtfTimeLink,
-    LogoLink,
     InfoCredentials,
+    LogoLink,
+    WeightBadge,
   },
   props: {
     ctf: { type: Object as () => Ctf, required: true },

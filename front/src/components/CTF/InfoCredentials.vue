@@ -1,8 +1,8 @@
 <template>
   <div class="q-gutter-sm">
-    <div class="row items-center q-gutter-md q-pa-sm">
+    <div class="row q-gutter-md q-pl-sm">
       <div class="text-h6 col col-auto">Credentials</div>
-      <div>
+      <div class="col">
         <q-btn
           v-if="me.isManager"
           round
