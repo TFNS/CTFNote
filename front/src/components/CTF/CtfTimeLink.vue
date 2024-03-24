@@ -1,7 +1,7 @@
 <template>
   <a :href="ctf.ctftimeUrl" target="_blank">
     <q-tooltip>Browse CTFTime.org</q-tooltip>
-    <img height="30" src="/ctftime-logo.svg" />
+    <img height="28" src="/ctftime-logo.svg" />
   </a>
 </template>
 
