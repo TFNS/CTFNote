@@ -15,7 +15,7 @@
       transition-show="fade"
       transition-hide="fade"
     >
-      <q-card bordered style="border-radius: 23px !important;">
+      <q-card bordered style="border-radius: 23px !important">
         <q-card-section class="tooltip-section">
           <q-list dense>
             <q-item
