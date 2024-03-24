@@ -1,22 +1,28 @@
 <template>
   <div>
-    <div class="row q-mb-md q-gutter-md items-center">
-      <div class="col col-md-3 col-sm-6 col-xs-11">
-        <q-input v-model="filter" label="search">
-          <template #append>
+    <div class="row q-mb-md q-col-gutter-sm">
+      <div class="col col-md-3 col-sm-6 col-xs-11 col-grow">
+        <q-input v-model="filter" filled dense placeholder="Search">
+          <template #prepend>
             <q-icon name="search" />
           </template>
         </q-input>
       </div>
-      <div class="col col-md-3 col-sm-5 col-xs-11 col-grow">
+      <div class="col col-md-3 col-sm-6 col-xs-11 col-grow">
         <q-select
           v-model="tagFilter"
           :options="tags"
+          filled
+          dense
+          options-dense
           use-chips
           multiple
           label="Filter by tag"
           emit-value
         >
+          <template #prepend>
+            <q-icon name="label" />
+          </template>
           <template v-if="tagFilter.length" #append>
             <q-icon
               name="cancel"
@@ -26,15 +32,22 @@
           </template>
         </q-select>
       </div>
+
       <div class="col col-auto">
-        <q-checkbox v-model="hideSolved" label="Hide solved" />
+        <q-checkbox v-model="hideSolved" label="Hide solved" class="q-mr-sm" />
         <q-checkbox v-model="myTasks" label="Show my tasks" />
       </div>
+
       <q-space />
-      <div class="col">
+
+      <div class="col col-auto q-ml-auto">
         <q-select
           v-model="displayMode"
+          filled
+          dense
+          options-dense
           label="Display"
+          style="width: 130px"
           :options="displayOptions"
         />
       </div>
@@ -54,6 +67,7 @@
       />
       <task-table v-else :ctf="ctf" :tasks="sortedTasks" />
     </template>
+
     <div v-else class="text-center col">
       <div class="row q-gutter-md justify-center">
         <q-btn
