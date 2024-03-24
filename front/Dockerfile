@@ -1,4 +1,4 @@
-FROM node@18.19.1-alpine AS build-deps
+FROM node:18.19.1-alpine AS build-deps
 
 RUN apk add --no-cache python3 make g++
 RUN mkdir -p /usr/src/app

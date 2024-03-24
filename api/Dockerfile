@@ -2,12 +2,12 @@
 
 # Global args, set before the first FROM, shared by all stages
 ARG NODE_ENV="production"
-ARG NODE_VERSION="18.19.1-alpine"
+ARG NODE_IMAGE="18.19.1-alpine"
 
 ################################################################################
 # Build stage 1 - `yarn build`
 
-FROM node@${NODE_VERSION} as builder
+FROM node:${NODE_IMAGE} as builder
 # Import our shared args
 ARG NODE_ENV
 
@@ -26,7 +26,7 @@ RUN yarn run build
 ################################################################################
 # Build stage 2 - COPY the relevant things (multiple steps)
 
-FROM node@${NODE_VERSION} as clean
+FROM node:${NODE_IMAGE} as clean
 # Import our shared args
 ARG NODE_ENV
 ARG DB_HOST
@@ -42,7 +42,7 @@ COPY --from=builder /app/migrations/ /app/migrations/
 ################################################################################
 # Build stage FINAL - COPY everything, once, and then do a clean `yarn install`
 
-FROM node@${NODE_VERSION}
+FROM node:${NODE_IMAGE}
 # Import our shared args
 ARG NODE_ENV
 
