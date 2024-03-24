@@ -1,19 +1,19 @@
 <template>
   <q-input
-    bottom-slots
     v-model="discordEventLink"
+    bottom-slots
     label="Discord Event Link"
     hint="Format: https://discord.gg/abcdefg?event=123456789"
     filled
   >
-    <template v-slot:after>
+    <template #after>
       <q-btn
         round
         icon="sync"
         color="positive"
         title="Import users from Discord"
-        @click="set(ctf, discordEventLink ?? '')"
         :loading="loading"
+        @click="set(ctf, discordEventLink ?? '')"
       />
     </template>
   </q-input>

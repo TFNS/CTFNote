@@ -30,11 +30,19 @@ export default defineComponent({
     openDeleteCtfDialog() {
       this.$q
         .dialog({
-          title: `Delete ${this.ctf.title} ?`,
-          color: 'negative',
+          title: `Delete ${this.ctf.title}?`,
+          color: 'primary',
+          class: 'compact-dialog',
           message: 'This will delete all the tasks, but not the pads.',
-          ok: 'Delete',
-          cancel: true,
+          cancel: {
+            label: 'Cancel',
+            flat: true,
+          },
+          ok: {
+            color: 'negative',
+            label: 'Delete',
+            flat: true,
+          },
         })
         .onOk(() => {
           const title = this.ctf.title;

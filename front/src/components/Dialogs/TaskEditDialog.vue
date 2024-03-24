@@ -1,20 +1,27 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide">
+  <q-dialog ref="dialogRef" no-backdrop-dismiss @hide="onDialogHide">
     <q-card class="ctfnote-dialog">
       <q-form @submit="submit">
-        <q-card-section class="row">
-          <div class="text-h6">
+        <q-card-section class="row items-center no-wrap">
+          <div class="text-h6 ellipsis">
             {{ title }}
           </div>
           <q-space />
           <q-btn v-close-popup icon="close" flat round dense />
         </q-card-section>
-        <q-card-section class="q-pt-none">
-          <q-input v-model="form.title" required label="Title" />
-        </q-card-section>
-        <q-card-section class="q-pt-none">
+
+        <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
+          <q-input v-model="form.title" filled dense required label="Title">
+            <template #prepend>
+              <q-icon name="title" />
+            </template>
+          </q-input>
+
           <q-select
             v-model="form.tags"
+            filled
+            dense
+            options-dense
             label="Tags"
             :options="suggestions"
             input-debounce="0"
@@ -24,20 +31,29 @@
             new-value-mode="add-unique"
             behavior="menu"
             @filter="filterFn"
-          />
-        </q-card-section>
-        <q-card-section class="q-pt-none">
+          >
+            <template #prepend>
+              <q-icon name="label" />
+            </template>
+          </q-select>
+
           <q-input
             v-model="form.description"
+            filled
+            dense
             label="Description"
             type="textarea"
           />
+
+          <q-input v-model="form.flag" filled dense label="Flag">
+            <template #prepend>
+              <q-icon name="flag" />
+            </template>
+          </q-input>
         </q-card-section>
-        <q-card-section class="q-pt-none">
-          <q-input v-model="form.flag" label="Flag" />
-        </q-card-section>
-        <q-card-actions class="q-gutter-md q-pr-md q-pb-md" align="right">
-          <q-btn v-close-popup flat color="warning" label="Cancel" />
+
+        <q-card-actions align="right" class="q-px-md q-pb-md">
+          <q-btn v-close-popup flat color="primary" label="Cancel" />
           <q-btn color="positive" type="submit" :label="editText" />
         </q-card-actions>
       </q-form>
