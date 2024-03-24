@@ -10,9 +10,18 @@
           <div class="text-h4">
             {{ ctf.title }}
           </div>
+          
           <q-space />
-          <btn-edit v-if="me.isManager" round :ctf="ctf" />
-          <btn-delete v-if="me.isManager" round :ctf="ctf" />
+
+          <template v-if="me.isManager">
+            <q-btn v-if="$q.screen.xs" icon="settings" round color="primary">
+              <card-admin-menu :ctf="ctf" :context-menu="false" />
+            </q-btn>
+            <template v-else>
+              <btn-edit v-if="me.isManager" round :ctf="ctf" />
+              <btn-delete v-if="me.isManager" round :ctf="ctf" />
+            </template>
+          </template>
         </div>
       </div>
 
@@ -67,6 +76,7 @@ import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import BtnDelete from './BtnDelete.vue';
 import BtnEdit from './BtnEdit.vue';
+import CardAdminMenu from './CardAdminMenu.vue';
 import CtfTimeLink from './CtfTimeLink.vue';
 import InfoCredentials from './InfoCredentials.vue';
 import LogoLink from './LogoLink.vue';
@@ -76,6 +86,7 @@ export default defineComponent({
   components: {
     BtnEdit,
     BtnDelete,
+    CardAdminMenu,
     CtfTimeLink,
     InfoCredentials,
     LogoLink,
