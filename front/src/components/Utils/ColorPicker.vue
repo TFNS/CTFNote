@@ -58,6 +58,7 @@ export default defineComponent({
   border-radius: 4px;
   height: 32px;
   width: 32px;
+  color: white;
 }
 
 .no-icon {
