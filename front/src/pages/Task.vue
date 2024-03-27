@@ -1,6 +1,6 @@
 <template>
   <q-page class="page">
-    <iframe v-if="task" :src="task.padUrl" />
+    <iframe v-if="task" :src="task.padUrl + '#'" />
     <p v-else>Unable to load task</p>
   </q-page>
 </template>
