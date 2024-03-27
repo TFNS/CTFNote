@@ -32,23 +32,8 @@
             {{ value }}
           </q-td>
         </template>
-        <template #body-cell-login="{ value }">
-          <q-td>
-            {{ value }}
-          </q-td>
-        </template>
-        <template #body-cell-username="{ value }">
-          <q-td>
-            {{ value }}
-          </q-td>
-        </template>
-        <template #body-cell-lastactive="{ value }">
-          <q-td style="width: 150px; max-width: 150px">
-            {{ value }}
-          </q-td>
-        </template>
         <template #body-cell-role="{ row, value }">
-          <q-td style="width: 140px; max-width: 140px">
+          <q-td style="width: 132px; max-width: 132px">
             <select-role
               filled
               dense
@@ -56,6 +41,21 @@
               :model-value="value"
               @update:model-value="(v) => updateRole(row, v)"
             />
+          </q-td>
+        </template>
+        <template #body-cell-username="{ value }">
+          <q-td>
+            {{ value }}
+          </q-td>
+        </template>
+        <template #body-cell-displayname="{ value }">
+          <q-td>
+            {{ value }}
+          </q-td>
+        </template>
+        <template #body-cell-lastactive="{ value }">
+          <q-td style="width: 150px; max-width: 150px">
+            {{ value }}
           </q-td>
         </template>
         <template #body-cell-btns="{ row }">
@@ -111,6 +111,13 @@ const columns = [
     align: 'left',
   },
   {
+    name: 'role',
+    label: 'Role',
+    field: 'role',
+    sortable: true,
+    align: 'left',
+  },
+  {
     name: 'username',
     label: 'Username',
     field: 'login',
@@ -130,13 +137,6 @@ const columns = [
     field: (u: User) => {
       return date.formatDate(u.profile.lastactive, 'YYYY-MM-DD HH:mm:ss');
     },
-    sortable: true,
-    align: 'left',
-  },
-  {
-    name: 'role',
-    label: 'Role',
-    field: 'role',
     sortable: true,
     align: 'left',
   },
