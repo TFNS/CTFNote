@@ -56,7 +56,7 @@
                 <div class="text-h6">Description</div>
               </div>
               <div class="row">
-                <div class="col col-auto">
+                <div class="col col-auto ctf-info-text">
                   <q-markdown no-html :src="ctf.description" />
                 </div>
               </div>
@@ -65,7 +65,7 @@
 
           <template v-if="$q.screen.gt.xs">
             <q-separator vertical />
-            <div class="col">
+            <div class="col ctf-info-text">
               <info-credentials :ctf="ctf" />
             </div>
           </template>
@@ -74,7 +74,7 @@
 
       <template v-if="$q.screen.xs">
         <q-separator />
-        <div class="col">
+        <div class="col ctf-info-text">
           <info-credentials :ctf="ctf" />
         </div>
       </template>
@@ -151,5 +151,11 @@ export default defineComponent({
   & * {
     z-index: 1;
   }
+}
+</style>
+
+<style>
+.ctf-info-text p:last-child {
+  display: inline;
 }
 </style>
