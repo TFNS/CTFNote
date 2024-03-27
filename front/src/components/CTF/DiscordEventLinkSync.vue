@@ -1,14 +1,18 @@
 <template>
   <q-input
     v-model="discordEventLink"
-    bottom-slots
-    label="Discord Event Link"
-    hint="Format: https://discord.gg/abcdefg?event=123456789"
+    dense
     filled
+    bottom-slots
+    label="Discord event link"
+    hint="Format: https://discord.gg/abcdefg?event=123456789"
   >
+    <template #prepend>
+      <q-icon name="discord" />
+    </template>
     <template #after>
       <q-btn
-        round
+        class="ctfnote-input-button"
         icon="sync"
         color="positive"
         title="Import users from Discord"
