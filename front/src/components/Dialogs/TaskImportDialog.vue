@@ -175,29 +175,33 @@ export default defineComponent({
     onPaste() {
       void this.$nextTick(() => this.autoDetectParser());
     },
+    normalizeTags(tags: string[]): string[] {
+      if (tags.length == 0) return [];
+      return Array.from(new Set(tags.map((t) => t.trim().toLowerCase())));
+    },
     parseTasks(v: string): ParsedTask[] {
       // Get list of task {title,category} from parse
       const parsedTasks = this.currentParser.value.parse(v);
       // Precompute a set of task to avoid N square operation
       const hashTask = (title: string, tags: string[]): string =>
-        title +
-        tags
-          .map((t) => t.toLowerCase())
-          .sort()
-          .join('');
+        title + this.normalizeTags(tags).sort().join('');
       const taskSet = new Set();
       for (const task of this.ctf.tasks) {
         taskSet.add(
           hashTask(
             task.title,
-            task.assignedTags.map((t) => t.tag)
+            this.normalizeTags(task.assignedTags.map((t) => t.tag))
           )
         );
       }
       // mark already existing tasks
       return parsedTasks.map((task) => {
         const hash = hashTask(task.title, task.tags);
-        return { ...task, keep: !taskSet.has(hash) };
+        return {
+          ...task,
+          tags: this.normalizeTags(task.tags),
+          keep: !taskSet.has(hash),
+        };
       });
     },
     computeTags(tags: { nodeId: number; tag: string }[]) {

@@ -61,6 +61,7 @@ export function icalRoute(pool: Pool): Handler {
       });
     }
 
-    cal.serve(res);
+    res.write(cal.toString());
+    res.end();
   };
 }
