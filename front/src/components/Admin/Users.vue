@@ -111,7 +111,7 @@ const columns = [
     align: 'left',
   },
   {
-    name: 'Username',
+    name: 'username',
     label: 'Username',
     field: 'login',
     sortable: true,
