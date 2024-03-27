@@ -1,7 +1,12 @@
 <template>
   <q-card bordered class="ctfcard">
     <card-admin-menu :ctf="ctf" />
-    <q-linear-progress v-if="progress >= 0" :value="progress" animation-speed="0" color="positive" />
+    <q-linear-progress
+      v-if="progress >= 0"
+      :value="progress"
+      animation-speed="0"
+      color="positive"
+    />
     <q-card-section>
       <div class="row q-gutter-md items-center">
         <div class="col-auto">
@@ -124,7 +129,7 @@ export default defineComponent({
       const end = this.ctf.endTime.getTime();
       const duration = end - start;
       const elapsed = this.now.valueOf() - start;
-      const progress = Math.min((elapsed / duration), 1);
+      const progress = Math.min(elapsed / duration, 1);
       return progress;
     },
   },

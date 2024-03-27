@@ -21,8 +21,8 @@
           </div>
 
           <task-tags-list
-            condensed
             v-if="currentTask && $q.screen.gt.sm"
+            condensed
             style="text-transform: none; font-weight: normal"
             dense
             :tags="currentTask.assignedTags"
