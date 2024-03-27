@@ -4,12 +4,8 @@
 
     <div v-else class="flex justify-center items-start q-mt-md">
       <q-card>
-        <q-card-section>
+        <q-card-section class="q-pb-sm">
           <div class="text-h5">Task not found</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
-          <span>It might have been deleted.</span>
         </q-card-section>
 
         <q-card-actions class="row q-px-md q-pb-md">
