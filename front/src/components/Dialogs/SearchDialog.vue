@@ -2,11 +2,14 @@
   <q-dialog ref="dialogRef" position="top" @hide="onDialogHide">
     <q-card style="width: 100%; max-width: 1000px">
       <q-card-section class="row items-center no-wrap">
-          <div class="text-h6 ellipsis">
-            Global search
-          </div>
-          <q-space />
-          <q-chip square dense class="keycap q-ml-md">ctrl</q-chip>+<q-chip square dense class="keycap">k</q-chip>
+        <div class="text-h6 ellipsis">Global search</div>
+        <q-space />
+        <q-chip square dense class="keycap q-ml-md">ctrl</q-chip>+<q-chip
+          square
+          dense
+          class="keycap"
+          >k</q-chip
+        >
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -26,7 +29,7 @@
       </q-card-section>
 
       <q-card-section v-if="!!items.length" class="q-pt-none">
-        <q-list bordered separator style="border-radius: 4px;">
+        <q-list bordered separator style="border-radius: 4px">
           <q-item
             v-for="(item, i) in items"
             :key="item.nodeId"
@@ -35,8 +38,13 @@
             class="col"
             @click="onItemSelected(item)"
           >
-            <q-item-section side top class="justify-center" style="width: 54px;">
-              <q-badge v-if="item.__typename == 'Ctf'" color="primary" label="CTF" style="margin: auto;" />
+            <q-item-section side top class="justify-center" style="width: 54px">
+              <q-badge
+                v-if="item.__typename == 'Ctf'"
+                color="primary"
+                label="CTF"
+                style="margin: auto"
+              />
               <q-badge v-else color="secondary" :label="item.__typename" />
             </q-item-section>
 

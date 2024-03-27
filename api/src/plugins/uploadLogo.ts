@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import fs from "fs";
 import { gql, makeExtendSchemaPlugin } from "graphile-utils";
-import { FileUpload } from "graphql-upload-ts";
+import { FileUpload, ReadStream } from "graphql-upload-ts";
 import path from "path";
 import { Client } from "pg";
 
@@ -29,7 +29,7 @@ export interface Context {
 }
 
 function saveLocal(
-  stream: fs.ReadStream,
+  stream: ReadStream,
   filename: string,
   folder = ""
 ): Promise<string> {
