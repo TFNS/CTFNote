@@ -25,13 +25,8 @@
         </div>
       </div>
 
-      <div class="col row q-gutter-sm" style="margin-top: 14px">
-        <q-chip
-          color="primary"
-          text-color="white"
-          class="q-ml-none"
-          :ripple="false"
-        >
+      <div class="col row q-ml-sm q-gutter-sm" style="margin-top: 14px">
+        <q-chip color="primary" text-color="white" :ripple="false">
           <span class="text-weight-bold">Start:</span>&nbsp;
           {{ startTime }}
         </q-chip>
@@ -42,7 +37,7 @@
 
         <q-space />
 
-        <div v-if="ctf.ctftimeUrl" class="row no-wrap justify-center q-ml-auto">
+        <div v-if="ctf.ctftimeUrl" class="row no-wrap q-ml-auto">
           <weight-badge :ctf="ctf" class="q-ml-none q-my-none q-mr-md" />
           <ctf-time-link height="28" :ctf="ctf" />
         </div>
