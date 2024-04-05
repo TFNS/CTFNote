@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-tabs class="bg-light" indicator-color="primary" dense align="left">
+    <q-tabs indicator-color="secondary" dense align="left">
       <q-route-tab
         v-for="(tab, idx) in tabs"
         :key="idx"

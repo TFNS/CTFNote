@@ -1,12 +1,6 @@
 <template>
   <q-page>
-    <q-tabs
-      v-model="tab"
-      class="bg-light"
-      indicator-color="primary"
-      dense
-      align="left"
-    >
+    <q-tabs v-model="tab" indicator-color="secondary" dense align="left">
       <q-route-tab
         :to="{ name: 'admin-registration' }"
         label="Authentication"
