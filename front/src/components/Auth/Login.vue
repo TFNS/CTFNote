@@ -4,16 +4,18 @@
       <q-card-section>
         <div class="text-h5">Login</div>
       </q-card-section>
-      <q-card-section class="q-gutter-md">
+
+      <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
         <q-input
           v-model="form.login"
           filled
+          dense
           autocomplete="username"
           autocapitalize="none"
-          label="Login"
+          label="Username"
           required
         />
-        <password-input v-model="form.password" required />
+        <password-input v-model="form.password" dense required />
 
         <q-input
           v-if="!!token"
@@ -23,22 +25,21 @@
           label="Token"
         />
       </q-card-section>
-      <q-card-actions class="q-pa-md row justify-between">
-        <div v-if="registrationEnabled">
-          I don't have an account:
-          <b>
-            <ctf-note-link
-              name="auth-register"
-              class="text-primary"
-              label="REGISTER"
-              underline
-            />
-          </b>
-        </div>
-        <div v-else />
-        <q-btn type="submit" label="Login" color="primary" />
+
+      <q-card-actions class="row q-px-md q-pb-md">
+        <q-btn type="submit" label="Login" color="primary" class="full-width" />
       </q-card-actions>
     </q-form>
+  </q-card>
+
+  <q-card class="q-mt-md">
+    <q-card-actions v-if="registrationEnabled" class="row q-px-md">
+      <span>Don't have an account?</span>
+      <q-space />
+      <ctf-note-link name="auth-register">
+        <q-btn flat color="primary">Register</q-btn>
+      </ctf-note-link>
+    </q-card-actions>
   </q-card>
 </template>
 
