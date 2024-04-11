@@ -1,9 +1,6 @@
 <template>
   <div class="q-gutter-md">
     <div class="row text-h6">Invite guests</div>
-    <div class="row q-mt-sm">
-      Choose which guests can view and modify tasks in this CTF.
-    </div>
     <div class="row q-mt-sm" style="margin-left: 12px">
       <template v-if="guestsWithInvitation.length > 0">
         <div
