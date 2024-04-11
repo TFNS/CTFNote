@@ -34,7 +34,7 @@
     </div>
     <div class="row text-h6">Sync with Discord event</div>
     <div class="row q-mt-sm">
-      <div style="width: 26rem">
+      <div style="width: 590px">
         <discord-event-link-sync :ctf="ctf" class="col" />
       </div>
     </div>
