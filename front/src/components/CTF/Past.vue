@@ -15,11 +15,19 @@
           <q-tr :props="props">
             <card-admin-menu :ctf="props.row" />
             <q-td key="title" :props="props">
-              <ctf-note-link :ctf="props.row" name="ctf">
-                <q-btn flat :label="props.row.title" />
-              </ctf-note-link>
+              <ctf-note-link
+                :ctf="props.row"
+                name="ctf"
+                class="stretched-link"
+              />
+              <span class="text-weight-medium">{{ props.row.title }}</span>
             </q-td>
             <q-td key="date" :props="props">
+              <ctf-note-link
+                :ctf="props.row"
+                name="ctf"
+                class="stretched-link"
+              />
               {{ formatTime(props.row) }}
             </q-td>
           </q-tr>
@@ -100,3 +108,16 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped lang="scss">
+/* Bootstrap stretched-link class (https://github.com/twbs/bootstrap/blob/868705bed08f0824ec560e0397a023266786a26b/scss/helpers/_stretched-link.scss) */
+.stretched-link::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  content: '';
+}
+</style>
