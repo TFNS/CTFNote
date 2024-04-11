@@ -1,6 +1,6 @@
 <template>
   <q-card>
-    <q-card-section>
+    <q-card-section class="q-pa-none">
       <q-table
         v-model:pagination="pagination"
         no-data-label="No CTF available."
