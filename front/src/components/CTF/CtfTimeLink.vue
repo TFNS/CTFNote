@@ -1,5 +1,5 @@
 <template>
-  <a :href="ctf.ctftimeUrl" target="_blank">
+  <a :href="ctf.ctftimeUrl" target="_blank" style="height: 28px">
     <q-tooltip>Browse CTFTime.org</q-tooltip>
     <img height="28" src="/ctftime-logo.svg" />
   </a>
@@ -14,5 +14,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style></style>

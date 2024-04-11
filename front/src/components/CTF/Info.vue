@@ -2,45 +2,75 @@
   <div class="background-logo" :style="style">
     <div class="column q-gutter-md">
       <div class="col">
-        <div
-          class="row q-gutter-md items-start no-wrap"
-          style="width: calc(100vw - 16px)"
-        >
-          <logo-link :ctf="ctf" />
-          <div class="text-h4">
-            {{ ctf.title }}
+        <div class="row items-center" style="width: calc(100vw - 16px)">
+          <div class="row q-gutter-md no-wrap q-mb-md">
+            <logo-link :ctf="ctf" style="height: 42px" />
+            <div class="text-h4">
+              {{ ctf.title }}
+            </div>
+
+            <template v-if="me.isManager">
+              <q-btn
+                v-if="$q.screen.xs"
+                icon="settings"
+                round
+                color="primary"
+                class="q-mr-md"
+                style="height: 42px"
+              >
+                <card-admin-menu :ctf="ctf" :context-menu="false" />
+              </q-btn>
+              <template v-else>
+                <btn-edit
+                  v-if="me.isManager"
+                  round
+                  :ctf="ctf"
+                  style="height: 42px"
+                />
+                <btn-delete
+                  v-if="me.isManager"
+                  round
+                  :ctf="ctf"
+                  class="q-mr-md"
+                  style="height: 42px"
+                />
+              </template>
+            </template>
           </div>
 
           <q-space />
 
-          <template v-if="me.isManager">
-            <q-btn v-if="$q.screen.xs" icon="settings" round color="primary">
-              <card-admin-menu :ctf="ctf" :context-menu="false" />
-            </q-btn>
-            <template v-else>
-              <btn-edit v-if="me.isManager" round :ctf="ctf" />
-              <btn-delete v-if="me.isManager" round :ctf="ctf" />
-            </template>
-          </template>
+          <div
+            v-if="ctf.ctftimeUrl"
+            class="row no-wrap q-ml-auto q-pr-md q-mb-md"
+          >
+            <weight-badge :ctf="ctf" class="q-ml-none q-my-none q-mr-md" />
+            <ctf-time-link :ctf="ctf" />
+          </div>
         </div>
       </div>
 
-      <div class="col row q-ml-sm q-gutter-sm" style="margin-top: 14px">
-        <q-chip color="primary" text-color="white" :ripple="false">
+      <div class="col row q-ml-sm q-gutter-sm q-mt-none">
+        <q-chip
+          color="primary"
+          text-color="white"
+          class="q-my-none"
+          :ripple="false"
+        >
           <span class="text-weight-bold">Start:</span>&nbsp;
           {{ startTime }}
         </q-chip>
-        <q-chip color="primary" text-color="white" :ripple="false">
+        <q-chip
+          color="primary"
+          text-color="white"
+          class="q-my-none"
+          :ripple="false"
+        >
           <span class="text-weight-bold">End:</span>&nbsp;
           {{ endTime }}
         </q-chip>
 
         <q-space />
-
-        <div v-if="ctf.ctftimeUrl" class="row no-wrap q-ml-auto">
-          <weight-badge :ctf="ctf" class="q-ml-none q-my-none q-mr-md" />
-          <ctf-time-link height="28" :ctf="ctf" />
-        </div>
       </div>
 
       <div class="col">
@@ -51,7 +81,7 @@
                 <div class="text-h6">Description</div>
               </div>
               <div class="row">
-                <div class="col col-auto ctf-info-text">
+                <div class="col col-auto hide-last-newline">
                   <q-markdown no-html :src="ctf.description" />
                 </div>
               </div>
@@ -60,7 +90,7 @@
 
           <template v-if="$q.screen.gt.xs">
             <q-separator vertical />
-            <div class="col ctf-info-text">
+            <div class="col">
               <info-credentials :ctf="ctf" />
             </div>
           </template>
@@ -69,7 +99,7 @@
 
       <template v-if="$q.screen.xs">
         <q-separator />
-        <div class="col ctf-info-text">
+        <div class="col">
           <info-credentials :ctf="ctf" />
         </div>
       </template>
@@ -150,7 +180,7 @@ export default defineComponent({
 </style>
 
 <style>
-.ctf-info-text p:last-child {
+.hide-last-newline p:last-child {
   display: inline;
 }
 </style>
