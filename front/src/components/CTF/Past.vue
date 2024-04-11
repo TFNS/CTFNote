@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import { date } from 'quasar';
+import { useStoredSettings } from 'src/extensions/storedSettings';
 import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { computed, defineComponent, ref, watch } from 'vue';
@@ -57,9 +58,13 @@ type OnRequestProps = {
 export default defineComponent({
   components: { CardAdminMenu, CtfNoteLink },
   setup() {
+    const { makePersistant } = useStoredSettings();
+
+    const rowsPerPage = makePersistant('ctf-rows-per-page', ref(50));
+
     const pagination = ref({
       rowsNumber: 0,
-      rowsPerPage: 20,
+      rowsPerPage: rowsPerPage,
       page: 1,
     });
 
@@ -76,10 +81,19 @@ export default defineComponent({
       { immediate: true }
     );
 
+    watch(
+      () => pagination.value.rowsPerPage,
+      (v) => {
+        rowsPerPage.value = v;
+      },
+      { immediate: true }
+    );
+
     return {
       ctfs: computed(() => pastCtfs.value.ctfs),
       loading,
       pagination,
+      rowsPerPage,
       rowsPerPageOptions: [25, 50, 75, 100, 150, 200, 250],
       columns: [
         {
