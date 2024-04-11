@@ -5,6 +5,7 @@
         v-model:pagination="pagination"
         no-data-label="No CTF available."
         flat
+        dense
         :rows="ctfs"
         :loading="loading"
         :columns="columns"
@@ -12,7 +13,7 @@
         @request="onRequest"
       >
         <template #body="props">
-          <q-tr :props="props">
+          <q-tr :props="props" style="height: 42px">
             <card-admin-menu :ctf="props.row" />
             <q-td key="title" :props="props">
               <ctf-note-link
