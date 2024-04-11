@@ -80,7 +80,7 @@ export default defineComponent({
       ctfs: computed(() => pastCtfs.value.ctfs),
       loading,
       pagination,
-      rowsPerPageOptions: [5, 10, 15, 20, 30, 40, 50],
+      rowsPerPageOptions: [25, 50, 75, 100, 150, 200, 250],
       columns: [
         {
           name: 'title',
