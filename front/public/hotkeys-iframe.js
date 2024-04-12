@@ -365,3 +365,15 @@ hotkeys('ctrl+k, command+k', function (event) {
 
   parent.postMessage('showSearchDialog', '*');
 });
+
+// Hotkeys for HedgeDoc CodeMirror editor
+editor.setOption('extraKeys', {
+  'Ctrl-K': () => {
+    parent.postMessage('showSearchDialog', '*');
+    return false;
+  },
+  'Cmd-K': () => {
+    parent.postMessage('showSearchDialog', '*');
+    return false;
+  },
+});
