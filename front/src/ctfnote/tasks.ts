@@ -67,6 +67,7 @@ export function useSolveTaskPopup() {
         type: 'text',
         label: 'Flag',
         filled: true,
+        class: 'solve-task-popup-focus',
       },
       cancel: {
         label: 'Cancel',
@@ -79,6 +80,12 @@ export function useSolveTaskPopup() {
     }).onOk((flag: string) => {
       void updateTask(task, { flag });
     });
+
+    window.setTimeout(() => {
+      (
+        document.querySelector('.solve-task-popup-focus') as HTMLElement
+      ).focus();
+    }, 0);
   };
 }
 

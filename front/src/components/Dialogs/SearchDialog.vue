@@ -17,10 +17,10 @@
           v-model="searchText"
           filled
           label="Search for CTF, task or tag"
-          autofocus
           :loading="loading"
           @update:model-value="onSearchChange"
           @keypress.enter="submit"
+          @vue:mounted="focusInput"
         >
           <template #prepend>
             <q-icon name="search" />
@@ -188,6 +188,9 @@ export default defineComponent({
       if (!selectedItem) return;
 
       this.onItemSelected(selectedItem);
+    },
+    focusInput(target: { el: HTMLElement }) {
+      target.el.focus();
     },
   },
 });
