@@ -1,10 +1,11 @@
 <template>
   <q-card>
-    <q-card-section>
+    <q-card-section class="q-pa-none">
       <q-table
         v-model:pagination="pagination"
         no-data-label="No CTF available."
         flat
+        dense
         :rows="ctfs"
         :loading="loading"
         :columns="columns"
@@ -12,14 +13,22 @@
         @request="onRequest"
       >
         <template #body="props">
-          <q-tr :props="props">
+          <q-tr :props="props" style="height: 42px">
             <card-admin-menu :ctf="props.row" />
             <q-td key="title" :props="props">
-              <ctf-note-link :ctf="props.row" name="ctf">
-                <q-btn flat :label="props.row.title" />
-              </ctf-note-link>
+              <ctf-note-link
+                :ctf="props.row"
+                name="ctf"
+                class="stretched-link"
+              />
+              <span class="text-weight-medium">{{ props.row.title }}</span>
             </q-td>
             <q-td key="date" :props="props">
+              <ctf-note-link
+                :ctf="props.row"
+                name="ctf"
+                class="stretched-link"
+              />
               {{ formatTime(props.row) }}
             </q-td>
           </q-tr>
@@ -31,6 +40,7 @@
 
 <script lang="ts">
 import { date } from 'quasar';
+import { useStoredSettings } from 'src/extensions/storedSettings';
 import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { computed, defineComponent, ref, watch } from 'vue';
@@ -48,9 +58,13 @@ type OnRequestProps = {
 export default defineComponent({
   components: { CardAdminMenu, CtfNoteLink },
   setup() {
+    const { makePersistant } = useStoredSettings();
+
+    const rowsPerPage = makePersistant('ctf-rows-per-page', ref(50));
+
     const pagination = ref({
       rowsNumber: 0,
-      rowsPerPage: 20,
+      rowsPerPage: rowsPerPage,
       page: 1,
     });
 
@@ -67,11 +81,20 @@ export default defineComponent({
       { immediate: true }
     );
 
+    watch(
+      () => pagination.value.rowsPerPage,
+      (v) => {
+        rowsPerPage.value = v;
+      },
+      { immediate: true }
+    );
+
     return {
       ctfs: computed(() => pastCtfs.value.ctfs),
       loading,
       pagination,
-      rowsPerPageOptions: [5, 10, 15, 20, 30, 40, 50],
+      rowsPerPage,
+      rowsPerPageOptions: [25, 50, 75, 100, 150, 200, 250],
       columns: [
         {
           name: 'title',
@@ -100,3 +123,16 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped lang="scss">
+/* Bootstrap stretched-link class (https://github.com/twbs/bootstrap/blob/868705bed08f0824ec560e0397a023266786a26b/scss/helpers/_stretched-link.scss) */
+.stretched-link::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  content: '';
+}
+</style>
