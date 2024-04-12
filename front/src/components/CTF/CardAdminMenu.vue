@@ -1,5 +1,9 @@
 <template>
-  <q-menu v-if="me.isManager" touch-position context-menu>
+  <q-menu
+    v-if="me.isManager"
+    :touch-position="contextMenu"
+    :context-menu="contextMenu"
+  >
     <q-list dense>
       <q-item v-close-popup clickable @click="openEditCtfDialog">
         <q-item-section side>
@@ -26,6 +30,10 @@ import EditCtfDialogVue from '../Dialogs/EditCtfDialog.vue';
 export default defineComponent({
   props: {
     ctf: { type: Object as () => Ctf, required: true },
+    contextMenu: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup() {
     return {
