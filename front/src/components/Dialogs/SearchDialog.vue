@@ -99,10 +99,12 @@ export default defineComponent({
 
     const previousShortcut = 'command+p, ctrl+p, up';
     const nextShortcut = 'command+n, ctrl+n, down';
+    const cancelShortcut = 'esc';
 
     onUnmounted(() => {
       hotkeys.unbind(previousShortcut);
       hotkeys.unbind(nextShortcut);
+      hotkeys.unbind(cancelShortcut);
     });
 
     onMounted(() => {
@@ -122,6 +124,12 @@ export default defineComponent({
         event.preventDefault();
         selectedItemIndex.value += 1;
         updateSelectedIndex();
+      });
+
+      hotkeys(cancelShortcut, (event) => {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        if (dialogRef) dialogRef.value?.hide();
       });
     });
 
