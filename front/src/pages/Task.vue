@@ -23,8 +23,10 @@
 </template>
 
 <script lang="ts">
+import hotkeys from 'hotkeys-js';
+import ctfnote from 'src/ctfnote';
 import { Ctf, Id, Task } from 'src/ctfnote/models';
-import { computed, defineComponent, onMounted, watch } from 'vue';
+import { computed, defineComponent, onMounted, onUnmounted, watch } from 'vue';
 
 export default defineComponent({
   props: {
@@ -36,15 +38,30 @@ export default defineComponent({
       () => props.ctf.tasks.find((t) => t.id == props.taskId) ?? null
     );
 
+    const solveTask = ctfnote.tasks.useSolveTaskPopup();
+
+    const solveTaskShortcut = 'ctrl+s, alt+s, command+s';
+
     watch(
       task,
       (task) => {
         if (task) {
           document.title = `CTFNote - ${task.title}`;
+          hotkeys(solveTaskShortcut, function (event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
+            solveTask(task);
+          });
         }
       },
       { immediate: true }
     );
+
+    let solveTaskShortcutListener: (
+      this: Window,
+      ev: MessageEvent<string>
+    ) => void;
 
     onMounted(() => {
       const taskFrame = window.frames[0];
@@ -57,9 +74,25 @@ export default defineComponent({
           taskFrame.document.body.appendChild(hotkeyScript);
         });
       }
+
+      // Listen for shortcut from HedgeDoc iframe
+      solveTaskShortcutListener = (event) => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data === 'solveTask') {
+          if (task.value !== null) {
+            solveTask(task.value);
+          }
+        }
+      };
+      window.addEventListener('message', solveTaskShortcutListener);
     });
 
-    return { task };
+    onUnmounted(() => {
+      hotkeys.unbind(solveTaskShortcut);
+      window.removeEventListener('message', solveTaskShortcutListener);
+    });
+
+    return { task, solveTask };
   },
 });
 </script>
