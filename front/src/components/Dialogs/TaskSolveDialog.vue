@@ -4,6 +4,8 @@
       <q-form @submit="submit">
         <q-card-section class="row items-center no-wrap">
           <div class="text-h6 ellipsis">Submit flag for {{ task.title }}</div>
+          <q-space />
+          <ShortcutHint v-if="$route.name === 'task'" :keys="['ctrl', 's']" />
         </q-card-section>
 
         <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
@@ -40,8 +42,12 @@ import { Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import { defineComponent, reactive } from 'vue';
 import { TaskPatch } from 'src/generated/graphql';
+import ShortcutHint from '../Utils/ShortcutHint.vue';
 
 export default defineComponent({
+  components: {
+    ShortcutHint,
+  },
   props: {
     task: { type: Object as () => Task, required: true },
   },
