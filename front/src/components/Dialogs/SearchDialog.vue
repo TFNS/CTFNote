@@ -4,7 +4,7 @@
       <q-card-section class="row items-center no-wrap">
         <div class="text-h6 ellipsis">Global search</div>
         <q-space />
-        <ShortcutPreview :keys="['ctrl', 'k']" />
+        <ShortcutHint :keys="['ctrl', 'k']" />
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -70,12 +70,12 @@ import ctfnote from 'src/ctfnote';
 import { safeSlugify } from 'src/ctfnote/ctfs';
 import { Ctf, Task } from 'src/ctfnote/models';
 import { defineComponent, onMounted, onUnmounted, Ref, ref } from 'vue';
-import ShortcutPreview from '../Utils/ShortcutPreview.vue';
+import ShortcutHint from '../Utils/ShortcutHint.vue';
 import TaskTagsList from '../Task/TaskTagsList.vue';
 
 export default defineComponent({
   components: {
-    ShortcutPreview,
+    ShortcutHint,
     TaskTagsList,
   },
   emits: useDialogPluginComponent.emits,
