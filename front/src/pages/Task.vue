@@ -40,19 +40,14 @@ export default defineComponent({
 
     const solveTask = ctfnote.tasks.useSolveTaskPopup();
 
-    const solveTaskShortcut = 'ctrl+s, alt+s, command+s';
+    const solveTaskShortcut = 'ctrl+s, command+s';
 
     watch(
       task,
       (task) => {
+        console.log('Watched:', task);
         if (task) {
           document.title = `CTFNote - ${task.title}`;
-          hotkeys(solveTaskShortcut, function (event) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-
-            solveTask(task);
-          });
         }
       },
       { immediate: true }
@@ -74,6 +69,16 @@ export default defineComponent({
           taskFrame.document.body.appendChild(hotkeyScript);
         });
       }
+
+      // Listen for shortcut
+      hotkeys(solveTaskShortcut, function (event) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+
+        if (task.value !== null) {
+          solveTask(task.value);
+        }
+      });
 
       // Listen for shortcut from HedgeDoc iframe
       solveTaskShortcutListener = (event) => {
