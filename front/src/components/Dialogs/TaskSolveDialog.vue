@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialogRef" no-backdrop-dismiss @hide="onDialogHide">
+  <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card class="dialog-solve-task">
       <q-form @submit="submit">
         <q-card-section class="row items-center no-wrap">
