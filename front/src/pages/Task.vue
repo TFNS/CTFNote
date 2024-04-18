@@ -1,6 +1,6 @@
 <template>
   <q-page class="page">
-    <iframe v-if="task" :src="task.padUrl + '#'" />
+    <iframe v-if="task" :src="task.padUrl + '#'" @load="listenForHotkeys()" />
 
     <div v-else class="flex justify-center items-start q-mt-md">
       <q-card>
@@ -45,7 +45,6 @@ export default defineComponent({
     watch(
       task,
       (task) => {
-        console.log('Watched:', task);
         if (task) {
           document.title = `CTFNote - ${task.title}`;
         }
@@ -59,17 +58,6 @@ export default defineComponent({
     ) => void;
 
     onMounted(() => {
-      const taskFrame = window.frames[0];
-      if (taskFrame !== undefined) {
-        taskFrame.addEventListener('DOMContentLoaded', () => {
-          // inject hotkey script with some CTFNote code to catch hotkey for search dialog
-          // and communicate that with the parent window
-          const hotkeyScript = taskFrame.document.createElement('script');
-          hotkeyScript.src = '/pad/js/hotkeys-iframe.js'; // this won't exist in development but will in production
-          taskFrame.document.body.appendChild(hotkeyScript);
-        });
-      }
-
       // Listen for shortcut
       hotkeys(solveTaskShortcut, function (event) {
         event.stopImmediatePropagation();
@@ -80,7 +68,7 @@ export default defineComponent({
         }
       });
 
-      // Listen for shortcut from HedgeDoc iframe
+      // Listen for solve task shortcut from HedgeDoc iframe
       solveTaskShortcutListener = (event) => {
         if (event.origin !== window.location.origin) return;
         if (event.data === 'solveTask') {
@@ -98,6 +86,18 @@ export default defineComponent({
     });
 
     return { task, solveTask };
+  },
+  methods: {
+    listenForHotkeys() {
+      const taskFrame = window.frames[0];
+      if (taskFrame !== undefined) {
+        // inject hotkey script with some CTFNote code to catch hotkey for search dialog
+        // and communicate that with the parent window
+        const hotkeyScript = taskFrame.document.createElement('script');
+        hotkeyScript.src = '/pad/js/hotkeys-iframe.js'; // this won't exist in development but will in production
+        taskFrame.document.body.appendChild(hotkeyScript);
+      }
+    },
   },
 });
 </script>
