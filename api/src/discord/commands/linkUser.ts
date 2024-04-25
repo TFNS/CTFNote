@@ -13,13 +13,15 @@ import {
 import { CTF, getAccessibleCTFsForUser } from "../database/ctfs";
 import { getDiscordClient } from "..";
 import config from "../../config";
+import { PoolClient } from "pg";
 
 export async function changeDiscordUserRoleForCTF(
   userId: bigint,
   ctf: CTF | string | string[],
-  operation: "add" | "remove"
+  operation: "add" | "remove",
+  pgClient: PoolClient | null = null
 ): Promise<boolean> {
-  const discordUserId = await getDiscordIdFromUserId(userId);
+  const discordUserId = await getDiscordIdFromUserId(userId, pgClient);
   if (discordUserId == null) return false;
 
   return changeDiscordUserRoleForCTFByDiscordId(discordUserId, ctf, operation);

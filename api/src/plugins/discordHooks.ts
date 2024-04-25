@@ -71,6 +71,7 @@ export async function handleTaskSolved(
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
   const {
     scope: { isRootMutation },
@@ -99,9 +100,13 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
   }
 
   const handleDiscordMutationAfter = async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     args: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     context: any,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _resolveInfo: GraphQLResolveInfoWithMessages
   ) => {
     const guild = getDiscordGuild();
@@ -264,7 +269,12 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       const link = args.input.link;
       const ctfId = args.input.ctfId;
 
-      await syncDiscordPermissionsWithCtf(guild, ctfId, link).catch((err) => {
+      await syncDiscordPermissionsWithCtf(
+        guild,
+        ctfId,
+        link,
+        context.pgClient
+      ).catch((err) => {
         console.error("Failed to sync discord permissions.", err);
       });
     }
@@ -273,9 +283,13 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
   };
 
   const handleDiscordMutationBefore = async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     input: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     args: any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     context: any,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _resolveInfo: GraphQLResolveInfoWithMessages
   ) => {
     const guild = getDiscordGuild();
@@ -404,6 +418,7 @@ async function handeInvitation(
   await changeDiscordUserRoleForCTF(profileId, ctf, operation);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleUpdateCtf(args: any, guild: Guild) {
   const ctf = await getCtfFromDatabase(args.input.id);
   if (ctf == null) return;

@@ -14,6 +14,7 @@ export interface CTF {
   secrets_id: bigint;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildCtf(row: any): CTF {
   return {
     id: row.id as bigint,
@@ -68,9 +69,11 @@ export async function getAllCtfsFromDatabase(): Promise<string[]> {
 
 // get id from ctf name
 export async function getCtfFromDatabase(
-  ctfName: string | bigint
+  ctfName: string | bigint,
+  pgClient: PoolClient | null = null
 ): Promise<CTF | null> {
-  const pgClient = await connectToDatabase();
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
 
   try {
     //make a query to get all the challenges from a ctf
@@ -94,7 +97,7 @@ export async function getCtfFromDatabase(
     console.error("Failed to get CTF from the database:", error);
     return null;
   } finally {
-    pgClient.release();
+    if (!useRequestClient) pgClient.release();
   }
 }
 
@@ -163,9 +166,11 @@ export async function getAccessibleCTFsForUser(
 // invite the user to play the CTF, but only if they don't have access yet
 export async function insertInvitation(
   ctfId: bigint,
-  profileId: bigint
+  profileId: bigint,
+  pgClient: PoolClient | null = null
 ): Promise<void> {
-  const pgClient = await connectToDatabase();
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
 
   const accessibleCTFs = await getAccessibleCTFsForUser(profileId, pgClient);
   if (accessibleCTFs.find((ctf) => ctf.id === ctfId) != null) {
@@ -182,12 +187,16 @@ export async function insertInvitation(
     console.error("Failed to insert invitation in the database:", error);
     return;
   } finally {
-    pgClient.release();
+    if (!useRequestClient) pgClient.release();
   }
 }
 
-export async function getInvitedUsersByCtf(ctfId: bigint): Promise<bigint[]> {
-  const pgClient = await connectToDatabase();
+export async function getInvitedUsersByCtf(
+  ctfId: bigint,
+  pgClient: PoolClient | null = null
+): Promise<bigint[]> {
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
 
   try {
     const query = `SELECT profile_id FROM ctfnote.invitation WHERE ctf_id = $1`;
@@ -199,15 +208,17 @@ export async function getInvitedUsersByCtf(ctfId: bigint): Promise<bigint[]> {
     console.error("Failed to get invited users from the database:", error);
     return [];
   } finally {
-    pgClient.release();
+    if (!useRequestClient) pgClient.release();
   }
 }
 
 export async function deleteInvitation(
   ctfId: bigint,
-  profileId: bigint
+  profileId: bigint,
+  pgClient: PoolClient | null = null
 ): Promise<void> {
-  const pgClient = await connectToDatabase();
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
 
   try {
     const query = `DELETE FROM ctfnote.invitation WHERE ctf_id = $1 AND profile_id = $2`;
@@ -217,6 +228,6 @@ export async function deleteInvitation(
     console.error("Failed to delete invitation from the database:", error);
     return;
   } finally {
-    pgClient.release();
+    if (!useRequestClient) pgClient.release();
   }
 }
