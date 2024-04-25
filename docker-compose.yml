@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   api:
-    image: ghcr.io/jj-8/ctfnote/api:latest
+    image: ghcr.io/tfns/ctfnote/api:latest
     build:
       context: "./api"
     networks:
@@ -33,7 +33,7 @@ services:
     volumes:
       - ctfnote-uploads:/app/uploads
   db:
-    image: ghcr.io/jj-8/ctfnote/db:latest
+    image: ghcr.io/tfns/ctfnote/db:latest
     build:
       context: "./db"
     restart: always
@@ -46,7 +46,7 @@ services:
     networks:
       - ctfnote
   front:
-    image: ghcr.io/jj-8/ctfnote/front:latest
+    image: ghcr.io/tfns/ctfnote/front:latest
     networks:
       - ctfnote
     restart: always
