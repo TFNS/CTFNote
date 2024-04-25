@@ -1,4 +1,5 @@
 import { connectToDatabase } from "./database";
+import { PoolClient } from "pg";
 
 /*
  * Only returns users that have not linked their discord account yet.
@@ -45,9 +46,11 @@ export async function setDiscordIdForUser(
 }
 
 export async function getUserByDiscordId(
-  discordId: string
+  discordId: string,
+  pgClient: PoolClient | null = null
 ): Promise<bigint | null> {
-  const pgClient = await connectToDatabase();
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
 
   try {
     const query =
@@ -59,14 +62,16 @@ export async function getUserByDiscordId(
   } catch (error) {
     return null;
   } finally {
-    pgClient.release();
+    if (!useRequestClient) pgClient.release();
   }
 }
 
 export async function getDiscordIdFromUserId(
-  userId: bigint
+  userId: bigint,
+  pgClient: PoolClient | null = null
 ): Promise<string | null> {
-  const pgClient = await connectToDatabase();
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
   try {
     const query = "SELECT discord_id FROM ctfnote.profile WHERE id = $1";
     const values = [userId];
@@ -76,7 +81,7 @@ export async function getDiscordIdFromUserId(
   } catch (error) {
     return null;
   } finally {
-    pgClient.release();
+    if (!useRequestClient) pgClient.release();
   }
 }
 
