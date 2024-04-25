@@ -366,6 +366,13 @@ hotkeys('ctrl+k, command+k', function (event) {
   parent.postMessage('showSearchDialog', '*');
 });
 
+hotkeys('ctrl+s, command+s', function (event) {
+  event.stopImmediatePropagation();
+  event.preventDefault();
+
+  parent.postMessage('solveTask', '*');
+});
+
 // Hotkeys for HedgeDoc CodeMirror editor
 editor.setOption('extraKeys', {
   'Ctrl-K': () => {
@@ -374,6 +381,14 @@ editor.setOption('extraKeys', {
   },
   'Cmd-K': () => {
     parent.postMessage('showSearchDialog', '*');
+    return false;
+  },
+  'Ctrl-S': () => {
+    parent.postMessage('solveTask', '*');
+    return false;
+  },
+  'Cmd-S': () => {
+    parent.postMessage('solveTask', '*');
     return false;
   },
 });

@@ -13,6 +13,8 @@ import {
 import { Ctf, Id, Task, WorkingOn, makeId } from './models';
 import { Dialog } from 'quasar';
 import TaskEditDialogVue from '../components/Dialogs/TaskEditDialog.vue';
+import TaskSolveDialogVue from '../components/Dialogs/TaskSolveDialog.vue';
+import { ref, computed } from 'vue';
 
 export function buildWorkingOn(w: WorkingOnFragment): WorkingOn {
   return {
@@ -56,36 +58,28 @@ export function useCancelWorkingOn() {
 }
 
 export function useSolveTaskPopup() {
-  const updateTask = useUpdateTask();
-  return (task: Task) => {
-    Dialog.create({
-      title: 'Submit flag for ' + task.title,
-      color: 'primary',
-      class: 'compact-dialog',
-      prompt: {
-        model: task.flag ?? '',
-        type: 'text',
-        label: 'Flag',
-        filled: true,
-        class: 'solve-task-popup-focus',
-      },
-      cancel: {
-        label: 'Cancel',
-        flat: true,
-      },
-      ok: {
-        color: 'positive',
-        label: 'Save',
-      },
-    }).onOk((flag: string) => {
-      void updateTask(task, { flag });
-    });
+  // Used to force opening at most one dialog at a time
+  const openedSolveTaskPopup = ref(false);
 
-    window.setTimeout(() => {
-      (
-        document.querySelector('.solve-task-popup-focus') as HTMLElement
-      ).focus();
-    }, 0);
+  const lock = () => (openedSolveTaskPopup.value = true);
+  const unlock = () => (openedSolveTaskPopup.value = false);
+  const locked = computed(() => openedSolveTaskPopup.value);
+
+  return (task: Task) => {
+    // If the dialog is already opened, don't do anything
+    if (locked.value) return;
+
+    lock();
+
+    Dialog.create({
+      component: TaskSolveDialogVue,
+      componentProps: {
+        task,
+      },
+    })
+      .onOk(unlock)
+      .onCancel(unlock)
+      .onDismiss(unlock);
   };
 }
 
