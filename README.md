@@ -20,7 +20,7 @@ configuration makes it super easy to start a new instance!
 Building CTFNote requires at least 3 GB of RAM. If you want to host CTFNote
 on a server with less than 3 GB of RAM, you can use the pre-build images
 from the GitHub Container Registry.
-Discord integration
+
 To use the pre-build images, download `docker-compose.yml` (for example through cloning the repository) and run:
 
 ```shell
