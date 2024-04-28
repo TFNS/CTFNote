@@ -231,4 +231,6 @@ The value of every variables are explained in this file.
 
 ## Contributing
 
+We have a [Discord server](https://discord.gg/uzTybeYuBg) where we discuss the development and feature of CTFNote.
+
 A contribution guide is available here: [CONTRIBUTING.md](CONTRIBUTING.md)
