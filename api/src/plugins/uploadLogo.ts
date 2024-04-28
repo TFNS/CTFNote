@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import fs from "fs";
 import { gql, makeExtendSchemaPlugin } from "graphile-utils";
-import { FileUpload } from "graphql-upload-ts";
+import { FileUpload, ReadStream } from "graphql-upload-ts";
 import path from "path";
 import { Client } from "pg";
 
@@ -15,7 +15,7 @@ function isAdmin(pgRole: string): boolean {
 
 const UPLOAD_DIR_NAME = "uploads";
 
-interface Context {
+export interface Context {
   pgClient: Client;
   pgRole: string;
   jwtClaims: {
@@ -29,7 +29,7 @@ interface Context {
 }
 
 function saveLocal(
-  stream: fs.ReadStream,
+  stream: ReadStream,
   filename: string,
   folder = ""
 ): Promise<string> {

@@ -8,9 +8,9 @@
   >
     <template #body="props">
       <q-tr v-show="isTaskVisible(props.row)" :props="props">
-        <task-menu :task="props.row" />
-        <q-td key="category" :props="props" class="no-click" auto-width>
-          <task-category-chip :name="props.row.category" />
+        <task-menu :task="props.row" :context-menu="true" />
+        <q-td key="tags" :props="props" class="no-click">
+          <task-tags-list :tags="props.row.assignedTags" />
         </q-td>
 
         <q-td key="solved" :props="props" auto-width>
@@ -40,7 +40,7 @@
           </ctf-note-link>
         </q-td>
         <q-td key="actions" :props="props" class="no-click" auto-width>
-          <task-btn-group :task="props.row" />
+          <task-btn-group style="width: 76px" :task="props.row" />
         </q-td>
       </q-tr>
     </template>
@@ -52,7 +52,7 @@ import { defineComponent } from 'vue';
 import { Ctf, Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
 import TaskBtnGroup from './TaskBtnGroup.vue';
-import TaskCategoryChip from './TaskCategoryChip.vue';
+import TaskTagsList from './TaskTagsList.vue';
 import TaskPlayerList from './TaskPlayerList.vue';
 import TaskMenu from './TaskMenu.vue';
 import { injectStrict } from 'src/ctfnote/utils';
@@ -73,7 +73,7 @@ function col(name: string, opt = {}) {
 export default defineComponent({
   components: {
     TaskBtnGroup,
-    TaskCategoryChip,
+    TaskTagsList,
     TaskPlayerList,
     TaskMenu,
     CtfNoteLink,
@@ -84,7 +84,7 @@ export default defineComponent({
   },
   setup() {
     const columns = [
-      col('category', { sortable: true }),
+      col('tags', { sortable: true }),
       col('solved', { sortable: true }),
       col('title', { sortable: true }),
       col('description', { label: 'description / flag' }),
@@ -97,7 +97,6 @@ export default defineComponent({
       col('actions', {
         label: '',
         align: 'right',
-        style: 'width:120px;max-width:120px;',
       }),
     ];
     const pagination = {

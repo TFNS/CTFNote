@@ -14,13 +14,18 @@ export type Maybe<T> = T | null;
 
 /* CTFNote Types */
 
-export type Profile = {
+export type PublicProfile = {
   id: Id<Profile>;
   username: string;
   role: Role;
   description: string;
   color: string;
   nodeId: string;
+};
+
+export type Profile = PublicProfile & {
+  lastactive: string;
+  discordId: string | null;
 };
 
 export type Me = {
@@ -44,8 +49,8 @@ export type Task = {
   description: string;
   flag: string;
   solved: boolean;
-  category: string;
-  workOnTasks: Id<Profile>[];
+  assignedTags: Tag[];
+  workOnTasks: WorkingOn[];
   ctf?: Ctf | string;
 };
 
@@ -77,6 +82,7 @@ export type Ctf = {
   credentials: string | null;
   tasks: Task[];
   invitations: CtfInvitation[];
+  discordEventLink: string | null;
 };
 
 export const defaultColorsNames = [
@@ -90,7 +96,7 @@ export const defaultColorsNames = [
   'warning',
 ] as const;
 
-export type SettingsColor = typeof defaultColorsNames[number];
+export type SettingsColor = (typeof defaultColorsNames)[number];
 export type SettingsColorMap = Record<SettingsColor, string>;
 export type Settings = {
   registrationAllowed: boolean;
@@ -101,6 +107,7 @@ export type Settings = {
 export type AdminSettings = Settings & {
   registrationPassword: string;
   registrationDefaultRole: Role;
+  icalPassword: string;
 };
 
 export type User = {
@@ -110,4 +117,17 @@ export type User = {
   login: string;
   role: Role;
   profile: Profile;
+};
+
+export type Tag = {
+  nodeId: string;
+  id: Id<Tag>;
+  tag: string;
+};
+
+export type WorkingOn = {
+  nodeId: string;
+  taskId: Id<Task>;
+  profileId: Id<Profile>;
+  active: boolean;
 };

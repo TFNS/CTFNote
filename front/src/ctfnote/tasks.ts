@@ -1,15 +1,28 @@
 import {
   CreateTaskInput,
   TaskPatch,
+  WorkingOnFragment,
+  useCancelWorkingOnMutation,
   useCreateTaskForCtfIdMutation,
   useDeleteTaskMutation,
   useStartWorkingOnMutation,
   useStopWorkingOnMutation,
   useUpdateTaskMutation,
 } from 'src/generated/graphql';
-import { Ctf, Id, Task } from './models';
+
+import { Ctf, Id, Task, WorkingOn, makeId } from './models';
 import { Dialog } from 'quasar';
 import TaskEditDialogVue from '../components/Dialogs/TaskEditDialog.vue';
+import TaskSolveDialogVue from '../components/Dialogs/TaskSolveDialog.vue';
+import { ref, computed } from 'vue';
+
+export function buildWorkingOn(w: WorkingOnFragment): WorkingOn {
+  return {
+    ...w,
+    taskId: makeId(w.taskId),
+    profileId: makeId(w.profileId),
+  };
+}
 
 /* Mutations */
 export function useCreateTask() {
@@ -39,28 +52,34 @@ export function useStopWorkingOn() {
   return (task: Task) => doStopWorking({ taskId: task.id });
 }
 
+export function useCancelWorkingOn() {
+  const { mutate: doCancelWorking } = useCancelWorkingOnMutation({});
+  return (task: Task) => doCancelWorking({ taskId: task.id });
+}
+
 export function useSolveTaskPopup() {
-  const updateTask = useUpdateTask();
+  // Used to force opening at most one dialog at a time
+  const openedSolveTaskPopup = ref(false);
+
+  const lock = () => (openedSolveTaskPopup.value = true);
+  const unlock = () => (openedSolveTaskPopup.value = false);
+  const locked = computed(() => openedSolveTaskPopup.value);
+
   return (task: Task) => {
+    // If the dialog is already opened, don't do anything
+    if (locked.value) return;
+
+    lock();
+
     Dialog.create({
-      title: 'Flag:',
-      color: 'primary',
-      cancel: {
-        label: 'cancel',
-        color: 'warning',
-        flat: true,
+      component: TaskSolveDialogVue,
+      componentProps: {
+        task,
       },
-      prompt: {
-        model: task.flag ?? '',
-        type: 'text',
-      },
-      ok: {
-        color: 'positive',
-        label: 'save',
-      },
-    }).onOk((flag: string) => {
-      void updateTask(task, { flag });
-    });
+    })
+      .onOk(unlock)
+      .onCancel(unlock)
+      .onDismiss(unlock);
   };
 }
 
@@ -69,10 +88,18 @@ export function useDeleteTaskPopup() {
   return (task: Task) => {
     Dialog.create({
       title: `Delete ${task.title}?`,
-      color: 'negative',
+      color: 'primary',
+      class: 'compact-dialog',
       message: 'This will delete the task, but not the pads.',
-      ok: 'Delete',
-      cancel: true,
+      cancel: {
+        label: 'Cancel',
+        flat: true,
+      },
+      ok: {
+        color: 'negative',
+        label: 'Delete',
+        flat: true,
+      },
     }).onOk(() => {
       void deleteTask(task);
     });

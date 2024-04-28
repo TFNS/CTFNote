@@ -1,8 +1,8 @@
 <template>
   <div class="q-gutter-sm">
-    <div class="row items-center q-gutter-md q-pa-sm">
+    <div class="row q-gutter-md q-pl-sm">
       <div class="text-h6 col col-auto">Credentials</div>
-      <div>
+      <div class="col">
         <q-btn
           v-if="me.isManager"
           round
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col col-auto">
+      <div class="col col-auto hide-last-newline">
         <q-markdown no-html :src="ctf.credentials" class="blur" />
       </div>
     </div>
@@ -46,24 +46,26 @@ export default defineComponent({
         .dialog({
           title: 'Edit credentials',
           color: 'primary',
+          class: 'compact-dialog',
           prompt: {
             model: this.ctf.credentials ?? '',
             type: 'textarea',
+            label: 'Credentials (Markdown)',
+            filled: true,
           },
           ok: {
-            label: 'save',
+            label: 'Save',
             color: 'positive',
           },
           cancel: {
             label: 'Cancel',
-            color: 'warning',
             flat: true,
           },
         })
         .onOk((credentials: string) => {
           const opts = {
             message: 'Credentials updated!',
-            icon: 'lock',
+            icon: 'key',
           };
           void this.resolveAndNotify(
             this.updateCtfCredentials(this.ctf, credentials),
@@ -75,4 +77,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style>
+.hide-last-newline p:last-child {
+  display: inline;
+}
+</style>

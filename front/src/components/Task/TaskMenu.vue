@@ -1,5 +1,5 @@
 <template>
-  <q-menu touch-position context-menu>
+  <q-menu touch-position :context-menu="contextMenu">
     <q-list dense>
       <q-item v-ripple v-close-popup tag="label">
         <q-item-section side top>
@@ -48,6 +48,10 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   props: {
     task: { type: Object as () => Task, required: true },
+    contextMenu: {
+      type: Boolean,
+      required: true,
+    },
   },
   setup() {
     return {
@@ -61,10 +65,14 @@ export default defineComponent({
   },
   computed: {
     onIt() {
-      if (!this.me.profile?.id) {
+      if (!this.me?.profile?.id) {
         return false;
       }
-      return this.task.workOnTasks.includes(this.me.profile.id);
+      return (
+        this.task.workOnTasks.filter(
+          (w) => w.profileId == this.me?.profile?.id && w.active
+        ).length > 0
+      );
     },
   },
   methods: {

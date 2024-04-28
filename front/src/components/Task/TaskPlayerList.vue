@@ -1,9 +1,10 @@
 <template>
   <div class="row">
     <user-badge
-      v-for="player in players"
-      :key="player.nodeId"
-      :profile="player"
+      v-for="p in playersWithActive"
+      :key="p.player.nodeId"
+      :profile="p.player"
+      :active="p.active"
     />
   </div>
 </template>
@@ -24,8 +25,25 @@ export default defineComponent({
     return { team };
   },
   computed: {
+    playersWithActive() {
+      return (
+        this.players
+          .map((p) => ({
+            player: p,
+            active:
+              this.task.workOnTasks.filter(
+                (w) => w.profileId == p.id && w.active
+              ).length > 0,
+          }))
+          // sort by active status (active first)
+          .sort((a) => (a.active ? -1 : 1))
+      );
+    },
     players() {
-      return this.team.filter((p) => this.task.workOnTasks.includes(p.id));
+      return this.team.filter(
+        (p) =>
+          this.task.workOnTasks.filter((id) => id.profileId == p.id).length > 0
+      );
     },
   },
 });

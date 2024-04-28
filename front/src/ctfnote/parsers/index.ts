@@ -8,7 +8,7 @@ import AngstromParser from './angstrom';
 
 export type ParsedTask = {
   title: string;
-  category: string;
+  tags: string[];
   description?: string;
   keep?: boolean;
 };

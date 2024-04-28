@@ -20,7 +20,7 @@ const AngstromParser: Parser = {
       }
       tasks.push({
         title: task.title,
-        category: task.category,
+        tags: [task.category],
         description: task.description,
       });
     }

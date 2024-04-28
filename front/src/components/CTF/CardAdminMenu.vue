@@ -1,5 +1,9 @@
 <template>
-  <q-menu v-if="me.isManager" touch-position context-menu>
+  <q-menu
+    v-if="me.isManager"
+    :touch-position="contextMenu"
+    :context-menu="contextMenu"
+  >
     <q-list dense>
       <q-item v-close-popup clickable @click="openEditCtfDialog">
         <q-item-section side>
@@ -26,6 +30,10 @@ import EditCtfDialogVue from '../Dialogs/EditCtfDialog.vue';
 export default defineComponent({
   props: {
     ctf: { type: Object as () => Ctf, required: true },
+    contextMenu: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup() {
     return {
@@ -46,11 +54,19 @@ export default defineComponent({
     openDeleteCtfDialog() {
       this.$q
         .dialog({
-          title: `Delete ${this.ctf.title} ?`,
-          color: 'negative',
+          title: `Delete ${this.ctf.title}?`,
+          color: 'primary',
+          class: 'compact-dialog',
           message: 'This will delete all the tasks, but not the pads.',
-          ok: 'Delete',
-          cancel: true,
+          cancel: {
+            label: 'Cancel',
+            flat: true,
+          },
+          ok: {
+            color: 'negative',
+            label: 'Delete',
+            flat: true,
+          },
         })
         .onOk(() => {
           const opts = {

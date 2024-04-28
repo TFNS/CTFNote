@@ -3,9 +3,8 @@
 fragment WorkingOnFragment on WorkOnTask {
   nodeId
   profileId
-  profile {
-    ...ProfileFragment
-  }
+  active
+  taskId
 }
 
 # Fragments
@@ -19,7 +18,11 @@ fragment TaskFragment on Task {
   description
   flag
   solved
-  category
+  assignedTags {
+    nodes {
+      ...AssignedTagsFragment
+    }
+  }
   workOnTasks {
     nodes {
       ...WorkingOnFragment
@@ -48,18 +51,12 @@ mutation updateTask(
   $id: Int!
   $title: String
   $description: String
-  $category: String
   $flag: String
 ) {
   updateTask(
     input: {
       id: $id
-      patch: {
-        title: $title
-        category: $category
-        description: $description
-        flag: $flag
-      }
+      patch: { title: $title, description: $description, flag: $flag }
     }
   ) {
     task {
@@ -71,7 +68,7 @@ mutation updateTask(
 mutation createTaskForCtfId(
   $ctfId: Int!
   $title: String!
-  $category: String
+  $tags: [String]
   $description: String
   $flag: String
 ) {
@@ -79,7 +76,7 @@ mutation createTaskForCtfId(
     input: {
       ctfId: $ctfId
       title: $title
-      category: $category
+      tags: $tags
       description: $description
       flag: $flag
     }
@@ -105,6 +102,14 @@ mutation startWorkingOn($taskId: Int!) {
 }
 mutation stopWorkingOn($taskId: Int!) {
   stopWorkingOn(input: { taskId: $taskId }) {
+    task {
+      ...TaskFragment
+    }
+  }
+}
+
+mutation cancelWorkingOn($taskId: Int!) {
+  cancelWorkingOn(input: { taskId: $taskId }) {
     task {
       ...TaskFragment
     }

@@ -1,6 +1,7 @@
 name: "Build and publish Docker images to GHCR"
 
 on:
+    workflow_dispatch:
     push:
         branches:
             - "main"

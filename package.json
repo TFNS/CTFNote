@@ -6,9 +6,10 @@
   "author": "BitK <bitk@yeswehack.com>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "husky": "^6.0.0"
+    "husky": "^8.0.3"
   },
   "scripts": {
     "prepare": "husky install"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }

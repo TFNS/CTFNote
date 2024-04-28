@@ -4,27 +4,38 @@
       <q-card-section>
         <div class="row q-gutter-md">
           <div class="text-h6">Create a new invitation link</div>
-          <q-space />
-          <q-btn v-close-popup icon="close" flat round dense />
         </div>
       </q-card-section>
-      <q-separator />
-      <q-card-section>
+
+      <q-card-section class="q-pa-none">
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="role" class="full-width">
-            <select-role v-model="role" label="Role" />
+          <q-tab-panel name="role" class="full-width q-pt-none q-pb-md">
+            <select-role
+              v-model="role"
+              filled
+              dense
+              options-dense
+              class="q-pb-xs"
+              label="Role"
+            >
+              <template #prepend>
+                <q-icon name="people_alt" />
+              </template>
+            </select-role>
           </q-tab-panel>
-          <q-tab-panel name="link" class="full-width">
-            <copy-link v-if="link" :link="link" />
+
+          <q-tab-panel name="link" class="full-width q-py-none">
+            <copy-link v-if="link" :link="link" dense />
           </q-tab-panel>
         </q-tab-panels>
       </q-card-section>
-      <q-card-actions class="q-pr-md q-pb-md" align="right">
+
+      <q-card-actions align="right" class="q-px-md q-pb-md">
         <template v-if="tab == 'role'">
-          <q-btn v-close-popup flat color="warning" label="Cancel" />
+          <q-btn v-close-popup flat color="primary" label="Cancel" />
           <q-btn color="positive" label="Create" @click="createLink" />
         </template>
-        <q-btn v-else v-close-popup color="positive" label="Close" />
+        <q-btn v-else v-close-popup color="primary" label="Close" />
       </q-card-actions>
     </q-card>
   </q-dialog>
