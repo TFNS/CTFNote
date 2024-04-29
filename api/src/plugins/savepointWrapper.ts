@@ -1,6 +1,9 @@
 import { Client } from "pg";
 
-async function savepointWrapper<Type>(pgClient: Client, f: () => Type): Promise<Type> {
+async function savepointWrapper<Type>(
+  pgClient: Client,
+  f: () => Type
+): Promise<Type> {
   const name = `"CHECKPOINT-${Math.floor(Math.random() * 0xffff)}"`;
   await pgClient.query(`SAVEPOINT ${name}`);
   try {

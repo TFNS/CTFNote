@@ -48,7 +48,9 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   }
 
   // Create the action row with the button components
-  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons);
+  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    buttons
+  );
 
   await interaction.editReply({
     content: ctfNamesMessage,

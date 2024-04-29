@@ -63,7 +63,9 @@ async function deleteCtfLogic(client: Client, interaction: CommandInteraction) {
     );
   }
 
-  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons);
+  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    buttons
+  );
 
   await interaction.editReply({
     content:
