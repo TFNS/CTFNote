@@ -24,6 +24,9 @@ const challengeCategories: { [index: number]: string } = {
   20: 'Cloud',
   21: 'Scada',
   23: 'ML',
+  25: 'TTX',
+  26: 'Trivia',
+  30: 'Sherlocks',
 };
 
 const HTBParser: Parser = {
@@ -58,7 +61,7 @@ const HTBParser: Parser = {
 
       tasks.push({
         title: challenge.name,
-        category: category,
+        tags: [category],
         description: challenge.description,
       });
     }

@@ -10,14 +10,33 @@ CTFNote is a collaborative tool aiming to help CTF teams to organise their work.
 
 ## Installation
 
-Before starting, make sure to fill in the information in the `.env` file.
+Before starting, make sure to fill copy `.env.example` to `.env` and fill in the information in the `.env` file.
 
-Then you can start it with `docker-compose`. The default
+### Running the Docker containers
+
+You can build and start CTFNote with `docker compose`. The default
+configuration makes it super easy to start a new instance!
+
+Building CTFNote requires at least 3 GB of RAM. If you want to host CTFNote
+on a server with less than 3 GB of RAM, you can use the pre-build images
+from the GitHub Container Registry.
+
+To use the pre-build images, download `docker-compose.yml` (for example through cloning the repository) and run:
+
+```shell
+sudo docker compose up -d --pull always
+```
+
+### Self-build images
+
+You can build and start CTFNote with `docker compose`. The default
 configuration makes it super easy to start a new instance!
 
 ```shell
-$ docker-compose up -d
+sudo docker compose up -d --build
 ```
+
+### Accessing the instance
 
 The instance will spawn a web server on port `127.0.0.1:8080`. The first account created will
 have administrative privileges.
@@ -47,16 +66,9 @@ server {
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header X-Forwarded-Proto $scheme;
                 add_header Pragma "no-cache";
+                client_max_body_size 5M;
         }
 }
-```
-
-Edit the `docker-compose.yml` file to make sure CTFNote only listens on
-localhost:
-
-```diff
--      - 8080:80
-+      - 127.0.0.1:8080:80
 ```
 
 Edit the `.env` file to instruct the pad to use TLS:
@@ -73,6 +85,62 @@ Edit the `.env` file to instruct the pad to use TLS:
 
 After deploying this configuration, run `certbot` to make it available over HTTPS.
 See [this article](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04) for more information.
+
+### Add Discord bot support
+
+![Screenshot of a CTF in Discord](screenshots/discord-agile.png)
+
+To add support for the CTFNote discord bot, you need to change the following values in the `.env` file:
+
+```
+USE_DISCORD=true
+DISCORD_BOT_TOKEN=secret_token
+DISCORD_SERVER_ID=server_id
+```
+
+You can also configure the amount of voice channels you want per CTF by changing `DISCORD_VOICE_CHANNELS`.
+
+To get the `DISCORD_BOT_TOKEN`, you need to create a discord bot and add it to your server.
+You can follow [this guide](https://discordpy.readthedocs.io/en/stable/discord.html) to do so.
+
+- Please grant the bot the following intents: Presence Intent, Server Members Intent, Message Content Intent.
+- Please grant the bot the following permissions: Administrator.
+
+When you are done, copy the token from the Build-A-Bot section and paste it in the `.env` file.
+
+You can find the `DISCORD_SERVER_ID` in the 'Widget' section of your server settings.
+
+#### Limitations
+
+Please do not use this bot if untrusted members can create channels or categories in your server, or can edit topics of channels.
+This can cause privilege escalations within CTFNote.
+
+Please also note that syncing the CTFNote state to Discord is prone to race conditions.
+Therefore, some actions such as importing tasks are now serialized (due to correctly handling the 50 channel limit per category of Discord).
+Therefore you should patiently wait before the bot is done importing before you perform certain actions, such as deleting or editing the CTF.
+The bot will tell you when its done by editing the private reply.
+You will now also see more loading animations within CTFNote to indicate syncing to Discord.
+
+Discord also has modification timeouts when you perform certain actions such as editing the category or channel name.
+If you modify a task or CTF name multiple times in a row, the sync to Discord can't be performed and you should rename the CTF categories / task channel and topic manually in order to restore syncing.
+
+#### Available commands
+
+- `/link [token]`: link you Discord account with your CTFNote account through the CTFNote token found in your profile.
+- `/create`: create Discord categories, channels and roles for any upcoming / active CTF.
+- `/archive`: convert the messages in the channels of a CTF to a task to be stored permanently in CTFNote.
+- `/delete`: remove the Discord categories, channels and roles for a CTF.
+  You must first create an `/archive` before you can do this.
+- `/start`: start working on the task linked to the Discord channel.
+- `/stop`: stop working on the task linked to the Discord channel.
+- `/solve [flag]`: solve the task linked to the Discord channel.
+  Solving can only be done once and flags cannot be removed/overridden through Discord.
+
+The `/create`, `/archive` and `/delete` commands are only accessible when you have Discord administrator rights (not related to the CTFNote administrator rights).
+`/start`, `/stop` and `/solve` are only accessible to users who have `/link`ed their Discord account.
+
+The bot will automatically create more categories when you hit the 50 Discord channel limit, so you can have an almost infinite amount of tasks per CTF.
+It is your own responsibility to stay below the Discord server channel limit, which is 500 at the moment of writing (categories count as channels).
 
 ### Migration
 
@@ -162,5 +230,7 @@ The value of every variables are explained in this file.
 [![Screenshot of pad](screenshots/pad_small.webp)](screenshots/pad.png)
 
 ## Contributing
+
+We have a [Discord server](https://discord.gg/uzTybeYuBg) where we discuss the development and feature of CTFNote.
 
 A contribution guide is available here: [CONTRIBUTING.md](CONTRIBUTING.md)

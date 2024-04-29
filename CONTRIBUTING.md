@@ -1,6 +1,8 @@
 # CTFNote - Contribution Guide
 
-When contributing to this repository, please first discuss the change you wish to make via issue with the collaborators of this repository before making a change.
+We have a [Discord server](https://discord.gg/uzTybeYuBg) where we discuss the development and feature of CTFNote.
+
+When contributing to this repository, please first discuss the change you wish to make via issue with the collaborators of this repository before making a change, or have a chat in Discord if you do not want to create a full issue yet.
 
 ## Git process
 
@@ -44,13 +46,14 @@ $ yarn
 This should run the prepare script and install the linting pre-commit hooks:
 
 ```
-[1/4] 🔍  Resolving packages...
-[2/4] 🚚  Fetching packages...
-[3/4] 🔗  Linking dependencies...
-[4/4] 🔨  Building fresh packages...
-$ husky install
-[##] 2/2husky - Git hooks installed
-✨  Done in 0.40s.
+➤ YN0000: · Yarn 4.1.1
+➤ YN0000: ┌ Resolution step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Link step
+➤ YN0000: └ Completed
+➤ YN0000: · Done in 0s 103ms
 ```
 
 ### Start the third party containers
@@ -58,7 +61,7 @@ $ husky install
 ```shell
 $ docker compose \
     -f docker-compose.dev.yml \
-    up -d hedgedoc db adminer
+    up -d hedgedoc db
 ```
 
 ### Start the API
@@ -85,8 +88,7 @@ The following endpoint are exposed and can be used in the developpement environm
 - [GraphiQL](http://localhost:3000/graphiql)
 - [Hedgedoc](http://localhost:3001/)
 - [Quasar APP](http://localhost:8088/)
-- [Adminer](http://localhost:3002/?pgsql=db&username=ctfnote&db=ctfnote)
 
 ## Review
 
-To merge a pull request, two distinct reviews from two different collaborators are required.
+To merge a pull request, a review of a maintainer is required.

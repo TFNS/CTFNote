@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section>
-      <div v-if="$q.screen.gt.md" class="row justify-between items-center">
+      <div v-if="$q.screen.gt.sm" class="row justify-between items-center">
         <q-btn
           icon="arrow_back_ios"
           flat
@@ -11,6 +11,15 @@
         <div class="row items-center q-gutter-md">
           <q-btn round flat icon="today" title="Today" @click="showToday" />
           <div class="text-h5">{{ currentMonth }}</div>
+          <q-btn
+            round
+            flat
+            :icon="icalLinkIcon"
+            title="iCalendar"
+            @click="clickIcalLink()"
+          >
+            <q-tooltip> Copy iCalendar link </q-tooltip>
+          </q-btn>
         </div>
         <q-btn
           icon-right="arrow_forward_ios"
@@ -23,6 +32,15 @@
         <div class="row col col-12 items-center justify-center q-gutter-md">
           <q-btn round flat icon="today" title="Today" @click="showToday" />
           <div class="text-h5">{{ currentMonth }}</div>
+          <q-btn
+            round
+            flat
+            :icon="icalLinkIcon"
+            title="iCalendar"
+            @click="clickIcalLink()"
+          >
+            <q-tooltip> Copy iCalendar link </q-tooltip>
+          </q-btn>
         </div>
         <q-btn
           icon="arrow_back_ios"
@@ -85,7 +103,8 @@ import '@quasar/quasar-ui-qcalendar/src/QCalendarTransitions.sass';
 import '@quasar/quasar-ui-qcalendar/src/QCalendarVariables.sass';
 import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
+import { copyToClipboard, QInput } from 'quasar';
 
 function dateToLocale(s: string, offset = 0): string {
   const [year, month] = s.split('-').map((e) => parseInt(e));
@@ -96,13 +115,30 @@ function dateToLocale(s: string, offset = 0): string {
 export default defineComponent({
   components: { QCalendarMonth },
   setup() {
+    const icalEl = ref<QInput>();
     const { result: ctfs, loading } = ctfnote.ctfs.getAllCtfs();
+    const { result: icalPassword } = ctfnote.settings.getIcalPassword();
+
+    const icalLink = computed(() => {
+      icalEl.value?.select();
+      if (icalPassword.value != '') {
+        return (
+          document.location.origin +
+          '/calendar.ics?key=' +
+          encodeURIComponent(icalPassword.value)
+        );
+      }
+      return document.location.origin + '/calendar.ics';
+    });
     return {
       calendar: ref<QCalendar>(),
       ctfs,
       loading,
       animated: ref(false),
       selectedDate: ref(today()),
+      icalLinkIcon: ref('link'),
+      icalLink,
+      icalEl,
     };
   },
   computed: {
@@ -149,6 +185,13 @@ export default defineComponent({
     },
     clickCtf(ctf: Ctf) {
       void this.$router.push(ctf.infoLink);
+    },
+    async clickIcalLink() {
+      await copyToClipboard(this.icalLink);
+      this.icalLinkIcon = 'done';
+      setTimeout(() => {
+        this.icalLinkIcon = 'link';
+      }, 1500);
     },
   },
 });

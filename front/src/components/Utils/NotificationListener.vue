@@ -23,13 +23,22 @@ export default defineComponent({
       globalNotify({
         message: `${profile.username} joined CTFNote!`,
         icon: 'person',
+        tag: `onProfileCreated:${profile.username}`,
       })
     );
     onCtfCreated((ctf) =>
-      globalNotify({ message: `CTF ${ctf.title} created!`, icon: 'flag' })
+      globalNotify({
+        message: `CTF ${ctf.title} created!`,
+        icon: 'flag',
+        tag: `onCtfCreated:${ctf.id}`,
+      })
     );
     onFlag((task) =>
-      globalNotify({ message: `Task ${task.title} solved!`, icon: 'flag' })
+      globalNotify({
+        message: `Task ${task.title} solved!`,
+        icon: 'flag',
+        tag: `onFlag:${task.ctfId}:${task.id}`,
+      })
     );
 
     return {};

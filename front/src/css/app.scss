@@ -18,9 +18,59 @@ body.live-mode .blur {
   }
 }
 
+.ctfnote-input-button {
+  height: 40px;
+  width: 40px;
+}
+
 .q-markdown--link {
   color: $primary;
   &:visited {
     color: $primary;
   }
+}
+
+.body--light .svg-icon {
+  filter: brightness(0);
+  opacity: 0.54;
+}
+
+.body--dark .svg-icon {
+  opacity: 0.7;
+}
+
+// Add border radius to filled input design
+.q-field--filled .q-field__control {
+  border-radius: 4px;
+}
+
+// Curve animate line below text fields around border radius
+.q-field--filled .q-field__control::after {
+  height: 20px;
+  background: transparent;
+  border-bottom: 2px solid currentColor !important;
+  border-radius: 4px;
+}
+
+// Set default highlighted label color to white on dark theme
+.q-field--filled.q-field--dark .q-field__control-container {
+  color: white;
+}
+
+// Prevent text from overflowing in a dialog
+.compact-dialog .q-dialog__title {
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.compact-dialog .q-dialog-plugin__form,
+.compact-dialog .q-dialog__message {
+  padding-bottom: 8px;
+}
+
+.compact-dialog .q-card__actions--horiz {
+  margin-right: 8px;
+  margin-bottom: 8px;
 }

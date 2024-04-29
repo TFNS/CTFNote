@@ -1,47 +1,104 @@
 <template>
   <div class="background-logo" :style="style">
-    <div class="column q-px-md">
-      <div class="col q-py-md">
-        <div class="row q-gutter-md items-center">
-          <logo-link :ctf="ctf" />
+    <div class="q-gutter-md">
+      <div class="row items-center" style="width: calc(100vw - 16px)">
+        <div class="row q-gutter-md no-wrap q-mb-md">
+          <logo-link :ctf="ctf" style="height: 42px" />
           <div class="text-h4">
             {{ ctf.title }}
           </div>
-          <btn-edit v-if="me.isManager" round :ctf="ctf" />
-          <btn-delete v-if="me.isManager" round :ctf="ctf" />
-          <q-space />
-          <template v-if="ctf.ctftimeUrl">
-            <weight-badge :ctf="ctf" />
-            <ctf-time-link :ctf="ctf" />
+
+          <template v-if="me.isManager">
+            <q-btn
+              v-if="$q.screen.xs"
+              icon="settings"
+              round
+              color="primary"
+              class="q-mr-md"
+              style="height: 42px"
+            >
+              <card-admin-menu :ctf="ctf" :context-menu="false" />
+            </q-btn>
+            <template v-else>
+              <btn-edit
+                v-if="me.isManager"
+                round
+                :ctf="ctf"
+                style="height: 42px"
+              />
+              <btn-delete
+                v-if="me.isManager"
+                round
+                :ctf="ctf"
+                class="q-mr-md"
+                style="height: 42px"
+              />
+            </template>
           </template>
         </div>
-      </div>
-      <div class="col q-py-md">
-        <div class="q-gutter-md items-center">
-          <div>Start: {{ startTime }}</div>
-          <div>End: {{ endTime }}</div>
+
+        <q-space />
+
+        <div
+          v-if="ctf.ctftimeUrl"
+          class="row no-wrap q-ml-auto q-pr-md q-mb-md"
+        >
+          <weight-badge :ctf="ctf" class="q-ml-none q-my-none q-mr-md" />
+          <ctf-time-link :ctf="ctf" />
         </div>
       </div>
-      <div class="col q-py-md">
-        <div class="row q-gutter-md">
-          <div class="col">
-            <div class="q-gutter-sm">
-              <div class="row items-center q-gutter-md q-pa-sm">
-                <div class="text-h6">Description</div>
-              </div>
-              <div class="row">
-                <div class="col col-auto">
-                  <q-markdown no-html :src="ctf.description" />
-                </div>
+
+      <div class="row q-ml-sm q-gutter-sm q-mt-none">
+        <q-chip
+          color="primary"
+          text-color="white"
+          class="q-my-none"
+          :ripple="false"
+        >
+          <span class="text-weight-bold">Start:</span>&nbsp;
+          {{ startTime }}
+        </q-chip>
+        <q-chip
+          color="primary"
+          text-color="white"
+          class="q-my-none"
+          :ripple="false"
+        >
+          <span class="text-weight-bold">End:</span>&nbsp;
+          {{ endTime }}
+        </q-chip>
+
+        <q-space />
+      </div>
+
+      <div class="row q-gutter-md">
+        <div class="col">
+          <div class="q-gutter-sm">
+            <div class="row q-gutter-md q-pl-sm">
+              <div class="text-h6">Description</div>
+            </div>
+            <div class="row">
+              <div class="col col-auto hide-last-newline">
+                <q-markdown no-html :src="ctf.description" />
               </div>
             </div>
           </div>
-          <q-separator vertical />
+        </div>
+
+        <template v-if="$q.screen.gt.xs">
+          <q-separator vertical class="q-mx-md" />
           <div class="col">
             <info-credentials :ctf="ctf" />
           </div>
-        </div>
+        </template>
       </div>
+
+      <template v-if="$q.screen.xs">
+        <q-separator />
+        <div class="col">
+          <info-credentials :ctf="ctf" />
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -53,6 +110,7 @@ import ctfnote from 'src/ctfnote';
 import { defineComponent } from 'vue';
 import BtnDelete from './BtnDelete.vue';
 import BtnEdit from './BtnEdit.vue';
+import CardAdminMenu from './CardAdminMenu.vue';
 import CtfTimeLink from './CtfTimeLink.vue';
 import InfoCredentials from './InfoCredentials.vue';
 import LogoLink from './LogoLink.vue';
@@ -62,10 +120,11 @@ export default defineComponent({
   components: {
     BtnEdit,
     BtnDelete,
-    WeightBadge,
+    CardAdminMenu,
     CtfTimeLink,
-    LogoLink,
     InfoCredentials,
+    LogoLink,
+    WeightBadge,
   },
   props: {
     ctf: { type: Object as () => Ctf, required: true },
@@ -113,5 +172,11 @@ export default defineComponent({
   & * {
     z-index: 1;
   }
+}
+</style>
+
+<style>
+.hide-last-newline p:last-child {
+  display: inline;
 }
 </style>

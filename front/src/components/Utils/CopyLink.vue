@@ -6,11 +6,11 @@
     :model-value="link"
     readonly
   >
+    <template #prepend>
+      <q-icon name="link" />
+    </template>
     <template #after>
       <slot name="after" />
-    </template>
-    <template #before>
-      <q-icon name="lock" />
     </template>
 
     <template #append>

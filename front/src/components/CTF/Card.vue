@@ -1,8 +1,14 @@
 <template>
   <q-card bordered class="ctfcard">
     <card-admin-menu :ctf="ctf" />
+    <q-linear-progress
+      v-if="progress >= 0"
+      :value="progress"
+      animation-speed="0"
+      color="positive"
+    />
     <q-card-section>
-      <div class="row progress-row q-gutter-md items-center" :style="style">
+      <div class="row q-gutter-md items-center">
         <div class="col-auto">
           <logo-link :ctf="ctf" />
         </div>
@@ -118,36 +124,19 @@ export default defineComponent({
     startDate() {
       return date.formatDate(this.ctf.startTime, 'YYYY/MM/DD');
     },
-    style(): Record<string, string> {
+    progress() {
       const start = this.ctf.startTime.getTime();
       const end = this.ctf.endTime.getTime();
       const duration = end - start;
       const elapsed = this.now.valueOf() - start;
-      const progress = Math.min((elapsed / duration) * 100, 100);
-      return { '--progress-percent': `${progress.toFixed(2)}%` };
+      const progress = Math.min(elapsed / duration, 1);
+      return progress;
     },
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.progress-row {
-  --progress-percent: 0%;
-
-  &::before {
-    position: absolute;
-    content: '';
-    transition: max-width linear 1s;
-    top: 1px;
-    left: 4px;
-    height: 2px;
-    width: calc(var(--progress-percent) - 8px);
-    border-radius: 5px;
-    background: $positive;
-    box-shadow: 0 1px 3px 0px lighten($positive, 5%),
-      0 0.2px 1px 0px rgba(255, 255, 255, 0.8) inset;
-  }
-}
 @keyframes blinker {
   from {
     opacity: 1;

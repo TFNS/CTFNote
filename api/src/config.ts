@@ -9,6 +9,7 @@ type DeepReadOnly<T> = {
 
 export type CTFNoteConfig = DeepReadOnly<{
   env: string;
+  sessionSecret: string;
   db: {
     database: string;
     admin: {
@@ -26,15 +27,30 @@ export type CTFNoteConfig = DeepReadOnly<{
   pad: {
     createUrl: string;
     showUrl: string;
+    documentMaxLength: number;
+    domain: string;
+    useSSL: string;
   };
 
   web: {
     port: number;
   };
+  discord: {
+    use: string;
+    token: string;
+    serverId: string;
+    voiceChannels: number;
+    botName: string;
+    maxChannelsPerCategory: number;
+  };
 }>;
 
-function getEnv(name: string): string {
+function getEnv(
+  name: string,
+  defaultValue: string | undefined = undefined
+): string {
   const v = process.env[name];
+  if (!v && defaultValue !== undefined) return defaultValue;
   if (!v) throw Error(`Missing env variable ${name}`);
   return v;
 }
@@ -45,6 +61,7 @@ function getEnvInt(name: string): number {
 
 const config: CTFNoteConfig = {
   env: getEnv("NODE_ENV"),
+  sessionSecret: getEnv("SESSION_SECRET", ""),
   db: {
     database: getEnv("DB_DATABASE"),
     user: {
@@ -62,9 +79,20 @@ const config: CTFNoteConfig = {
   pad: {
     createUrl: getEnv("PAD_CREATE_URL"),
     showUrl: getEnv("PAD_SHOW_URL"),
+    documentMaxLength: Number(getEnv("CMD_DOCUMENT_MAX_LENGTH", "100000")),
+    domain: getEnv("CMD_DOMAIN", ""),
+    useSSL: getEnv("CMD_PROTOCOL_USESSL", "false"),
   },
   web: {
     port: getEnvInt("WEB_PORT"),
+  },
+  discord: {
+    use: getEnv("USE_DISCORD", "false"),
+    token: getEnv("DISCORD_BOT_TOKEN"),
+    serverId: getEnv("DISCORD_SERVER_ID"),
+    voiceChannels: getEnvInt("DISCORD_VOICE_CHANNELS"),
+    botName: getEnv("DISCORD_BOT_NAME", "CTFNote"),
+    maxChannelsPerCategory: 50, // 50 is the hard Discord limit
   },
 };
 

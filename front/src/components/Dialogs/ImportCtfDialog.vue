@@ -2,20 +2,28 @@
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card style="min-width: 400px">
       <q-card-section class="text-h6"> Import CTF from CTFtime </q-card-section>
-      <q-separator />
-      <q-card-section>
+
+      <q-card-section class="q-py-none">
         <q-input
           v-model="model"
           filled
-          label="Id"
-          hint="ctftime.org url or id"
+          dense
+          class="q-pb-sm"
+          label="CTFtime.org URL or ID"
           :rules="[validate]"
           autofocus
           @keypress.enter="submit"
-        />
+        >
+          <template #prepend>
+            <div class="q-icon svg-icon">
+              <img src="/ctftime-icon.svg" />
+            </div>
+          </template>
+        </q-input>
       </q-card-section>
-      <q-card-actions align="right" class="q-gutter-md q-px-md q-pb-sm">
-        <q-btn color="warning" flat label="cancel" @click="onDialogCancel" />
+
+      <q-card-actions align="right" class="q-gutter-md q-px-md q-pb-md">
+        <q-btn color="primary" flat label="cancel" @click="onDialogCancel" />
         <q-btn color="positive" label="import" @click="submit" />
       </q-card-actions>
     </q-card>

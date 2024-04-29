@@ -23,6 +23,7 @@ export default defineComponent({
   components: { MainMenu, NotificationListener },
   setup() {
     ctfnote.me.provideMe();
+    ctfnote.tags.provideTags();
     ctfnote.profiles.provideTeam();
 
     const settings = ctfnote.settings.provideSettings();

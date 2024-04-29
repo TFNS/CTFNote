@@ -2,6 +2,12 @@ import { QVueGlobals, useQuasar } from 'quasar';
 
 type NotifyOptions = Exclude<Parameters<QVueGlobals['notify']>[0], string> & {
   message: string;
+  
+  /**
+   * Unique tag used to prevent duplicate notifications.
+   * @type{string}
+   * */
+  tag?: string; 
 };
 
 const USE_SYSTEM_NOTIFICATION = 'use-system-notification';
@@ -62,11 +68,11 @@ export function useNotify() {
   };
 
   const globalNotify = (opts: NotifyOptions) => {
-    console.log('enabled', isSystemNotificationEnabled());
     if (isSystemNotificationEnabled()) {
       try {
         new Notification(opts.message, {
           icon: `${document.location.origin}/favicon.ico`,
+          tag: opts.tag,
         });
         return;
       } catch {
