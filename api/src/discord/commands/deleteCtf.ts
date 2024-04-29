@@ -3,7 +3,6 @@ import {
   ApplicationCommandType,
   ButtonBuilder,
   ButtonStyle,
-  ChannelType,
   Client,
   CommandInteraction,
   Interaction,
@@ -64,7 +63,7 @@ async function deleteCtfLogic(client: Client, interaction: CommandInteraction) {
     );
   }
 
-  const actionRow: any = new ActionRowBuilder().addComponents(buttons);
+  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons);
 
   await interaction.editReply({
     content:
