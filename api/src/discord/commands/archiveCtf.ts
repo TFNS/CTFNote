@@ -82,7 +82,9 @@ async function archiveCtfLogic(
     );
   }
 
-  const actionRow: any = new ActionRowBuilder().addComponents(buttons);
+  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    buttons
+  );
 
   await interaction.editReply({
     content: "Which CTF do you want to archive?",

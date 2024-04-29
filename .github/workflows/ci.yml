@@ -1,0 +1,107 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: ctfnote
+          POSTGRES_USER: ctfnote
+        ports:
+          - 5432:5432
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 19, 18]
+
+    name: Node.js ${{ matrix.node }} build
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node }}
+        cache: "yarn"
+        cache-dependency-path: |
+          api/yarn.lock
+          front/yarn.lock
+
+    - name: Build api
+      working-directory: ./api
+      run: |
+        yarn install --immutable --immutable-cache --check-cache
+        yarn build
+        yarn run pg-validate-migrations ./migrations
+
+    - name: Build frontend
+      working-directory: ./front
+      run: |
+        yarn install --immutable --immutable-cache --check-cache
+        yarn build
+
+    - name: Run database migrations and codegen
+      env:
+        PAD_CREATE_URL: http://hedgedoc:3000/new
+        PAD_SHOW_URL: /
+        DB_DATABASE: ctfnote
+        DB_ADMIN_LOGIN: ctfnote
+        DB_ADMIN_PASSWORD: ctfnote
+        DB_USER_LOGIN: user_postgraphile
+        DB_USER_PASSWORD: secret_password
+        DB_HOST: 127.0.0.1
+        DB_PORT: 5432
+        WEB_PORT: 3000
+      run: |
+        cd ./api
+        # create database tables first, running migrations
+        DB_MIGRATE_ONLY=1 yarn start
+        # then start the api backend server
+        nohup yarn start &
+        cd ../front
+        # and finally validate the generated files are up to date
+        bash ../api/start.sh 127.0.0.1 3000 yarn run graphql-codegen --config codegen.yml --check
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "yarn"
+          cache-dependency-path: |
+            api/yarn.lock
+            front/yarn.lock
+
+      - name: Install frontend dependencies
+        working-directory: ./front
+        run: yarn install --immutable --immutable-cache --check-cache
+
+      - name: Lint frontend
+        working-directory: ./front
+        run: |
+          yarn run eslint --ext .js,.ts,.vue,.graphql ./src
+          yarn run prettier --check 'src/**/*.{ts,js,vue,graphql}'
+
+      - name: Install api dependencies
+        working-directory: ./api
+        run: yarn install --immutable --immutable-cache --check-cache
+
+      - name: Lint api
+        working-directory: ./api
+        run: |
+          yarn run eslint --ext .ts ./src
+          yarn run prettier --check 'src/**/*.ts'

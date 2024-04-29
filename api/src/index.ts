@@ -145,6 +145,10 @@ async function performMigrations() {
 
 async function main() {
   await performMigrations();
+  if (config.db.migrateOnly) {
+    console.log("Migrations done. Exiting.");
+    return;
+  }
   const postgraphileOptions = createOptions();
   const app = createApp(postgraphileOptions);
 

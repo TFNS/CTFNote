@@ -10,6 +10,7 @@ export interface Task {
   flag: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildTask(row: any): Task {
   return {
     id: row.id as bigint,

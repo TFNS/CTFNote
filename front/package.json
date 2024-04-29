@@ -8,7 +8,7 @@
   "scripts": {
     "build": "quasar build",
     "dev": "quasar dev",
-    "format": "prettier --write '**/*.{js,vue,graphql}'",
+    "format": "prettier --write '**/*.{ts,js,vue,graphql}'",
     "lint": "eslint --ext .js,.ts,.vue,.graphql ./",
     "test": "echo \"No test specified\" && exit 0",
     "codegen": "graphql-codegen --config codegen.yml"
