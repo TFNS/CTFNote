@@ -67,20 +67,6 @@ export type AssignedTagCondition = {
   taskId?: InputMaybe<Scalars['Int']>;
 };
 
-/** A filter to be used against `AssignedTag` object types. All fields are combined with a logical ‘and.’ */
-export type AssignedTagFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<AssignedTagFilter>>;
-  /** Negates the expression. */
-  not?: InputMaybe<AssignedTagFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<AssignedTagFilter>>;
-  /** Filter by the object’s `tagId` field. */
-  tagId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `taskId` field. */
-  taskId?: InputMaybe<IntFilter>;
-};
-
 /** An input for mutations affecting `AssignedTag` */
 export type AssignedTagInput = {
   tagId: Scalars['Int'];
@@ -119,32 +105,6 @@ export enum AssignedTagsOrderBy {
   TaskIdAsc = 'TASK_ID_ASC',
   TaskIdDesc = 'TASK_ID_DESC'
 }
-
-/** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
-export type BooleanFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Boolean']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Boolean']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Boolean']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Boolean']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Boolean']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Boolean']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Boolean']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Boolean']>>;
-};
 
 /** All input for the `cancelWorkingOn` mutation. */
 export type CancelWorkingOnInput = {
@@ -480,7 +440,6 @@ export type CtfInvitationsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<InvitationCondition>;
-  filter?: InputMaybe<InvitationFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -529,20 +488,10 @@ export type CtfCondition = {
 export type CtfFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<CtfFilter>>;
-  /** Filter by the object’s `endTime` field. */
-  endTime?: InputMaybe<DatetimeFilter>;
-  /** Filter by the object’s `granted` field. */
-  granted?: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not?: InputMaybe<CtfFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<CtfFilter>>;
-  /** Filter by the object’s `secretsId` field. */
-  secretsId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `startTime` field. */
-  startTime?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `title` field. */
   title?: InputMaybe<StringFilter>;
 };
@@ -625,18 +574,6 @@ export type CtfSecretCondition = {
   id?: InputMaybe<Scalars['Int']>;
 };
 
-/** A filter to be used against `CtfSecret` object types. All fields are combined with a logical ‘and.’ */
-export type CtfSecretFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<CtfSecretFilter>>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
-  /** Negates the expression. */
-  not?: InputMaybe<CtfSecretFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<CtfSecretFilter>>;
-};
-
 /** Represents an update to a `CtfSecret`. Fields that are set will be updated. */
 export type CtfSecretPatch = {
   credentials?: InputMaybe<Scalars['String']>;
@@ -712,30 +649,16 @@ export enum CtfsOrderBy {
   TitleDesc = 'TITLE_DESC'
 }
 
-/** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
-export type DatetimeFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Datetime']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Datetime']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Datetime']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Datetime']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Datetime']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Datetime']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Datetime']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Datetime']>>;
+export type CtftimeCtf = {
+  __typename?: 'CtftimeCtf';
+  ctftimeUrl: Scalars['String'];
+  description: Scalars['String'];
+  finish: Scalars['String'];
+  logo: Scalars['String'];
+  start: Scalars['String'];
+  title: Scalars['String'];
+  url: Scalars['String'];
+  weight: Scalars['Float'];
 };
 
 /** All input for the `deleteAssignedTagByNodeId` mutation. */
@@ -1010,32 +933,6 @@ export type ImportCtfPayload = {
   query?: Maybe<Query>;
 };
 
-/** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
-export type IntFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Int']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Int']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Int']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Int']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Int']>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Int']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Int']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Int']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Int']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Int']>>;
-};
-
 export type Invitation = Node & {
   __typename?: 'Invitation';
   /** Reads a single `Ctf` that is related to this `Invitation`. */
@@ -1057,20 +954,6 @@ export type InvitationCondition = {
   ctfId?: InputMaybe<Scalars['Int']>;
   /** Checks for equality with the object’s `profileId` field. */
   profileId?: InputMaybe<Scalars['Int']>;
-};
-
-/** A filter to be used against `Invitation` object types. All fields are combined with a logical ‘and.’ */
-export type InvitationFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<InvitationFilter>>;
-  /** Filter by the object’s `ctfId` field. */
-  ctfId?: InputMaybe<IntFilter>;
-  /** Negates the expression. */
-  not?: InputMaybe<InvitationFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<InvitationFilter>>;
-  /** Filter by the object’s `profileId` field. */
-  profileId?: InputMaybe<IntFilter>;
 };
 
 /** An input for mutations affecting `Invitation` */
@@ -1582,7 +1465,6 @@ export type ProfileInvitationsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<InvitationCondition>;
-  filter?: InputMaybe<InvitationFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1606,7 +1488,6 @@ export type ProfileWorkOnTasksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
-  filter?: InputMaybe<WorkOnTaskFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1651,14 +1532,10 @@ export type ProfileFilter = {
   and?: InputMaybe<Array<ProfileFilter>>;
   /** Filter by the object’s `discordId` field. */
   discordId?: InputMaybe<StringFilter>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not?: InputMaybe<ProfileFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<ProfileFilter>>;
-  /** Filter by the object’s `role` field. */
-  role?: InputMaybe<RoleFilter>;
   /** Filter by the object’s `username` field. */
   username?: InputMaybe<StringFilter>;
 };
@@ -1789,6 +1666,9 @@ export type Query = Node & {
   ctfSecrets?: Maybe<CtfSecretsConnection>;
   /** Reads and enables pagination through a set of `Ctf`. */
   ctfs?: Maybe<CtfsConnection>;
+  /** Reads and enables pagination through a set of `Ctf`. */
+  ctfsByDate?: Maybe<CtfsConnection>;
+  ctftimeCtfById?: Maybe<CtftimeCtf>;
   /** Reads and enables pagination through a set of `Profile`. */
   guests?: Maybe<ProfilesConnection>;
   /** Reads and enables pagination through a set of `Ctf`. */
@@ -1864,7 +1744,6 @@ export type QueryAssignedTagsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<AssignedTagCondition>;
-  filter?: InputMaybe<AssignedTagFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1901,7 +1780,6 @@ export type QueryCtfSecretsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<CtfSecretCondition>;
-  filter?: InputMaybe<CtfSecretFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1923,10 +1801,27 @@ export type QueryCtfsArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryCtfsByDateArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  month?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  year?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryCtftimeCtfByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryGuestsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
-  filter?: InputMaybe<ProfileFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1937,7 +1832,6 @@ export type QueryGuestsArgs = {
 export type QueryIncomingCtfArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
-  filter?: InputMaybe<CtfFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1962,7 +1856,6 @@ export type QueryInvitationsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<InvitationCondition>;
-  filter?: InputMaybe<InvitationFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1980,7 +1873,6 @@ export type QueryNodeArgs = {
 export type QueryPastCtfArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
-  filter?: InputMaybe<CtfFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2137,7 +2029,6 @@ export type QueryWorkOnTasksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
-  filter?: InputMaybe<WorkOnTaskFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2299,32 +2190,6 @@ export enum Role {
   UserMember = 'USER_MEMBER'
 }
 
-/** A filter to be used against Role fields. All fields are combined with a logical ‘and.’ */
-export type RoleFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Role>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Role>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Role>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Role>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Role>>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Role>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Role>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Role>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Role>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Role>>;
-};
-
 /** All input for the `setDiscordEventLink` mutation. */
 export type SetDiscordEventLinkInput = {
   /**
@@ -2471,80 +2336,8 @@ export type StopWorkingOnPayloadWorkOnTaskEdgeArgs = {
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
 export type StringFilter = {
-  /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['String']>;
-  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  distinctFromInsensitive?: InputMaybe<Scalars['String']>;
-  /** Ends with the specified string (case-sensitive). */
-  endsWith?: InputMaybe<Scalars['String']>;
-  /** Ends with the specified string (case-insensitive). */
-  endsWithInsensitive?: InputMaybe<Scalars['String']>;
-  /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['String']>;
-  /** Equal to the specified value (case-insensitive). */
-  equalToInsensitive?: InputMaybe<Scalars['String']>;
-  /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['String']>;
-  /** Greater than the specified value (case-insensitive). */
-  greaterThanInsensitive?: InputMaybe<Scalars['String']>;
-  /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['String']>;
-  /** Greater than or equal to the specified value (case-insensitive). */
-  greaterThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
-  /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['String']>>;
-  /** Included in the specified list (case-insensitive). */
-  inInsensitive?: InputMaybe<Array<Scalars['String']>>;
-  /** Contains the specified string (case-sensitive). */
-  includes?: InputMaybe<Scalars['String']>;
   /** Contains the specified string (case-insensitive). */
   includesInsensitive?: InputMaybe<Scalars['String']>;
-  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
-  /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['String']>;
-  /** Less than the specified value (case-insensitive). */
-  lessThanInsensitive?: InputMaybe<Scalars['String']>;
-  /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['String']>;
-  /** Less than or equal to the specified value (case-insensitive). */
-  lessThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
-  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  like?: InputMaybe<Scalars['String']>;
-  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  likeInsensitive?: InputMaybe<Scalars['String']>;
-  /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['String']>;
-  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  notDistinctFromInsensitive?: InputMaybe<Scalars['String']>;
-  /** Does not end with the specified string (case-sensitive). */
-  notEndsWith?: InputMaybe<Scalars['String']>;
-  /** Does not end with the specified string (case-insensitive). */
-  notEndsWithInsensitive?: InputMaybe<Scalars['String']>;
-  /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['String']>;
-  /** Not equal to the specified value (case-insensitive). */
-  notEqualToInsensitive?: InputMaybe<Scalars['String']>;
-  /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['String']>>;
-  /** Not included in the specified list (case-insensitive). */
-  notInInsensitive?: InputMaybe<Array<Scalars['String']>>;
-  /** Does not contain the specified string (case-sensitive). */
-  notIncludes?: InputMaybe<Scalars['String']>;
-  /** Does not contain the specified string (case-insensitive). */
-  notIncludesInsensitive?: InputMaybe<Scalars['String']>;
-  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLike?: InputMaybe<Scalars['String']>;
-  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLikeInsensitive?: InputMaybe<Scalars['String']>;
-  /** Does not start with the specified string (case-sensitive). */
-  notStartsWith?: InputMaybe<Scalars['String']>;
-  /** Does not start with the specified string (case-insensitive). */
-  notStartsWithInsensitive?: InputMaybe<Scalars['String']>;
-  /** Starts with the specified string (case-sensitive). */
-  startsWith?: InputMaybe<Scalars['String']>;
-  /** Starts with the specified string (case-insensitive). */
-  startsWithInsensitive?: InputMaybe<Scalars['String']>;
 };
 
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
@@ -2579,7 +2372,6 @@ export type TagAssignedTagsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<AssignedTagCondition>;
-  filter?: InputMaybe<AssignedTagFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2610,8 +2402,6 @@ export type TagCondition = {
 export type TagFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<TagFilter>>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not?: InputMaybe<TagFilter>;
   /** Checks for any expressions in this list. */
@@ -2709,7 +2499,6 @@ export type TaskAssignedTagsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<AssignedTagCondition>;
-  filter?: InputMaybe<AssignedTagFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2745,7 +2534,6 @@ export type TaskWorkOnTasksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
-  filter?: InputMaybe<WorkOnTaskFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2766,16 +2554,10 @@ export type TaskCondition = {
 export type TaskFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<TaskFilter>>;
-  /** Filter by the object’s `ctfId` field. */
-  ctfId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<IntFilter>;
   /** Negates the expression. */
   not?: InputMaybe<TaskFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<TaskFilter>>;
-  /** Filter by the object’s `solved` field. */
-  solved?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `title` field. */
   title?: InputMaybe<StringFilter>;
 };
@@ -3282,20 +3064,6 @@ export type WorkOnTaskCondition = {
   taskId?: InputMaybe<Scalars['Int']>;
 };
 
-/** A filter to be used against `WorkOnTask` object types. All fields are combined with a logical ‘and.’ */
-export type WorkOnTaskFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<WorkOnTaskFilter>>;
-  /** Negates the expression. */
-  not?: InputMaybe<WorkOnTaskFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<WorkOnTaskFilter>>;
-  /** Filter by the object’s `profileId` field. */
-  profileId?: InputMaybe<IntFilter>;
-  /** Filter by the object’s `taskId` field. */
-  taskId?: InputMaybe<IntFilter>;
-};
-
 /** An input for mutations affecting `WorkOnTask` */
 export type WorkOnTaskInput = {
   active?: InputMaybe<Scalars['Boolean']>;
@@ -3448,12 +3216,29 @@ export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: {
 
 export type CtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null };
 
+export type CtftimeCtfFragment = { __typename?: 'CtftimeCtf', title: string, weight: number, url: string, logo: string, ctftimeUrl: string, description: string, start: string, finish: string };
+
 export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
 
 export type CtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CtfsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null }> } | null };
+
+export type CtfsByDateQueryVariables = Exact<{
+  year: Scalars['Int'];
+  month: Scalars['Int'];
+}>;
+
+
+export type CtfsByDateQuery = { __typename?: 'Query', ctfsByDate?: { __typename?: 'CtfsConnection', ctfs: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null }> } | null };
+
+export type CtftimeCtfByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CtftimeCtfByIdQuery = { __typename?: 'Query', ctftimeCtfById?: { __typename?: 'CtftimeCtf', title: string, weight: number, url: string, logo: string, ctftimeUrl: string, description: string, start: string, finish: string } | null };
 
 export type SubscribeToCtfSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -3831,6 +3616,18 @@ export const UserFragmentDoc = gql`
   }
 }
     ${ProfileFragmentDoc}`;
+export const CtftimeCtfFragmentDoc = gql`
+    fragment CtftimeCtfFragment on CtftimeCtf {
+  title
+  weight
+  url
+  logo
+  ctftimeUrl
+  description
+  start
+  finish
+}
+    `;
 export const CtfFragmentDoc = gql`
     fragment CtfFragment on Ctf {
   nodeId
@@ -4440,6 +4237,69 @@ export function useCtfsLazyQuery(options: VueApolloComposable.UseQueryOptions<Ct
   return VueApolloComposable.useLazyQuery<CtfsQuery, CtfsQueryVariables>(CtfsDocument, {}, options);
 }
 export type CtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtfsQuery, CtfsQueryVariables>;
+export const CtfsByDateDocument = gql`
+    query CtfsByDate($year: Int!, $month: Int!) {
+  ctfsByDate(year: $year, month: $month) {
+    ctfs: nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${CtfFragmentDoc}`;
+
+/**
+ * __useCtfsByDateQuery__
+ *
+ * To run a query within a Vue component, call `useCtfsByDateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCtfsByDateQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useCtfsByDateQuery({
+ *   year: // value for 'year'
+ *   month: // value for 'month'
+ * });
+ */
+export function useCtfsByDateQuery(variables: CtfsByDateQueryVariables | VueCompositionApi.Ref<CtfsByDateQueryVariables> | ReactiveFunction<CtfsByDateQueryVariables>, options: VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<CtfsByDateQuery, CtfsByDateQueryVariables>(CtfsByDateDocument, variables, options);
+}
+export function useCtfsByDateLazyQuery(variables: CtfsByDateQueryVariables | VueCompositionApi.Ref<CtfsByDateQueryVariables> | ReactiveFunction<CtfsByDateQueryVariables>, options: VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<CtfsByDateQuery, CtfsByDateQueryVariables>(CtfsByDateDocument, variables, options);
+}
+export type CtfsByDateQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtfsByDateQuery, CtfsByDateQueryVariables>;
+export const CtftimeCtfByIdDocument = gql`
+    query CtftimeCtfById($id: Int!) {
+  ctftimeCtfById(id: $id) {
+    ...CtftimeCtfFragment
+  }
+}
+    ${CtftimeCtfFragmentDoc}`;
+
+/**
+ * __useCtftimeCtfByIdQuery__
+ *
+ * To run a query within a Vue component, call `useCtftimeCtfByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCtftimeCtfByIdQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useCtftimeCtfByIdQuery({
+ *   id: // value for 'id'
+ * });
+ */
+export function useCtftimeCtfByIdQuery(variables: CtftimeCtfByIdQueryVariables | VueCompositionApi.Ref<CtftimeCtfByIdQueryVariables> | ReactiveFunction<CtftimeCtfByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>(CtftimeCtfByIdDocument, variables, options);
+}
+export function useCtftimeCtfByIdLazyQuery(variables: CtftimeCtfByIdQueryVariables | VueCompositionApi.Ref<CtftimeCtfByIdQueryVariables> | ReactiveFunction<CtftimeCtfByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>(CtftimeCtfByIdDocument, variables, options);
+}
+export type CtftimeCtfByIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>;
 export const SubscribeToCtfDocument = gql`
     subscription subscribeToCtf {
   listen(topic: "update:ctfs") {
@@ -6003,6 +5863,18 @@ export const UserFragment = gql`
   }
 }
     ${ProfileFragment}`;
+export const CtftimeCtfFragment = gql`
+    fragment CtftimeCtfFragment on CtftimeCtf {
+  title
+  weight
+  url
+  logo
+  ctftimeUrl
+  description
+  start
+  finish
+}
+    `;
 export const CtfFragment = gql`
     fragment CtfFragment on Ctf {
   nodeId
@@ -6270,6 +6142,22 @@ export const Ctfs = gql`
   }
 }
     ${CtfFragment}`;
+export const CtfsByDate = gql`
+    query CtfsByDate($year: Int!, $month: Int!) {
+  ctfsByDate(year: $year, month: $month) {
+    ctfs: nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${CtfFragment}`;
+export const CtftimeCtfById = gql`
+    query CtftimeCtfById($id: Int!) {
+  ctftimeCtfById(id: $id) {
+    ...CtftimeCtfFragment
+  }
+}
+    ${CtftimeCtfFragment}`;
 export const SubscribeToCtf = gql`
     subscription subscribeToCtf {
   listen(topic: "update:ctfs") {
