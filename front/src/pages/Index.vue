@@ -32,7 +32,6 @@ import CtfCalendar from '../components/CTF/CtfCalendar.vue';
 const router = useRouter();
 const route = useRoute();
 
-
 const params = computed(() => {
   const now = new Date();
   let year = parseInt(route.params.year as string, 10);
