@@ -28,7 +28,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['apollo', 'ctfnote'],
+    boot: ['apollo', 'ctfnote', 'vcalendar'],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ['app.scss'],
@@ -88,6 +88,9 @@ module.exports = configure(function (ctx) {
           target: 'http://127.0.0.1:3000',
         },
         '/calendar.ics': {
+          target: 'http://127.0.0.1:3000',
+        },
+        '/ctftime': {
           target: 'http://127.0.0.1:3000',
         },
         '/pad': {
