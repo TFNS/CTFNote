@@ -1,3 +1,4 @@
+import { useApolloClient } from '@vue/apollo-composable';
 import { date } from 'quasar';
 import slugify from 'slugify';
 import {
@@ -5,23 +6,18 @@ import {
   CtfInput,
   CtfPatch,
   CtfSecretFragment,
+  CtftimeCtfById,
+  CtftimeCtfByIdQuery,
   InvitationFragment,
-  SubscribeToCtfCreatedDocument,
-  SubscribeToCtfCreatedSubscription,
-  SubscribeToCtfCreatedSubscriptionVariables,
-  SubscribeToCtfDeletedDocument,
-  SubscribeToCtfDeletedSubscription,
-  SubscribeToCtfDeletedSubscriptionVariables,
   TagFragment,
   TaskFragment,
   useCreateCtfMutation,
+  useCtfsByDateQuery,
   useCtfsQuery,
   useDeleteCtfbyIdMutation,
   useGetFullCtfQuery,
   useImportctfMutation,
-  useIncomingCtfsQuery,
   useInviteUserToCtfMutation,
-  usePastCtfsQuery,
   useSetDiscordEventLinkMutation,
   useSubscribeToCtfCreatedSubscription,
   useSubscribeToCtfDeletedSubscription,
@@ -32,11 +28,11 @@ import {
   useUpdateCredentialsForCtfIdMutation,
   useUpdateCtfByIdMutation,
 } from 'src/generated/graphql';
-import { CtfInvitation, makeId } from './models';
-import { Ctf, Profile, Task } from './models';
-import { wrapQuery } from './utils';
+import { MaybeRefOrGetter, computed, reactive, toValue } from 'vue';
+import { Ctf, CtfInvitation, Profile, Task, makeId } from './models';
 import { buildTag } from './tags';
 import { buildWorkingOn } from './tasks';
+import { wrapQuery } from './utils';
 
 type FullCtfResponse = {
   ctf: CtfFragment & {
@@ -129,119 +125,71 @@ export function buildFullCtf(data: FullCtfResponse): Ctf {
 
 /* Queries */
 
-export function getIncomingCtfs() {
-  const query = useIncomingCtfsQuery({ fetchPolicy: 'cache-and-network' });
-  const wrappedQuery = wrapQuery(query, [], (data) =>
-    data.incomingCtf.nodes.map(buildCtf)
-  );
+export function useFetchFromCtftime() {
+  const { resolveClient } = useApolloClient();
 
-  /* Watch deletion */
-  query.subscribeToMore<
-    SubscribeToCtfDeletedSubscriptionVariables,
-    SubscribeToCtfDeletedSubscription
-  >({
-    document: SubscribeToCtfDeletedDocument,
-    updateQuery(oldResult, { subscriptionData }) {
-      const nodeId = subscriptionData.data.listen.relatedNodeId;
-      if (!nodeId) return oldResult;
-      const nodes = oldResult.incomingCtf?.nodes.slice() ?? [];
-      return {
-        incomingCtf: {
-          __typename: 'CtfsConnection',
-          nodes: nodes.filter((ctf) => ctf.nodeId != nodeId),
-        },
-      };
-    },
-  });
+  return (id: number) => {
+    const client = resolveClient();
 
-  /* Watch creation */
-  query.subscribeToMore<
-    SubscribeToCtfCreatedSubscriptionVariables,
-    SubscribeToCtfCreatedSubscription
-  >({
-    document: SubscribeToCtfCreatedDocument,
-    updateQuery(oldResult, { subscriptionData }) {
-      const node = subscriptionData.data.listen.relatedNode;
-      if (!node || node.__typename != 'Ctf') return oldResult;
-      const nodes = oldResult.incomingCtf?.nodes.slice() ?? [];
-
-      const endTime = extractDate(node.endTime);
-      if (endTime > new Date()) {
-        nodes.push(node);
-      }
-      return {
-        incomingCtf: {
-          __typename: 'CtfsConnection',
-          nodes,
-        },
-      };
-    },
-  });
-
-  return wrappedQuery;
+    return client
+      .query<CtftimeCtfByIdQuery>({
+        query: CtftimeCtfById,
+        variables: { id },
+      })
+      .then((r) => {
+        if (!r.data.ctftimeCtfById) {
+          throw new Error('Ctf not found');
+        }
+        return r.data.ctftimeCtfById;
+      });
+  };
 }
 
-export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
-  const query = usePastCtfsQuery(...args);
-  const wrappedQuery = wrapQuery(query, { total: 0, ctfs: [] }, (data) => ({
-    total: data.pastCtf.totalCount,
-    ctfs: data.pastCtf.nodes.map(buildCtf),
-  }));
+export function useCtfsByDate(
+  params: MaybeRefOrGetter<{ year: number; month: number }>
+) {
+  const ctfs = reactive(new Map<string, Ctf>());
+  const query = useCtfsByDateQuery(params);
 
-  /* Watch deletion */
-  query.subscribeToMore<
-    SubscribeToCtfDeletedSubscriptionVariables,
-    SubscribeToCtfDeletedSubscription
-  >({
-    document: SubscribeToCtfDeletedDocument,
-    updateQuery(oldResult, { subscriptionData }) {
-      const nodeId = subscriptionData.data.listen.relatedNodeId;
-      if (!nodeId) return oldResult;
-      const nodes = oldResult.pastCtf?.nodes.slice() ?? [];
-      const newNodes = nodes.filter((ctf) => ctf.nodeId != nodeId);
-      return {
-        pastCtf: {
-          __typename: 'CtfsConnection',
-          nodes: newNodes,
-          totalCount: (oldResult.pastCtf?.totalCount ?? 0) - 1,
-        },
-      };
-    },
+  query.onResult((result) => {
+    result.data?.ctfsByDate?.ctfs?.forEach((node) => {
+      const ctf = buildCtf(node);
+      ctfs.set(ctf.nodeId, ctf);
+    });
   });
 
-  /* Watch creation */
-  query.subscribeToMore<
-    SubscribeToCtfCreatedSubscriptionVariables,
-    SubscribeToCtfCreatedSubscription
-  >({
-    document: SubscribeToCtfCreatedDocument,
-    updateQuery(oldResult, { subscriptionData }) {
-      const node = subscriptionData.data.listen.relatedNode;
-      if (!node || node.__typename != 'Ctf') return oldResult;
-      const nodes = oldResult.pastCtf?.nodes.slice() ?? [];
-
-      const endTime = extractDate(node.endTime);
-      if (endTime < new Date()) {
-        nodes.push(node);
-        nodes.sort((a, b) =>
-          Number(new Date(a.startTime)) > Number(new Date(b.startTime))
-            ? -1
-            : Number(new Date(a.startTime)) < Number(new Date(b.startTime))
-            ? 1
-            : 0
-        );
-      }
-      return {
-        pastCtf: {
-          __typename: 'CtfsConnection',
-          nodes,
-          totalCount: (oldResult.pastCtf?.totalCount ?? 0) + 1,
-        },
-      };
-    },
+  useSubscribeToCtfCreatedSubscription().onResult((result) => {
+    if (!result.data) return;
+    if (result.data.listen.relatedNode?.__typename !== 'Ctf') return;
+    const ctf = buildCtf(result.data.listen.relatedNode);
+    ctfs.set(ctf.nodeId, ctf);
   });
 
-  return wrappedQuery;
+  useSubscribeToCtfDeletedSubscription().onResult((result) => {
+    if (result.data?.listen?.relatedNodeId) {
+      ctfs.delete(result.data.listen.relatedNodeId);
+    }
+  });
+
+  return {
+    ctfs: computed(() => {
+      return Array.from(ctfs.values())
+        .filter((ctf) => {
+          const monthStart = date.buildDate({
+            year: toValue(params).year,
+            month: toValue(params).month,
+            day: 1,
+          });
+          const monthEnd = date.addToDate(monthStart, { months: 1 });
+          const start = ctf.startTime.getTime();
+          const end = ctf.endTime.getTime();
+
+          return start <= monthEnd.getTime() && end >= monthStart.getTime();
+        })
+        .sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
+    }),
+    loading: query.loading,
+  };
 }
 
 export function getCtf(...args: Parameters<typeof useGetFullCtfQuery>) {
@@ -263,7 +211,13 @@ export function getAllCtfs() {
 
 export function useCreateCtf() {
   const { mutate } = useCreateCtfMutation({});
-  return (ctf: CtfInput) => mutate(ctf);
+  return (ctf: CtfInput) =>
+    mutate(ctf).then((r) => {
+      if (r?.data?.createCtf?.ctf) {
+        return buildCtf(r.data.createCtf.ctf);
+      }
+      throw new Error('Failed to create CTF');
+    });
 }
 
 export function useDeleteCtf() {
@@ -273,7 +227,13 @@ export function useDeleteCtf() {
 
 export function useUpdateCtf() {
   const { mutate } = useUpdateCtfByIdMutation({});
-  return (ctf: Ctf, patch: CtfPatch) => mutate({ id: ctf.id, ...patch });
+  return (ctf: Ctf, patch: CtfPatch) =>
+    mutate({ id: ctf.id, ...patch }).then((r) => {
+      if (r?.data?.updateCtf?.ctf) {
+        return buildCtf(r.data.updateCtf.ctf);
+      }
+      throw new Error('Failed to update CTF');
+    });
 }
 
 export function useUpdateCtfCredentials() {

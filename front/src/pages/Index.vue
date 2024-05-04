@@ -1,97 +1,86 @@
 <template>
   <q-page>
-    <q-tabs indicator-color="secondary" dense align="left">
-      <q-route-tab
-        v-for="(tab, idx) in tabs"
-        :key="idx"
-        :to="tab.route"
-        :label="tab.label"
-        content-class="tab-button"
-        :icon="tab.icon"
-      />
-    </q-tabs>
     <div class="q-pa-md">
-      <router-view />
-    </div>
-    <q-page-sticky position="top-right" :offset="[18, 8]">
-      <q-fab
-        v-if="me.isManager"
-        class="ctfs-action-btn shadow-2"
-        padding="10px"
-        color="positive"
-        icon="add"
-        vertical-actions-align="right"
-        direction="down"
-        push
+      <div class="column q-gutter-md card-list">
+        <div v-for="ctf of ctfs" :key="ctf.nodeId" class="ctf-card-container">
+          <ctf-card :ctf="ctf" :data-ctf-id="ctf.id" class="ctf-card" />
+        </div>
+      </div>
+      <div
+        class="text-h6 q-pl-md flex items-center justify-center q-pt-lg card-list"
       >
-        <q-fab-action
-          color="positive"
-          push
-          icon="add"
-          label="Create"
-          @click="openCreateCtfDialog"
-        />
-        <q-fab-action
-          color="secondary"
-          push
-          icon="flag"
-          label="Import "
-          @click="openImportCtfDialog"
-        />
-      </q-fab>
-    </q-page-sticky>
+        <q-spinner-dots v-if="loading" size="50px" />
+        <div v-else-if="ctfs.length === 0">No CTFs this month</div>
+      </div>
+      <ctf-calendar
+        :ctfs="ctfs"
+        :model-value="params"
+        @update:model-value="handleNavigation"
+        @ctf-click="handleCtfClick"
+      />
+    </div>
   </q-page>
 </template>
 
-<script lang="ts">
-import EditCtfDialogVue from 'src/components/Dialogs/EditCtfDialog.vue';
-import ImportCtfDialogVue from 'src/components/Dialogs/ImportCtfDialog.vue';
+<script setup lang="ts">
 import ctfnote from 'src/ctfnote';
-import { defineComponent } from 'vue';
+import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import CtfCard from '../components/CTF/Card.vue';
+import CtfCalendar from '../components/CTF/CtfCalendar.vue';
 
-export default defineComponent({
-  name: 'PageIndex',
-  components: {},
-  setup() {
-    return {
-      me: ctfnote.me.injectMe(),
-      tabs: [
-        {
-          label: 'Incoming',
-          icon: 'query_builder',
-          route: { name: 'ctfs-incoming' },
-        },
-        {
-          label: 'Past',
-          icon: 'archive',
-          route: { name: 'ctfs-past' },
-        },
-        {
-          label: 'calendar',
-          icon: 'calendar_today',
-          route: { name: 'ctfs-calendar' },
-        },
-      ],
-    };
-  },
-  methods: {
-    openCreateCtfDialog() {
-      this.$q.dialog({
-        component: EditCtfDialogVue,
-      });
-    },
-    openImportCtfDialog() {
-      this.$q.dialog({
-        component: ImportCtfDialogVue,
-      });
-    },
-  },
+const router = useRouter();
+const route = useRoute();
+
+
+const params = computed(() => {
+  const now = new Date();
+  let year = parseInt(route.params.year as string, 10);
+  if (isNaN(year)) {
+    year = now.getFullYear();
+  }
+  let month = parseInt(route.params.month as string, 10);
+  if (isNaN(month)) {
+    month = now.getMonth() + 1;
+  }
+  month = Math.min(12, Math.max(1, month));
+
+  return { year, month };
 });
+
+const { ctfs, loading } = ctfnote.ctfs.useCtfsByDate(params);
+
+function handleNavigation({ year, month }: { year: number; month: number }) {
+  void router.push({
+    name: 'ctfs',
+    params: { year, month },
+  });
+}
+
+function handleCtfClick(ctfId: number) {
+  document.querySelector(`[data-ctf-id="${ctfId}"]`)?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  });
+}
 </script>
 
 <style lang="scss" scoped>
-.q-tab {
-  min-width: 200px;
-  padding-top: 5px;
+.card-list {
+  margin-left: 250px;
+
+  @media (max-width: $breakpoint-md-min) {
+    margin-left: -16px;
+  }
+}
+
+.ctf-card-container {
+  max-width: calc(100% - 16px);
+  *:first-child {
+    scroll-margin-top: 66px;
+  }
+  &:last-of-type {
+    min-height: calc(100dvh - 82px);
+  }
 }
 </style>

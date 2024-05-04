@@ -1,36 +1,9 @@
 import { RouteRecordRaw } from 'vue-router';
 
 const ctfsRoute: RouteRecordRaw = {
-  path: 'ctfs',
+  path: 'ctfs/:year(\\d+)?/:month(\\d+)?',
   name: 'ctfs',
   component: () => import('pages/Index.vue'),
-  redirect: { name: 'ctfs-incoming' },
-  children: [
-    {
-      path: 'incoming',
-      name: 'ctfs-incoming',
-      meta: {
-        title: 'Incoming CTFs',
-      },
-      component: () => import('components/CTF/Incoming.vue'),
-    },
-    {
-      path: 'past',
-      name: 'ctfs-past',
-      meta: {
-        title: 'Past CTFs',
-      },
-      component: () => import('components/CTF/Past.vue'),
-    },
-    {
-      path: 'calendar',
-      name: 'ctfs-calendar',
-      meta: {
-        title: 'Calendar',
-      },
-      component: () => import('components/CTF/Calendar.vue'),
-    },
-  ],
 };
 
 const ctfRoute: RouteRecordRaw = {
