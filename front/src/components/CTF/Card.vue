@@ -1,5 +1,5 @@
 <template>
-  <q-card bordered class="ctf-card" :style="style">
+  <q-card class="ctf-card" :style="style">
     <card-admin-menu :ctf="ctf" />
     <q-linear-progress
       v-if="progress >= 0"
@@ -37,7 +37,7 @@
     <q-separator inset />
     <q-card-section>
       <div class="q-mb-md column q-col-gutter-md background-logo">
-        <div class="flex gap-4">
+        <div class="flex gap-sm">
           <time-chip :date="ctf.startTime" label="Start:" />
           <time-chip :date="ctf.startTime" label="End:" />
           <link-chip v-if="ctf.ctfUrl" :url="ctf.ctfUrl" />
@@ -99,7 +99,9 @@ const progress = computed(() => {
 
 const style = computed(() => {
   if (props.ctf.logoUrl) {
-    return { '--bgUrl': `url(${props.ctf.logoUrl})` };
+    return {
+      '--bgUrl': `url(${props.ctf.logoUrl})`,
+    };
   }
   return {};
 });

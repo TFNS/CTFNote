@@ -1,6 +1,6 @@
 <template>
   <a :href="url" target="_blank">
-    <q-chip clickable color="secondary" class="q-my-none" text-color="white">
+    <q-chip clickable color="secondary" class="q-ma-none" text-color="white">
       <q-icon name="link" class="q-mr-sm" />
       {{ domain }}
     </q-chip>

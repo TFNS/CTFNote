@@ -1,5 +1,5 @@
 <template>
-  <q-card bordered class="ctf-calendar-card">
+  <q-card class="ctf-calendar-card">
     <v-calendar
       id="ctf-calendar"
       ref="calendar"
@@ -230,9 +230,9 @@ function createCtf() {
       height: 42px;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
-      width: calc(100% + 2px);
-      top: -1px;
-      left: -1px;
+      width: 100%;
+      top: 0;
+      left: 0;
       background: var(--q-primary);
     }
 

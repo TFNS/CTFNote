@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <div class="column q-gutter-md card-list">
+      <div class="card-list">
         <div v-for="ctf of ctfs" :key="ctf.nodeId" class="ctf-card-container">
           <ctf-card :ctf="ctf" :data-ctf-id="ctf.id" class="ctf-card" />
         </div>
@@ -67,6 +67,11 @@ function handleCtfClick(ctfId: number) {
 <style lang="scss" scoped>
 .card-list {
   margin-left: 250px;
+  margin-right: -16px;
+  padding-left: 16px;
+  gap: 32px;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: $breakpoint-md-min) {
     margin-left: -16px;
@@ -79,7 +84,7 @@ function handleCtfClick(ctfId: number) {
     scroll-margin-top: 66px;
   }
   &:last-of-type {
-    min-height: calc(100dvh - 82px);
+    min-height: calc(100dvh - 106px);
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <q-chip color="primary" text-color="white" class="q-my-none" :ripple="false">
+  <q-chip color="primary" text-color="white" class="q-ma-none" :ripple="false">
     <span class="text-weight-bold">{{ label }}</span
     >&nbsp;
     {{ formatedDate }}

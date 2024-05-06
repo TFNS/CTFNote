@@ -12,6 +12,7 @@ body .blur {
 
 body.live-mode .blur {
   filter: blur(5px);
+
   &:hover {
     filter: blur(0px);
     transition-delay: 0.2s;
@@ -25,6 +26,7 @@ body.live-mode .blur {
 
 .q-markdown--link {
   color: $primary;
+
   &:visited {
     color: $primary;
   }
@@ -73,4 +75,21 @@ body.live-mode .blur {
 .compact-dialog .q-card__actions--horiz {
   margin-right: 8px;
   margin-bottom: 8px;
+}
+
+
+.gap-xs {
+  gap: 4px;
+}
+
+.gap-sm {
+  gap: 8px;
+}
+
+.gap-md {
+  gap: 16px;
+}
+
+.gap-lg {
+  gap: 32px;
 }
