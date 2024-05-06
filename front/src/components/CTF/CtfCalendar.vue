@@ -235,24 +235,12 @@ function createCtf() {
       left: -1px;
       background: var(--q-primary);
     }
-    .vc-bar-start {
-      margin-left: 10%;
-    }
 
-    .vc-bar-end {
-      margin-right: 10%;
-    }
     .on-right {
       margin-left: 0;
-      .vc-bar {
-        margin-right: 20%;
-      }
     }
     .on-left {
       margin-right: 0;
-      .vc-bar {
-        margin-left: 20%;
-      }
     }
     .vc-weeks {
       padding-top: 8px;
