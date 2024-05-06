@@ -48,27 +48,10 @@
         </div>
       </div>
 
-      <div class="row q-ml-sm q-gutter-sm q-mt-none">
-        <q-chip
-          color="primary"
-          text-color="white"
-          class="q-my-none"
-          :ripple="false"
-        >
-          <span class="text-weight-bold">Start:</span>&nbsp;
-          {{ startTime }}
-        </q-chip>
-        <q-chip
-          color="primary"
-          text-color="white"
-          class="q-my-none"
-          :ripple="false"
-        >
-          <span class="text-weight-bold">End:</span>&nbsp;
-          {{ endTime }}
-        </q-chip>
-
-        <q-space />
+      <div class="row">
+        <time-chip :date="ctf.startTime" label="Start:" />
+        <time-chip :date="ctf.startTime" label="End:" />
+        <link-chip v-if="ctf.ctfUrl" :url="ctf.ctfUrl" />
       </div>
 
       <div class="row q-gutter-md">
@@ -105,9 +88,11 @@
 
 <script lang="ts">
 import { date } from 'quasar';
-import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
+import { Ctf } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
+import LinkChip from '../Utils/LinkChip.vue';
+import TimeChip from '../Utils/TimeChip.vue';
 import BtnDelete from './BtnDelete.vue';
 import BtnEdit from './BtnEdit.vue';
 import CardAdminMenu from './CardAdminMenu.vue';
@@ -118,6 +103,8 @@ import WeightBadge from './WeightBadge.vue';
 
 export default defineComponent({
   components: {
+    TimeChip,
+    LinkChip,
     BtnEdit,
     BtnDelete,
     CardAdminMenu,

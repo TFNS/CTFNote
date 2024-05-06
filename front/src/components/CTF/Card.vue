@@ -37,46 +37,10 @@
     <q-separator inset />
     <q-card-section>
       <div class="q-mb-md column q-col-gutter-md background-logo">
-        <div class="row q-gutter-md">
-          <div class="col-auto">
-            <q-chip
-              color="primary"
-              text-color="white"
-              class="q-my-none"
-              :ripple="false"
-            >
-              <span class="text-weight-bold">Start:</span>&nbsp;
-              {{ startsAt }}
-            </q-chip>
-          </div>
-          <div class="col-auto">
-            <q-chip
-              color="primary"
-              text-color="white"
-              class="q-my-none"
-              :ripple="false"
-            >
-              <span class="text-weight-bold">End:</span>&nbsp;
-              {{ endsAt }}
-            </q-chip>
-          </div>
-          <a
-            v-if="ctf.ctfUrl"
-            class="col-auto"
-            :href="ctf.ctfUrl"
-            target="_blank"
-          >
-            <q-chip
-              clickable
-              color="primary"
-              text-color="white"
-              class="q-my-none"
-              :ripple="false"
-            >
-              <q-icon name="link" class="q-mr-sm" />
-              {{ ctfDomain || ctf.ctfUrl }}
-            </q-chip>
-          </a>
+        <div class="flex gap-4">
+          <time-chip :date="ctf.startTime" label="Start:" />
+          <time-chip :date="ctf.startTime" label="End:" />
+          <link-chip v-if="ctf.ctfUrl" :url="ctf.ctfUrl" />
         </div>
         <div class="col">
           <q-markdown
@@ -101,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { date } from 'quasar';
+import { useNow } from 'src/composables/useNow';
 import { Ctf } from 'src/ctfnote/models';
 import { computed } from 'vue';
 import BtnDelete from '../CTF/BtnDelete.vue';
@@ -110,8 +74,9 @@ import CtfTimeLink from '../CTF/CtfTimeLink.vue';
 import LogoLink from '../CTF/LogoLink.vue';
 import WeightBadge from '../CTF/WeightBadge.vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
+import LinkChip from '../Utils/LinkChip.vue';
+import TimeChip from '../Utils/TimeChip.vue';
 import CardAdminMenu from './CardAdminMenu.vue';
-import { useNow } from 'src/composables/useNow';
 
 const props = defineProps<{
   ctf: Ctf;
@@ -122,13 +87,6 @@ const now = useNow();
 const running = computed(
   () => props.ctf.startTime < now.value && props.ctf.endTime > now.value
 );
-const startsAt = computed(() =>
-  date.formatDate(props.ctf.startTime, 'YYYY-MM-DD HH:mm')
-);
-
-const endsAt = computed(() =>
-  date.formatDate(props.ctf.endTime, 'YYYY-MM-DD HH:mm')
-);
 
 const progress = computed(() => {
   const start = props.ctf.startTime.getTime();
@@ -137,15 +95,6 @@ const progress = computed(() => {
   const elapsed = now.value.valueOf() - start;
   const progress = Math.min(elapsed / duration, 1);
   return progress;
-});
-
-const ctfDomain = computed(() => {
-  try {
-    const url = new URL(props.ctf?.ctfUrl ?? '');
-    return url.hostname;
-  } catch {
-    return '';
-  }
 });
 
 const style = computed(() => {
