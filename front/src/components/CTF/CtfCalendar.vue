@@ -13,27 +13,18 @@
       @dayclick="onDayClick"
     >
     </v-calendar>
-    <q-card-section class="flex q-gutter-sm">
-      <ical-btn size="sm" />
+    <q-card-section class="flex items-center q-gutter-sm">
+      <ical-btn />
       <q-btn
+        padding="6px"
         color="primary"
         icon="calendar_today"
-        size="sm"
-        round
         @click="calendar?.move(new Date())"
       >
         <q-tooltip>Show today</q-tooltip>
       </q-btn>
       <q-space />
-      <q-btn
-        rounded
-        dense
-        class="q-px-sm"
-        icon="add"
-        color="positive"
-        size="sm"
-        @click="createCtf"
-      >
+      <q-btn dense padding="6px" icon="add" color="positive" @click="createCtf">
         <q-icon name="flag" />
         <q-tooltip>Create a CTF</q-tooltip>
       </q-btn>

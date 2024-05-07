@@ -2,37 +2,24 @@
   <div class="background-logo" :style="style">
     <div class="q-gutter-md">
       <div class="row items-center" style="width: calc(100vw - 16px)">
-        <div class="row q-gutter-md no-wrap q-mb-md">
+        <div class="row q-gutter-md no-wrap q-mb-md items-center">
           <logo-link :ctf="ctf" style="height: 42px" />
           <div class="text-h4">
             {{ ctf.title }}
           </div>
-
+          <q-space />
           <template v-if="me.isManager">
             <q-btn
               v-if="$q.screen.xs"
               icon="settings"
-              round
               color="primary"
-              class="q-mr-md"
-              style="height: 42px"
+              padding="6px"
             >
               <card-admin-menu :ctf="ctf" :context-menu="false" />
             </q-btn>
             <template v-else>
-              <btn-edit
-                v-if="me.isManager"
-                round
-                :ctf="ctf"
-                style="height: 42px"
-              />
-              <btn-delete
-                v-if="me.isManager"
-                round
-                :ctf="ctf"
-                class="q-mr-md"
-                style="height: 42px"
-              />
+              <btn-edit :ctf="ctf" />
+              <btn-delete :ctf="ctf" />
             </template>
           </template>
         </div>
@@ -48,7 +35,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row gap-sm">
         <time-chip :date="ctf.startTime" label="Start:" />
         <time-chip :date="ctf.startTime" label="End:" />
         <link-chip v-if="ctf.ctfUrl" :url="ctf.ctfUrl" />

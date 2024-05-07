@@ -1,5 +1,5 @@
 <template>
-  <q-btn round color="primary" :icon="icon" @click="onClick">
+  <q-btn color="primary" padding="6px" :icon="icon" @click="onClick">
     <q-tooltip> Copy iCalendar link </q-tooltip>
   </q-btn>
 </template>

@@ -18,9 +18,13 @@
         :icon="icon"
         :color="color"
         size="sm"
-        round
+        dense
         @click="refresh"
-      />
+      >
+        <q-tooltip v-if="ctftimeId">
+          {{ 'Fetch from CTFTime' }}
+        </q-tooltip>
+      </q-btn>
     </template>
   </q-input>
 </template>
@@ -53,7 +57,7 @@ const icon = computed(() => {
     case 'error':
       return 'error';
     default:
-      return 'refresh';
+      return 'import';
   }
 });
 
