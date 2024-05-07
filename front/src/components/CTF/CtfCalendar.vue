@@ -26,7 +26,7 @@
       <q-space />
       <q-btn dense padding="6px" icon="add" color="positive" @click="createCtf">
         <q-icon name="flag" />
-        <q-tooltip>Create a CTF</q-tooltip>
+        <q-tooltip class="text-no-wrap">Create a CTF</q-tooltip>
       </q-btn>
     </q-card-section>
   </q-card>
@@ -204,6 +204,8 @@ function createCtf() {
   }
 }
 .ctf-calendar-card {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   top: 66px;
   #ctf-calendar {
@@ -219,8 +221,7 @@ function createCtf() {
       content: '';
       position: absolute;
       height: 42px;
-      border-top-left-radius: 5px;
-      border-top-right-radius: 5px;
+      border-radius: 5px 5px 0 0;
       width: 100%;
       top: 0;
       left: 0;
@@ -249,22 +250,45 @@ function createCtf() {
     top: unset;
     bottom: 0;
     left: 50%;
-    transform: translate(-50%, 296px);
+    transform: translate(-50%, 0);
     transition: transform 0.3s;
-    &:hover {
-      transform: translate(-50%, 0);
-    }
-  }
-}
+    flex-direction: column-reverse;
+    border-top: 1px solid var(--vc-gray-500);
+    clip-path: polygon(
+      -100% calc(100% - 42px),
+      200% calc(100% - 42px),
+      200% 100%,
+      -100% 100%
+    );
 
-@media (max-width: $breakpoint-sm-min) {
-  .ctf-calendar-card {
-    width: 100%;
-    left: 0;
-    transform: translate(0, 296px);
-    transition: transform 0.3s;
     &:hover {
-      transform: translate(0, 0);
+      clip-path: polygon(-100% 0, 200% 0, 200% 100%, -100% 100%);
+
+      #ctf-calendar {
+        &.vc-container::before {
+          transition-delay: 0s;
+          border-radius: 0;
+        }
+      }
+    }
+    transition: all 0.3s;
+    .vc-pane {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    #ctf-calendar {
+      &.vc-container::before {
+        transition: all 0.3s;
+        transition-delay: 0.3s;
+        border-radius: 5px 5px 0 0;
+        top: unset;
+        bottom: 0;
+      }
+    }
+    .vc-pane-header-wrapper {
+      top: unset;
+      bottom: 0;
     }
   }
 }

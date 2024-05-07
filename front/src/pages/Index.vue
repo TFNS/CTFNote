@@ -67,7 +67,6 @@ function handleCtfClick(ctfId: number) {
 <style lang="scss" scoped>
 .card-list {
   margin-left: 250px;
-  margin-right: -16px;
   padding-left: 16px;
   gap: 32px;
   display: flex;
@@ -79,12 +78,17 @@ function handleCtfClick(ctfId: number) {
 }
 
 .ctf-card-container {
-  max-width: calc(100% - 16px);
   *:first-child {
     scroll-margin-top: 66px;
+    scroll-snap-align: start;
   }
   &:last-of-type {
     min-height: calc(100dvh - 106px);
   }
+}
+</style>
+<style>
+html {
+  scroll-snap-type: y proximity;
 }
 </style>
