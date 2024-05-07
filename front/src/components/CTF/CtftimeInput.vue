@@ -57,7 +57,7 @@ const icon = computed(() => {
     case 'error':
       return 'error';
     default:
-      return 'import';
+      return 'refresh';
   }
 });
 
