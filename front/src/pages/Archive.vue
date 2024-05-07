@@ -144,4 +144,3 @@ const columns: QTableColumn[] = [
 
 const { result: ctfs } = ctfnote.ctfs.getAllCtfs();
 </script>
-
