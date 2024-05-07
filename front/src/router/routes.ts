@@ -1,9 +1,19 @@
 import { RouteRecordRaw } from 'vue-router';
 
 const ctfsRoute: RouteRecordRaw = {
-  path: 'ctfs/:year(\\d+)?/:month(\\d+)?',
-  name: 'ctfs',
-  component: () => import('pages/Index.vue'),
+  path: 'ctfs/',
+  children: [
+    {
+      path: ':year(\\d+)?/:month(\\d+)?',
+      name: 'ctfs',
+      component: () => import('pages/Index.vue'),
+    },
+    {
+      path: 'archive',
+      name: 'ctfs-archive',
+      component: () => import('pages/Archive.vue'),
+    },
+  ],
 };
 
 const ctfRoute: RouteRecordRaw = {
