@@ -11,14 +11,14 @@
         <img src="/ctftime-icon.svg" />
       </div>
     </template>
-    <template #append>
+    <template #after>
       <q-btn
         :loading="state === 'loading'"
         :disable="!ctftimeId"
         :icon="icon"
         :color="color"
-        size="sm"
-        dense
+        unelevated
+        class="ctfnote-input-button"
         @click="refresh"
       >
         <q-tooltip v-if="ctftimeId">
