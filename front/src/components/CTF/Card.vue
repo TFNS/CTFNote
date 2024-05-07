@@ -31,11 +31,19 @@
         LIVE
       </q-chip>
 
-      <weight-badge :ctf="ctf" class="ctf-card-header-weight" />
-      <ctf-time-link :ctf="ctf" class="ctf-card-header-ctftime" />
+      <weight-badge
+        v-if="ctf.ctftimeUrl"
+        :ctf="ctf"
+        class="ctf-card-header-weight"
+      />
+      <ctf-time-link
+        v-if="ctf.ctftimeUrl"
+        :ctf="ctf"
+        class="ctf-card-header-ctftime"
+      />
     </q-card-section>
     <q-separator inset />
-    <q-card-section>
+    <q-card-section class="q-pb-none">
       <div class="q-mb-md column q-col-gutter-md background-logo">
         <div class="flex gap-sm">
           <time-chip :date="ctf.startTime" label="Start:" />
@@ -52,13 +60,13 @@
       </div>
     </q-card-section>
     <q-card-section>
-      <div class="q-gutter-sm row">
+      <div class="q-gutter-sm row items-center">
         <ctf-note-link name="ctf" :ctf="ctf" :label="ctf.title">
           <q-btn color="primary" icon="flag" label="Open Ctf" />
         </ctf-note-link>
         <q-space />
-        <btn-edit round :ctf="ctf" />
-        <btn-delete round :ctf="ctf" />
+        <btn-edit :ctf="ctf" />
+        <btn-delete :ctf="ctf" />
       </div>
     </q-card-section>
   </q-card>
@@ -140,7 +148,6 @@ const style = computed(() => {
   .ctf-card-description {
     max-width: var(--description-width);
     text-align: justify;
-    min-height: 132px;
   }
 
   .ctf-card-header {
