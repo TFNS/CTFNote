@@ -1,7 +1,6 @@
 <template>
   <q-chip color="primary" text-color="white" class="q-ma-none" :ripple="false">
-    <span class="text-weight-bold">{{ label }}</span
-    >&nbsp;
+    <span v-if="label" class="text-weight-bold q-mr-sm">{{ label }}</span>
     {{ formatedDate }}
   </q-chip>
 </template>
@@ -12,7 +11,7 @@ import { computed } from 'vue';
 
 const props = defineProps<{
   date: Date;
-  label: string;
+  label?: string;
 }>();
 
 const formatedDate = computed(() => {
