@@ -6613,7 +6613,7 @@ __metadata:
     jszip: "npm:^3.10.1"
     lint-staged: "npm:^13.3.0"
     prettier: "npm:^2.8.8"
-    quasar: "npm:^2.15.1"
+    quasar: "npm:^2.16.3"
     slugify: "npm:^1.6.6"
     subscriptions-transport-ws: "npm:^0.11.0"
     ts-essentials: "npm:^9.4.1"
@@ -11796,10 +11796,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"quasar@npm:^2.15.1":
-  version: 2.15.1
-  resolution: "quasar@npm:2.15.1"
-  checksum: 10/9458b512eb2c630b114a28863d4fd53143591f19d8882fa8feed52664fd44aee6c5d38a02b922bdb3d5fb56c274c84740887e9e903be6face6c26ca1171e0146
+"quasar@npm:^2.16.3":
+  version: 2.16.3
+  resolution: "quasar@npm:2.16.3"
+  checksum: 10/d9f9db6a568f4cc31c827584b533af14db654cb0414e00c50c7d4ec4e1e9626126787dd6aa037c122968ff64c214bfcb89d99956c158c5694de258116c17167a
   languageName: node
   linkType: hard
 
