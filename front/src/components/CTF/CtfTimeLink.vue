@@ -1,16 +1,30 @@
 <template>
-  <a :href="ctf.ctftimeUrl" target="_blank" style="height: 28px">
+  <q-btn v-if="mini" :href="url" dense class="bg-ctftime">
     <q-tooltip>Browse CTFTime.org</q-tooltip>
-    <img height="28" src="/ctftime-logo.svg" />
+    <img src="/ctftime-icon.svg" height="28" />
+  </q-btn>
+  <a v-else :href="url" target="_blank" class="flex items-center">
+    <q-tooltip>Browse CTFTime.org</q-tooltip>
+    <img src="/ctftime-logo.svg" height="28" />
   </a>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Ctf } from 'src/ctfnote/models';
-import { defineComponent } from 'vue';
-export default defineComponent({
-  props: {
-    ctf: { type: Object as () => Ctf, required: true },
-  },
-});
+import { computed } from 'vue';
+
+const props = defineProps<{
+  ctf: Ctf;
+  mini?: boolean;
+}>();
+
+const url = computed(() =>
+  props.ctf.ctftimeUrl ? props.ctf.ctftimeUrl : 'https://ctftime.org/'
+);
 </script>
+
+<style scoped>
+.bg-ctftime {
+  background: #e3000b;
+}
+</style>

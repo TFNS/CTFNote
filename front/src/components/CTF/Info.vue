@@ -2,37 +2,24 @@
   <div class="background-logo" :style="style">
     <div class="q-gutter-md">
       <div class="row items-center" style="width: calc(100vw - 16px)">
-        <div class="row q-gutter-md no-wrap q-mb-md">
+        <div class="row q-gutter-md no-wrap q-mb-md items-center">
           <logo-link :ctf="ctf" style="height: 42px" />
           <div class="text-h4">
             {{ ctf.title }}
           </div>
-
+          <q-space />
           <template v-if="me.isManager">
             <q-btn
               v-if="$q.screen.xs"
               icon="settings"
-              round
               color="primary"
-              class="q-mr-md"
-              style="height: 42px"
+              padding="6px"
             >
               <card-admin-menu :ctf="ctf" :context-menu="false" />
             </q-btn>
             <template v-else>
-              <btn-edit
-                v-if="me.isManager"
-                round
-                :ctf="ctf"
-                style="height: 42px"
-              />
-              <btn-delete
-                v-if="me.isManager"
-                round
-                :ctf="ctf"
-                class="q-mr-md"
-                style="height: 42px"
-              />
+              <btn-edit :ctf="ctf" />
+              <btn-delete :ctf="ctf" />
             </template>
           </template>
         </div>
@@ -48,27 +35,10 @@
         </div>
       </div>
 
-      <div class="row q-ml-sm q-gutter-sm q-mt-none">
-        <q-chip
-          color="primary"
-          text-color="white"
-          class="q-my-none"
-          :ripple="false"
-        >
-          <span class="text-weight-bold">Start:</span>&nbsp;
-          {{ startTime }}
-        </q-chip>
-        <q-chip
-          color="primary"
-          text-color="white"
-          class="q-my-none"
-          :ripple="false"
-        >
-          <span class="text-weight-bold">End:</span>&nbsp;
-          {{ endTime }}
-        </q-chip>
-
-        <q-space />
+      <div class="row gap-sm">
+        <time-chip :date="ctf.startTime" label="Start:" />
+        <time-chip :date="ctf.endTime" label="End:" />
+        <link-chip v-if="ctf.ctfUrl" :url="ctf.ctfUrl" />
       </div>
 
       <div class="row q-gutter-md">
@@ -105,9 +75,11 @@
 
 <script lang="ts">
 import { date } from 'quasar';
-import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
+import { Ctf } from 'src/ctfnote/models';
 import { defineComponent } from 'vue';
+import LinkChip from '../Utils/LinkChip.vue';
+import TimeChip from '../Utils/TimeChip.vue';
 import BtnDelete from './BtnDelete.vue';
 import BtnEdit from './BtnEdit.vue';
 import CardAdminMenu from './CardAdminMenu.vue';
@@ -118,6 +90,8 @@ import WeightBadge from './WeightBadge.vue';
 
 export default defineComponent({
   components: {
+    TimeChip,
+    LinkChip,
     BtnEdit,
     BtnDelete,
     CardAdminMenu,

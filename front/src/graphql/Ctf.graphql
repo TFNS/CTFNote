@@ -17,6 +17,17 @@ fragment CtfFragment on Ctf {
   discordEventLink
 }
 
+fragment CtftimeCtfFragment on CtftimeCtf {
+  title
+  weight
+  url
+  logo
+  ctftimeUrl
+  description
+  start
+  finish
+}
+
 fragment FullCtfFragment on Ctf {
   ...CtfFragment
 
@@ -44,6 +55,20 @@ query Ctfs {
     nodes {
       ...CtfFragment
     }
+  }
+}
+
+query CtfsByDate($year: Int!, $month: Int!) {
+  ctfsByDate(year: $year, month: $month) {
+    ctfs: nodes {
+      ...CtfFragment
+    }
+  }
+}
+
+query CtftimeCtfById($id: Int!) {
+  ctftimeCtfById(id: $id) {
+    ...CtftimeCtfFragment
   }
 }
 

@@ -50,6 +50,19 @@
           <q-item-label>Team</q-item-label>
         </q-item-section>
       </q-item>
+      <q-item
+        v-if="me.isLogged"
+        clickable
+        :to="{ name: 'ctfs-archive' }"
+        active-class="dimmed-background"
+      >
+        <q-item-section side>
+          <q-avatar icon="archive" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>CTF Archive</q-item-label>
+        </q-item-section>
+      </q-item>
     </template>
   </base-menu-bar>
 </template>

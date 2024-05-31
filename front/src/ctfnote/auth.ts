@@ -49,7 +49,7 @@ export function useLogin() {
     if (jwt) {
       saveJWT(jwt);
       await prefetchMe();
-      await $router.push({ name: 'ctfs-incoming' });
+      await $router.push({ name: 'ctfs' });
     }
   };
 }
@@ -63,7 +63,7 @@ export function useRegister() {
     if (jwt) {
       saveJWT(jwt);
       await prefetchMe();
-      await $router.push({ name: 'ctfs-incoming' });
+      await $router.push({ name: 'ctfs' });
     }
   };
 }
@@ -77,7 +77,7 @@ export function useRegisterWithToken() {
     if (jwt) {
       saveJWT(jwt);
       await prefetchMe();
-      await $router.push({ name: 'ctfs-incoming' });
+      await $router.push({ name: 'ctfs' });
     }
   };
 }
@@ -95,7 +95,7 @@ export function useRegisterWithPassword() {
     if (jwt) {
       saveJWT(jwt);
       await prefetchMe();
-      await $router.push({ name: 'ctfs-incoming' });
+      await $router.push({ name: 'ctfs' });
     }
   };
 }

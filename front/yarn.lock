@@ -1839,6 +1839,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.21.0":
+  version: 7.24.4
+  resolution: "@babel/runtime@npm:7.24.4"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10/8ec8ce2c145bc7e31dd39ab66df124f357f65c11489aefacb30f431bae913b9aaa66aa5efe5321ea2bf8878af3fcee338c87e7599519a952e3a6f83aa1b03308
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.18.10, @babel/template@npm:^7.22.15, @babel/template@npm:^7.22.5":
   version: 7.22.15
   resolution: "@babel/template@npm:7.22.15"
@@ -3247,6 +3256,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@popperjs/core@npm:^2.11.8":
+  version: 2.11.8
+  resolution: "@popperjs/core@npm:2.11.8"
+  checksum: 10/ddd16090cde777aaf102940f05d0274602079a95ad9805bd20bc55dcc7c3a2ba1b99dd5c73e5cc2753c3d31250ca52a67d58059459d7d27debb983a9f552936c
+  languageName: node
+  linkType: hard
+
 "@quasar/app-webpack@npm:^3.12.4":
   version: 3.12.4
   resolution: "@quasar/app-webpack@npm:3.12.4"
@@ -3844,6 +3860,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4.14.165":
+  version: 4.17.0
+  resolution: "@types/lodash@npm:4.17.0"
+  checksum: 10/2053203292b5af99352d108656ceb15d39da5922fc3fb8186e1552d65c82d6e545372cc97f36c95873aa7186404d59d9305e9d49254d4ae55e77df1e27ab7b5d
+  languageName: node
+  linkType: hard
+
 "@types/markdown-it@npm:^12.2.3":
   version: 12.2.3
   resolution: "@types/markdown-it@npm:12.2.3"
@@ -3907,6 +3930,13 @@ __metadata:
   version: 1.2.4
   resolution: "@types/range-parser@npm:1.2.4"
   checksum: 10/b7c0dfd5080a989d6c8bb0b6750fc0933d9acabeb476da6fe71d8bdf1ab65e37c136169d84148034802f48378ab94e3c37bb4ef7656b2bec2cb9c0f8d4146a95
+  languageName: node
+  linkType: hard
+
+"@types/resize-observer-browser@npm:^0.1.7":
+  version: 0.1.11
+  resolution: "@types/resize-observer-browser@npm:0.1.11"
+  checksum: 10/1e36bde885fb5d89d7138edce3b6dae51f14605a89cd1ffcf60e53ca1866515afe82b6fda7abb84f9c9639166f45480c9b7e512849bcc6502597984f302937c1
   languageName: node
   linkType: hard
 
@@ -6587,6 +6617,7 @@ __metadata:
     "@graphql-codegen/typescript-document-nodes": "npm:^3.0.4"
     "@graphql-codegen/typescript-operations": "npm:^3.0.4"
     "@graphql-codegen/typescript-vue-apollo": "npm:^3.3.7"
+    "@popperjs/core": "npm:^2.11.8"
     "@quasar/app-webpack": "npm:^3.12.4"
     "@quasar/cli": "npm:^2.4.0"
     "@quasar/extras": "npm:^1.16.9"
@@ -6619,6 +6650,7 @@ __metadata:
     ts-essentials: "npm:^9.4.1"
     typescript: "npm:^5.4.3"
     typescript-eslint: "npm:^7.3.1"
+    v-calendar: "npm:^3.1.2"
     vue: "npm:^3.4.21"
     vue-router: "npm:^4.3.0"
     webpack: "npm:^5.91.0"
@@ -6636,6 +6668,24 @@ __metadata:
   version: 2.2.2
   resolution: "dataloader@npm:2.2.2"
   checksum: 10/9c7a1f02cfa6391ab8bc21ebd0ef60b03832bd3beafdfecf48b111fba14090f98d33965f8e268045ba3c289f801b6a9000a9e61a41188363bdee2344811f64f1
+  languageName: node
+  linkType: hard
+
+"date-fns-tz@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "date-fns-tz@npm:2.0.1"
+  peerDependencies:
+    date-fns: 2.x
+  checksum: 10/f12e684bc13c9fe7ef7910c5b25437e15290a655d45102b7420f046cecdf9fa5715bf333d6dfb6bab6c382c7abc6b58241a50c216e9ab0b60d6fdb388f473d6b
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^2.16.1":
+  version: 2.30.0
+  resolution: "date-fns@npm:2.30.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.21.0"
+  checksum: 10/70b3e8ea7aaaaeaa2cd80bd889622a4bcb5d8028b4de9162cbcda359db06e16ff6e9309e54eead5341e71031818497f19aaf9839c87d1aba1e27bb4796e758a9
   languageName: node
   linkType: hard
 
@@ -13858,6 +13908,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"v-calendar@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "v-calendar@npm:3.1.2"
+  dependencies:
+    "@types/lodash": "npm:^4.14.165"
+    "@types/resize-observer-browser": "npm:^0.1.7"
+    date-fns: "npm:^2.16.1"
+    date-fns-tz: "npm:^2.0.0"
+    lodash: "npm:^4.17.20"
+    vue-screen-utils: "npm:^1.0.0-beta.13"
+  peerDependencies:
+    "@popperjs/core": ^2.0.0
+    vue: ^3.2.0
+  checksum: 10/47ff6fe81a7a491bb94480634f953fb4b59171b86fd7660b9d69ad611944de72cec79c2477553f347708c375bba95d10c8a260f8dc71d0483837f8f57242f84e
+  languageName: node
+  linkType: hard
+
 "valid-url@npm:1.0.9":
   version: 1.0.9
   resolution: "valid-url@npm:1.0.9"
@@ -13952,6 +14019,15 @@ __metadata:
   peerDependencies:
     vue: ^3.2.0
   checksum: 10/511689a38f2824223eec9a6c50745af81de01c027fa54107221ec09918aebd72817c0c2dd462f4e8829ed06f74dc1816f304e2aaf5b03bb7436a222dd0f5b4cb
+  languageName: node
+  linkType: hard
+
+"vue-screen-utils@npm:^1.0.0-beta.13":
+  version: 1.0.0-beta.13
+  resolution: "vue-screen-utils@npm:1.0.0-beta.13"
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: 10/a4f527e7d1ee739540fdc2c691d305c459dfe94b52880671fb6de070b0191bd189e1ead0ee363ae3c706c2e2c31b0bfc78b3c55a699af2b32a38c2b4a3afc023
   languageName: node
   linkType: hard
 

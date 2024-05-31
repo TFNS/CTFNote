@@ -5,7 +5,7 @@
       <div class="col">
         <q-btn
           v-if="me.isManager"
-          round
+          padding="6px"
           size="sm"
           color="warning"
           icon="edit"
