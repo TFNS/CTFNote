@@ -1,10 +1,11 @@
 import CTFDParser from './ctfd';
-import ECSCParser from './ecsc';
+import ECSC2021Parser from './ecsc2021';
 import RawParser from './raw';
 import HTBParser from './htb';
 import PicoParser from './pico';
 import justCTFParser from './justctf';
 import AngstromParser from './angstrom';
+import CINIParser from './cini';
 
 export type ParsedTask = {
   title: string;
@@ -23,9 +24,10 @@ export type Parser = {
 export default [
   RawParser,
   CTFDParser,
-  ECSCParser,
+  ECSC2021Parser,
   HTBParser,
   PicoParser,
   justCTFParser,
   AngstromParser,
+  CINIParser,
 ];

@@ -1,9 +1,9 @@
 import { ParsedTask, Parser } from '.';
 import { parseJson, parseJsonStrict } from '../utils';
 
-const ECSCParser: Parser = {
-  name: 'ECSC parser',
-  hint: 'paste ecsc /stats.json',
+const ECSC2021Parser: Parser = {
+  name: 'ECSC 2021 (Prague) parser',
+  hint: 'paste ECSC platform /stats.json',
 
   parse(s: string): ParsedTask[] {
     const tasks = [];
@@ -26,4 +26,4 @@ const ECSCParser: Parser = {
   },
 };
 
-export default ECSCParser;
+export default ECSC2021Parser;
