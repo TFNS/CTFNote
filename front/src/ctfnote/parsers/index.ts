@@ -1,5 +1,5 @@
 import CTFDParser from './ctfd';
-import ECSCParser from './ecsc';
+import ECSC2021Parser from './ecsc2021';
 import RawParser from './raw';
 import HTBParser from './htb';
 import PicoParser from './pico';
@@ -23,7 +23,7 @@ export type Parser = {
 export default [
   RawParser,
   CTFDParser,
-  ECSCParser,
+  ECSC2021Parser,
   HTBParser,
   PicoParser,
   justCTFParser,
