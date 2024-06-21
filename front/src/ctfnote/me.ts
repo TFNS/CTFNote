@@ -70,7 +70,7 @@ const MeSymbol: InjectionKey<Ref<Me | null>> = Symbol('me');
 
 export function provideMe(refresh = false) {
   const { result: me } = getMe(refresh);
-  provide(MeSymbol, me);
+  provide(MeSymbol, me as Ref<Me>);
   return me;
 }
 
