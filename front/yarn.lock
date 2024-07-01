@@ -3882,10 +3882,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.18.91":
-  version: 16.18.91
-  resolution: "@types/node@npm:16.18.91"
-  checksum: 10/3623e0acf60309ee0b4fcc085ec55969de59c92965e3b0873f4339d99b53e24e1e301d377880b4c094cc70a5432f8ae738f3c2401e538d9d4c30dd7b36719c04
+"@types/node@npm:^20.14.9":
+  version: 20.14.9
+  resolution: "@types/node@npm:20.14.9"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10/f313b06c79be92f5d3541159ef813b9fc606941f951ecf826e940658c6d4952755ca2f06277b746326cef0697ed79a04676ecde053d32e1121b3352c8168d2e9
   languageName: node
   linkType: hard
 
@@ -6596,7 +6598,7 @@ __metadata:
     "@types/apollo-upload-client": "npm:^17.0.5"
     "@types/babel__core": "npm:^7"
     "@types/color-hash": "npm:^1.0.5"
-    "@types/node": "npm:^16.18.91"
+    "@types/node": "npm:^20.14.9"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@vue/apollo-composable": "npm:^4.0.2"
     apollo-upload-client: "npm:^17.0.0"
@@ -13613,6 +13615,13 @@ __metadata:
   version: 0.1.2
   resolution: "unc-path-regex@npm:0.1.2"
   checksum: 10/a05fa2006bf4606051c10fc7968f08ce7b28fa646befafa282813aeb1ac1a56f65cb1b577ca7851af2726198d59475bb49b11776036257b843eaacee2860a4ec
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 10/0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
   languageName: node
   linkType: hard
 
