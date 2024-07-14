@@ -48,7 +48,8 @@ const CINIParser: Parser = {
   },
   isValid(s) {
     const data = parseJson<Events>(s);
-    return !Array.isArray(data);
+    if (data == null) return false;
+    return data.gamePause !== undefined && data.events !== undefined;
   },
 };
 
