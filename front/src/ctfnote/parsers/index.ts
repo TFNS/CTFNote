@@ -6,6 +6,7 @@ import PicoParser from './pico';
 import justCTFParser from './justctf';
 import AngstromParser from './angstrom';
 import CINIParser from './cini';
+import HitconParser from './hitcon';
 
 export type ParsedTask = {
   title: string;
@@ -30,4 +31,5 @@ export default [
   justCTFParser,
   AngstromParser,
   CINIParser,
+  HitconParser,
 ];
