@@ -32,3 +32,17 @@ yarn-error.log*
 *.njsproj
 *.sln
 .vscode
+
+# Yarn Integrity file
+.yarn-integrity
+
+### yarn ###
+# https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
+
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
