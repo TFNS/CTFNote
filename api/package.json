@@ -27,7 +27,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "graphile-utils": "4.13.0",
-    "graphql": "^16.8.1",
+    "graphql": "^16.9.0",
     "graphql-upload-ts": "^2.1.2",
     "ical-generator": "^7.0.0",
     "postgraphile": "4.13.0",

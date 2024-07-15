@@ -1311,7 +1311,7 @@ __metadata:
     eslint: "npm:^8.57.0"
     express: "npm:^4.19.2"
     graphile-utils: "npm:4.13.0"
-    graphql: "npm:^16.8.1"
+    graphql: "npm:^16.9.0"
     graphql-upload-ts: "npm:^2.1.2"
     ical-generator: "npm:^7.0.0"
     lint-staged: "npm:^15.2.2"
@@ -2179,10 +2179,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^16.8.1":
-  version: 16.8.1
-  resolution: "graphql@npm:16.8.1"
-  checksum: 10/7a09d3ec5f75061afe2bd2421a2d53cf37273d2ecaad8f34febea1f1ac205dfec2834aec3419fa0a10fcc9fb345863b2f893562fb07ea825da2ae82f6392893c
+"graphql@npm:^16.9.0":
+  version: 16.9.0
+  resolution: "graphql@npm:16.9.0"
+  checksum: 10/5833f82bb6c31bec120bbf9cd400eda873e1bb7ef5c17974fa262cd82dc68728fda5d4cb859dc8aaa4c4fe4f6fe1103a9c47efc01a12c02ae5cb581d8e4029e2
   languageName: node
   linkType: hard
 
