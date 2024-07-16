@@ -102,6 +102,7 @@ export type Settings = {
   registrationAllowed: boolean;
   registrationPasswordAllowed: boolean;
   style: SettingsColorMap;
+  discordIntegrationEnabled: boolean;
 };
 
 export type AdminSettings = Settings & {
