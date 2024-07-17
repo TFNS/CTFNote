@@ -38,7 +38,7 @@
         The Discord integration is currently disabled.
       </div>
     </div>
-    <div v-if="settings.discordIntegrationEnabled" class="row q-mt-sm">
+    <div v-else class="row q-mt-sm">
       <div style="width: 590px">
         <discord-event-link-sync :ctf="ctf" class="col" />
       </div>
