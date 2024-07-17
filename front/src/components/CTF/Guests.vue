@@ -33,7 +33,12 @@
       <div v-else class="q-ml-xs"><i>No guests found.</i></div>
     </div>
     <div class="row text-h6">Sync with Discord event</div>
-    <div class="row q-mt-sm">
+    <div v-if="!settings.discordIntegrationEnabled" class="row q-mt-sm">
+      <div style="width: 590px">
+        The Discord integration is currently disabled on the backend.
+      </div>
+    </div>
+    <div v-if="settings.discordIntegrationEnabled" class="row q-mt-sm">
       <div style="width: 590px">
         <discord-event-link-sync :ctf="ctf" class="col" />
       </div>
@@ -55,10 +60,12 @@ export default defineComponent({
   setup() {
     const team = ctfnote.profiles.injectTeam();
     const now = ref(new Date());
+    const settings = ctfnote.settings.injectSettings();
 
     return {
       now,
       team,
+      settings,
       inviteUserToCtf: ctfnote.ctfs.useInviteUserToCtf(),
       uninviteUserToCtf: ctfnote.ctfs.useUninviteUserToCtf(),
     };

@@ -138,7 +138,19 @@
               <div class="text-h6">Link your Discord account</div>
             </q-card-section>
 
-            <q-card-section class="q-pt-none q-gutter-md">
+            <q-card-section
+              v-if="!settings.discordIntegrationEnabled"
+              class="q-pt-none q-gutter-md"
+            >
+              <div>
+                The Discord integration is currently disabled on the backend.
+              </div>
+            </q-card-section>
+
+            <q-card-section
+              v-if="settings.discordIntegrationEnabled"
+              class="q-pt-none q-gutter-md"
+            >
               <div v-if="me?.profile.discordId == null">
                 Your CTFNote account is not linked to your Discord account.
               </div>
@@ -162,7 +174,11 @@
               </password-input>
             </q-card-section>
 
-            <q-card-actions align="right" class="q-px-md q-pb-md q-pt-none">
+            <q-card-actions
+              v-if="settings.discordIntegrationEnabled"
+              align="right"
+              class="q-px-md q-pb-md q-pt-none"
+            >
               <q-btn
                 v-if="me?.profile.discordId != null"
                 label="Unlink Discord"
@@ -205,6 +221,8 @@ export default defineComponent({
     const profileToken: Ref<string> = ref('');
     const { result: profileTokenResult } = ctfnote.me.getProfileToken();
 
+    const settings = ctfnote.settings.injectSettings();
+
     watch(
       profileTokenResult,
       (s) => {
@@ -242,6 +260,7 @@ export default defineComponent({
       username,
       description,
       me,
+      settings,
       systemNotificationEnabled,
       askForNotificationPrivilege,
       disableSystemNotification,
