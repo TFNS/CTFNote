@@ -142,9 +142,7 @@
               v-if="!settings.discordIntegrationEnabled"
               class="q-pt-none q-gutter-md"
             >
-              <div>
-                The Discord integration is currently disabled on the backend.
-              </div>
+              <div>The Discord integration is currently disabled.</div>
             </q-card-section>
 
             <q-card-section

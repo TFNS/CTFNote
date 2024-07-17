@@ -35,7 +35,7 @@
     <div class="row text-h6">Sync with Discord event</div>
     <div v-if="!settings.discordIntegrationEnabled" class="row q-mt-sm">
       <div style="width: 590px">
-        The Discord integration is currently disabled on the backend.
+        The Discord integration is currently disabled.
       </div>
     </div>
     <div v-if="settings.discordIntegrationEnabled" class="row q-mt-sm">
