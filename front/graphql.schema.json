@@ -12123,6 +12123,22 @@
         "description": null,
         "fields": [
           {
+            "name": "discordIntegrationEnabled",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "icalPassword",
             "description": null,
             "args": [],
@@ -12248,6 +12264,18 @@
         "description": "Represents an update to a `Setting`. Fields that are set will be updated.",
         "fields": null,
         "inputFields": [
+          {
+            "name": "discordIntegrationEnabled",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "icalPassword",
             "description": null,

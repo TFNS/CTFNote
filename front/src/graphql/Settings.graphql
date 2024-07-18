@@ -3,6 +3,7 @@ fragment SettingsInfo on Setting {
   registrationAllowed
   registrationPasswordAllowed
   style
+  discordIntegrationEnabled
 }
 
 fragment AdminSettingsInfo on Setting {
