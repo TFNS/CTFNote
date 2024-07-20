@@ -29,17 +29,16 @@ const ImaginaryParser: Parser = {
     return tasks;
   },
   isValid(s) {
-    const data =
-      parseJsonStrict<
-        [
-          {
-            title: string;
-            category: string;
-            description: string;
-            release_date: string;
-          }
-        ]
-      >(s);
+    const data = parseJsonStrict<
+      [
+        {
+          title: string;
+          category: string;
+          description: string;
+          release_date: string;
+        }
+      ]
+    >(s);
     if (data == null || data.length < 1) {
       return false;
     }
