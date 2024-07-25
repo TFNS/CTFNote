@@ -1,5 +1,5 @@
 ALTER TABLE ctfnote_private.invitation_link
-  ADD COLUMN "discord_id" TEXT UNIQUE DEFAULT NULL;
+  ADD COLUMN "discord_id" TEXT DEFAULT NULL;
 
 DROP FUNCTION ctfnote.create_invitation_link ("role" ctfnote.role);
 CREATE OR REPLACE FUNCTION ctfnote.create_invitation_link ("role" ctfnote.role, "discord_id" text default null)
