@@ -52,8 +52,27 @@ type AllowedRoles =
   | "user_manager"
   | "user_admin";
 
-export async function createInvitationURLForDiscordId(
-  role: AllowedRoles,
+export async function getInvitationTokenForDiscordId(
+  discordId: string,
+  pgClient: PoolClient | null = null
+): Promise<string | null> {
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
+
+  try {
+    const query =
+      "SELECT token FROM ctfnote_private.invitation_link WHERE discord_id = $1";
+    const values = [discordId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows[0].token as string;
+  } catch (error) {
+    return null;
+  } finally {
+    if (!useRequestClient) pgClient.release();
+  }
+}
+
   discordId: string,
   pgClient: PoolClient | null = null
 ): Promise<string | null> {

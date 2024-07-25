@@ -32,6 +32,24 @@ async function createAccountLogic(
     return;
   }
 
+  const existing_invitation_code = await getInvitationTokenForDiscordId(
+    interaction.user.id
+  );
+  if (existing_invitation_code != null) {
+    const invitation_url = await getInvitationUrl(existing_invitation_code);
+    if (invitation_url == "") {
+      await interaction.editReply({
+        content: "Something went wrong.", // TODO: Meaningful error messages?
+      });
+      return;
+    }
+
+    await interaction.editReply({
+      content: `Your personal invitation url: ${invitation_url}. If you already have a CTFNote account you should link it using the /link command instead.`,
+    });
+    return;
+  }
+
   await interaction.editReply({
     content:
       "Generating private invitation url... If you already have a CTFNote account you should link it using the /link command instead.",
