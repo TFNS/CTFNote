@@ -45,6 +45,36 @@ export async function setDiscordIdForUser(
   }
 }
 
+type AllowedRoles =
+  | "user_guest"
+  | "user_friend"
+  | "user_member"
+  | "user_manager"
+  | "user_admin";
+
+export async function createInvitationURLForDiscordId(
+  role: AllowedRoles,
+  discordId: string,
+  pgClient: PoolClient | null = null
+): Promise<string | null> {
+  // TODO: Verify if valid role is passed.
+
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
+
+  try {
+    const query = "SELECT token FROM ctfnote.create_invitation_link($1, $2)";
+    const values = [role, discordId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows[0].token as string;
+  } catch (error) {
+    return null;
+  } finally {
+    if (!useRequestClient) pgClient.release();
+  }
+}
+
 export async function getUserByDiscordId(
   discordId: string,
   pgClient: PoolClient | null = null
