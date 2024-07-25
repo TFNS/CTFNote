@@ -73,10 +73,12 @@ export async function getInvitationTokenForDiscordId(
   }
 }
 
+export async function createInvitationTokenForDiscordId(
+  role: AllowedRoles = "user_guest",
   discordId: string,
   pgClient: PoolClient | null = null
 ): Promise<string | null> {
-  // TODO: Verify if valid role is passed.
+  role = (role as AllowedRoles) ?? "user_guest";
 
   const useRequestClient = pgClient != null;
   if (pgClient == null) pgClient = await connectToDatabase();
