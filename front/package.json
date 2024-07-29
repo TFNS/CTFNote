@@ -14,7 +14,7 @@
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/client": "^3.9.9",
+    "@apollo/client": "^3.11.1",
     "@quasar/cli": "^2.4.0",
     "@quasar/extras": "^1.16.9",
     "@quasar/quasar-app-extension-apollo": "^2.2.0",
