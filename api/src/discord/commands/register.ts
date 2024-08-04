@@ -26,7 +26,7 @@ async function createAccountLogic(
   client: Client,
   interaction: CommandInteraction
 ) {
-  if (config.discord.registrationEnabled.toLowerCase() === "false") {
+  if (config.discord.registrationEnabled.toLowerCase() !== "true") {
     await interaction.editReply({
       content:
         "The functionality to create your own account this way has been disabled by an administrator.",
@@ -112,7 +112,7 @@ async function createAccountLogic(
 
 export const Register: Command = {
   name: "register",
-  description: "Create an account on CTFNote if you are allowed to!",
+  description: "Create an account on CTFNote (if enabled)!",
   type: ApplicationCommandType.ChatInput,
   run: async (client, interaction) => {
     return createAccountLogic(client, interaction).catch((e) => {
