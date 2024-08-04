@@ -13,13 +13,13 @@ import {
 } from "../database/users";
 import config from "../../config";
 
-async function getInvitationUrl(invitation_code: string | null = null) {
-  if (config.pad.domain == "") return "";
-  if (invitation_code == null) return "";
+async function getInvitationUrl(invitationCode: string | null = null) {
+  if (config.pad.domain == "") return null;
+  if (invitationCode == null) return null;
 
   const ssl = config.pad.useSSL == "false" ? "" : "s";
 
-  return `http${ssl}://${config.pad.domain}/#/auth/register/${invitation_code}`;
+  return `http${ssl}://${config.pad.domain}/#/auth/register/${invitationCode}`;
 }
 
 async function createAccountLogic(
@@ -57,12 +57,12 @@ async function createAccountLogic(
     return;
   }
 
-  const existing_invitation_code = await getInvitationTokenForDiscordId(
+  const existingInvitationCode = await getInvitationTokenForDiscordId(
     interaction.user.id
   );
-  if (existing_invitation_code != null) {
-    const invitation_url = await getInvitationUrl(existing_invitation_code);
-    if (invitation_url == "") {
+  if (existingInvitationCode != null) {
+    const invitationUrl = await getInvitationUrl(existingInvitationCode);
+    if (invitationUrl == null) {
       await interaction.editReply({
         content: "Something went wrong.", // TODO: Meaningful error messages?
       });
@@ -70,7 +70,7 @@ async function createAccountLogic(
     }
 
     await interaction.editReply({
-      content: `Your personal invitation url: ${invitation_url}. If you already have a CTFNote account you should link it using the /link command instead.`,
+      content: `Your personal invitation url: ${invitationUrl}. If you already have a CTFNote account you should link it using the /link command instead.`,
     });
     return;
   }
@@ -80,21 +80,21 @@ async function createAccountLogic(
       "Generating private invitation url... If you already have a CTFNote account you should link it using the /link command instead.",
   });
 
-  const invitation_code = await createInvitationTokenForDiscordId(
+  const invitationCode = await createInvitationTokenForDiscordId(
     interaction.user.id,
     (config.discord.registrationAccountRole as AllowedRoles) ??
       AllowedRoles.user_guest
   );
 
-  if (invitation_code == null) {
+  if (invitationCode == null) {
     await interaction.editReply({
       content: "Something went wrong.", // TODO: Meaningful error messages?
     });
     return;
   }
 
-  const invitation_url = await getInvitationUrl(invitation_code);
-  if (invitation_url == "") {
+  const invitationUrl = await getInvitationUrl(invitationCode);
+  if (invitationUrl == null) {
     await interaction.editReply({
       content: "Something went wrong.", // TODO: Meaningful error messages?
     });
@@ -102,7 +102,7 @@ async function createAccountLogic(
   }
 
   await interaction.editReply({
-    content: `Your personal invitation url: ${invitation_url}. If you already have a CTFNote account you should link it using the /link command instead.`,
+    content: `Your personal invitation url: ${invitationUrl}. If you already have a CTFNote account you should link it using the /link command instead.`,
   });
   return;
 }
