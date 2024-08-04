@@ -78,7 +78,7 @@ async function createAccountLogic(
 
   await interaction.editReply({
     content:
-      "Generating private invitation url... If you already have a CTFNote account you should link it using the `/link` command instead.",
+      "Generating a private invitation URL... If you already have a CTFNote account you should link it using the `/link` command instead.",
   });
 
   const invitationCode = await createInvitationTokenForDiscordId(
@@ -116,7 +116,7 @@ export const Register: Command = {
   type: ApplicationCommandType.ChatInput,
   run: async (client, interaction) => {
     return createAccountLogic(client, interaction).catch((e) => {
-      console.error("Error during register logic: ", e);
+      console.error("Error during /register Discord logic: ", e);
     });
   },
 };
