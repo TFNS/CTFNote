@@ -52,6 +52,9 @@ SECURITY DEFINER;
 
 GRANT EXECUTE ON FUNCTION ctfnote.register_with_token (text, text, text) TO user_anonymous;
 
+-- first we remove and re-apply the old internal registration function to be extra verbose
+-- we implement the additional logic for registration with discord_id in a seperate function with the same name, thus overloading this function for normal original operation and
+-- operation with the new discord id linking.
 DROP FUNCTION ctfnote_private.do_register ("login" text, "password" text, "role" ctfnote.role);
 
 CREATE OR REPLACE FUNCTION ctfnote_private.do_register ("login" text, "password" text, "role" ctfnote.role)
@@ -76,7 +79,7 @@ LANGUAGE plpgsql
 STRICT
 SECURITY DEFINER;
 
-
+-- overloaded function, implements the logic needed for discord linking.
 CREATE OR REPLACE FUNCTION ctfnote_private.do_register ("login" text, "password" text, "role" ctfnote.role, "discord_id" text)
   RETURNS ctfnote.jwt
   AS $$
