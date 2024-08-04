@@ -30,7 +30,7 @@ async function getProfileUrl() {
   return `http${ssl}://${config.pad.domain}/#/user/settings`;
 }
 
-async function createAccountLogic(
+async function registerLogic(
   client: Client,
   interaction: CommandInteraction
 ) {
@@ -123,7 +123,7 @@ export const Register: Command = {
   description: "Create an account on CTFNote (if enabled)!",
   type: ApplicationCommandType.ChatInput,
   run: async (client, interaction) => {
-    return createAccountLogic(client, interaction).catch((e) => {
+    return registerLogic(client, interaction).catch((e) => {
       console.error("Error during /register Discord logic: ", e);
     });
   },
