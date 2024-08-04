@@ -283,6 +283,30 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       });
     }
 
+    /*
+     * We have a nice ductape solution for the following problem:
+     * During the handling of these hooks, the changes to the database are not committed yet.
+     * This means that we can't query the database for the new user id.
+     * We have to wait a bit to make sure the user is in the database.
+     * Alternatively we can hook the postgraphile lifecycle but that is not compatible with the current setup.
+     * The outgoing request is probably handling within 1 second, so this works fine.
+     */
+    if (fieldContext.scope.fieldName === "registerWithToken") {
+      const username = args.input.login; // the login is equal to the username at registration
+      setTimeout(async () => {
+        const userId = await getUserIdFromUsername(username, null); // use null to get a new client which is privileged as the Discord bot
+        if (userId == null) return;
+        const ctfs = await getAccessibleCTFsForUser(userId, null);
+        for (let i = 0; i < ctfs.length; i++) {
+          await changeDiscordUserRoleForCTF(userId, ctfs[i], "add").catch(
+            (err) => {
+              console.error("Error while adding role to user: ", err);
+            }
+          );
+        }
+      }, 2000);
+    }
+
     return input;
   };
 
@@ -316,30 +340,6 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       await handleResetDiscordId(context.jwtClaims.user_id).catch((err) => {
         console.error("Failed to reset discord id.", err);
       });
-    }
-
-    /*
-     * We have a nice ductape solution for the following problem:
-     * During the handling of these hooks, the changes to the database are not committed yet.
-     * This means that we can't query the database for the new user id.
-     * We have to wait a bit to make sure the user is in the database.
-     * Alternatively we can hook the postgraphile lifecycle but that is not compatible with the current setup.
-     * The outgoing request is probably handling within 1 second, so this works fine.
-     */
-    if (fieldContext.scope.fieldName === "registerWithToken") {
-      const username = args.input.login; // the login is equal to the username at registration
-      setTimeout(async () => {
-        const userId = await getUserIdFromUsername(username, null); // use null to get a new client which is privileged as the Discord bot
-        if (userId == null) return;
-        const ctfs = await getAccessibleCTFsForUser(userId, null);
-        for (let i = 0; i < ctfs.length; i++) {
-          await changeDiscordUserRoleForCTF(userId, ctfs[i], "add").catch(
-            (err) => {
-              console.error("Error while adding role to user: ", err);
-            }
-          );
-        }
-      }, 2000);
     }
 
     return input;
