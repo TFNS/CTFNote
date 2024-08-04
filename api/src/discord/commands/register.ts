@@ -64,20 +64,21 @@ async function createAccountLogic(
     const invitationUrl = await getInvitationUrl(existingInvitationCode);
     if (invitationUrl == null) {
       await interaction.editReply({
-        content: "Something went wrong.", // TODO: Meaningful error messages?
+        content:
+          "Could not generate invitation URL. Please contact an administrator.",
       });
       return;
     }
 
     await interaction.editReply({
-      content: `Your personal invitation url: ${invitationUrl}. If you already have a CTFNote account you should link it using the /link command instead.`,
+      content: `Your personal invitation url: ${invitationUrl}. If you already have a CTFNote account you should link it using the \`/link\` command instead.`,
     });
     return;
   }
 
   await interaction.editReply({
     content:
-      "Generating private invitation url... If you already have a CTFNote account you should link it using the /link command instead.",
+      "Generating private invitation url... If you already have a CTFNote account you should link it using the `/link` command instead.",
   });
 
   const invitationCode = await createInvitationTokenForDiscordId(
@@ -88,7 +89,8 @@ async function createAccountLogic(
 
   if (invitationCode == null) {
     await interaction.editReply({
-      content: "Something went wrong.", // TODO: Meaningful error messages?
+      content:
+        "Could not generate an invitation code. Please contact an administrator.",
     });
     return;
   }
@@ -96,7 +98,8 @@ async function createAccountLogic(
   const invitationUrl = await getInvitationUrl(invitationCode);
   if (invitationUrl == null) {
     await interaction.editReply({
-      content: "Something went wrong.", // TODO: Meaningful error messages?
+      content:
+        "Could not get an invitation URL. Please contact an administrator.",
     });
     return;
   }
