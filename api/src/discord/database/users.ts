@@ -157,3 +157,23 @@ export async function getDiscordUsersThatCanPlayCTF(
     pgClient.release();
   }
 }
+
+export async function getUserIdFromUsername(
+  username: string,
+  pgClient: PoolClient | null = null
+): Promise<bigint | null> {
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
+
+  try {
+    const query = "SELECT id FROM ctfnote.profile WHERE username = $1";
+    const values = [username];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows[0].id as bigint;
+  } catch (error) {
+    return null;
+  } finally {
+    if (!useRequestClient) pgClient.release();
+  }
+}
