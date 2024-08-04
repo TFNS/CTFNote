@@ -30,10 +30,7 @@ async function getProfileUrl() {
   return `http${ssl}://${config.pad.domain}/#/user/settings`;
 }
 
-async function registerLogic(
-  client: Client,
-  interaction: CommandInteraction
-) {
+async function registerLogic(client: Client, interaction: CommandInteraction) {
   if (config.discord.registrationEnabled.toLowerCase() !== "true") {
     await interaction.editReply({
       content:
