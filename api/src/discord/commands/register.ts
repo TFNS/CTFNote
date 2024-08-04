@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 import { Command } from "../command";
 import {
+  AllowedRoles,
   createInvitationTokenForDiscordId,
   getInvitationTokenForDiscordId,
   getUserByDiscordId,
@@ -21,14 +22,6 @@ async function getInvitationUrl(invitation_code: string | null = null) {
   return `http${ssl}://${config.pad.domain}/#/auth/register/${invitation_code}`;
 }
 
-//? Refactor this to not have this type in two places.
-type AllowedRoles =
-  | "user_guest"
-  | "user_friend"
-  | "user_member"
-  | "user_manager"
-  | "user_admin";
-
 async function createAccountLogic(
   client: Client,
   interaction: CommandInteraction
@@ -36,7 +29,7 @@ async function createAccountLogic(
   if (config.discord.registrationEnabled.toLowerCase() === "false") {
     await interaction.editReply({
       content:
-        "The functionality to create your own account this way has been disabled by an administrator",
+        "The functionality to create your own account this way has been disabled by an administrator.",
     });
     return;
   }
@@ -88,8 +81,9 @@ async function createAccountLogic(
   });
 
   const invitation_code = await createInvitationTokenForDiscordId(
-    (config.discord.registrationAccountRole as AllowedRoles) ?? "user_guest",
-    interaction.user.id
+    interaction.user.id,
+    (config.discord.registrationAccountRole as AllowedRoles) ??
+      AllowedRoles.user_guest
   );
 
   if (invitation_code == null) {
@@ -115,8 +109,7 @@ async function createAccountLogic(
 
 export const Register: Command = {
   name: "register",
-  description:
-    "Create an account on the CTFNote platform if you are allowed to!",
+  description: "Create an account on CTFNote if you are allowed to!",
   type: ApplicationCommandType.ChatInput,
   run: async (client, interaction) => {
     return createAccountLogic(client, interaction).catch((e) => {

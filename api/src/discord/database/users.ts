@@ -45,12 +45,14 @@ export async function setDiscordIdForUser(
   }
 }
 
-type AllowedRoles =
-  | "user_guest"
-  | "user_friend"
-  | "user_member"
-  | "user_manager"
-  | "user_admin";
+// refactor above to an enum
+export enum AllowedRoles {
+  user_guest = "user_guest",
+  user_friend = "user_friend",
+  user_member = "user_member",
+  user_manager = "user_manager",
+  user_admin = "user_admin",
+}
 
 export async function getInvitationTokenForDiscordId(
   discordId: string,
@@ -74,11 +76,11 @@ export async function getInvitationTokenForDiscordId(
 }
 
 export async function createInvitationTokenForDiscordId(
-  role: AllowedRoles = "user_guest",
   discordId: string,
+  role: AllowedRoles = AllowedRoles.user_guest,
   pgClient: PoolClient | null = null
 ): Promise<string | null> {
-  role = (role as AllowedRoles) ?? "user_guest";
+  role = (role as AllowedRoles) ?? AllowedRoles.user_guest;
 
   const useRequestClient = pgClient != null;
   if (pgClient == null) pgClient = await connectToDatabase();
