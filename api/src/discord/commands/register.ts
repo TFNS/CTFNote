@@ -22,6 +22,14 @@ async function getInvitationUrl(invitationCode: string | null = null) {
   return `http${ssl}://${config.pad.domain}/#/auth/register/${invitationCode}`;
 }
 
+async function getProfileUrl() {
+  if (config.pad.domain == "") return null;
+
+  const ssl = config.pad.useSSL == "false" ? "" : "s";
+
+  return `http${ssl}://${config.pad.domain}/#/user/settings`;
+}
+
 async function createAccountLogic(
   client: Client,
   interaction: CommandInteraction
@@ -71,7 +79,7 @@ async function createAccountLogic(
     }
 
     await interaction.editReply({
-      content: `Your personal invitation url: ${invitationUrl}. If you already have a CTFNote account you should link it using the \`/link\` command instead.`,
+      content: `Your personal invitation url: ${invitationUrl}.\n-# If you already have a CTFNote account you should link it using the \`/link\` command using the Discord token from your profile: ${await getProfileUrl()}.`,
     });
     return;
   }
@@ -105,7 +113,7 @@ async function createAccountLogic(
   }
 
   await interaction.editReply({
-    content: `Your personal invitation url: ${invitationUrl}. If you already have a CTFNote account you should link it using the /link command instead.`,
+    content: `Your personal invitation url: ${invitationUrl}.\n-# If you already have a CTFNote account you should link it using the \`/link\` command using the Discord token from your profile: ${await getProfileUrl()}.`,
   });
   return;
 }
