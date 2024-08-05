@@ -22,6 +22,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@apollo/client@npm:^3.11.3":
+  version: 3.11.3
+  resolution: "@apollo/client@npm:3.11.3"
+  dependencies:
+    "@graphql-typed-document-node/core": "npm:^3.1.1"
+    "@wry/caches": "npm:^1.0.0"
+    "@wry/equality": "npm:^0.5.6"
+    "@wry/trie": "npm:^0.5.0"
+    graphql-tag: "npm:^2.12.6"
+    hoist-non-react-statics: "npm:^3.3.2"
+    optimism: "npm:^0.18.0"
+    prop-types: "npm:^15.7.2"
+    rehackt: "npm:^0.1.0"
+    response-iterator: "npm:^0.2.6"
+    symbol-observable: "npm:^4.0.0"
+    ts-invariant: "npm:^0.10.3"
+    tslib: "npm:^2.3.0"
+    zen-observable-ts: "npm:^1.2.5"
+  peerDependencies:
+    graphql: ^15.0.0 || ^16.0.0
+    graphql-ws: ^5.5.5
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0
+    subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+  peerDependenciesMeta:
+    graphql-ws:
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+    subscriptions-transport-ws:
+      optional: true
+  checksum: 10/88df23d98a38a833b12ded5187ae8ec4ef0fa1545ee2ae1c9f53d9940b5339ff536b41888130bc3eee3e32a09ca9a1b151557eda8e3954153e67b1a90d2514ef
+  languageName: node
+  linkType: hard
+
 "@apollo/client@npm:^3.7.0":
   version: 3.7.10
   resolution: "@apollo/client@npm:3.7.10"
@@ -55,43 +92,6 @@ __metadata:
     subscriptions-transport-ws:
       optional: true
   checksum: 10/3e162f3a5579761cea3a8dafd5f96b810bd4edc8a0dc50656c8cc22f4b750537299e8a680034fd597860270a5bbf89b9b75ece0993914e318d6989425b566636
-  languageName: node
-  linkType: hard
-
-"@apollo/client@npm:^3.9.9":
-  version: 3.9.9
-  resolution: "@apollo/client@npm:3.9.9"
-  dependencies:
-    "@graphql-typed-document-node/core": "npm:^3.1.1"
-    "@wry/caches": "npm:^1.0.0"
-    "@wry/equality": "npm:^0.5.6"
-    "@wry/trie": "npm:^0.5.0"
-    graphql-tag: "npm:^2.12.6"
-    hoist-non-react-statics: "npm:^3.3.2"
-    optimism: "npm:^0.18.0"
-    prop-types: "npm:^15.7.2"
-    rehackt: "npm:0.0.6"
-    response-iterator: "npm:^0.2.6"
-    symbol-observable: "npm:^4.0.0"
-    ts-invariant: "npm:^0.10.3"
-    tslib: "npm:^2.3.0"
-    zen-observable-ts: "npm:^1.2.5"
-  peerDependencies:
-    graphql: ^15.0.0 || ^16.0.0
-    graphql-ws: ^5.5.5
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-    subscriptions-transport-ws: ^0.9.0 || ^0.11.0
-  peerDependenciesMeta:
-    graphql-ws:
-      optional: true
-    react:
-      optional: true
-    react-dom:
-      optional: true
-    subscriptions-transport-ws:
-      optional: true
-  checksum: 10/9e67f8867eb4fd8a29c36267d919f20d003584040134744db99d85db18cfc2ba61364586c76799bef413b690fc3957a37b79b9b1e084bf1730217aa95d7efd2f
   languageName: node
   linkType: hard
 
@@ -6624,7 +6624,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ctf-note-front@workspace:."
   dependencies:
-    "@apollo/client": "npm:^3.9.9"
+    "@apollo/client": "npm:^3.11.3"
     "@babel/core": "npm:^7.24.3"
     "@babel/eslint-parser": "npm:^7.24.1"
     "@graphql-codegen/cli": "npm:^3.3.1"
@@ -12102,9 +12102,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rehackt@npm:0.0.6":
-  version: 0.0.6
-  resolution: "rehackt@npm:0.0.6"
+"rehackt@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "rehackt@npm:0.1.0"
   peerDependencies:
     "@types/react": "*"
     react: "*"
@@ -12113,7 +12113,7 @@ __metadata:
       optional: true
     react:
       optional: true
-  checksum: 10/3897c93270836159406529e0fa983bf4a11c07d2efc5c8f6bdfd7f6821d3b84a30d911c3f3b9c689948739e6955c5835c8dd9d91579150bec5092f356c0d91df
+  checksum: 10/c81adead82c165dffc574cbf9e1de3605522782a56b48df48b68d53d45c4d8c9253df3790109335bf97072424e54ad2423bb9544ca3a985fa91995dda43452fc
   languageName: node
   linkType: hard
 
