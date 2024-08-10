@@ -1,5 +1,5 @@
 import { ParsedTask, Parser } from '.';
-import { parseJson, parseJsonStrict } from '../utils';
+import { parseJsonStrict } from '../utils';
 
 interface Events {
   gamePause?: unknown;

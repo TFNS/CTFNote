@@ -1,5 +1,5 @@
 import { ParsedTask, Parser } from '.';
-import { parseJson, parseJsonStrict } from '../utils';
+import { parseJsonStrict } from '../utils';
 
 const AngstromParser: Parser = {
   name: 'ångstromCTF parser',

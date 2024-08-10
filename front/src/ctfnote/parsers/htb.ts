@@ -1,5 +1,5 @@
 import { ParsedTask, Parser } from '.';
-import { parseJson, parseJsonStrict } from '../utils';
+import { parseJsonStrict } from '../utils';
 
 // output of https://ctf.hackthebox.com/api/public/challengeCategories
 const challengeCategories: { [index: number]: string } = {
