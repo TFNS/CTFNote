@@ -300,6 +300,7 @@ export type CreateInvitationLinkInput = {
    * payload verbatim. May be used to track mutations by the client.
    */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  discordId?: InputMaybe<Scalars['String']>;
   role?: InputMaybe<Role>;
 };
 
