@@ -25,7 +25,11 @@ const justCTFParser: Parser = {
     }
 
     for (const challenge of data) {
-      if (!challenge.description || !challenge.name) {
+      if (
+        !challenge.description ||
+        !challenge.name ||
+        !Array.isArray(challenge.categories)
+      ) {
         continue;
       }
 
