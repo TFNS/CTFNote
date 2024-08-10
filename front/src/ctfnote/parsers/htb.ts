@@ -67,17 +67,6 @@ const HTBParser: Parser = {
     }
     return tasks;
   },
-  isValid(s) {
-    const data = parseJson<{
-      challenges: Array<{
-        id: number;
-        name: string;
-        description: string;
-        challenge_category_id: number;
-      }>;
-    }>(s);
-    return Array.isArray(data?.challenges);
-  },
 };
 
 export default HTBParser;

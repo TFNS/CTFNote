@@ -30,10 +30,6 @@ const CTFDParser: Parser = {
     }
     return tasks;
   },
-  isValid(s) {
-    const data = parseJson<{ data?: unknown }>(s);
-    return Array.isArray(data?.data);
-  },
 };
 
 export default CTFDParser;

@@ -26,19 +26,6 @@ const AngstromParser: Parser = {
     }
     return tasks;
   },
-  isValid(s) {
-    const data =
-      parseJson<
-        Array<{ title: string; category: string; description: string }>
-      >(s);
-    return (
-      Array.isArray(data) &&
-      data.length > 0 &&
-      data[0].title != null &&
-      data[0].category != null &&
-      data[0].description != null
-    );
-  },
 };
 
 export default AngstromParser;

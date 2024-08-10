@@ -17,7 +17,6 @@ export type ParsedTask = {
 export type Parser = {
   name: string;
   hint: string;
-  isValid(s: string): boolean;
   parse(s: string): ParsedTask[];
 };
 

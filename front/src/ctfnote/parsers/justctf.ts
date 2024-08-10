@@ -41,29 +41,6 @@ const justCTFParser: Parser = {
     }
     return tasks;
   },
-  isValid(s) {
-    const data = parseJson<
-      [
-        {
-          id: number;
-          name: string;
-          categories: [string];
-          difficult: string;
-          description: string;
-          points: number;
-          solvers: number;
-        }
-      ]
-    >(s);
-    return (
-      data != null &&
-      data?.length > 0 &&
-      data[0].id != null &&
-      data[0].name != null &&
-      Array.isArray(data[0].categories) &&
-      data[0].points != null
-    );
-  },
 };
 
 export default justCTFParser;
