@@ -53,6 +53,8 @@ export interface TaskInput {
   flag: string;
 }
 
+export const challengesTalkChannelName = "challenges-talk";
+
 const newPrefix = "New - ";
 const startedPrefix = "Started - ";
 const solvedPrefix = "Solved - ";
@@ -171,7 +173,7 @@ export async function createChannelsAndRolesForCtf(guild: Guild, ctf: CTF) {
 
   // create challenges-talk channel
   await guild?.channels.create({
-    name: `challenges-talk`,
+    name: challengesTalkChannelName,
     type: ChannelType.GuildText,
     parent: startedCategory?.id,
   });
@@ -231,7 +233,7 @@ function getTalkChannelForCtf(guild: Guild, ctf: CTF) {
   return guild.channels.cache.find(
     (channel) =>
       channel.type === ChannelType.GuildText &&
-      channel.name === `challenges-talk` &&
+      channel.name === challengesTalkChannelName &&
       isChannelOfCtf(channel, startedCategoryName(ctf))
   ) as TextChannel;
 }

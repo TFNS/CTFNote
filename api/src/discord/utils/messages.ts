@@ -12,7 +12,7 @@ import {
 import config from "../../config";
 import { Task, getTaskFromId } from "../database/tasks";
 import { CTF, getCtfFromDatabase } from "../database/ctfs";
-import { getTaskChannel } from "./channels";
+import { challengesTalkChannelName, getTaskChannel } from "./channels";
 import { createPad } from "../../plugins/createTask";
 
 export const discordArchiveTaskName = "Discord archive";
@@ -176,7 +176,8 @@ export async function convertMessagesToPadFormat(messages: Message<boolean>[]) {
       const channel = messages[0].channel;
       if (channel.type !== ChannelType.GuildText) return;
 
-      if (messages.length < 2) return; // don't include channels with one message, since that is only the bot message
+      if (messages.length < 2 && channel.name !== challengesTalkChannelName)
+        return; // don't include channels with one message, since that is only the bot message
 
       result.push(`## ${channel.name}`);
 
