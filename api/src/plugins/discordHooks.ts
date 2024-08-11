@@ -5,14 +5,10 @@ import {
   getAccessibleCTFsForUser,
   getAllCtfsFromDatabase,
   getCtfFromDatabase,
-  getNameFromUserId,
 } from "../discord/database/ctfs";
 import { getDiscordGuild, usingDiscordBot } from "../discord";
 import { changeDiscordUserRoleForCTF } from "../discord/agile/commands/linkUser";
-import {
-  getDiscordIdFromUserId,
-  getUserIdFromUsername,
-} from "../discord/database/users";
+import { getUserIdFromUsername } from "../discord/database/users";
 import {
   Task,
   getTaskByCtfIdAndNameFromDatabase,
@@ -29,33 +25,7 @@ import {
 import { isCategoryOfCtf } from "../discord/utils/comparison";
 import { GraphQLResolveInfoWithMessages } from "@graphile/operation-hooks";
 import { syncDiscordPermissionsWithCtf } from "../discord/utils/permissionSync";
-
-export async function convertToUsernameFormat(userId: bigint | string) {
-  // this is actually the Discord ID and not a CTFNote userId
-  if (typeof userId === "string") {
-    // but if somehow it's not, just return it
-    if (isNaN(parseInt(userId))) return userId;
-    return `<@${userId}>`;
-  }
-
-  const name = await getNameFromUserId(userId);
-  if (name == null) return name;
-
-  const discordId = await getDiscordIdFromUserId(userId);
-  if (discordId == null) return name;
-
-  const guild = getDiscordGuild();
-  if (guild == null) return name;
-
-  const member = await guild.members.fetch({ user: discordId });
-  if (member == null) return name;
-
-  if (member.displayName.toLowerCase() !== name.toLowerCase()) {
-    return `${member.user} (${name})`;
-  } else {
-    return `${member.user}`;
-  }
-}
+import { convertToUsernameFormat } from "../discord/utils/user";
 
 export async function handleTaskSolved(
   guild: Guild,

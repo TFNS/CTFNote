@@ -1,6 +1,8 @@
 import { Client, CommandInteraction, Interaction } from "discord.js";
-import { Commands } from "../agile/commands";
-import { Interactions } from "../agile/interactions";
+import {
+  getChannelHandleStyleCommands,
+  getChannelHandleStyleInteractions,
+} from "../utils/channelStyle";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
@@ -20,7 +22,7 @@ const handleButtonInteraction = async (
   if (!interaction.isButton()) {
     return;
   }
-  const handler = Interactions.find((i) =>
+  const handler = (await getChannelHandleStyleInteractions()).find((i) =>
     interaction.customId.startsWith(i.customId)
   );
 
@@ -40,7 +42,9 @@ const handleSlashCommand = async (
   client: Client,
   interaction: CommandInteraction
 ): Promise<void> => {
-  const slashCommand = Commands.find((c) => c.name === interaction.commandName);
+  const slashCommand = (await getChannelHandleStyleCommands()).find(
+    (c) => c.name === interaction.commandName
+  );
   if (!slashCommand) {
     await interaction.followUp({ content: "An error has occurred" });
     return;

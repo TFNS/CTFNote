@@ -1,9 +1,9 @@
 import { ActivityType, Client } from "discord.js";
 
-import { Commands } from "../agile/commands";
 import interactionCreate from "./interactionCreate";
 import fs from "fs";
 import config from "../../config";
+import { getChannelHandleStyleCommands } from "../utils/channelStyle";
 
 export default (client: Client): void => {
   client.on("ready", async () => {
@@ -25,7 +25,9 @@ export default (client: Client): void => {
         .catch((err) => console.error("Failed to change avatar of bot.", err));
     }
 
-    await client.application.commands.set(Commands);
+    await client.application.commands.set(
+      await getChannelHandleStyleCommands()
+    );
     interactionCreate(client);
 
     console.log(`${client.user.username} bot is online`);
