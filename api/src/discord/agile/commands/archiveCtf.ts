@@ -8,19 +8,19 @@ import {
   CommandInteraction,
   PermissionFlagsBits,
 } from "discord.js";
-import { Command } from "./command";
+import { Command } from "../../interfaces/command";
 import {
   createTask,
   getAllCtfsFromDatabase,
   getCtfFromDatabase,
-} from "../database/ctfs";
-import { getChannelCategoriesForCtf } from "../utils/channels";
+} from "../../database/ctfs";
+import { getChannelCategoriesForCtf } from "../../utils/channels";
 import {
   convertMessagesToPadFormat,
   createPadWithoutLimit,
   getMessagesOfCategories,
-} from "../utils/messages";
-import { DiscordButtonInteraction } from "../interactions/interaction";
+} from "../../utils/messages";
+import { DiscordButtonInteraction } from "../../interfaces/interaction";
 
 async function handleArchiveInteraction(
   interaction: ButtonInteraction,

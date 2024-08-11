@@ -8,7 +8,7 @@ import {
   getNameFromUserId,
 } from "../discord/database/ctfs";
 import { getDiscordGuild, usingDiscordBot } from "../discord";
-import { changeDiscordUserRoleForCTF } from "../discord/commands/linkUser";
+import { changeDiscordUserRoleForCTF } from "../discord/agile/commands/linkUser";
 import {
   getDiscordIdFromUserId,
   getUserIdFromUsername,

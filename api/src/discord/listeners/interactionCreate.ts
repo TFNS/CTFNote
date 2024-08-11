@@ -1,6 +1,6 @@
 import { Client, CommandInteraction, Interaction } from "discord.js";
-import { Commands } from "../commands/commands";
-import { Interactions } from "../interactions/interactions";
+import { Commands } from "../agile/commands";
+import { Interactions } from "../agile/interactions";
 
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {

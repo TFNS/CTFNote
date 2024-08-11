@@ -8,15 +8,18 @@ import {
   CommandInteraction,
   PermissionFlagsBits,
 } from "discord.js";
-import { Command } from "./command";
-import { getCtfFromDatabase, getCTFNamesFromDatabase } from "../database/ctfs";
+import { Command } from "../../interfaces/command";
+import {
+  getCtfFromDatabase,
+  getCTFNamesFromDatabase,
+} from "../../database/ctfs";
 import {
   createChannelForTaskInCtf,
   createChannelsAndRolesForCtf,
   getChannelCategoriesForCtf,
-} from "../utils/channels";
-import { DiscordButtonInteraction } from "../interactions/interaction";
-import { getChallengesFromDatabase } from "../database/tasks";
+} from "../../utils/channels";
+import { DiscordButtonInteraction } from "../../interfaces/interaction";
+import { getChallengesFromDatabase } from "../../database/tasks";
 
 export const HandleCreateCtfInteraction: DiscordButtonInteraction = {
   customId: "create-ctf-button",

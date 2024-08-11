@@ -4,14 +4,14 @@ import {
   CommandInteraction,
   GuildMemberRoleManager,
 } from "discord.js";
-import { Command } from "./command";
+import { Command } from "../../interfaces/command";
 import {
   AllowedRoles,
   createInvitationTokenForDiscordId,
   getInvitationTokenForDiscordId,
   getUserByDiscordId,
-} from "../database/users";
-import config from "../../config";
+} from "../../database/users";
+import config from "../../../config";
 
 async function getInvitationUrl(invitationCode: string | null = null) {
   if (config.pad.domain == "") return null;

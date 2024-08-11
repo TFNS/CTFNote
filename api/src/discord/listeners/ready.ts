@@ -1,6 +1,6 @@
 import { ActivityType, Client } from "discord.js";
 
-import { Commands } from "../commands/commands";
+import { Commands } from "../agile/commands";
 import interactionCreate from "./interactionCreate";
 import fs from "fs";
 import config from "../../config";

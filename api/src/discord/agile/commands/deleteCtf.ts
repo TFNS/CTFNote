@@ -9,13 +9,16 @@ import {
   Interaction,
   PermissionFlagsBits,
 } from "discord.js";
-import { Command } from "./command";
-import { getAllCtfsFromDatabase, getCtfFromDatabase } from "../database/ctfs";
-import { getChannelCategoriesForCtf } from "../utils/channels";
-import { handleDeleteCtf } from "../../plugins/discordHooks";
-import { getTaskByCtfIdAndNameFromDatabase } from "../database/tasks";
-import { discordArchiveTaskName } from "../utils/messages";
-import { DiscordButtonInteraction } from "../interactions/interaction";
+import { Command } from "../../interfaces/command";
+import {
+  getAllCtfsFromDatabase,
+  getCtfFromDatabase,
+} from "../../database/ctfs";
+import { getChannelCategoriesForCtf } from "../../utils/channels";
+import { handleDeleteCtf } from "../../../plugins/discordHooks";
+import { getTaskByCtfIdAndNameFromDatabase } from "../../database/tasks";
+import { discordArchiveTaskName } from "../../utils/messages";
+import { DiscordButtonInteraction } from "../../interfaces/interaction";
 
 export async function handleDeleteInteraction(
   interaction: Interaction,

@@ -1,15 +1,15 @@
 import { ApplicationCommandType, Client, CommandInteraction } from "discord.js";
-import { Command } from "./command";
+import { Command } from "../../interfaces/command";
 import {
   userStartsWorkingOnTask,
   userStopsWorkingOnTask,
-} from "../database/tasks";
+} from "../../database/tasks";
 import {
   sendStartWorkingOnMessage,
   sendStopWorkingOnMessage,
-} from "../../plugins/discordHooks";
-import { getUserByDiscordId } from "../database/users";
-import { getCurrentTaskChannelFromDiscord } from "../utils/channels";
+} from "../../../plugins/discordHooks";
+import { getUserByDiscordId } from "../../database/users";
+import { getCurrentTaskChannelFromDiscord } from "../../utils/channels";
 
 async function accessDenied(interaction: CommandInteraction) {
   await interaction.editReply({
