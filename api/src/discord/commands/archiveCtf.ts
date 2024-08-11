@@ -2,10 +2,10 @@ import {
   ActionRowBuilder,
   ApplicationCommandType,
   ButtonBuilder,
+  ButtonInteraction,
   ButtonStyle,
   Client,
   CommandInteraction,
-  Interaction,
   PermissionFlagsBits,
 } from "discord.js";
 import { Command } from "../command";
@@ -20,9 +20,10 @@ import {
   createPadWithoutLimit,
   getMessagesOfCategories,
 } from "../utils/messages";
+import { DiscordButtonInteraction } from "../interactions/interaction";
 
-export async function handleArchiveInteraction(
-  interaction: Interaction,
+async function handleArchiveInteraction(
+  interaction: ButtonInteraction,
   ctfName: string
 ) {
   const guild = interaction.guild;
@@ -53,11 +54,35 @@ export async function handleArchiveInteraction(
   return true;
 }
 
+export const HandleArchiveCtfInteraction: DiscordButtonInteraction = {
+  customId: "archive-ctf-button",
+  handle: async (client: Client, interaction: ButtonInteraction) => {
+    const ctfName = interaction.customId.replace("archive-ctf-button-", "");
+    await interaction.deferUpdate();
+    await interaction.editReply({
+      content: `Archiving the CTF channels and roles for ${ctfName}`,
+      components: [],
+    });
+
+    if (await handleArchiveInteraction(interaction, ctfName)) {
+      await interaction.editReply({
+        content: `Archived the CTF channels and roles for ${ctfName}`,
+        components: [],
+      });
+    } else {
+      await interaction.editReply({
+        content: `Failed to archive the CTF channels and roles for ${ctfName}`,
+        components: [],
+      });
+    }
+  },
+};
+
 async function archiveCtfLogic(
   client: Client,
   interaction: CommandInteraction
 ) {
-  // Get current CTFs from the discord categorys
+  // Get current CTFs from the discord categories
   let ctfNames = await getAllCtfsFromDatabase();
   const guild = interaction.guild;
   if (guild == null) return;
