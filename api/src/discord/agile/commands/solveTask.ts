@@ -8,7 +8,7 @@ import { Command } from "../../interfaces/command";
 import { setFlagForChallengeId } from "../../database/tasks";
 import { handleTaskSolved } from "../../../plugins/discordHooks";
 import { getUserByDiscordId } from "../../database/users";
-import { getCurrentTaskChannelFromDiscord } from "../../utils/channels";
+import { getCurrentTaskChannelFromDiscord } from "../channels";
 
 async function accessDenied(interaction: CommandInteraction) {
   await interaction.editReply({

@@ -14,7 +14,7 @@ import {
   getAllCtfsFromDatabase,
   getCtfFromDatabase,
 } from "../../database/ctfs";
-import { getChannelCategoriesForCtf } from "../../utils/channels";
+import { getChannelCategoriesForCtf } from "../channels";
 import {
   convertMessagesToPadFormat,
   createPadWithoutLimit,

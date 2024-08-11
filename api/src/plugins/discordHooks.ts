@@ -21,7 +21,7 @@ import {
   getActiveCtfCategories,
   getTaskChannel,
   moveChannel,
-} from "../discord/utils/channels";
+} from "../discord/agile/channels";
 import { isCategoryOfCtf } from "../discord/utils/comparison";
 import { GraphQLResolveInfoWithMessages } from "@graphile/operation-hooks";
 import { syncDiscordPermissionsWithCtf } from "../discord/utils/permissionSync";

@@ -12,7 +12,7 @@ import {
 import config from "../../config";
 import { Task, getTaskFromId } from "../database/tasks";
 import { CTF, getCtfFromDatabase } from "../database/ctfs";
-import { challengesTalkChannelName, getTaskChannel } from "./channels";
+import { challengesTalkChannelName, getTaskChannel } from "../agile/channels";
 import { createPad } from "../../plugins/createTask";
 
 export const discordArchiveTaskName = "Discord archive";

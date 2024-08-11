@@ -14,7 +14,7 @@ import {
   getAllCtfsFromDatabase,
   getCtfFromDatabase,
 } from "../../database/ctfs";
-import { getChannelCategoriesForCtf } from "../../utils/channels";
+import { getChannelCategoriesForCtf } from "../channels";
 import { handleDeleteCtf } from "../../../plugins/discordHooks";
 import { getTaskByCtfIdAndNameFromDatabase } from "../../database/tasks";
 import { discordArchiveTaskName } from "../../utils/messages";

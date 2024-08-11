@@ -25,13 +25,13 @@ import {
   getTaskTitleFromTopic,
   sendMessageToChannel,
   topicDelimiter,
-} from "./messages";
+} from "../utils/messages";
 import {
   isChannelOfCtf,
   isTaskChannelOf,
   isRoleOfCtf,
   isCategoryOfCtf,
-} from "./comparison";
+} from "../utils/comparison";
 import { safeSlugify } from "../../utils/utils";
 
 enum CategoryType {

@@ -17,7 +17,7 @@ import {
   createChannelForTaskInCtf,
   createChannelsAndRolesForCtf,
   getChannelCategoriesForCtf,
-} from "../../utils/channels";
+} from "../channels";
 import { DiscordButtonInteraction } from "../../interfaces/interaction";
 import { getChallengesFromDatabase } from "../../database/tasks";
 
