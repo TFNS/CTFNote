@@ -9,7 +9,7 @@ import {
   Interaction,
   PermissionFlagsBits,
 } from "discord.js";
-import { Command } from "../command";
+import { Command } from "./command";
 import { getAllCtfsFromDatabase, getCtfFromDatabase } from "../database/ctfs";
 import { getChannelCategoriesForCtf } from "../utils/channels";
 import { handleDeleteCtf } from "../../plugins/discordHooks";

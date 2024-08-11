@@ -4,7 +4,7 @@ import {
   Client,
   CommandInteraction,
 } from "discord.js";
-import { Command } from "../command";
+import { Command } from "./command";
 import {
   getDiscordIdFromUserId,
   getUserByToken,

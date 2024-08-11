@@ -4,7 +4,7 @@ import {
   CommandInteraction,
   GuildMemberRoleManager,
 } from "discord.js";
-import { Command } from "../command";
+import { Command } from "./command";
 import {
   AllowedRoles,
   createInvitationTokenForDiscordId,

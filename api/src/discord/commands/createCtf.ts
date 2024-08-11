@@ -8,7 +8,7 @@ import {
   CommandInteraction,
   PermissionFlagsBits,
 } from "discord.js";
-import { Command } from "../command";
+import { Command } from "./command";
 import { getCtfFromDatabase, getCTFNamesFromDatabase } from "../database/ctfs";
 import {
   createChannelForTaskInCtf,

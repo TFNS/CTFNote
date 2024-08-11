@@ -8,7 +8,7 @@ import {
   CommandInteraction,
   PermissionFlagsBits,
 } from "discord.js";
-import { Command } from "../command";
+import { Command } from "./command";
 import {
   createTask,
   getAllCtfsFromDatabase,
