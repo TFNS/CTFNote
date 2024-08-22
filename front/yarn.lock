@@ -4000,6 +4000,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/web-bluetooth@npm:^0.0.20":
+  version: 0.0.20
+  resolution: "@types/web-bluetooth@npm:0.0.20"
+  checksum: 10/2faa323e5c994e9468fff4675e3b6d35f3730eb4dc7c761d02267fb6246dbfd659fd8f3583db0872aae05b3ee139799c25655bbe79bf1b56c08c06e665db814b
+  languageName: node
+  linkType: hard
+
 "@types/webpack-bundle-analyzer@npm:4.6.0":
   version: 4.6.0
   resolution: "@types/webpack-bundle-analyzer@npm:4.6.0"
@@ -4401,6 +4408,34 @@ __metadata:
   version: 3.4.21
   resolution: "@vue/shared@npm:3.4.21"
   checksum: 10/38e8cca37437841717f92e562bf7ae1b07865d33f24b65b63e1a0107c75ab5a4584f0847317275bfeb03b3a7a06b7d9e68009d0588aab8c432715ac50f07f77a
+  languageName: node
+  linkType: hard
+
+"@vueuse/core@npm:^11.0.1":
+  version: 11.0.1
+  resolution: "@vueuse/core@npm:11.0.1"
+  dependencies:
+    "@types/web-bluetooth": "npm:^0.0.20"
+    "@vueuse/metadata": "npm:11.0.1"
+    "@vueuse/shared": "npm:11.0.1"
+    vue-demi: "npm:>=0.14.10"
+  checksum: 10/c512c03cb8d450c33f2a6ec5f8df55e2b8428bcce024749f56d2f93d6c82f7c54f2a035458c2d988cba6143f9a83da34fa9d5b24e775f0870abffb1d2dcee3f7
+  languageName: node
+  linkType: hard
+
+"@vueuse/metadata@npm:11.0.1":
+  version: 11.0.1
+  resolution: "@vueuse/metadata@npm:11.0.1"
+  checksum: 10/ed1c617a2e875180ba1c223e16bad330bc18a03698a4305285f6d5c714da7c3ebdaea0050e1e4bb1226b07a2a5164af146d0ce209f8b1f92084d205e6313d2c8
+  languageName: node
+  linkType: hard
+
+"@vueuse/shared@npm:11.0.1":
+  version: 11.0.1
+  resolution: "@vueuse/shared@npm:11.0.1"
+  dependencies:
+    vue-demi: "npm:>=0.14.10"
+  checksum: 10/2800cad5c1ed73a5bb812d130f34d035ab3cd5beadec4075d86c7bcc5428b81a2a5950b42de869d3cef3c3dc690e005a100957d3ad7efdfca899ab100ba7581d
   languageName: node
   linkType: hard
 
@@ -6630,6 +6665,7 @@ __metadata:
     "@types/node": "npm:^16.18.91"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@vue/apollo-composable": "npm:^4.0.2"
+    "@vueuse/core": "npm:^11.0.1"
     apollo-upload-client: "npm:^17.0.0"
     babel-loader: "npm:^9.1.3"
     color-hash: "npm:^2.0.2"
@@ -13957,6 +13993,22 @@ __metadata:
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: 10/31389debef15a480849b8331b220782230b9815a8e0dbb7b9a8369559aed2e9a7800cd904d4371ea74f4c3527db456dc8e7ac5befce5f0d289014dbdf47b2242
+  languageName: node
+  linkType: hard
+
+"vue-demi@npm:>=0.14.10":
+  version: 0.14.10
+  resolution: "vue-demi@npm:0.14.10"
+  peerDependencies:
+    "@vue/composition-api": ^1.0.0-rc.1
+    vue: ^3.0.0-0 || ^2.6.0
+  peerDependenciesMeta:
+    "@vue/composition-api":
+      optional: true
+  bin:
+    vue-demi-fix: bin/vue-demi-fix.js
+    vue-demi-switch: bin/vue-demi-switch.js
+  checksum: 10/3028239c0c25a84361a13ab936fcc9a199f54e0320c2ec1d2f4fdf7da8bae663382b7c1e5b1f5a1a43f6aebc73b955892cd4b6c7b3eaf2b766e18cc2a6f7ebea
   languageName: node
   linkType: hard
 
