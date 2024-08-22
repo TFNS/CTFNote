@@ -47,7 +47,7 @@
       <div class="q-mb-md column q-col-gutter-md background-logo">
         <div class="flex gap-sm">
           <time-chip :date="ctf.startTime" label="Start:" />
-          <time-chip :date="ctf.startTime" label="End:" />
+          <time-chip :date="ctf.endTime" label="End:" />
           <link-chip v-if="ctf.ctfUrl" :url="ctf.ctfUrl" />
         </div>
         <div class="col">
