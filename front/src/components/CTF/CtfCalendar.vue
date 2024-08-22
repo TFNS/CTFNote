@@ -19,7 +19,7 @@
         padding="6px"
         color="primary"
         icon="calendar_today"
-        @click="calendar?.move(new Date())"
+        @click="emit('showToday')"
       >
         <q-tooltip>Show today</q-tooltip>
       </q-btn>
@@ -50,6 +50,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   ctfClick: [number];
+  showToday: [];
 }>();
 
 const model = defineModel<{ year: number; month: number }>({ required: true });

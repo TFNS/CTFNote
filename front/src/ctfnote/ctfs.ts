@@ -6,13 +6,15 @@ import {
   CtfInput,
   CtfPatch,
   CtfSecretFragment,
+  CtfsByDateDocument,
+  CtfsByDateQuery,
+  CtfsByDateQueryVariables,
   CtftimeCtfById,
   CtftimeCtfByIdQuery,
   InvitationFragment,
   TagFragment,
   TaskFragment,
   useCreateCtfMutation,
-  useCtfsByDateQuery,
   useCtfsQuery,
   useDeleteCtfbyIdMutation,
   useGetFullCtfQuery,
@@ -28,11 +30,12 @@ import {
   useUpdateCredentialsForCtfIdMutation,
   useUpdateCtfByIdMutation,
 } from 'src/generated/graphql';
-import { MaybeRefOrGetter, computed, reactive, toValue } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { Ctf, CtfInvitation, Profile, Task, makeId } from './models';
 import { buildTag } from './tags';
 import { buildWorkingOn } from './tasks';
 import { wrapQuery } from './utils';
+import { shortDate, ShortDate } from 'src/utils/shortDate';
 
 type FullCtfResponse = {
   ctf: CtfFragment & {
@@ -145,18 +148,12 @@ export function useFetchFromCtftime() {
   };
 }
 
-export function useCtfsByDate(
-  params: MaybeRefOrGetter<{ year: number; month: number }>
-) {
+export function useCtfsByDate() {
+  const loading = ref(false);
+  const loaded = reactive(new Set<string>());
   const ctfs = reactive(new Map<string, Ctf>());
-  const query = useCtfsByDateQuery(params);
 
-  query.onResult((result) => {
-    result.data?.ctfsByDate?.ctfs?.forEach((node) => {
-      const ctf = buildCtf(node);
-      ctfs.set(ctf.nodeId, ctf);
-    });
-  });
+  const { client } = useApolloClient();
 
   useSubscribeToCtfCreatedSubscription().onResult((result) => {
     if (!result.data) return;
@@ -172,23 +169,30 @@ export function useCtfsByDate(
   });
 
   return {
-    ctfs: computed(() => {
-      return Array.from(ctfs.values())
-        .filter((ctf) => {
-          const monthStart = date.buildDate({
-            year: toValue(params).year,
-            month: toValue(params).month,
-            day: 1,
-          });
-          const monthEnd = date.addToDate(monthStart, { months: 1 });
-          const start = ctf.startTime.getTime();
-          const end = ctf.endTime.getTime();
-
-          return start <= monthEnd.getTime() && end >= monthStart.getTime();
+    fetchMore: async (date: ShortDate) => {
+      if (loaded.has(shortDate.toId(date))) {
+        return;
+      }
+      loaded.add(shortDate.toId(date));
+      return await client
+        .query<CtfsByDateQuery, CtfsByDateQueryVariables>({
+          query: CtfsByDateDocument,
+          variables: shortDate.copy(date),
         })
-        .sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
+        .then((result) => {
+          result.data?.ctfsByDate?.ctfs?.forEach((node) => {
+            const ctf = buildCtf(node);
+            ctfs.set(ctf.nodeId, ctf);
+          });
+        });
+    },
+    ctfs: computed((): Ctf[] => {
+      return Array.from(ctfs.values()).sort(
+        (a, b) => a.startTime.getTime() - b.startTime.getTime()
+      );
     }),
-    loading: query.loading,
+    loading,
+    loaded,
   };
 }
 
