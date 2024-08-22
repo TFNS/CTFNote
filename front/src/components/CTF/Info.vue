@@ -37,7 +37,7 @@
 
       <div class="row gap-sm">
         <time-chip :date="ctf.startTime" label="Start:" />
-        <time-chip :date="ctf.startTime" label="End:" />
+        <time-chip :date="ctf.endTime" label="End:" />
         <link-chip v-if="ctf.ctfUrl" :url="ctf.ctfUrl" />
       </div>
 
