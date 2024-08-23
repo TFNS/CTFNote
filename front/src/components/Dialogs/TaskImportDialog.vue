@@ -29,8 +29,9 @@
                 <template #option="scope">
                   <q-item v-bind="scope.itemProps">
                     <q-item-section>
-                      <q-item-label>
+                      <q-item-label class="flex">
                         {{ scope.opt.label }}
+                        <q-space />
                         {{
                           scope.opt.amount > 0 ? `(${scope.opt.amount})` : '(0)'
                         }}
