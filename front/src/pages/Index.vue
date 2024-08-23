@@ -27,7 +27,7 @@ import { whenever } from '@vueuse/core';
 import CardList from 'src/components/CTF/CardList.vue';
 import ctfnote from 'src/ctfnote';
 import { ShortDate, shortDate } from 'src/utils/shortDate';
-import { computed, nextTick, ref, toRaw } from 'vue';
+import { computed, nextTick, onMounted, ref, toRaw } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import CtfCalendar from '../components/CTF/CtfCalendar.vue';
 
@@ -114,6 +114,10 @@ async function doFetchMore(newDate: ShortDate) {
     end.value = newDate;
   }
 }
+
+onMounted(() => {
+  document.title = 'CTFNote - CTFs';
+})
 </script>
 
 <style lang="scss" scoped>
