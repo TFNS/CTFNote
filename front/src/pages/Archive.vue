@@ -145,7 +145,7 @@ const columns: QTableColumn<Ctf>[] = [
     align: 'left',
 
     sortable: true,
-    field: (row) => (row.ctfUrl ? row.weight : -1),
+    field: (row) => (row.ctftimeUrl ? row.weight : -1),
   },
 ];
 
