@@ -107,26 +107,31 @@ import LinkChip from 'src/components/Utils/LinkChip.vue';
 import TimeChip from 'src/components/Utils/TimeChip.vue';
 import ctfnote from 'src/ctfnote';
 import { date } from 'quasar';
+import { Ctf } from 'src/ctfnote/models';
+import { computed } from 'vue';
 
-const columns: QTableColumn[] = [
+const columns: QTableColumn<Ctf>[] = [
   {
     name: 'title',
     label: 'Title',
     align: 'left',
     field: 'title',
     headerStyle: 'padding-left: 32px',
+    sortable: true,
   },
   {
     name: 'startTime',
     label: 'Start Time',
     align: 'left',
     field: 'startTime',
+    sortable: true,
   },
   {
     name: 'endTime',
     label: 'End Time',
     align: 'left',
     field: 'endTime',
+    sortable: true,
   },
   {
     name: 'link',
@@ -138,9 +143,17 @@ const columns: QTableColumn[] = [
     name: 'ctftime',
     label: 'CTFTime',
     align: 'left',
-    field: () => undefined,
+
+    sortable: true,
+    field: (row) => (row.ctfUrl ? row.weight : -1),
   },
 ];
 
-const { result: ctfs } = ctfnote.ctfs.getAllCtfs();
+const { result } = ctfnote.ctfs.getAllCtfs();
+
+const ctfs = computed(() => {
+  return Array.from(result.value).sort((a, b) => {
+    return a.startTime.getTime() - b.startTime.getTime();
+  });
+});
 </script>
