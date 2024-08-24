@@ -1,5 +1,5 @@
 import { ParsedTask, Parser } from '.';
-import { parseJson, parseJsonStrict } from '../utils';
+import { parseJsonStrict } from '../utils';
 
 const AngstromParser: Parser = {
   name: 'ångstromCTF parser',
@@ -25,19 +25,6 @@ const AngstromParser: Parser = {
       });
     }
     return tasks;
-  },
-  isValid(s) {
-    const data =
-      parseJson<
-        Array<{ title: string; category: string; description: string }>
-      >(s);
-    return (
-      Array.isArray(data) &&
-      data.length > 0 &&
-      data[0].title != null &&
-      data[0].category != null &&
-      data[0].description != null
-    );
   },
 };
 

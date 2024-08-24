@@ -1,5 +1,5 @@
 import { ParsedTask, Parser } from '.';
-import { parseJson, parseJsonStrict } from '../utils';
+import { parseJsonStrict } from '../utils';
 
 interface Events {
   gamePause?: unknown;
@@ -45,11 +45,6 @@ const CINIParser: Parser = {
     }
 
     return tasks;
-  },
-  isValid(s) {
-    const data = parseJson<Events>(s);
-    if (data == null) return false;
-    return data.gamePause !== undefined && data.events !== undefined;
   },
 };
 

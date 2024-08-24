@@ -26,6 +26,29 @@
                 <template #prepend>
                   <q-icon name="data_object" />
                 </template>
+                <template #option="scope">
+                  <q-item v-bind="scope.itemProps">
+                    <q-item-section>
+                      <q-item-label class="flex">
+                        {{ scope.opt.label }}
+                        <q-space />
+                        {{
+                          scope.opt.amount > 0 ? `(${scope.opt.amount})` : '(0)'
+                        }}
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </template>
+                <template #selected-item="scope">
+                  <q-item-section>
+                    <q-item-label>
+                      {{ scope.opt.label }}
+                      {{
+                        scope.opt.amount > 0 ? `(${scope.opt.amount})` : '(0)'
+                      }}
+                    </q-item-label>
+                  </q-item-section>
+                </template>
               </q-select>
 
               <q-input
@@ -41,7 +64,10 @@
                   'font-family': 'monospace',
                 }"
                 :hint="currentParser.value.hint"
-                @paste="onPaste"
+                @paste="detectParser"
+                @blur="detectParser"
+                @focus="detectParser"
+                @update:model-value="detectParser"
               />
             </div>
           </q-tab-panel>
@@ -95,6 +121,7 @@ import { Ctf, makeId } from 'src/ctfnote/models';
 import parsers, { ParsedTask } from 'src/ctfnote/parsers';
 import { defineComponent, ref } from 'vue';
 import TaskTagsList from 'src/components/Task/TaskTagsList.vue';
+import RawParser from 'src/ctfnote/parsers/raw';
 
 export default defineComponent({
   components: {
@@ -107,7 +134,11 @@ export default defineComponent({
   setup() {
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
-    const parserOptions = parsers.map((p) => ({ label: p.name, value: p }));
+    const parserOptions = parsers.map((p) => ({
+      label: p.name,
+      value: p,
+      amount: 0,
+    }));
 
     const columns = [
       { name: 'keep', label: '', field: 'keep' },
@@ -165,14 +196,53 @@ export default defineComponent({
       }
     },
     autoDetectParser() {
-      for (const parser of parsers) {
-        if (parser.isValid(this.model)) {
-          const p = this.parserOptions.find((opt) => opt.value == parser);
-          if (p) this.currentParser = p;
+      const outputOfParser = parsers.map((p) => {
+        let challenges: ParsedTask[] = [];
+        try {
+          challenges = p.parse(this.model);
+        } catch (e) {}
+
+        return {
+          parser: p,
+          challenges: challenges,
+        };
+      });
+
+      // assign the amount of challenges to the parser options
+      this.parserOptions.forEach((opt) => {
+        const parser = outputOfParser.find(
+          (p) => p.parser.name === opt.value.name
+        );
+        if (parser) {
+          opt.amount = parser.challenges.length;
         }
+      });
+
+      // find the parser with the most tasks, but exclude the raw parser
+      // since it will count the amount of newlines which does not always make sense
+      const max = outputOfParser
+        .filter((p) => p.parser.name !== RawParser.name)
+        .reduce(
+          (acc, cur) =>
+            cur.challenges.length > acc ? cur.challenges.length : acc,
+          0
+        );
+      const bestParser = outputOfParser.find((p) => p.challenges.length == max);
+      if (
+        bestParser &&
+        bestParser.challenges.length > 0 &&
+        (bestParser.challenges.length > this.currentParser.amount ||
+          this.currentParser.label == RawParser.name) // it must be an improvement, except overriding the raw parser is allowed
+      ) {
+        const p = this.parserOptions.find(
+          (opt) => opt.value == bestParser.parser
+        );
+        if (p) this.currentParser = p;
+      } else if (this.currentParser.amount == 0) {
+        this.currentParser = this.parserOptions[0];
       }
     },
-    onPaste() {
+    detectParser() {
       void this.$nextTick(() => this.autoDetectParser());
     },
     normalizeTags(tags: string[]): string[] {

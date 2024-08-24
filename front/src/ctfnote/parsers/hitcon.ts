@@ -28,20 +28,6 @@ const HitconParser: Parser = {
 
     return tasks;
   },
-  isValid(s) {
-    const data =
-      parseJsonStrict<
-        [{ name: string; category: string; description: string }]
-      >(s);
-    if (data == null || data.length < 1) {
-      return false;
-    }
-    return (
-      data[0].name != null &&
-      data[0].category != null &&
-      data[0].description != null
-    );
-  },
 };
 
 export default HitconParser;

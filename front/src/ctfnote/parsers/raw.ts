@@ -19,12 +19,6 @@ const RawParser: Parser = {
     }
     return tasks;
   },
-  isValid(s) {
-    return s
-      .trim()
-      .split('\n')
-      .every((s) => /[^|]+\|[^|]+/.exec(s));
-  },
 };
 
 export default RawParser;
