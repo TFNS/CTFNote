@@ -4,10 +4,7 @@ import {
   userStartsWorkingOnTask,
   userStopsWorkingOnTask,
 } from "../../database/tasks";
-import {
-  sendStartWorkingOnMessage,
-  sendStopWorkingOnMessage,
-} from "../../../plugins/discordHooks";
+import { sendStartWorkingOnMessage, sendStopWorkingOnMessage } from "../hooks";
 import { getUserByDiscordId } from "../../database/users";
 import { getCurrentTaskChannelFromDiscord } from "../channels";
 

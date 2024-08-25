@@ -15,7 +15,7 @@ import {
   getCtfFromDatabase,
 } from "../../database/ctfs";
 import { getChannelCategoriesForCtf } from "../channels";
-import { handleDeleteCtf } from "../../../plugins/discordHooks";
+import { handleDeleteCtf } from "../hooks";
 import { getTaskByCtfIdAndNameFromDatabase } from "../../database/tasks";
 import { discordArchiveTaskName } from "../../utils/messages";
 import { DiscordButtonInteraction } from "../../interfaces/interaction";

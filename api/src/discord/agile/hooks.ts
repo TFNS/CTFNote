@@ -1,31 +1,30 @@
 import { Build, Context } from "postgraphile";
-import { SchemaBuilder } from "graphile-build";
 import { ChannelType, Guild } from "discord.js";
 import {
   getAccessibleCTFsForUser,
   getAllCtfsFromDatabase,
   getCtfFromDatabase,
-} from "../discord/database/ctfs";
-import { getDiscordGuild, usingDiscordBot } from "../discord";
-import { changeDiscordUserRoleForCTF } from "../discord/agile/commands/linkUser";
-import { getUserIdFromUsername } from "../discord/database/users";
+} from "../database/ctfs";
+import { getDiscordGuild, usingDiscordBot } from "..";
+import { changeDiscordUserRoleForCTF } from "./commands/linkUser";
+import { getUserIdFromUsername } from "../database/users";
 import {
   Task,
   getTaskByCtfIdAndNameFromDatabase,
   getTaskFromId,
-} from "../discord/database/tasks";
-import { sendMessageToTask } from "../discord/utils/messages";
+} from "../database/tasks";
+import { sendMessageToTask } from "../utils/messages";
 import {
   ChannelMovingEvent,
   createChannelForNewTask,
   getActiveCtfCategories,
   getTaskChannel,
   moveChannel,
-} from "../discord/agile/channels";
-import { isCategoryOfCtf } from "../discord/utils/comparison";
+} from "./channels";
+import { isCategoryOfCtf } from "../utils/comparison";
 import { GraphQLResolveInfoWithMessages } from "@graphile/operation-hooks";
-import { syncDiscordPermissionsWithCtf } from "../discord/utils/permissionSync";
-import { convertToUsernameFormat } from "../discord/utils/user";
+import { syncDiscordPermissionsWithCtf } from "../utils/permissionSync";
+import { convertToUsernameFormat } from "../utils/user";
 
 export async function handleTaskSolved(
   guild: Guild,
@@ -328,7 +327,6 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         callback: handleDiscordMutationAfter,
       },
     ],
-    error: [],
   };
 };
 
@@ -441,9 +439,6 @@ async function handleUpdateCtf(args: any, guild: Guild) {
   });
 }
 
-export default function (builder: SchemaBuilder): void {
-  builder.hook("init", (_, build) => {
-    build.addOperationHook(discordMutationHook(build));
-    return _;
-  });
-}
+export default {
+  operationHook: discordMutationHook,
+};

@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { setFlagForChallengeId } from "../../database/tasks";
-import { handleTaskSolved } from "../../../plugins/discordHooks";
+import { handleTaskSolved } from "../hooks";
 import { getUserByDiscordId } from "../../database/users";
 import { getCurrentTaskChannelFromDiscord } from "../channels";
 
