@@ -25,6 +25,7 @@ import { isCategoryOfCtf } from "../utils/comparison";
 import { GraphQLResolveInfoWithMessages } from "@graphile/operation-hooks";
 import { syncDiscordPermissionsWithCtf } from "../utils/permissionSync";
 import { convertToUsernameFormat } from "../utils/user";
+import { PoolClient } from "pg";
 
 export async function handleTaskSolved(
   guild: Guild,
@@ -41,6 +42,131 @@ export async function handleTaskSolved(
     id,
     `${task.title} is solved by ${await convertToUsernameFormat(userId)}!`
   );
+}
+
+async function handleCreateTask(
+  guild: Guild,
+  ctfId: bigint,
+  title: string,
+  pgClient: PoolClient | null
+) {
+  // we have to query the task using the context.pgClient in order to see the newly created task
+  const task = await getTaskByCtfIdAndNameFromDatabase(ctfId, title, pgClient);
+  if (task == null) return null;
+
+  // we have to await this since big imports will cause race conditions with the Discord API
+  await createChannelForNewTask(guild, task, true);
+}
+
+async function handleDeleteTask(guild: Guild, taskId: bigint) {
+  const task = await getTaskFromId(taskId);
+  if (task == null) return null;
+
+  const channel = await getTaskChannel(guild, task, null);
+  if (channel == null) return null;
+
+  channel
+    .setName(`deleted-${task.title}`)
+    .catch((err) => console.error("Failed to mark channel as deleted.", err));
+}
+
+async function handleUpdateTask(
+  guild: Guild,
+  taskId: bigint | null,
+  newTitle: string | null,
+  newFlag: string | null,
+  newDescription: string | null,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context: any
+) {
+  if (taskId == null) return null;
+
+  const task = await getTaskFromId(taskId);
+  if (task == null) return null;
+
+  if (newFlag != null) {
+    if (newFlag !== "") {
+      const userId = context.jwtClaims.user_id;
+
+      handleTaskSolved(guild, taskId, userId);
+    } else {
+      const task = await getTaskFromId(taskId);
+      if (task == null) return null;
+
+      moveChannel(guild, task, null, ChannelMovingEvent.UNSOLVED);
+    }
+  }
+
+  // handle task title change
+  if (newTitle != null && newTitle != task.title) {
+    const channel = await getTaskChannel(guild, task, null);
+    if (channel == null) return null;
+
+    channel
+      .edit({
+        name: newTitle,
+        topic: channel.topic?.replace(task.title, newTitle),
+      })
+      .catch((err) => console.error("Failed to rename channel.", err));
+  }
+
+  // handle task description change
+  if (newDescription != null && newDescription !== task.description) {
+    sendMessageToTask(guild, task, `Description changed:\n${newDescription}`);
+  }
+}
+
+async function handleStartWorkingOn(
+  guild: Guild,
+  taskId: bigint,
+  userId: bigint
+) {
+  await moveChannel(guild, taskId, null, ChannelMovingEvent.START);
+  await sendStartWorkingOnMessage(guild, userId, taskId);
+}
+
+async function handleUpdateUserRole(
+  guild: Guild,
+  userId: bigint,
+  pgClient: PoolClient
+) {
+  // reset all roles
+  const currentCtfs = await getActiveCtfCategories(guild);
+  await Promise.all(
+    currentCtfs.map(async function (ctf) {
+      return changeDiscordUserRoleForCTF(userId, ctf, "remove").catch((err) => {
+        console.error("Error while adding role to user: ", err);
+      });
+    })
+  );
+  // re-assign roles if accessible
+  const ctfs = await getAccessibleCTFsForUser(userId, pgClient);
+  ctfs.forEach(function (ctf) {
+    changeDiscordUserRoleForCTF(userId, ctf, "add").catch((err) => {
+      console.error("Error while adding role to user: ", err);
+    });
+  });
+}
+
+async function handleRegisterWithToken(username: string) {
+  /*
+   * We have a nice ductape solution for the following problem:
+   * During the handling of these hooks, the changes to the database are not committed yet.
+   * This means that we can't query the database for the new user id.
+   * We have to wait a bit to make sure the user is in the database.
+   * Alternatively we can hook the postgraphile lifecycle but that is not compatible with the current setup.
+   * The outgoing request is probably handling within 1 second, so this works fine.
+   */
+  setTimeout(async () => {
+    const userId = await getUserIdFromUsername(username, null); // use null to get a new client which is privileged as the Discord bot
+    if (userId == null) return;
+    const ctfs = await getAccessibleCTFsForUser(userId, null);
+    for (let i = 0; i < ctfs.length; i++) {
+      await changeDiscordUserRoleForCTF(userId, ctfs[i], "add").catch((err) => {
+        console.error("Error while adding role to user: ", err);
+      });
+    }
+  }, 2000);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
@@ -86,196 +212,98 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     if (guild == null) return input;
 
     //add challenges to the ctf channel discord
-    if (fieldContext.scope.fieldName === "createTask") {
-      // we have to query the task using the context.pgClient in order to see the newly created task
-      const task = await getTaskByCtfIdAndNameFromDatabase(
-        args.input.ctfId,
-        args.input.title,
-        context.pgClient
-      );
-      if (task == null) return input;
-
-      // we have to await this since big imports will cause race conditions with the Discord API
-      await createChannelForNewTask(guild, task, true);
-    }
-    if (fieldContext.scope.fieldName === "deleteTask") {
-      const task = await getTaskFromId(args.input.id);
-      if (task == null) return input;
-
-      const channel = await getTaskChannel(guild, task, null);
-      if (channel == null) return input;
-
-      channel
-        .setName(`deleted-${task.title}`)
-        .catch((err) =>
-          console.error("Failed to mark channel as deleted.", err)
-        );
-    }
-
-    // handle task (un)solved
-    if (
-      fieldContext.scope.fieldName === "updateTask" &&
-      args.input.id != null
-    ) {
-      const task = await getTaskFromId(args.input.id);
-      if (task == null) return input;
-
-      let title = task.title;
-      if (args.input.patch.title != null) {
-        title = args.input.patch.title;
-      }
-
-      if (args.input.patch.flag != null) {
-        if (args.input.patch.flag !== "") {
-          const userId = context.jwtClaims.user_id;
-
-          handleTaskSolved(guild, args.input.id, userId);
-        } else {
-          const task = await getTaskFromId(args.input.id);
-          if (task == null) return input;
-
-          moveChannel(guild, task, null, ChannelMovingEvent.UNSOLVED);
-        }
-      }
-
-      // handle task title change
-      if (
-        args.input.patch.title != null &&
-        args.input.patch.title != task.title
-      ) {
-        const channel = await getTaskChannel(guild, task, null);
-        if (channel == null) return input;
-
-        channel
-          .edit({
-            name: title,
-            topic: channel.topic?.replace(task.title, title),
-          })
-          .catch((err) => console.error("Failed to rename channel.", err));
-      }
-
-      // handle task description change
-      if (
-        args.input.patch.description != null &&
-        args.input.patch.description !== task.description
-      ) {
-        sendMessageToTask(
+    switch (fieldContext.scope.fieldName) {
+      case "createTask":
+        handleCreateTask(
           guild,
-          task,
-          `Description changed:\n${args.input.patch.description}`
-        );
-      }
-    }
-
-    if (fieldContext.scope.fieldName === "startWorkingOn") {
-      //send a message to the channel that the user started working on the task
-      const userId = context.jwtClaims.user_id;
-      const taskId = args.input.taskId;
-      moveChannel(guild, taskId, null, ChannelMovingEvent.START).then(() => {
-        sendStartWorkingOnMessage(guild, userId, taskId).catch((err) => {
+          args.input.ctfId,
+          args.input.title,
+          context.pgClient
+        ).catch((err) => {
+          console.error("Failed to create task.", err);
+        });
+        break;
+      case "deleteTask":
+        handleDeleteTask(guild, args.input.id).catch((err) => {
+          console.error("Failed to delete task.", err);
+        });
+        break;
+      case "updateTask":
+        handleUpdateTask(
+          guild,
+          args.input.id,
+          args.input.patch.title,
+          args.input.patch.flag,
+          args.input.patch.description,
+          context
+        ).catch((err) => {
+          console.error("Failed to update task.", err);
+        });
+        break;
+      case "startWorkingOn":
+        handleStartWorkingOn(
+          guild,
+          args.input.taskId,
+          context.jwtClaims.user_id
+        ).catch((err) => {
+          console.error("Failed to start working on task.", err);
+        });
+        break;
+      case "stopWorkingOn":
+      case "cancelWorkingOn":
+        sendStopWorkingOnMessage(
+          guild,
+          context.jwtClaims.user_id,
+          args.input.taskId,
+          fieldContext.scope.fieldName === "cancelWorkingOn"
+        ).catch((err) => {
           console.error(
-            "Failed sending 'started working on' notification.",
+            "Failed sending 'stopped working on' notification.",
             err
           );
         });
-      });
-    }
-    if (
-      fieldContext.scope.fieldName === "stopWorkingOn" ||
-      fieldContext.scope.fieldName === "cancelWorkingOn"
-    ) {
-      //send a message to the channel that the user stopped working on the task
-      const userId = context.jwtClaims.user_id;
-      const taskId = args.input.taskId;
-
-      sendStopWorkingOnMessage(
-        guild,
-        userId,
-        taskId,
-        fieldContext.scope.fieldName === "cancelWorkingOn"
-      ).catch((err) => {
-        console.error("Failed sending 'stopped working on' notification.", err);
-      });
-    }
-    if (fieldContext.scope.fieldName === "createInvitation") {
-      handeInvitation(
-        args.input.invitation.ctfId,
-        args.input.invitation.profileId,
-        "add"
-      ).catch((err) => {
-        console.error("Failed to create invitation.", err);
-      });
-    }
-
-    if (fieldContext.scope.fieldName === "deleteInvitation") {
-      handeInvitation(args.input.ctfId, args.input.profileId, "remove").catch(
-        (err) => {
-          console.error("Failed to delete invitation.", err);
-        }
-      );
-    }
-
-    if (fieldContext.scope.fieldName === "updateUserRole") {
-      const userId = args.input.userId;
-
-      // reset all roles
-      const currentCtfs = await getActiveCtfCategories(guild);
-      await Promise.all(
-        currentCtfs.map(async function (ctf) {
-          return changeDiscordUserRoleForCTF(userId, ctf, "remove").catch(
-            (err) => {
-              console.error("Error while adding role to user: ", err);
-            }
-          );
-        })
-      );
-      // re-assign roles if accessible
-      const ctfs = await getAccessibleCTFsForUser(userId, context.pgClient);
-      ctfs.forEach(function (ctf) {
-        changeDiscordUserRoleForCTF(userId, ctf, "add").catch((err) => {
-          console.error("Error while adding role to user: ", err);
+        break;
+      case "createInvitation":
+        handeInvitation(
+          args.input.invitation.ctfId,
+          args.input.invitation.profileId,
+          "add"
+        ).catch((err) => {
+          console.error("Failed to create invitation.", err);
         });
-      });
+        break;
+      case "deleteInvitation":
+        handeInvitation(args.input.ctfId, args.input.profileId, "remove").catch(
+          (err) => {
+            console.error("Failed to delete invitation.", err);
+          }
+        );
+        break;
+      case "updateUserRole":
+        handleUpdateUserRole(guild, args.input.userId, context.pgClient).catch(
+          (err) => {
+            console.error("Failed to update user role.", err);
+          }
+        );
+        break;
+      case "setDiscordEventLink":
+        await syncDiscordPermissionsWithCtf(
+          guild,
+          args.input.ctfId,
+          args.input.link,
+          context.pgClient
+        ).catch((err) => {
+          console.error("Failed to sync discord permissions.", err);
+        });
+        break;
+      case "registerWithToken":
+        handleRegisterWithToken(args.input.login).catch((err) => {
+          console.error("Failed to register with token.", err);
+        });
+        break;
+      default:
+        break;
     }
-
-    if (fieldContext.scope.fieldName === "setDiscordEventLink") {
-      const link = args.input.link;
-      const ctfId = args.input.ctfId;
-
-      await syncDiscordPermissionsWithCtf(
-        guild,
-        ctfId,
-        link,
-        context.pgClient
-      ).catch((err) => {
-        console.error("Failed to sync discord permissions.", err);
-      });
-    }
-
-    /*
-     * We have a nice ductape solution for the following problem:
-     * During the handling of these hooks, the changes to the database are not committed yet.
-     * This means that we can't query the database for the new user id.
-     * We have to wait a bit to make sure the user is in the database.
-     * Alternatively we can hook the postgraphile lifecycle but that is not compatible with the current setup.
-     * The outgoing request is probably handling within 1 second, so this works fine.
-     */
-    if (fieldContext.scope.fieldName === "registerWithToken") {
-      const username = args.input.login; // the login is equal to the username at registration
-      setTimeout(async () => {
-        const userId = await getUserIdFromUsername(username, null); // use null to get a new client which is privileged as the Discord bot
-        if (userId == null) return;
-        const ctfs = await getAccessibleCTFsForUser(userId, null);
-        for (let i = 0; i < ctfs.length; i++) {
-          await changeDiscordUserRoleForCTF(userId, ctfs[i], "add").catch(
-            (err) => {
-              console.error("Error while adding role to user: ", err);
-            }
-          );
-        }
-      }, 2000);
-    }
-
     return input;
   };
 
@@ -291,24 +319,27 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
   ) => {
     const guild = getDiscordGuild();
     if (guild === null) return input;
-    if (fieldContext.scope.fieldName === "updateCtf") {
-      handleUpdateCtf(args, guild).catch((err) => {
-        console.error("Failed to update ctf.", err);
-      });
-    }
 
-    if (fieldContext.scope.fieldName === "deleteCtf") {
-      handleDeleteCtf(args.input.id, guild).catch((err) => {
-        console.error("Failed to delete ctf.", err);
-      });
-    }
-
-    if (fieldContext.scope.fieldName === "resetDiscordId") {
-      // we need to use the await here to prevent a race condition
-      // between deleting the discord id and retrieving the discord id (to remove the roles)
-      await handleResetDiscordId(context.jwtClaims.user_id).catch((err) => {
-        console.error("Failed to reset discord id.", err);
-      });
+    switch (fieldContext.scope.fieldName) {
+      case "updateCtf":
+        handleUpdateCtf(args, guild).catch((err) => {
+          console.error("Failed to update ctf.", err);
+        });
+        break;
+      case "deleteCtf":
+        handleDeleteCtf(args.input.id, guild).catch((err) => {
+          console.error("Failed to delete ctf.", err);
+        });
+        break;
+      case "resetDiscordId":
+        // we need to use the await here to prevent a race condition
+        // between deleting the discord id and retrieving the discord id (to remove the roles)
+        await handleResetDiscordId(context.jwtClaims.user_id).catch((err) => {
+          console.error("Failed to reset discord id.", err);
+        });
+        break;
+      default:
+        break;
     }
 
     return input;
