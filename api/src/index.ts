@@ -22,6 +22,7 @@ import discordHooks from "./plugins/discordHooks";
 import { getDiscordClient } from "./discord";
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
 import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
+import { connectToDatabase } from "./discord/database/database";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -153,6 +154,22 @@ async function main() {
   const app = createApp(postgraphileOptions);
 
   getDiscordClient();
+
+  const pgClient = await connectToDatabase(); //? maybe we should not keep this dependency in the discord folder?
+
+  try {
+    const query =
+      "UPDATE ctfnote.settings SET discord_integration_enabled = $1";
+    const values = [config.discord.use.toLowerCase() !== "false"];
+    await pgClient.query(query, values);
+  } catch (error) {
+    console.error(
+      "Failed to set discord_integration_enabled flag in the database:",
+      error
+    );
+  } finally {
+    pgClient.release();
+  }
 
   app.listen(config.web.port, () => {
     //sendMessageToDiscord("CTFNote API started");

@@ -1,0 +1,6 @@
+{
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/node_modules": true
+  }
+}

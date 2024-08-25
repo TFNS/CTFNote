@@ -40,6 +40,7 @@ export function buildSettings(
     registrationAllowed: fragment.registrationAllowed ?? false,
     registrationPasswordAllowed: fragment.registrationPasswordAllowed ?? false,
     style: parseStyle(fragment.style ?? '{}'),
+    discordIntegrationEnabled: fragment.discordIntegrationEnabled ?? false,
   };
 }
 

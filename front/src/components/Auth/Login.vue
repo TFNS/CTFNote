@@ -14,6 +14,7 @@
           autocapitalize="none"
           label="Username"
           required
+          autofocus
         />
         <password-input v-model="form.password" dense required />
 

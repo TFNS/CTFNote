@@ -300,6 +300,7 @@ export type CreateInvitationLinkInput = {
    * payload verbatim. May be used to track mutations by the client.
    */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  discordId?: InputMaybe<Scalars['String']>;
   role?: InputMaybe<Role>;
 };
 
@@ -2384,6 +2385,7 @@ export type SetDiscordEventLinkPayload = {
 
 export type Setting = Node & {
   __typename?: 'Setting';
+  discordIntegrationEnabled: Scalars['Boolean'];
   icalPassword?: Maybe<Scalars['String']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
@@ -2396,6 +2398,7 @@ export type Setting = Node & {
 
 /** Represents an update to a `Setting`. Fields that are set will be updated. */
 export type SettingPatch = {
+  discordIntegrationEnabled?: InputMaybe<Scalars['Boolean']>;
   icalPassword?: InputMaybe<Scalars['String']>;
   registrationAllowed?: InputMaybe<Scalars['Boolean']>;
   registrationDefaultRole?: InputMaybe<Role>;
@@ -3712,14 +3715,14 @@ export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
 
 export type UpdateCredentialsForCtfIdMutation = { __typename?: 'Mutation', updateCtfSecret?: { __typename?: 'UpdateCtfSecretPayload', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null } | null };
 
-export type SettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
+export type SettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean };
 
-export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string };
+export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean };
 
 export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null };
+export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean }> } | null };
 
 export type GetIcalPasswordQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3729,7 +3732,7 @@ export type GetIcalPasswordQuery = { __typename?: 'Query', settings?: { __typena
 export type GetAdminSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string }> } | null };
+export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean }> } | null };
 
 export type UpdateSettingsMutationVariables = Exact<{
   nodeId: Scalars['ID'];
@@ -3737,7 +3740,7 @@ export type UpdateSettingsMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string } | null } | null };
+export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean } | null } | null };
 
 export type TagFragment = { __typename?: 'Tag', nodeId: string, id: number, tag: string };
 
@@ -4018,6 +4021,7 @@ export const SettingsInfoFragmentDoc = gql`
   registrationAllowed
   registrationPasswordAllowed
   style
+  discordIntegrationEnabled
 }
     `;
 export const AdminSettingsInfoFragmentDoc = gql`
@@ -6265,6 +6269,7 @@ export const SettingsInfo = gql`
   registrationAllowed
   registrationPasswordAllowed
   style
+  discordIntegrationEnabled
 }
     `;
 export const AdminSettingsInfo = gql`
