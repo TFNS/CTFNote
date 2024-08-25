@@ -117,7 +117,7 @@ async function doFetchMore(newDate: ShortDate) {
 
 onMounted(() => {
   document.title = 'CTFNote - CTFs';
-})
+});
 </script>
 
 <style lang="scss" scoped>
