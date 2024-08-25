@@ -26,23 +26,7 @@ import { GraphQLResolveInfoWithMessages } from "@graphile/operation-hooks";
 import { syncDiscordPermissionsWithCtf } from "../utils/permissionSync";
 import { convertToUsernameFormat } from "../utils/user";
 import { PoolClient } from "pg";
-
-export async function handleTaskSolved(
-  guild: Guild,
-  id: bigint,
-  userId: bigint | string
-) {
-  const task = await getTaskFromId(id);
-  if (task == null) return;
-
-  await moveChannel(guild, task, null, ChannelMovingEvent.SOLVED);
-
-  return sendMessageToTask(
-    guild,
-    id,
-    `${task.title} is solved by ${await convertToUsernameFormat(userId)}!`
-  );
-}
+import { handleTaskSolved } from "./commands/solveTask";
 
 async function handleCreateTask(
   guild: Guild,
