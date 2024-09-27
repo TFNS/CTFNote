@@ -3,17 +3,40 @@ import {
   ApplicationCommandType,
   Client,
   CommandInteraction,
+  Guild,
 } from "discord.js";
-import { Command } from "../command";
-import { setFlagForChallengeId } from "../database/tasks";
-import { handleTaskSolved } from "../../plugins/discordHooks";
-import { getUserByDiscordId } from "../database/users";
-import { getCurrentTaskChannelFromDiscord } from "../utils/channels";
+import { Command } from "../../interfaces/command";
+import { getTaskFromId, setFlagForChallengeId } from "../../database/tasks";
+import { getUserByDiscordId } from "../../database/users";
+import {
+  ChannelMovingEvent,
+  getCurrentTaskChannelFromDiscord,
+  moveChannel,
+} from "../channels";
+import { sendMessageToTask } from "../../utils/messages";
+import { convertToUsernameFormat } from "../../utils/user";
 
 async function accessDenied(interaction: CommandInteraction) {
   await interaction.editReply({
     content: "You are not using a valid channel to solve the task",
   });
+}
+
+export async function handleTaskSolved(
+  guild: Guild,
+  id: bigint,
+  userId: bigint | string
+) {
+  const task = await getTaskFromId(id);
+  if (task == null) return;
+
+  await moveChannel(guild, task, null, ChannelMovingEvent.SOLVED);
+
+  return sendMessageToTask(
+    guild,
+    id,
+    `${task.title} is solved by ${await convertToUsernameFormat(userId)}!`
+  );
 }
 
 async function solveTaskLogic(client: Client, interaction: CommandInteraction) {

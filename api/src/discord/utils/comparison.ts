@@ -6,7 +6,7 @@ import {
 } from "discord.js";
 import { CTF } from "../database/ctfs";
 import { Task } from "../database/tasks";
-import { getCtfNameFromCategoryName } from "./channels";
+import { getCtfNameFromCategoryName } from "../agile/channels";
 import { getTaskTitleFromTopic } from "./messages";
 
 export function isCategoryOfCtf(

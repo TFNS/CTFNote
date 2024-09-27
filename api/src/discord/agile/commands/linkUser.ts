@@ -4,15 +4,15 @@ import {
   Client,
   CommandInteraction,
 } from "discord.js";
-import { Command } from "../command";
+import { Command } from "../../interfaces/command";
 import {
   getDiscordIdFromUserId,
   getUserByToken,
   setDiscordIdForUser,
-} from "../database/users";
-import { CTF, getAccessibleCTFsForUser } from "../database/ctfs";
-import { getDiscordClient } from "..";
-import config from "../../config";
+} from "../../database/users";
+import { CTF, getAccessibleCTFsForUser } from "../../database/ctfs";
+import { getDiscordClient } from "../..";
+import config from "../../../config";
 import { PoolClient } from "pg";
 
 export async function changeDiscordUserRoleForCTF(
