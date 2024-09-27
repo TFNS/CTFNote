@@ -713,6 +713,18 @@ export enum CtfsOrderBy {
   TitleDesc = 'TITLE_DESC'
 }
 
+export type CtftimeCtf = {
+  __typename?: 'CtftimeCtf';
+  ctftimeUrl: Scalars['String'];
+  description: Scalars['String'];
+  finish: Scalars['String'];
+  logo: Scalars['String'];
+  start: Scalars['String'];
+  title: Scalars['String'];
+  url: Scalars['String'];
+  weight: Scalars['Float'];
+};
+
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -1790,6 +1802,9 @@ export type Query = Node & {
   ctfSecrets?: Maybe<CtfSecretsConnection>;
   /** Reads and enables pagination through a set of `Ctf`. */
   ctfs?: Maybe<CtfsConnection>;
+  /** Reads and enables pagination through a set of `Ctf`. */
+  ctfsByDate?: Maybe<CtfsConnection>;
+  ctftimeCtfById?: Maybe<CtftimeCtf>;
   /** Reads and enables pagination through a set of `Profile`. */
   guests?: Maybe<ProfilesConnection>;
   /** Reads and enables pagination through a set of `Ctf`. */
@@ -1920,6 +1935,25 @@ export type QueryCtfsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<CtfsOrderBy>>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryCtfsByDateArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  filter?: InputMaybe<CtfFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  month?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  year?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The root query type which gives access points into the data universe. */
+export type QueryCtftimeCtfByIdArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -3451,12 +3485,29 @@ export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: {
 
 export type CtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null };
 
+export type CtftimeCtfFragment = { __typename?: 'CtftimeCtf', title: string, weight: number, url: string, logo: string, ctftimeUrl: string, description: string, start: string, finish: string };
+
 export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
 
 export type CtfsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CtfsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null }> } | null };
+
+export type CtfsByDateQueryVariables = Exact<{
+  year: Scalars['Int'];
+  month: Scalars['Int'];
+}>;
+
+
+export type CtfsByDateQuery = { __typename?: 'Query', ctfsByDate?: { __typename?: 'CtfsConnection', ctfs: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null }> } | null };
+
+export type CtftimeCtfByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CtftimeCtfByIdQuery = { __typename?: 'Query', ctftimeCtfById?: { __typename?: 'CtftimeCtf', title: string, weight: number, url: string, logo: string, ctftimeUrl: string, description: string, start: string, finish: string } | null };
 
 export type SubscribeToCtfSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -3834,6 +3885,18 @@ export const UserFragmentDoc = gql`
   }
 }
     ${ProfileFragmentDoc}`;
+export const CtftimeCtfFragmentDoc = gql`
+    fragment CtftimeCtfFragment on CtftimeCtf {
+  title
+  weight
+  url
+  logo
+  ctftimeUrl
+  description
+  start
+  finish
+}
+    `;
 export const CtfFragmentDoc = gql`
     fragment CtfFragment on Ctf {
   nodeId
@@ -4444,6 +4507,69 @@ export function useCtfsLazyQuery(options: VueApolloComposable.UseQueryOptions<Ct
   return VueApolloComposable.useLazyQuery<CtfsQuery, CtfsQueryVariables>(CtfsDocument, {}, options);
 }
 export type CtfsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtfsQuery, CtfsQueryVariables>;
+export const CtfsByDateDocument = gql`
+    query CtfsByDate($year: Int!, $month: Int!) {
+  ctfsByDate(year: $year, month: $month) {
+    ctfs: nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${CtfFragmentDoc}`;
+
+/**
+ * __useCtfsByDateQuery__
+ *
+ * To run a query within a Vue component, call `useCtfsByDateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCtfsByDateQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useCtfsByDateQuery({
+ *   year: // value for 'year'
+ *   month: // value for 'month'
+ * });
+ */
+export function useCtfsByDateQuery(variables: CtfsByDateQueryVariables | VueCompositionApi.Ref<CtfsByDateQueryVariables> | ReactiveFunction<CtfsByDateQueryVariables>, options: VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<CtfsByDateQuery, CtfsByDateQueryVariables>(CtfsByDateDocument, variables, options);
+}
+export function useCtfsByDateLazyQuery(variables: CtfsByDateQueryVariables | VueCompositionApi.Ref<CtfsByDateQueryVariables> | ReactiveFunction<CtfsByDateQueryVariables>, options: VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtfsByDateQuery, CtfsByDateQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<CtfsByDateQuery, CtfsByDateQueryVariables>(CtfsByDateDocument, variables, options);
+}
+export type CtfsByDateQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtfsByDateQuery, CtfsByDateQueryVariables>;
+export const CtftimeCtfByIdDocument = gql`
+    query CtftimeCtfById($id: Int!) {
+  ctftimeCtfById(id: $id) {
+    ...CtftimeCtfFragment
+  }
+}
+    ${CtftimeCtfFragmentDoc}`;
+
+/**
+ * __useCtftimeCtfByIdQuery__
+ *
+ * To run a query within a Vue component, call `useCtftimeCtfByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCtftimeCtfByIdQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param variables that will be passed into the query
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useCtftimeCtfByIdQuery({
+ *   id: // value for 'id'
+ * });
+ */
+export function useCtftimeCtfByIdQuery(variables: CtftimeCtfByIdQueryVariables | VueCompositionApi.Ref<CtftimeCtfByIdQueryVariables> | ReactiveFunction<CtftimeCtfByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>(CtftimeCtfByIdDocument, variables, options);
+}
+export function useCtftimeCtfByIdLazyQuery(variables: CtftimeCtfByIdQueryVariables | VueCompositionApi.Ref<CtftimeCtfByIdQueryVariables> | ReactiveFunction<CtftimeCtfByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>(CtftimeCtfByIdDocument, variables, options);
+}
+export type CtftimeCtfByIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<CtftimeCtfByIdQuery, CtftimeCtfByIdQueryVariables>;
 export const SubscribeToCtfDocument = gql`
     subscription subscribeToCtf {
   listen(topic: "update:ctfs") {
@@ -6007,6 +6133,18 @@ export const UserFragment = gql`
   }
 }
     ${ProfileFragment}`;
+export const CtftimeCtfFragment = gql`
+    fragment CtftimeCtfFragment on CtftimeCtf {
+  title
+  weight
+  url
+  logo
+  ctftimeUrl
+  description
+  start
+  finish
+}
+    `;
 export const CtfFragment = gql`
     fragment CtfFragment on Ctf {
   nodeId
@@ -6275,6 +6413,22 @@ export const Ctfs = gql`
   }
 }
     ${CtfFragment}`;
+export const CtfsByDate = gql`
+    query CtfsByDate($year: Int!, $month: Int!) {
+  ctfsByDate(year: $year, month: $month) {
+    ctfs: nodes {
+      ...CtfFragment
+    }
+  }
+}
+    ${CtfFragment}`;
+export const CtftimeCtfById = gql`
+    query CtftimeCtfById($id: Int!) {
+  ctftimeCtfById(id: $id) {
+    ...CtftimeCtfFragment
+  }
+}
+    ${CtftimeCtfFragment}`;
 export const SubscribeToCtf = gql`
     subscription subscribeToCtf {
   listen(topic: "update:ctfs") {

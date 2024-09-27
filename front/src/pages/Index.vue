@@ -1,97 +1,141 @@
 <template>
   <q-page>
-    <q-tabs indicator-color="secondary" dense align="left">
-      <q-route-tab
-        v-for="(tab, idx) in tabs"
-        :key="idx"
-        :to="tab.route"
-        :label="tab.label"
-        content-class="tab-button"
-        :icon="tab.icon"
-      />
-    </q-tabs>
     <div class="q-pa-md">
-      <router-view />
+      <div class="card-list">
+        <card-list
+          :fetch-more="doFetchMore"
+          :loaded="loaded"
+          :ctfs="ctfs"
+          :start="start"
+          :end="end"
+          @center="updateNavigation"
+        />
+      </div>
+      <ctf-calendar
+        :ctfs="ctfs"
+        :model-value="params"
+        @update:model-value="handleNavigation"
+        @ctf-click="scrollToCtf"
+        @show-today="showToday"
+      />
     </div>
-    <q-page-sticky position="top-right" :offset="[18, 8]">
-      <q-fab
-        v-if="me.isManager"
-        class="ctfs-action-btn shadow-2"
-        padding="10px"
-        color="positive"
-        icon="add"
-        vertical-actions-align="right"
-        direction="down"
-        push
-      >
-        <q-fab-action
-          color="positive"
-          push
-          icon="add"
-          label="Create"
-          @click="openCreateCtfDialog"
-        />
-        <q-fab-action
-          color="secondary"
-          push
-          icon="flag"
-          label="Import "
-          @click="openImportCtfDialog"
-        />
-      </q-fab>
-    </q-page-sticky>
   </q-page>
 </template>
 
-<script lang="ts">
-import EditCtfDialogVue from 'src/components/Dialogs/EditCtfDialog.vue';
-import ImportCtfDialogVue from 'src/components/Dialogs/ImportCtfDialog.vue';
+<script setup lang="ts">
+import { whenever } from '@vueuse/core';
+import CardList from 'src/components/CTF/CardList.vue';
 import ctfnote from 'src/ctfnote';
-import { defineComponent } from 'vue';
+import { ShortDate, shortDate } from 'src/utils/shortDate';
+import { computed, nextTick, onMounted, ref, toRaw } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import CtfCalendar from '../components/CTF/CtfCalendar.vue';
 
-export default defineComponent({
-  name: 'PageIndex',
-  components: {},
-  setup() {
-    return {
-      me: ctfnote.me.injectMe(),
-      tabs: [
-        {
-          label: 'Incoming',
-          icon: 'query_builder',
-          route: { name: 'ctfs-incoming' },
-        },
-        {
-          label: 'Past',
-          icon: 'archive',
-          route: { name: 'ctfs-past' },
-        },
-        {
-          label: 'calendar',
-          icon: 'calendar_today',
-          route: { name: 'ctfs-calendar' },
-        },
-      ],
-    };
-  },
-  methods: {
-    openCreateCtfDialog() {
-      this.$q.dialog({
-        component: EditCtfDialogVue,
+const router = useRouter();
+const route = useRoute();
+
+const currentDate = new Date();
+
+const params = computed(() => {
+  const year =
+    parseInt(route.params.year as string, 10) || currentDate.getFullYear();
+  const month = Math.min(
+    12,
+    Math.max(
+      1,
+      parseInt(route.params.month as string, 10) || currentDate.getMonth() + 1
+    )
+  );
+  return { year, month };
+});
+
+function scrollToCtf(ctfId: number, behavior: ScrollBehavior = 'smooth') {
+  document.querySelector(`[data-ctf-id="${ctfId}"]`)?.scrollIntoView({
+    behavior,
+    block: 'start',
+  });
+}
+
+const start = ref(toRaw(params.value));
+const end = ref(toRaw(params.value));
+
+const { ctfs, loaded, fetchMore } = ctfnote.ctfs.useCtfsByDate();
+
+function showNextCtf() {
+  for (const ctf of ctfs.value) {
+    if (ctf.endTime > currentDate) {
+      scrollToCtf(ctf.id, 'smooth');
+      break;
+    }
+  }
+}
+
+async function showToday() {
+  const date = shortDate.fromDate(new Date());
+  await doFetchMore(date);
+  await nextTick(showNextCtf);
+}
+
+// When the page is loaded for the first time, scroll to the next CTF
+whenever(() => ctfs.value.length, showNextCtf, { flush: 'post', once: true });
+
+async function handleNavigation(date: ShortDate) {
+  void router.replace({
+    name: 'ctfs',
+    params: { year: date.year, month: date.month },
+  });
+  await doFetchMore(date);
+  void nextTick(() => {
+    document
+      .querySelector(`[data-date="${shortDate.toId(date)}"]`)
+      ?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
       });
-    },
-    openImportCtfDialog() {
-      this.$q.dialog({
-        component: ImportCtfDialogVue,
-      });
-    },
-  },
+  });
+  if (shortDate.lt(date, start.value)) {
+    start.value = shortDate.copy(date);
+  }
+  if (shortDate.gt(date, end.value)) {
+    end.value = shortDate.copy(date);
+  }
+}
+
+function updateNavigation({ year, month }: ShortDate) {
+  void router.replace({ name: 'ctfs', params: { year, month } });
+}
+
+async function doFetchMore(newDate: ShortDate) {
+  await fetchMore(newDate);
+  if (shortDate.lt(newDate, start.value)) {
+    start.value = newDate;
+  }
+  if (shortDate.gt(newDate, end.value)) {
+    end.value = newDate;
+  }
+}
+
+onMounted(() => {
+  document.title = 'CTFNote - CTFs';
 });
 </script>
 
 <style lang="scss" scoped>
-.q-tab {
-  min-width: 200px;
-  padding-top: 5px;
+.card-list {
+  margin-left: 250px;
+  padding-left: 16px;
+  gap: 32px;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: $breakpoint-md-min) {
+    margin-left: -16px;
+  }
+}
+</style>
+
+<style>
+html {
+  scroll-snap-type: y proximity;
 }
 </style>
