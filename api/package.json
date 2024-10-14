@@ -25,7 +25,7 @@
     "axios": "^1.6.8",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.21.1",
     "graphile-utils": "4.13.0",
     "graphql": "^16.8.1",
     "graphql-upload-ts": "^2.1.2",
