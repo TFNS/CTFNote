@@ -81,7 +81,7 @@ export default defineComponent({
       void this.resolveAndNotify(
         this.login(this.form.login, this.form.password),
         {
-          message: `Logged as ${login}!`,
+          message: `Logged in as ${login}!`,
           icon: 'person',
         },
       );

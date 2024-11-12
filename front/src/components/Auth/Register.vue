@@ -135,7 +135,7 @@ export default defineComponent({
   methods: {
     submit() {
       const opts = {
-        message: `Logged as ${this.form.login}!`,
+        message: `Logged in as ${this.form.login}!`,
         icon: 'person',
       };
       let registerPromise;
