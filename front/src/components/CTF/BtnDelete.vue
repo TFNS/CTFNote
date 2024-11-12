@@ -2,6 +2,7 @@
   <q-btn
     v-if="me.isManager"
     v-bind="$attrs"
+    padding="6px"
     icon="delete"
     color="negative"
     @click="openDeleteCtfDialog"

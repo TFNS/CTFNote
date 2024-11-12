@@ -1,222 +1,187 @@
 <template>
-  <q-dialog ref="dialogRef" no-backdrop-dismiss @hide="onDialogHide">
+  <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card class="q-dialog-plugin ctfnote-dialog">
       <q-form @submit="submit">
         <q-card-section class="row items-center no-wrap">
           <div class="text-h6 ellipsis">
-            {{ title }}
+            {{ ctf ? `Edit ${ctf.title}` : 'Create CTF' }}
           </div>
           <q-space />
           <q-btn v-close-popup icon="close" flat round dense />
         </q-card-section>
 
-        <q-card-section class="q-pb-sm">
-          <div class="col q-col-gutter-sm">
-            <div class="row q-pt-none q-col-gutter-sm">
-              <div class="col">
-                <q-input
-                  v-model="form.title"
-                  required
-                  label="Title"
-                  filled
-                  dense
-                >
-                  <template #prepend>
-                    <q-icon name="title" />
-                  </template>
-                </q-input>
-              </div>
-              <div class="col">
-                <q-input v-model="form.ctfUrl" label="CTF link" filled dense>
-                  <template #prepend>
-                    <q-icon name="link" />
-                  </template>
-                </q-input>
-              </div>
-            </div>
-
-            <div class="row q-col-gutter-sm">
-              <div class="col">
-                <logo-field v-model="form.logoUrl" dense />
-              </div>
-            </div>
-
-            <div class="row q-col-gutter-sm q-mb-sm">
-              <div class="col">
-                <datetime-input
-                  v-model="form.startTime"
-                  filled
-                  dense
-                  label="Start on"
-                  class="datetime-input-no-error"
-                  @update:model-value="
-                    () => {
-                      if (form.endTime < form.startTime) {
-                        form.endTime = new Date(
-                          form.startTime.getTime() +
-                            1000 * 60 * 60 * 24 /* 24 hours in milliseconds */
-                        );
-                      }
-                    }
-                  "
-                />
-              </div>
-              <div class="col">
-                <datetime-input
-                  v-model="form.endTime"
-                  filled
-                  dense
-                  label="End on"
-                  lazy-rules
-                  :class="{ 'datetime-input-no-error': checkValidDateRange }"
-                  :rules="[
-                    () =>
-                      checkValidDateRange ||
-                      'End time must be after start time',
-                  ]"
-                />
-              </div>
-            </div>
-
-            <div class="row q-col-gutter-sm q-mb-sm">
-              <div class="col">
-                <q-input
-                  v-model="form.ctftimeUrl"
-                  label="CTFTime Link"
-                  filled
-                  dense
-                >
-                  <template #prepend>
-                    <div class="q-icon svg-icon">
-                      <img src="/ctftime-icon.svg" />
-                    </div>
-                  </template>
-                </q-input>
-              </div>
-              <div class="col-auto">
-                <q-input
-                  v-model.number="form.weight"
-                  step="0.01"
-                  type="number"
-                  label="Weight"
-                  style="width: 140px"
-                  filled
-                  dense
-                >
-                  <template #prepend>
-                    <q-icon name="fitness_center" />
-                  </template>
-                </q-input>
-              </div>
-            </div>
-
-            <div class="row q-col-gutter-md">
-              <div class="col">
-                <q-input
-                  v-model="form.description"
-                  filled
-                  type="textarea"
-                  label="Description (Markdown)"
-                />
-              </div>
-            </div>
+        <q-card-section class="row q-col-gutter-sm">
+          <div class="col-12 col-sm-9">
+            <ctftime-input
+              v-model="form.ctftimeUrl"
+              :autofocus="!ctf"
+              filled
+              dense
+              @refresh="onCtftimeRefresh"
+            />
+          </div>
+          <div class="col-12 col-sm-3">
+            <q-input
+              v-model.number="form.weight"
+              step="0.01"
+              type="number"
+              label="Weight"
+              filled
+              dense
+            >
+              <template #prepend>
+                <q-icon name="fitness_center" />
+              </template>
+            </q-input>
+          </div>
+          <div class="col-12 col-md-7">
+            <q-input v-model="form.title" required label="Title" filled dense>
+              <template #prepend>
+                <q-icon name="title" />
+              </template>
+            </q-input>
+          </div>
+          <div class="col-12 col-md-5">
+            <q-input v-model="form.ctfUrl" label="CTF link" filled dense>
+              <template #prepend>
+                <q-icon name="link" />
+              </template>
+            </q-input>
+          </div>
+          <div class="col-12">
+            <logo-field v-model="form.logoUrl" dense />
+          </div>
+          <div class="col-12 col-sm-6">
+            <datetime-input
+              v-model="form.startTime"
+              filled
+              dense
+              label="Start on"
+              class="datetime-input-no-error"
+              @update:model-value="
+                () => {
+                  if (form.endTime < form.startTime) {
+                    form.endTime = new Date(
+                      form.startTime.getTime() +
+                        1000 * 60 * 60 * 24 /* 24 hours in milliseconds */
+                    );
+                  }
+                }
+              "
+            />
+          </div>
+          <div class="col-12 col-sm-6">
+            <datetime-input
+              v-model="form.endTime"
+              filled
+              dense
+              label="End on"
+              lazy-rules
+              :class="{ 'datetime-input-no-error': isValidDateRange }"
+              :rules="[
+                () => isValidDateRange || 'End time must be after start time',
+              ]"
+            />
+          </div>
+          <div class="col-12">
+            <q-input
+              v-model="form.description"
+              filled
+              autogrow
+              type="textarea"
+              label="Description (Markdown)"
+            />
           </div>
         </q-card-section>
 
         <q-card-actions align="right" class="q-px-md q-pb-md">
-          <q-btn color="primary" flat label="Cancel" @click="onCancelClick" />
-          <q-btn color="positive" type="submit" :label="editText" />
+          <q-btn color="primary" flat label="Cancel" @click="onDialogCancel" />
+          <q-btn
+            color="positive"
+            type="submit"
+            :label="ctf ? 'Save' : 'Create'"
+          />
         </q-card-actions>
       </q-form>
     </q-card>
   </q-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import { Ctf } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import DatetimeInput from '../Utils/DatetimeInput.vue';
+import CtftimeInput from '../CTF/CtftimeInput.vue';
 import LogoField from '../Utils/LogoField.vue';
+import { CtftimeCtfFragment } from 'src/generated/graphql';
 
-export default defineComponent({
-  components: { DatetimeInput, LogoField },
-  props: {
-    ctf: { type: Object as () => Ctf | null, default: null },
-  },
-  emits: useDialogPluginComponent.emits,
-  setup(props) {
-    const now = new Date();
-    const form = reactive(
-      Object.assign(
-        {
-          title: '',
-          description: '',
-          startTime: now,
-          endTime: new Date(now.getTime() + 1000 * 60 * 60 * 24),
-          weight: 0,
-          ctfUrl: null,
-          ctftimeUrl: null,
-          logoUrl: null,
-        },
-        props.ctf
-      )
-    );
-    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
-      useDialogPluginComponent();
+const props = defineProps<{
+  ctf?: Ctf;
+}>();
 
-    return {
-      resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
-      updateCtf: ctfnote.ctfs.useUpdateCtf(),
-      createCtf: ctfnote.ctfs.useCreateCtf(),
-      dialogRef,
-      form,
-      onDialogHide,
-      onDialogOK,
-      onCancelClick: onDialogCancel,
-    };
-  },
-  computed: {
-    editText() {
-      return this.ctf ? 'Save' : 'Create';
-    },
-    title() {
-      return this.ctf ? `Edit ${this.ctf.title}` : 'Create CTF';
-    },
-    checkValidDateRange() {
-      return this.form.endTime && this.form.endTime >= this.form.startTime;
-    },
-  },
-  methods: {
-    submit() {
-      const ctf = this.ctf;
-      if (ctf) {
-        const opts = {
-          message: `CTF ${ctf.title} updated!`,
-          icon: 'flag',
-        };
-        void this.resolveAndNotify(
-          this.updateCtf(ctf, {
-            ...this.form,
-            startTime: this.form.startTime.toISOString(),
-            endTime: this.form.endTime.toISOString(),
-          }),
-          opts
-        );
-      } else {
-        void this.resolveAndNotify(
-          this.createCtf({
-            ...this.form,
-            startTime: this.form.startTime.toISOString(),
-            endTime: this.form.endTime.toISOString(),
-          })
-        );
-      }
-      this.onDialogOK();
-    },
-  },
+defineEmits(useDialogPluginComponent.emits);
+const { dialogRef, onDialogOK, onDialogCancel, onDialogHide } =
+  useDialogPluginComponent<Ctf>();
+
+const { resolveAndNotify } = ctfnote.ui.useNotify();
+const updateCtf = ctfnote.ctfs.useUpdateCtf();
+const createCtf = ctfnote.ctfs.useCreateCtf();
+
+const now = new Date();
+
+const form = reactive({
+  title: props.ctf?.title || '',
+  description: props.ctf?.description || '',
+  startTime: props.ctf?.startTime ?? now,
+  endTime: props.ctf?.endTime ?? new Date(now.getTime() + 1000 * 60 * 60 * 24),
+  weight: props.ctf?.weight ?? 0,
+  ctfUrl: props.ctf?.ctfUrl || null,
+  ctftimeUrl: props.ctf?.ctftimeUrl || null,
+  logoUrl: props.ctf?.logoUrl || null,
 });
+
+function onCtftimeRefresh(update: CtftimeCtfFragment) {
+  form.title = update.title;
+  form.startTime = new Date(update.start);
+  form.endTime = new Date(update.finish);
+  form.description = update.description;
+  form.ctfUrl = update.url;
+  form.logoUrl = update.logo;
+  form.weight = update.weight;
+  form.ctftimeUrl = update.ctftimeUrl;
+}
+
+const isValidDateRange = computed(
+  () => form.endTime && form.endTime >= form.startTime
+);
+
+async function submit() {
+  const ctf = props.ctf;
+  if (ctf) {
+    const opts = {
+      message: `CTF ${ctf.title} updated!`,
+      icon: 'flag',
+    };
+    await resolveAndNotify(
+      updateCtf(ctf, {
+        ...form,
+        startTime: form.startTime.toISOString(),
+        endTime: form.endTime.toISOString(),
+      }).then(onDialogOK),
+      opts
+    );
+  } else {
+    await resolveAndNotify(
+      createCtf({
+        ...form,
+        startTime: form.startTime.toISOString(),
+        endTime: form.endTime.toISOString(),
+      }).then(onDialogOK)
+    );
+  }
+}
 </script>
 
 <style lang="scss">

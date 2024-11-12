@@ -13,12 +13,23 @@ interface CTFTimeResponse {
   finish: string;
 }
 
-async function fetchFromCtftime(id: number): Promise<CTFTimeResponse> {
+function fetchFromCtftime(id: number) {
   const url = `https://ctftime.org/api/v1/events/${id}/`;
-  const response = await axios.get(url, {
-    headers: { "User-Agent": "CTFNote" }, // The default axios user-agent is blacklisted by ctftime :/
-  });
-  return response.data;
+  return axios
+    .get<CTFTimeResponse>(url, {
+      headers: { "User-Agent": "CTFNote" }, // The default axios user-agent is blacklisted by ctftime :/
+    })
+    .then((r) => ({
+      title: r.data.title,
+      weight: r.data.weight,
+      url: r.data.url,
+      logo: r.data.logo,
+      ctftimeUrl: r.data.ctftime_url,
+      description: r.data.description,
+      start: r.data.start,
+      finish: r.data.finish,
+    }))
+    .catch(() => null);
 }
 
 export default makeExtendSchemaPlugin((build) => {
@@ -34,11 +45,35 @@ export default makeExtendSchemaPlugin((build) => {
         query: Query
       }
 
+      type CtftimeCtf {
+        title: String!
+        weight: Float!
+        url: String!
+        logo: String!
+        ctftimeUrl: String!
+        description: String!
+        start: String!
+        finish: String!
+      }
+
       extend type Mutation {
         importCtf(input: ImportCtfInput): ImportCtfPayload
       }
+
+      extend type Query {
+        ctftimeCtfById(id: Int!): CtftimeCtf
+      }
     `,
     resolvers: {
+      Query: {
+        async ctftimeCtfById(_query, { id }, { pgRole }) {
+          if (pgRole !== "user_manager" && pgRole !== "user_admin") {
+            throw new Error("Permission denied");
+          }
+
+          return fetchFromCtftime(id);
+        },
+      },
       Mutation: {
         importCtf: async (
           _query,
@@ -47,6 +82,12 @@ export default makeExtendSchemaPlugin((build) => {
           resolveInfo
         ) => {
           const ctf = await fetchFromCtftime(ctftimeId);
+          if (!ctf) {
+            return {
+              data: null,
+              query: build.$$isQuery,
+            };
+          }
           await savepointWrapper(pgClient, async () => {
             const {
               rows: [newCtf],
@@ -68,7 +109,7 @@ export default makeExtendSchemaPlugin((build) => {
                 ctf.weight,
                 ctf.url,
                 ctf.logo,
-                ctf.ctftime_url,
+                ctf.ctftimeUrl,
                 ctf.description,
                 ctf.start,
                 ctf.finish,
