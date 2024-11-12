@@ -96,6 +96,28 @@ export const StopWorking: Command = {
   },
 };
 
+export const BeginWorking: Command = {
+  name: "begin",
+  description: "Alias for /start",
+  type: ApplicationCommandType.ChatInput,
+  run: async (client, interaction) => {
+    return workingOnLogic(client, interaction, "start").catch((e) => {
+      console.error("Error during start working logic: ", e);
+    });
+  },
+};
+
+export const EndWorking: Command = {
+  name: "end",
+  description: "Alias for /end",
+  type: ApplicationCommandType.ChatInput,
+  run: async (client, interaction) => {
+    return workingOnLogic(client, interaction, "stop").catch((e) => {
+      console.error("Error during stop working logic: ", e);
+    });
+  },
+};
+
 const startWorkingSentences = [
   "You've got this!",
   "Believe in yourself and your abilities.",
