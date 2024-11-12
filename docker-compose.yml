@@ -6,7 +6,7 @@ services:
       context: "./api"
     networks:
       - ctfnote
-    restart: always
+    restart: unless-stopped
     environment:
       PAD_CREATE_URL: http://hedgedoc:3000/new
       PAD_SHOW_URL: /
@@ -39,7 +39,7 @@ services:
     image: ghcr.io/tfns/ctfnote/db:latest
     build:
       context: "./db"
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: ctfnote
       POSTGRES_USER: ctfnote
@@ -52,7 +52,7 @@ services:
     image: ghcr.io/tfns/ctfnote/front:latest
     networks:
       - ctfnote
-    restart: always
+    restart: unless-stopped
     build:
       context: "./front"
     depends_on:
@@ -71,7 +71,7 @@ services:
       - CMD_DOCUMENT_MAX_LENGTH=${CMD_DOCUMENT_MAX_LENGTH:-100000}
     depends_on:
       - db
-    restart: always
+    restart: unless-stopped
     volumes:
       - pad-uploads:/hedgedoc/public/uploads
     networks:
