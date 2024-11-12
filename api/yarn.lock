@@ -1339,7 +1339,7 @@ __metadata:
     graphql-upload-ts: "npm:^2.1.2"
     ical-generator: "npm:^7.0.0"
     lint-staged: "npm:^15.2.2"
-    nodemon: "npm:^3.1.0"
+    nodemon: "npm:^3.1.7"
     postgraphile: "npm:4.13.0"
     postgraphile-plugin-connection-filter: "npm:^2.3.0"
     postgres-migrations: "npm:^5.3.0"
@@ -3182,9 +3182,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemon@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "nodemon@npm:3.1.0"
+"nodemon@npm:^3.1.7":
+  version: 3.1.7
+  resolution: "nodemon@npm:3.1.7"
   dependencies:
     chokidar: "npm:^3.5.2"
     debug: "npm:^4"
@@ -3198,7 +3198,7 @@ __metadata:
     undefsafe: "npm:^2.0.5"
   bin:
     nodemon: bin/nodemon.js
-  checksum: 10/a8757f3eda5e11fbe0e50ef47177d5e86cf8a22e99723373100d37d5f25fb758280419c02d286210d242d0675adf5ef0d61052948f10c8318d656761d3dfa2b1
+  checksum: 10/07c6b14e4915bfe11abd0ee95bdfd96087dcdb7a37f9d1a57d9526f5f564268432556aa726a4019abf7e48deeff4628a5b34e88ccba8bf46c310c5910ad4a075
   languageName: node
   linkType: hard
 
