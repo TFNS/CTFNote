@@ -1,4 +1,4 @@
-import { connectToDatabase } from "./database";
+import { connectToDatabase } from "../../utils/database";
 import { PoolClient } from "pg";
 
 /*
@@ -42,6 +42,59 @@ export async function setDiscordIdForUser(
     return false;
   } finally {
     pgClient.release();
+  }
+}
+
+// refactor above to an enum
+export enum AllowedRoles {
+  user_guest = "user_guest",
+  user_friend = "user_friend",
+  user_member = "user_member",
+  user_manager = "user_manager",
+  user_admin = "user_admin",
+}
+
+export async function getInvitationTokenForDiscordId(
+  discordId: string,
+  pgClient: PoolClient | null = null
+): Promise<string | null> {
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
+
+  try {
+    const query =
+      "SELECT token FROM ctfnote_private.invitation_link WHERE discord_id = $1";
+    const values = [discordId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows[0].token as string;
+  } catch (error) {
+    return null;
+  } finally {
+    if (!useRequestClient) pgClient.release();
+  }
+}
+
+export async function createInvitationTokenForDiscordId(
+  discordId: string,
+  role: AllowedRoles = AllowedRoles.user_guest,
+  pgClient: PoolClient | null = null
+): Promise<string | null> {
+  role = (role as AllowedRoles) ?? AllowedRoles.user_guest;
+
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
+
+  try {
+    const query = "SELECT token FROM ctfnote.create_invitation_link($1, $2)";
+    const values = [role, discordId];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows[0].token as string;
+  } catch (error) {
+    return null;
+  } finally {
+    if (!useRequestClient) pgClient.release();
   }
 }
 
@@ -104,5 +157,25 @@ export async function getDiscordUsersThatCanPlayCTF(
     return [];
   } finally {
     pgClient.release();
+  }
+}
+
+export async function getUserIdFromUsername(
+  username: string,
+  pgClient: PoolClient | null = null
+): Promise<bigint | null> {
+  const useRequestClient = pgClient != null;
+  if (pgClient == null) pgClient = await connectToDatabase();
+
+  try {
+    const query = "SELECT id FROM ctfnote.profile WHERE username = $1";
+    const values = [username];
+    const queryResult = await pgClient.query(query, values);
+
+    return queryResult.rows[0].id as bigint;
+  } catch (error) {
+    return null;
+  } finally {
+    if (!useRequestClient) pgClient.release();
   }
 }

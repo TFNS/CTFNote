@@ -1,5 +1,5 @@
 import { ParsedTask, Parser } from '.';
-import { parseJson, parseJsonStrict } from '../utils';
+import { parseJsonStrict } from '../utils';
 
 const justCTFParser: Parser = {
   name: 'justCTF parser',
@@ -25,7 +25,11 @@ const justCTFParser: Parser = {
     }
 
     for (const challenge of data) {
-      if (!challenge.description || !challenge.name) {
+      if (
+        !challenge.description ||
+        !challenge.name ||
+        !Array.isArray(challenge.categories)
+      ) {
         continue;
       }
 
@@ -36,29 +40,6 @@ const justCTFParser: Parser = {
       });
     }
     return tasks;
-  },
-  isValid(s) {
-    const data = parseJson<
-      [
-        {
-          id: number;
-          name: string;
-          categories: [string];
-          difficult: string;
-          description: string;
-          points: number;
-          solvers: number;
-        }
-      ]
-    >(s);
-    return (
-      data != null &&
-      data?.length > 0 &&
-      data[0].id != null &&
-      data[0].name != null &&
-      Array.isArray(data[0].categories) &&
-      data[0].points != null
-    );
   },
 };
 

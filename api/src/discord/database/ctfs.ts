@@ -1,4 +1,4 @@
-import { connectToDatabase } from "./database";
+import { connectToDatabase } from "../../utils/database";
 import { PoolClient } from "pg";
 
 export interface CTF {

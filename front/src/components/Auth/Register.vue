@@ -13,6 +13,7 @@
             dense
             label="Username"
             required
+            autofocus
           />
           <password-input
             v-model="form.password"

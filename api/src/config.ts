@@ -7,6 +7,10 @@ type DeepReadOnly<T> = {
     : T[k];
 };
 
+export enum DiscordChannelHandleStyle {
+  Agile = "agile",
+}
+
 export type CTFNoteConfig = DeepReadOnly<{
   env: string;
   sessionSecret: string;
@@ -42,6 +46,10 @@ export type CTFNoteConfig = DeepReadOnly<{
     voiceChannels: number;
     botName: string;
     maxChannelsPerCategory: number;
+    registrationEnabled: string;
+    registrationAccountRole: string;
+    registrationRoleId: string;
+    channelHandleStyle: DiscordChannelHandleStyle;
   };
 }>;
 
@@ -92,7 +100,17 @@ const config: CTFNoteConfig = {
     serverId: getEnv("DISCORD_SERVER_ID"),
     voiceChannels: getEnvInt("DISCORD_VOICE_CHANNELS"),
     botName: getEnv("DISCORD_BOT_NAME", "CTFNote"),
-    maxChannelsPerCategory: 50, // 50 is the hard Discord limit
+    maxChannelsPerCategory: 50, //! 50 is the hard Discord limit
+    registrationEnabled: getEnv("DISCORD_REGISTRATION_ENABLED", "false"),
+    registrationAccountRole: getEnv(
+      "DISCORD_REGISTRATION_CTFNOTE_ROLE",
+      "user_guest"
+    ),
+    registrationRoleId: getEnv("DISCORD_REGISTRATION_ROLE_ID", ""),
+    channelHandleStyle: getEnv(
+      "DISCORD_CHANNEL_HANDLE_STYLE",
+      "agile"
+    ) as DiscordChannelHandleStyle,
   },
 };
 

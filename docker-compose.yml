@@ -25,6 +25,9 @@ services:
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-bot_token}
       DISCORD_SERVER_ID: ${DISCORD_SERVER_ID:-server_id}
       DISCORD_VOICE_CHANNELS: ${DISCORD_VOICE_CHANNELS:-3}
+      DISCORD_REGISTRATION_ENABLED: ${DISCORD_REGISTRATION_ENABLED:-false}
+      DISCORD_REGISTRATION_CTFNOTE_ROLE: ${DISCORD_REGISTRATION_CTFNOTE_ROLE}
+      DISCORD_REGISTRATION_ROLE_ID: ${DISCORD_REGISTRATION_ROLE_ID}
       TZ: ${TZ:-UTC}
       LC_ALL: ${LC_ALL:-en_US.UTF-8}
       SESSION_SECRET: ${SESSION_SECRET:-}
@@ -57,7 +60,7 @@ services:
     ports:
       - 127.0.0.1:8080:80
   hedgedoc:
-    image: quay.io/hedgedoc/hedgedoc:1.9.9
+    image: quay.io/hedgedoc/hedgedoc:1.10.0
     environment:
       - CMD_DB_URL=postgres://ctfnote:ctfnote@db:5432/hedgedoc
       - CMD_URL_PATH=pad
