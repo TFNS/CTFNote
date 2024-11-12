@@ -24,7 +24,7 @@ export default defineComponent({
           loadingscreen.classList.add('fadeout');
         }
       },
-      { immediate: true }
+      { immediate: true },
     );
   },
 });

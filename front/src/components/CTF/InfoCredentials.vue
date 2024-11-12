@@ -69,7 +69,7 @@ export default defineComponent({
           };
           void this.resolveAndNotify(
             this.updateCtfCredentials(this.ctf, credentials),
-            opts
+            opts,
           );
         });
     },

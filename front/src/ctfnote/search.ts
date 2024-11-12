@@ -56,7 +56,7 @@ export async function searchTags(search: string): Promise<Task[]> {
   if (!result.data.tags) return [];
 
   return result.data.tags?.nodes.flatMap((n) =>
-    n.tasksByAssignedTagTagIdAndTaskId.nodes.map((t) => buildTask(t))
+    n.tasksByAssignedTagTagIdAndTaskId.nodes.map((t) => buildTask(t)),
   );
 }
 
@@ -75,21 +75,21 @@ export async function searchAll(search: string): Promise<Array<Task | Ctf>> {
 
   if (result.data.ctfs) {
     returnValue = returnValue.concat(
-      result.data.ctfs?.nodes.map((t) => buildCtf(t))
+      result.data.ctfs?.nodes.map((t) => buildCtf(t)),
     );
   }
 
   if (result.data.tasks) {
     returnValue = returnValue.concat(
-      result.data.tasks?.nodes.map((t) => buildTask(t))
+      result.data.tasks?.nodes.map((t) => buildTask(t)),
     );
   }
 
   if (result.data.tags) {
     returnValue = returnValue.concat(
       result.data.tags?.nodes.flatMap((n) =>
-        n.tasksByAssignedTagTagIdAndTaskId.nodes.map((t) => buildTask(t))
-      )
+        n.tasksByAssignedTagTagIdAndTaskId.nodes.map((t) => buildTask(t)),
+      ),
     );
   }
 

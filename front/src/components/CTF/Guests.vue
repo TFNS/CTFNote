@@ -75,13 +75,13 @@ export default defineComponent({
       return this.team.filter(
         (p) =>
           p.role == Role.UserGuest ||
-          (p.role == Role.UserFriend && this.ctf.endTime > this.now)
+          (p.role == Role.UserFriend && this.ctf.endTime > this.now),
       );
     },
     guestsWithInvitation() {
       return this.guests.map((g) => {
         const invitation = this.ctf.invitations.find(
-          (i) => i.profileId == g.id
+          (i) => i.profileId == g.id,
         );
         return { ...g, invitation };
       });

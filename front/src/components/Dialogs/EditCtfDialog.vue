@@ -54,7 +54,7 @@
                       if (form.endTime < form.startTime) {
                         form.endTime = new Date(
                           form.startTime.getTime() +
-                            1000 * 60 * 60 * 24 /* 24 hours in milliseconds */
+                            1000 * 60 * 60 * 24 /* 24 hours in milliseconds */,
                         );
                       }
                     }
@@ -160,8 +160,8 @@ export default defineComponent({
           ctftimeUrl: null,
           logoUrl: null,
         },
-        props.ctf
-      )
+        props.ctf,
+      ),
     );
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
@@ -202,7 +202,7 @@ export default defineComponent({
             startTime: this.form.startTime.toISOString(),
             endTime: this.form.endTime.toISOString(),
           }),
-          opts
+          opts,
         );
       } else {
         void this.resolveAndNotify(
@@ -210,7 +210,7 @@ export default defineComponent({
             ...this.form,
             startTime: this.form.startTime.toISOString(),
             endTime: this.form.endTime.toISOString(),
-          })
+          }),
         );
       }
       this.onDialogOK();

@@ -3,8 +3,8 @@
   'object' == typeof exports && 'undefined' != typeof module
     ? (module.exports = t())
     : 'function' == typeof define && define.amd
-    ? define(t)
-    : ((e = e || self).hotkeysJs = t());
+      ? define(t)
+      : ((e = e || self).hotkeysJs = t());
 })(this, function () {
   'use strict';
   function e(t) {

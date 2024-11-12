@@ -9,8 +9,9 @@ import {
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { createUploadLink } from 'apollo-upload-client';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { extractFiles } from 'extract-files';
+import { Kind, OperationTypeNode } from 'graphql';
 import { JWT_KEY } from 'src/ctfnote/auth';
 
 const protocol = document.location.protocol == 'https:' ? 'wss:' : 'ws:';
@@ -42,7 +43,7 @@ const uploadLink = createUploadLink({
 const uploadAndBatchHTTPLink = split(
   (operation) => extractFiles(operation).files.size > 0,
   uploadLink as unknown as ApolloLink,
-  httpLink
+  httpLink,
 );
 
 const splitLink = split(
@@ -50,12 +51,12 @@ const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
+      definition.kind === Kind.OPERATION_DEFINITION &&
+      definition.operation === OperationTypeNode.SUBSCRIPTION
     );
   },
   wsLink,
-  uploadAndBatchHTTPLink
+  uploadAndBatchHTTPLink,
 );
 
 const link = from([
@@ -68,7 +69,7 @@ const link = from([
             ...headers,
             Authorization: `Bearer ${token}`,
           },
-        })
+        }),
       );
     }
     return forward(operation);

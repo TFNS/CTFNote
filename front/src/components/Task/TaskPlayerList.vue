@@ -32,7 +32,7 @@ export default defineComponent({
             player: p,
             active:
               this.task.workOnTasks.filter(
-                (w) => w.profileId == p.id && w.active
+                (w) => w.profileId == p.id && w.active,
               ).length > 0,
           }))
           // sort by active status (active first)
@@ -42,7 +42,7 @@ export default defineComponent({
     players() {
       return this.team.filter(
         (p) =>
-          this.task.workOnTasks.filter((id) => id.profileId == p.id).length > 0
+          this.task.workOnTasks.filter((id) => id.profileId == p.id).length > 0,
       );
     },
   },

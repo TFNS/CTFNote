@@ -51,6 +51,13 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
+      sassLoaderOptions: {
+        sassOptions: {
+          quietDeps: true,
+          silenceDeprecations: ['slash-div'],
+        },
+      },
+
       // transpile: false,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)

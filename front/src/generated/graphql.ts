@@ -6,19 +6,21 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type ReactiveFunction<TParam> = () => TParam;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Cursor: any;
-  Datetime: string;
-  JSON: string;
-  Jwt: string;
-  Upload: File;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  Cursor: { input: any; output: any; }
+  Datetime: { input: string; output: string; }
+  JSON: { input: string; output: string; }
+  Jwt: { input: string; output: string; }
+  Upload: { input: File; output: File; }
 };
 
 /** All input for the `addTagsForTask` mutation. */
@@ -27,9 +29,9 @@ export type AddTagsForTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  taskid?: InputMaybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  taskid?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** The output of our `addTagsForTask` mutation. */
@@ -39,7 +41,7 @@ export type AddTagsForTaskPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -47,13 +49,13 @@ export type AddTagsForTaskPayload = {
 export type AssignedTag = Node & {
   __typename?: 'AssignedTag';
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['output'];
   /** Reads a single `Tag` that is related to this `AssignedTag`. */
   tag?: Maybe<Tag>;
-  tagId: Scalars['Int'];
+  tagId: Scalars['Int']['output'];
   /** Reads a single `Task` that is related to this `AssignedTag`. */
   task?: Maybe<Task>;
-  taskId: Scalars['Int'];
+  taskId: Scalars['Int']['output'];
 };
 
 /**
@@ -62,9 +64,9 @@ export type AssignedTag = Node & {
  */
 export type AssignedTagCondition = {
   /** Checks for equality with the object’s `tagId` field. */
-  tagId?: InputMaybe<Scalars['Int']>;
+  tagId?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `taskId` field. */
-  taskId?: InputMaybe<Scalars['Int']>;
+  taskId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** A filter to be used against `AssignedTag` object types. All fields are combined with a logical ‘and.’ */
@@ -83,8 +85,8 @@ export type AssignedTagFilter = {
 
 /** An input for mutations affecting `AssignedTag` */
 export type AssignedTagInput = {
-  tagId: Scalars['Int'];
-  taskId: Scalars['Int'];
+  tagId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
 };
 
 /** A connection to a list of `AssignedTag` values. */
@@ -97,14 +99,14 @@ export type AssignedTagsConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `AssignedTag` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `AssignedTag` edge in the connection. */
 export type AssignedTagsEdge = {
   __typename?: 'AssignedTagsEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `AssignedTag` at the end of the edge. */
   node: AssignedTag;
 };
@@ -123,27 +125,27 @@ export enum AssignedTagsOrderBy {
 /** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
 export type BooleanFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Boolean']>;
+  distinctFrom?: InputMaybe<Scalars['Boolean']['input']>;
   /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Boolean']>;
+  equalTo?: InputMaybe<Scalars['Boolean']['input']>;
   /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Boolean']>;
+  greaterThan?: InputMaybe<Scalars['Boolean']['input']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Boolean']['input']>;
   /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Boolean']>>;
+  in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Boolean']>;
+  lessThan?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['Boolean']['input']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Boolean']>;
+  notDistinctFrom?: InputMaybe<Scalars['Boolean']['input']>;
   /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Boolean']>;
+  notEqualTo?: InputMaybe<Scalars['Boolean']['input']>;
   /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Boolean']>>;
+  notIn?: InputMaybe<Array<Scalars['Boolean']['input']>>;
 };
 
 /** All input for the `cancelWorkingOn` mutation. */
@@ -152,8 +154,8 @@ export type CancelWorkingOnInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  taskId?: InputMaybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  taskId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** The output of our `cancelWorkingOn` mutation. */
@@ -163,7 +165,7 @@ export type CancelWorkingOnPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Profile` that is related to this `WorkOnTask`. */
   profile?: Maybe<Profile>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -187,9 +189,9 @@ export type ChangePasswordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  newpassword: Scalars['String'];
-  oldpassword: Scalars['String'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  newpassword: Scalars['String']['input'];
+  oldpassword: Scalars['String']['input'];
 };
 
 /** The output of our `changePassword` mutation. */
@@ -200,14 +202,14 @@ export type ChangePasswordPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 export type ChangePasswordResponse = {
   __typename?: 'ChangePasswordResponse';
-  ok?: Maybe<Scalars['Boolean']>;
+  ok?: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** All input for the create `AssignedTag` mutation. */
@@ -218,7 +220,7 @@ export type CreateAssignedTagInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The output of our create `AssignedTag` mutation. */
@@ -232,7 +234,7 @@ export type CreateAssignedTagPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** Reads a single `Tag` that is related to this `AssignedTag`. */
@@ -253,7 +255,7 @@ export type CreateCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The `Ctf` to be created by this mutation. */
   ctf: CtfInput;
 };
@@ -265,7 +267,7 @@ export type CreateCtfPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The `Ctf` that was created by this mutation. */
   ctf?: Maybe<Ctf>;
   /** An edge for our `Ctf`. May be used by Relay 1. */
@@ -288,7 +290,7 @@ export type CreateInvitationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The `Invitation` to be created by this mutation. */
   invitation: InvitationInput;
 };
@@ -299,8 +301,8 @@ export type CreateInvitationLinkInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  discordId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  discordId?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<Role>;
 };
 
@@ -311,7 +313,7 @@ export type CreateInvitationLinkPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   invitationLinkResponse?: Maybe<InvitationLinkResponse>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
@@ -324,7 +326,7 @@ export type CreateInvitationPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Ctf` that is related to this `Invitation`. */
   ctf?: Maybe<Ctf>;
   /** The `Invitation` that was created by this mutation. */
@@ -349,8 +351,8 @@ export type CreateResetPasswordLinkInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  userId?: InputMaybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** The output of our `createResetPasswordLink` mutation. */
@@ -360,7 +362,7 @@ export type CreateResetPasswordLinkPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   resetPasswordLinkResponse?: Maybe<ResetPasswordLinkResponse>;
@@ -372,7 +374,7 @@ export type CreateTagInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The `Tag` to be created by this mutation. */
   tag: TagInput;
 };
@@ -384,7 +386,7 @@ export type CreateTagPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** The `Tag` that was created by this mutation. */
@@ -400,11 +402,11 @@ export type CreateTagPayloadTagEdgeArgs = {
 };
 
 export type CreateTaskInput = {
-  ctfId: Scalars['Int'];
-  description?: InputMaybe<Scalars['String']>;
-  flag?: InputMaybe<Scalars['String']>;
-  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  title: Scalars['String'];
+  ctfId: Scalars['Int']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  flag?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  title: Scalars['String']['input'];
 };
 
 export type CreateTaskPayload = {
@@ -419,7 +421,7 @@ export type CreateWorkOnTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The `WorkOnTask` to be created by this mutation. */
   workOnTask: WorkOnTaskInput;
 };
@@ -431,7 +433,7 @@ export type CreateWorkOnTaskPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Profile` that is related to this `WorkOnTask`. */
   profile?: Maybe<Profile>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -452,78 +454,78 @@ export type CreateWorkOnTaskPayloadWorkOnTaskEdgeArgs = {
 
 export type Ctf = Node & {
   __typename?: 'Ctf';
-  ctfUrl?: Maybe<Scalars['String']>;
-  ctftimeUrl?: Maybe<Scalars['String']>;
-  description: Scalars['String'];
-  discordEventLink?: Maybe<Scalars['String']>;
-  endTime: Scalars['Datetime'];
-  granted?: Maybe<Scalars['Boolean']>;
-  id: Scalars['Int'];
+  ctfUrl?: Maybe<Scalars['String']['output']>;
+  ctftimeUrl?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
+  discordEventLink?: Maybe<Scalars['String']['output']>;
+  endTime: Scalars['Datetime']['output'];
+  granted?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['Int']['output'];
   /** Reads and enables pagination through a set of `Invitation`. */
   invitations: InvitationsConnection;
-  logoUrl?: Maybe<Scalars['String']>;
+  logoUrl?: Maybe<Scalars['String']['output']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['output'];
   /** Reads and enables pagination through a set of `Profile`. */
   profilesByInvitationCtfIdAndProfileId: CtfProfilesByInvitationCtfIdAndProfileIdManyToManyConnection;
   /** Reads a single `CtfSecret` that is related to this `Ctf`. */
   secrets?: Maybe<CtfSecret>;
-  secretsId: Scalars['Int'];
-  startTime: Scalars['Datetime'];
+  secretsId: Scalars['Int']['output'];
+  startTime: Scalars['Datetime']['output'];
   /** Reads and enables pagination through a set of `Task`. */
   tasks: TasksConnection;
-  title: Scalars['String'];
-  weight: Scalars['Float'];
+  title: Scalars['String']['output'];
+  weight: Scalars['Float']['output'];
 };
 
 
 export type CtfInvitationsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<InvitationCondition>;
   filter?: InputMaybe<InvitationFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
 export type CtfProfilesByInvitationCtfIdAndProfileIdArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<ProfileCondition>;
   filter?: InputMaybe<ProfileFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
 };
 
 
 export type CtfTasksArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<TaskCondition>;
   filter?: InputMaybe<TaskFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 /** A condition to be used against `Ctf` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type CtfCondition = {
   /** Checks for equality with the object’s `endTime` field. */
-  endTime?: InputMaybe<Scalars['Datetime']>;
+  endTime?: InputMaybe<Scalars['Datetime']['input']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `secretsId` field. */
-  secretsId?: InputMaybe<Scalars['Int']>;
+  secretsId?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `startTime` field. */
-  startTime?: InputMaybe<Scalars['Datetime']>;
+  startTime?: InputMaybe<Scalars['Datetime']['input']>;
   /** Checks for equality with the object’s `title` field. */
-  title?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A filter to be used against `Ctf` object types. All fields are combined with a logical ‘and.’ */
@@ -550,27 +552,27 @@ export type CtfFilter = {
 
 /** An input for mutations affecting `Ctf` */
 export type CtfInput = {
-  ctfUrl?: InputMaybe<Scalars['String']>;
-  ctftimeUrl?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  endTime: Scalars['Datetime'];
-  logoUrl?: InputMaybe<Scalars['String']>;
-  startTime: Scalars['Datetime'];
-  title: Scalars['String'];
-  weight?: InputMaybe<Scalars['Float']>;
+  ctfUrl?: InputMaybe<Scalars['String']['input']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  endTime: Scalars['Datetime']['input'];
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
+  startTime: Scalars['Datetime']['input'];
+  title: Scalars['String']['input'];
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 /** Represents an update to a `Ctf`. Fields that are set will be updated. */
 export type CtfPatch = {
-  ctfUrl?: InputMaybe<Scalars['String']>;
-  ctftimeUrl?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  discordEventLink?: InputMaybe<Scalars['String']>;
-  endTime?: InputMaybe<Scalars['Datetime']>;
-  logoUrl?: InputMaybe<Scalars['String']>;
-  startTime?: InputMaybe<Scalars['Datetime']>;
-  title?: InputMaybe<Scalars['String']>;
-  weight?: InputMaybe<Scalars['Float']>;
+  ctfUrl?: InputMaybe<Scalars['String']['input']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  discordEventLink?: InputMaybe<Scalars['String']['input']>;
+  endTime?: InputMaybe<Scalars['Datetime']['input']>;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
+  startTime?: InputMaybe<Scalars['Datetime']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
 };
 
 /** A connection to a list of `Profile` values, with data from `Invitation`. */
@@ -583,37 +585,37 @@ export type CtfProfilesByInvitationCtfIdAndProfileIdManyToManyConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Profile` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Profile` edge in the connection, with data from `Invitation`. */
 export type CtfProfilesByInvitationCtfIdAndProfileIdManyToManyEdge = {
   __typename?: 'CtfProfilesByInvitationCtfIdAndProfileIdManyToManyEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Profile` at the end of the edge. */
   node: Profile;
 };
 
 export type CtfSecret = Node & {
   __typename?: 'CtfSecret';
-  credentials?: Maybe<Scalars['String']>;
+  credentials?: Maybe<Scalars['String']['output']>;
   /** Reads and enables pagination through a set of `Ctf`. */
   ctfsBySecretsId: CtfsConnection;
-  id: Scalars['Int'];
+  id: Scalars['Int']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['output'];
 };
 
 
 export type CtfSecretCtfsBySecretsIdArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<CtfCondition>;
   filter?: InputMaybe<CtfFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
@@ -623,7 +625,7 @@ export type CtfSecretCtfsBySecretsIdArgs = {
  */
 export type CtfSecretCondition = {
   /** Checks for equality with the object’s `id` field. */
-  id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** A filter to be used against `CtfSecret` object types. All fields are combined with a logical ‘and.’ */
@@ -640,7 +642,7 @@ export type CtfSecretFilter = {
 
 /** Represents an update to a `CtfSecret`. Fields that are set will be updated. */
 export type CtfSecretPatch = {
-  credentials?: InputMaybe<Scalars['String']>;
+  credentials?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A connection to a list of `CtfSecret` values. */
@@ -653,14 +655,14 @@ export type CtfSecretsConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `CtfSecret` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `CtfSecret` edge in the connection. */
 export type CtfSecretsEdge = {
   __typename?: 'CtfSecretsEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `CtfSecret` at the end of the edge. */
   node: CtfSecret;
 };
@@ -684,14 +686,14 @@ export type CtfsConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Ctf` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Ctf` edge in the connection. */
 export type CtfsEdge = {
   __typename?: 'CtfsEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Ctf` at the end of the edge. */
   node: Ctf;
 };
@@ -716,27 +718,27 @@ export enum CtfsOrderBy {
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Datetime']>;
+  distinctFrom?: InputMaybe<Scalars['Datetime']['input']>;
   /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Datetime']>;
+  equalTo?: InputMaybe<Scalars['Datetime']['input']>;
   /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Datetime']>;
+  greaterThan?: InputMaybe<Scalars['Datetime']['input']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Datetime']['input']>;
   /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Datetime']>>;
+  in?: InputMaybe<Array<Scalars['Datetime']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Datetime']>;
+  lessThan?: InputMaybe<Scalars['Datetime']['input']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['Datetime']['input']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Datetime']>;
+  notDistinctFrom?: InputMaybe<Scalars['Datetime']['input']>;
   /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Datetime']>;
+  notEqualTo?: InputMaybe<Scalars['Datetime']['input']>;
   /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Datetime']>>;
+  notIn?: InputMaybe<Array<Scalars['Datetime']['input']>>;
 };
 
 /** All input for the `deleteAssignedTagByNodeId` mutation. */
@@ -745,9 +747,9 @@ export type DeleteAssignedTagByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `AssignedTag` to be deleted. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 /** All input for the `deleteAssignedTag` mutation. */
@@ -756,9 +758,9 @@ export type DeleteAssignedTagInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  tagId: Scalars['Int'];
-  taskId: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  tagId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
 };
 
 /** The output of our delete `AssignedTag` mutation. */
@@ -772,8 +774,8 @@ export type DeleteAssignedTagPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  deletedAssignedTagNodeId?: Maybe<Scalars['ID']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  deletedAssignedTagNodeId?: Maybe<Scalars['ID']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** Reads a single `Tag` that is related to this `AssignedTag`. */
@@ -794,9 +796,9 @@ export type DeleteCtfByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `Ctf` to be deleted. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 /** All input for the `deleteCtf` mutation. */
@@ -805,8 +807,8 @@ export type DeleteCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
 };
 
 /** The output of our delete `Ctf` mutation. */
@@ -816,12 +818,12 @@ export type DeleteCtfPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The `Ctf` that was deleted by this mutation. */
   ctf?: Maybe<Ctf>;
   /** An edge for our `Ctf`. May be used by Relay 1. */
   ctfEdge?: Maybe<CtfsEdge>;
-  deletedCtfNodeId?: Maybe<Scalars['ID']>;
+  deletedCtfNodeId?: Maybe<Scalars['ID']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** Reads a single `CtfSecret` that is related to this `Ctf`. */
@@ -840,9 +842,9 @@ export type DeleteInvitationByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `Invitation` to be deleted. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 /** All input for the `deleteInvitation` mutation. */
@@ -851,9 +853,9 @@ export type DeleteInvitationInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  ctfId: Scalars['Int'];
-  profileId: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  ctfId: Scalars['Int']['input'];
+  profileId: Scalars['Int']['input'];
 };
 
 /** The output of our delete `Invitation` mutation. */
@@ -863,10 +865,10 @@ export type DeleteInvitationPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Ctf` that is related to this `Invitation`. */
   ctf?: Maybe<Ctf>;
-  deletedInvitationNodeId?: Maybe<Scalars['ID']>;
+  deletedInvitationNodeId?: Maybe<Scalars['ID']['output']>;
   /** The `Invitation` that was deleted by this mutation. */
   invitation?: Maybe<Invitation>;
   /** An edge for our `Invitation`. May be used by Relay 1. */
@@ -889,9 +891,9 @@ export type DeleteTaskByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `Task` to be deleted. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 /** All input for the `deleteTask` mutation. */
@@ -900,8 +902,8 @@ export type DeleteTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
 };
 
 /** The output of our delete `Task` mutation. */
@@ -911,10 +913,10 @@ export type DeleteTaskPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Ctf` that is related to this `Task`. */
   ctf?: Maybe<Ctf>;
-  deletedTaskNodeId?: Maybe<Scalars['ID']>;
+  deletedTaskNodeId?: Maybe<Scalars['ID']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** The `Task` that was deleted by this mutation. */
@@ -935,8 +937,8 @@ export type DeleteUserInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  userId?: InputMaybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** The output of our `deleteUser` mutation. */
@@ -946,7 +948,7 @@ export type DeleteUserPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   userResponse?: Maybe<UserResponse>;
@@ -958,9 +960,9 @@ export type DeleteWorkOnTaskByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `WorkOnTask` to be deleted. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 /** All input for the `deleteWorkOnTask` mutation. */
@@ -969,9 +971,9 @@ export type DeleteWorkOnTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  profileId: Scalars['Int'];
-  taskId: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  profileId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
 };
 
 /** The output of our delete `WorkOnTask` mutation. */
@@ -981,8 +983,8 @@ export type DeleteWorkOnTaskPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  deletedWorkOnTaskNodeId?: Maybe<Scalars['ID']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  deletedWorkOnTaskNodeId?: Maybe<Scalars['ID']['output']>;
   /** Reads a single `Profile` that is related to this `WorkOnTask`. */
   profile?: Maybe<Profile>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -1002,7 +1004,7 @@ export type DeleteWorkOnTaskPayloadWorkOnTaskEdgeArgs = {
 };
 
 export type ImportCtfInput = {
-  ctftimeId: Scalars['Int'];
+  ctftimeId: Scalars['Int']['input'];
 };
 
 export type ImportCtfPayload = {
@@ -1014,39 +1016,39 @@ export type ImportCtfPayload = {
 /** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
 export type IntFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['Int']>;
+  distinctFrom?: InputMaybe<Scalars['Int']['input']>;
   /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['Int']>;
+  equalTo?: InputMaybe<Scalars['Int']['input']>;
   /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['Int']>;
+  greaterThan?: InputMaybe<Scalars['Int']['input']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['Int']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Int']['input']>;
   /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['Int']>>;
+  in?: InputMaybe<Array<Scalars['Int']['input']>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['Int']>;
+  lessThan?: InputMaybe<Scalars['Int']['input']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['Int']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['Int']['input']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['Int']>;
+  notDistinctFrom?: InputMaybe<Scalars['Int']['input']>;
   /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['Int']>;
+  notEqualTo?: InputMaybe<Scalars['Int']['input']>;
   /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['Int']>>;
+  notIn?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 export type Invitation = Node & {
   __typename?: 'Invitation';
   /** Reads a single `Ctf` that is related to this `Invitation`. */
   ctf?: Maybe<Ctf>;
-  ctfId: Scalars['Int'];
+  ctfId: Scalars['Int']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['output'];
   /** Reads a single `Profile` that is related to this `Invitation`. */
   profile?: Maybe<Profile>;
-  profileId: Scalars['Int'];
+  profileId: Scalars['Int']['output'];
 };
 
 /**
@@ -1055,9 +1057,9 @@ export type Invitation = Node & {
  */
 export type InvitationCondition = {
   /** Checks for equality with the object’s `ctfId` field. */
-  ctfId?: InputMaybe<Scalars['Int']>;
+  ctfId?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `profileId` field. */
-  profileId?: InputMaybe<Scalars['Int']>;
+  profileId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** A filter to be used against `Invitation` object types. All fields are combined with a logical ‘and.’ */
@@ -1076,13 +1078,13 @@ export type InvitationFilter = {
 
 /** An input for mutations affecting `Invitation` */
 export type InvitationInput = {
-  ctfId: Scalars['Int'];
-  profileId: Scalars['Int'];
+  ctfId: Scalars['Int']['input'];
+  profileId: Scalars['Int']['input'];
 };
 
 export type InvitationLinkResponse = {
   __typename?: 'InvitationLinkResponse';
-  token?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']['output']>;
 };
 
 /** A connection to a list of `Invitation` values. */
@@ -1095,14 +1097,14 @@ export type InvitationsConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Invitation` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Invitation` edge in the connection. */
 export type InvitationsEdge = {
   __typename?: 'InvitationsEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Invitation` at the end of the edge. */
   node: Invitation;
 };
@@ -1123,7 +1125,7 @@ export type ListenPayload = {
   /** Our root query field type. Allows us to run any query from our subscription payload. */
   query?: Maybe<Query>;
   relatedNode?: Maybe<Node>;
-  relatedNodeId?: Maybe<Scalars['ID']>;
+  relatedNodeId?: Maybe<Scalars['ID']['output']>;
 };
 
 /** All input for the `login` mutation. */
@@ -1132,9 +1134,9 @@ export type LoginInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  login: Scalars['String'];
-  password: Scalars['String'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 /** The output of our `login` mutation. */
@@ -1144,8 +1146,8 @@ export type LoginPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  jwt?: Maybe<Scalars['Jwt']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  jwt?: Maybe<Scalars['Jwt']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -1229,7 +1231,7 @@ export type Mutation = {
   updateWorkOnTask?: Maybe<UpdateWorkOnTaskPayload>;
   /** Updates a single `WorkOnTask` using its globally unique id and a patch. */
   updateWorkOnTaskByNodeId?: Maybe<UpdateWorkOnTaskPayload>;
-  uploadCtfLogo: Scalars['String'];
+  uploadCtfLogo: Scalars['String']['output'];
 };
 
 
@@ -1523,105 +1525,105 @@ export type MutationUpdateWorkOnTaskByNodeIdArgs = {
 
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUploadCtfLogoArgs = {
-  logo: Scalars['Upload'];
+  logo: Scalars['Upload']['input'];
 };
 
 /** An object with a globally unique `ID`. */
 export type Node = {
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['output'];
 };
 
 /** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
   /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['Cursor']>;
+  endCursor?: Maybe<Scalars['Cursor']['output']>;
   /** When paginating forwards, are there more items? */
-  hasNextPage: Scalars['Boolean'];
+  hasNextPage: Scalars['Boolean']['output'];
   /** When paginating backwards, are there more items? */
-  hasPreviousPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean']['output'];
   /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['Cursor']>;
+  startCursor?: Maybe<Scalars['Cursor']['output']>;
 };
 
 export type Profile = Node & {
   __typename?: 'Profile';
-  color?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']['output']>;
   /** Reads and enables pagination through a set of `Ctf`. */
   ctfsByInvitationProfileIdAndCtfId: ProfileCtfsByInvitationProfileIdAndCtfIdManyToManyConnection;
-  description: Scalars['String'];
-  discordId?: Maybe<Scalars['String']>;
-  id: Scalars['Int'];
+  description: Scalars['String']['output'];
+  discordId?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
   /** Reads and enables pagination through a set of `Invitation`. */
   invitations: InvitationsConnection;
-  lastactive: Scalars['Datetime'];
+  lastactive: Scalars['Datetime']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['output'];
   role?: Maybe<Role>;
   /** Reads and enables pagination through a set of `Task`. */
   tasksByWorkOnTaskProfileIdAndTaskId: ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyConnection;
-  username: Scalars['String'];
+  username: Scalars['String']['output'];
   /** Reads and enables pagination through a set of `WorkOnTask`. */
   workOnTasks: WorkOnTasksConnection;
 };
 
 
 export type ProfileCtfsByInvitationProfileIdAndCtfIdArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<CtfCondition>;
   filter?: InputMaybe<CtfFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 
 export type ProfileInvitationsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<InvitationCondition>;
   filter?: InputMaybe<InvitationFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
 export type ProfileTasksByWorkOnTaskProfileIdAndTaskIdArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<TaskCondition>;
   filter?: InputMaybe<TaskFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 
 export type ProfileWorkOnTasksArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
   filter?: InputMaybe<WorkOnTaskFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** A condition to be used against `Profile` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type ProfileCondition = {
   /** Checks for equality with the object’s `discordId` field. */
-  discordId?: InputMaybe<Scalars['String']>;
+  discordId?: InputMaybe<Scalars['String']['input']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `username` field. */
-  username?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A connection to a list of `Ctf` values, with data from `Invitation`. */
@@ -1634,14 +1636,14 @@ export type ProfileCtfsByInvitationProfileIdAndCtfIdManyToManyConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Ctf` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Ctf` edge in the connection, with data from `Invitation`. */
 export type ProfileCtfsByInvitationProfileIdAndCtfIdManyToManyEdge = {
   __typename?: 'ProfileCtfsByInvitationProfileIdAndCtfIdManyToManyEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Ctf` at the end of the edge. */
   node: Ctf;
 };
@@ -1666,9 +1668,9 @@ export type ProfileFilter = {
 
 /** Represents an update to a `Profile`. Fields that are set will be updated. */
 export type ProfilePatch = {
-  color?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  username?: InputMaybe<Scalars['String']>;
+  color?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A connection to a list of `Task` values, with data from `WorkOnTask`. */
@@ -1681,15 +1683,15 @@ export type ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Task` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Task` edge in the connection, with data from `WorkOnTask`. */
 export type ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyEdge = {
   __typename?: 'ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyEdge';
-  active: Scalars['Boolean'];
+  active: Scalars['Boolean']['output'];
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Task` at the end of the edge. */
   node: Task;
 };
@@ -1704,14 +1706,14 @@ export type ProfilesConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Profile` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Profile` edge in the connection. */
 export type ProfilesEdge = {
   __typename?: 'ProfilesEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Profile` at the end of the edge. */
   node: Profile;
 };
@@ -1731,17 +1733,17 @@ export enum ProfilesOrderBy {
 
 export type PublicProfile = {
   __typename?: 'PublicProfile';
-  color?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  nodeId?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  nodeId?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Role>;
-  username?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 export type PublicProfileSubscriptionPayload = {
   __typename?: 'PublicProfileSubscriptionPayload';
-  event?: Maybe<Scalars['String']>;
+  event?: Maybe<Scalars['String']['output']>;
   publicProfile?: Maybe<PublicProfile>;
 };
 
@@ -1755,14 +1757,14 @@ export type PublicProfilesConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `PublicProfile` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `PublicProfile` edge in the connection. */
 export type PublicProfilesEdge = {
   __typename?: 'PublicProfilesEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `PublicProfile` at the end of the edge. */
   node: PublicProfile;
 };
@@ -1800,11 +1802,11 @@ export type Query = Node & {
   /** Reads and enables pagination through a set of `Invitation`. */
   invitations?: Maybe<InvitationsConnection>;
   me?: Maybe<Profile>;
-  newToken?: Maybe<Scalars['Jwt']>;
+  newToken?: Maybe<Scalars['Jwt']['output']>;
   /** Fetches an object given its globally unique `ID`. */
   node?: Maybe<Node>;
   /** The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['output'];
   /** Reads and enables pagination through a set of `Ctf`. */
   pastCtf?: Maybe<CtfsConnection>;
   profile?: Maybe<Profile>;
@@ -1812,7 +1814,7 @@ export type Query = Node & {
   /** Reads a single `Profile` using its globally unique `ID`. */
   profileByNodeId?: Maybe<Profile>;
   profileByUsername?: Maybe<Profile>;
-  profileToken?: Maybe<Scalars['String']>;
+  profileToken?: Maybe<Scalars['String']['output']>;
   /** Reads and enables pagination through a set of `Profile`. */
   profiles?: Maybe<ProfilesConnection>;
   /** Reads and enables pagination through a set of `PublicProfile`. */
@@ -1849,299 +1851,299 @@ export type Query = Node & {
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAssignedTagArgs = {
-  tagId: Scalars['Int'];
-  taskId: Scalars['Int'];
+  tagId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAssignedTagByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryAssignedTagsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<AssignedTagCondition>;
   filter?: InputMaybe<AssignedTagFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<AssignedTagsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfSecretArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfSecretByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfSecretsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<CtfSecretCondition>;
   filter?: InputMaybe<CtfSecretFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<CtfSecretsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryCtfsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<CtfCondition>;
   filter?: InputMaybe<CtfFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<CtfsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryGuestsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   filter?: InputMaybe<ProfileFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryIncomingCtfArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   filter?: InputMaybe<CtfFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryInvitationArgs = {
-  ctfId: Scalars['Int'];
-  profileId: Scalars['Int'];
+  ctfId: Scalars['Int']['input'];
+  profileId: Scalars['Int']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryInvitationByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryInvitationsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<InvitationCondition>;
   filter?: InputMaybe<InvitationFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<InvitationsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryNodeArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPastCtfArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   filter?: InputMaybe<CtfFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryProfileArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryProfileByDiscordIdArgs = {
-  discordId: Scalars['String'];
+  discordId: Scalars['String']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryProfileByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryProfileByUsernameArgs = {
-  username: Scalars['String'];
+  username: Scalars['String']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryProfilesArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<ProfileCondition>;
   filter?: InputMaybe<ProfileFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryPublicProfilesArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<PublicProfilesOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QuerySettingByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QuerySettingsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<SettingsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTagArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTagByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTagByTagArgs = {
-  tag: Scalars['String'];
+  tag: Scalars['String']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTagsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<TagCondition>;
   filter?: InputMaybe<TagFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<TagsOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTaskArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTaskByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryTasksArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<TaskCondition>;
   filter?: InputMaybe<TaskFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryUsersArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<UsersOrderBy>>;
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryWorkOnTaskArgs = {
-  profileId: Scalars['Int'];
-  taskId: Scalars['Int'];
+  profileId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryWorkOnTaskByNodeIdArgs = {
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
 };
 
 
 /** The root query type which gives access points into the data universe. */
 export type QueryWorkOnTasksArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
   filter?: InputMaybe<WorkOnTaskFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
@@ -2151,9 +2153,9 @@ export type RegisterInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  login: Scalars['String'];
-  password: Scalars['String'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 /** The output of our `register` mutation. */
@@ -2163,8 +2165,8 @@ export type RegisterPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  jwt?: Maybe<Scalars['Jwt']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  jwt?: Maybe<Scalars['Jwt']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -2175,10 +2177,10 @@ export type RegisterWithPasswordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  ctfnotePassword: Scalars['String'];
-  login: Scalars['String'];
-  password: Scalars['String'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  ctfnotePassword: Scalars['String']['input'];
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 /** The output of our `registerWithPassword` mutation. */
@@ -2188,8 +2190,8 @@ export type RegisterWithPasswordPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  jwt?: Maybe<Scalars['Jwt']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  jwt?: Maybe<Scalars['Jwt']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -2200,10 +2202,10 @@ export type RegisterWithTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  login?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
-  token?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  login?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  token?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The output of our `registerWithToken` mutation. */
@@ -2213,8 +2215,8 @@ export type RegisterWithTokenPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  jwt?: Maybe<Scalars['Jwt']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  jwt?: Maybe<Scalars['Jwt']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -2225,7 +2227,7 @@ export type ResetDiscordIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The output of our `resetDiscordId` mutation. */
@@ -2235,10 +2237,10 @@ export type ResetDiscordIdPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
-  string?: Maybe<Scalars['String']>;
+  string?: Maybe<Scalars['String']['output']>;
 };
 
 /** All input for the `resetPassword` mutation. */
@@ -2247,14 +2249,14 @@ export type ResetPasswordInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
-  token?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  token?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ResetPasswordLinkResponse = {
   __typename?: 'ResetPasswordLinkResponse';
-  token?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']['output']>;
 };
 
 /** The output of our `resetPassword` mutation. */
@@ -2264,8 +2266,8 @@ export type ResetPasswordPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
-  jwt?: Maybe<Scalars['Jwt']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  jwt?: Maybe<Scalars['Jwt']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -2276,7 +2278,7 @@ export type ResetProfileTokenInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The output of our `resetProfileToken` mutation. */
@@ -2286,10 +2288,10 @@ export type ResetProfileTokenPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
-  string?: Maybe<Scalars['String']>;
+  string?: Maybe<Scalars['String']['output']>;
 };
 
 export enum Role {
@@ -2313,7 +2315,7 @@ export type RoleFilter = {
   /** Included in the specified list. */
   in?: InputMaybe<Array<Role>>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
   lessThan?: InputMaybe<Role>;
   /** Less than or equal to the specified value. */
@@ -2332,9 +2334,9 @@ export type SetDiscordEventLinkInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  ctfId?: InputMaybe<Scalars['Int']>;
-  link?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  ctfId?: InputMaybe<Scalars['Int']['input']>;
+  link?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The output of our `setDiscordEventLink` mutation. */
@@ -2344,33 +2346,33 @@ export type SetDiscordEventLinkPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 export type Setting = Node & {
   __typename?: 'Setting';
-  discordIntegrationEnabled: Scalars['Boolean'];
-  icalPassword?: Maybe<Scalars['String']>;
+  discordIntegrationEnabled: Scalars['Boolean']['output'];
+  icalPassword?: Maybe<Scalars['String']['output']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
-  registrationAllowed: Scalars['Boolean'];
+  nodeId: Scalars['ID']['output'];
+  registrationAllowed: Scalars['Boolean']['output'];
   registrationDefaultRole: Role;
-  registrationPassword: Scalars['String'];
-  registrationPasswordAllowed: Scalars['Boolean'];
-  style: Scalars['JSON'];
+  registrationPassword: Scalars['String']['output'];
+  registrationPasswordAllowed: Scalars['Boolean']['output'];
+  style: Scalars['JSON']['output'];
 };
 
 /** Represents an update to a `Setting`. Fields that are set will be updated. */
 export type SettingPatch = {
-  discordIntegrationEnabled?: InputMaybe<Scalars['Boolean']>;
-  icalPassword?: InputMaybe<Scalars['String']>;
-  registrationAllowed?: InputMaybe<Scalars['Boolean']>;
+  discordIntegrationEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  icalPassword?: InputMaybe<Scalars['String']['input']>;
+  registrationAllowed?: InputMaybe<Scalars['Boolean']['input']>;
   registrationDefaultRole?: InputMaybe<Role>;
-  registrationPassword?: InputMaybe<Scalars['String']>;
-  registrationPasswordAllowed?: InputMaybe<Scalars['Boolean']>;
-  style?: InputMaybe<Scalars['JSON']>;
+  registrationPassword?: InputMaybe<Scalars['String']['input']>;
+  registrationPasswordAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  style?: InputMaybe<Scalars['JSON']['input']>;
 };
 
 /** A connection to a list of `Setting` values. */
@@ -2383,14 +2385,14 @@ export type SettingsConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Setting` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Setting` edge in the connection. */
 export type SettingsEdge = {
   __typename?: 'SettingsEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Setting` at the end of the edge. */
   node: Setting;
 };
@@ -2408,8 +2410,8 @@ export type StartWorkingOnInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  taskId?: InputMaybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  taskId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** The output of our `startWorkingOn` mutation. */
@@ -2419,7 +2421,7 @@ export type StartWorkingOnPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Profile` that is related to this `WorkOnTask`. */
   profile?: Maybe<Profile>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -2443,8 +2445,8 @@ export type StopWorkingOnInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  taskId?: InputMaybe<Scalars['Int']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  taskId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** The output of our `stopWorkingOn` mutation. */
@@ -2454,7 +2456,7 @@ export type StopWorkingOnPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Profile` that is related to this `WorkOnTask`. */
   profile?: Maybe<Profile>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -2475,79 +2477,79 @@ export type StopWorkingOnPayloadWorkOnTaskEdgeArgs = {
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
 export type StringFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
-  distinctFrom?: InputMaybe<Scalars['String']>;
+  distinctFrom?: InputMaybe<Scalars['String']['input']>;
   /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  distinctFromInsensitive?: InputMaybe<Scalars['String']>;
+  distinctFromInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Ends with the specified string (case-sensitive). */
-  endsWith?: InputMaybe<Scalars['String']>;
+  endsWith?: InputMaybe<Scalars['String']['input']>;
   /** Ends with the specified string (case-insensitive). */
-  endsWithInsensitive?: InputMaybe<Scalars['String']>;
+  endsWithInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Equal to the specified value. */
-  equalTo?: InputMaybe<Scalars['String']>;
+  equalTo?: InputMaybe<Scalars['String']['input']>;
   /** Equal to the specified value (case-insensitive). */
-  equalToInsensitive?: InputMaybe<Scalars['String']>;
+  equalToInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Greater than the specified value. */
-  greaterThan?: InputMaybe<Scalars['String']>;
+  greaterThan?: InputMaybe<Scalars['String']['input']>;
   /** Greater than the specified value (case-insensitive). */
-  greaterThanInsensitive?: InputMaybe<Scalars['String']>;
+  greaterThanInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Greater than or equal to the specified value. */
-  greaterThanOrEqualTo?: InputMaybe<Scalars['String']>;
+  greaterThanOrEqualTo?: InputMaybe<Scalars['String']['input']>;
   /** Greater than or equal to the specified value (case-insensitive). */
-  greaterThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  greaterThanOrEqualToInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Included in the specified list. */
-  in?: InputMaybe<Array<Scalars['String']>>;
+  in?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Included in the specified list (case-insensitive). */
-  inInsensitive?: InputMaybe<Array<Scalars['String']>>;
+  inInsensitive?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Contains the specified string (case-sensitive). */
-  includes?: InputMaybe<Scalars['String']>;
+  includes?: InputMaybe<Scalars['String']['input']>;
   /** Contains the specified string (case-insensitive). */
-  includesInsensitive?: InputMaybe<Scalars['String']>;
+  includesInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Is null (if `true` is specified) or is not null (if `false` is specified). */
-  isNull?: InputMaybe<Scalars['Boolean']>;
+  isNull?: InputMaybe<Scalars['Boolean']['input']>;
   /** Less than the specified value. */
-  lessThan?: InputMaybe<Scalars['String']>;
+  lessThan?: InputMaybe<Scalars['String']['input']>;
   /** Less than the specified value (case-insensitive). */
-  lessThanInsensitive?: InputMaybe<Scalars['String']>;
+  lessThanInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Less than or equal to the specified value. */
-  lessThanOrEqualTo?: InputMaybe<Scalars['String']>;
+  lessThanOrEqualTo?: InputMaybe<Scalars['String']['input']>;
   /** Less than or equal to the specified value (case-insensitive). */
-  lessThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  lessThanOrEqualToInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  like?: InputMaybe<Scalars['String']>;
+  like?: InputMaybe<Scalars['String']['input']>;
   /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  likeInsensitive?: InputMaybe<Scalars['String']>;
+  likeInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Equal to the specified value, treating null like an ordinary value. */
-  notDistinctFrom?: InputMaybe<Scalars['String']>;
+  notDistinctFrom?: InputMaybe<Scalars['String']['input']>;
   /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
-  notDistinctFromInsensitive?: InputMaybe<Scalars['String']>;
+  notDistinctFromInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Does not end with the specified string (case-sensitive). */
-  notEndsWith?: InputMaybe<Scalars['String']>;
+  notEndsWith?: InputMaybe<Scalars['String']['input']>;
   /** Does not end with the specified string (case-insensitive). */
-  notEndsWithInsensitive?: InputMaybe<Scalars['String']>;
+  notEndsWithInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Not equal to the specified value. */
-  notEqualTo?: InputMaybe<Scalars['String']>;
+  notEqualTo?: InputMaybe<Scalars['String']['input']>;
   /** Not equal to the specified value (case-insensitive). */
-  notEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  notEqualToInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Not included in the specified list. */
-  notIn?: InputMaybe<Array<Scalars['String']>>;
+  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Not included in the specified list (case-insensitive). */
-  notInInsensitive?: InputMaybe<Array<Scalars['String']>>;
+  notInInsensitive?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Does not contain the specified string (case-sensitive). */
-  notIncludes?: InputMaybe<Scalars['String']>;
+  notIncludes?: InputMaybe<Scalars['String']['input']>;
   /** Does not contain the specified string (case-insensitive). */
-  notIncludesInsensitive?: InputMaybe<Scalars['String']>;
+  notIncludesInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLike?: InputMaybe<Scalars['String']>;
+  notLike?: InputMaybe<Scalars['String']['input']>;
   /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
-  notLikeInsensitive?: InputMaybe<Scalars['String']>;
+  notLikeInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Does not start with the specified string (case-sensitive). */
-  notStartsWith?: InputMaybe<Scalars['String']>;
+  notStartsWith?: InputMaybe<Scalars['String']['input']>;
   /** Does not start with the specified string (case-insensitive). */
-  notStartsWithInsensitive?: InputMaybe<Scalars['String']>;
+  notStartsWithInsensitive?: InputMaybe<Scalars['String']['input']>;
   /** Starts with the specified string (case-sensitive). */
-  startsWith?: InputMaybe<Scalars['String']>;
+  startsWith?: InputMaybe<Scalars['String']['input']>;
   /** Starts with the specified string (case-insensitive). */
-  startsWithInsensitive?: InputMaybe<Scalars['String']>;
+  startsWithInsensitive?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
@@ -2562,51 +2564,51 @@ export type Subscription = {
 
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
 export type SubscriptionListenArgs = {
-  topic: Scalars['String'];
+  topic: Scalars['String']['input'];
 };
 
 export type Tag = Node & {
   __typename?: 'Tag';
   /** Reads and enables pagination through a set of `AssignedTag`. */
   assignedTags: AssignedTagsConnection;
-  id: Scalars['Int'];
+  id: Scalars['Int']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
-  tag: Scalars['String'];
+  nodeId: Scalars['ID']['output'];
+  tag: Scalars['String']['output'];
   /** Reads and enables pagination through a set of `Task`. */
   tasksByAssignedTagTagIdAndTaskId: TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection;
 };
 
 
 export type TagAssignedTagsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<AssignedTagCondition>;
   filter?: InputMaybe<AssignedTagFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<AssignedTagsOrderBy>>;
 };
 
 
 export type TagTasksByAssignedTagTagIdAndTaskIdArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<TaskCondition>;
   filter?: InputMaybe<TaskFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<TasksOrderBy>>;
 };
 
 /** A condition to be used against `Tag` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type TagCondition = {
   /** Checks for equality with the object’s `id` field. */
-  id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `tag` field. */
-  tag?: InputMaybe<Scalars['String']>;
+  tag?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A filter to be used against `Tag` object types. All fields are combined with a logical ‘and.’ */
@@ -2625,8 +2627,8 @@ export type TagFilter = {
 
 /** An input for mutations affecting `Tag` */
 export type TagInput = {
-  id?: InputMaybe<Scalars['Int']>;
-  tag: Scalars['String'];
+  id?: InputMaybe<Scalars['Int']['input']>;
+  tag: Scalars['String']['input'];
 };
 
 /** A connection to a list of `Task` values, with data from `AssignedTag`. */
@@ -2639,14 +2641,14 @@ export type TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Task` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Task` edge in the connection, with data from `AssignedTag`. */
 export type TagTasksByAssignedTagTagIdAndTaskIdManyToManyEdge = {
   __typename?: 'TagTasksByAssignedTagTagIdAndTaskIdManyToManyEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Task` at the end of the edge. */
   node: Task;
 };
@@ -2661,14 +2663,14 @@ export type TagsConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Tag` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Tag` edge in the connection. */
 export type TagsEdge = {
   __typename?: 'TagsEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Tag` at the end of the edge. */
   node: Tag;
 };
@@ -2690,79 +2692,79 @@ export type Task = Node & {
   assignedTags: AssignedTagsConnection;
   /** Reads a single `Ctf` that is related to this `Task`. */
   ctf?: Maybe<Ctf>;
-  ctfId: Scalars['Int'];
-  description: Scalars['String'];
-  flag: Scalars['String'];
-  id: Scalars['Int'];
+  ctfId: Scalars['Int']['output'];
+  description: Scalars['String']['output'];
+  flag: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
-  padUrl: Scalars['String'];
+  nodeId: Scalars['ID']['output'];
+  padUrl: Scalars['String']['output'];
   /** Reads and enables pagination through a set of `Profile`. */
   profilesByWorkOnTaskTaskIdAndProfileId: TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyConnection;
-  solved?: Maybe<Scalars['Boolean']>;
+  solved?: Maybe<Scalars['Boolean']['output']>;
   /** Reads and enables pagination through a set of `Tag`. */
   tagsByAssignedTagTaskIdAndTagId: TaskTagsByAssignedTagTaskIdAndTagIdManyToManyConnection;
-  title: Scalars['String'];
+  title: Scalars['String']['output'];
   /** Reads and enables pagination through a set of `WorkOnTask`. */
   workOnTasks: WorkOnTasksConnection;
 };
 
 
 export type TaskAssignedTagsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<AssignedTagCondition>;
   filter?: InputMaybe<AssignedTagFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<AssignedTagsOrderBy>>;
 };
 
 
 export type TaskProfilesByWorkOnTaskTaskIdAndProfileIdArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<ProfileCondition>;
   filter?: InputMaybe<ProfileFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<ProfilesOrderBy>>;
 };
 
 
 export type TaskTagsByAssignedTagTaskIdAndTagIdArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<TagCondition>;
   filter?: InputMaybe<TagFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<TagsOrderBy>>;
 };
 
 
 export type TaskWorkOnTasksArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
+  after?: InputMaybe<Scalars['Cursor']['input']>;
+  before?: InputMaybe<Scalars['Cursor']['input']>;
   condition?: InputMaybe<WorkOnTaskCondition>;
   filter?: InputMaybe<WorkOnTaskFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
 };
 
 /** A condition to be used against `Task` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type TaskCondition = {
   /** Checks for equality with the object’s `ctfId` field. */
-  ctfId?: InputMaybe<Scalars['Int']>;
+  ctfId?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `id` field. */
-  id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `title` field. */
-  title?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A filter to be used against `Task` object types. All fields are combined with a logical ‘and.’ */
@@ -2785,9 +2787,9 @@ export type TaskFilter = {
 
 /** Represents an update to a `Task`. Fields that are set will be updated. */
 export type TaskPatch = {
-  description?: InputMaybe<Scalars['String']>;
-  flag?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  flag?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A connection to a list of `Profile` values, with data from `WorkOnTask`. */
@@ -2800,15 +2802,15 @@ export type TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Profile` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Profile` edge in the connection, with data from `WorkOnTask`. */
 export type TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyEdge = {
   __typename?: 'TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyEdge';
-  active: Scalars['Boolean'];
+  active: Scalars['Boolean']['output'];
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Profile` at the end of the edge. */
   node: Profile;
 };
@@ -2823,14 +2825,14 @@ export type TaskTagsByAssignedTagTaskIdAndTagIdManyToManyConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Tag` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Tag` edge in the connection, with data from `AssignedTag`. */
 export type TaskTagsByAssignedTagTaskIdAndTagIdManyToManyEdge = {
   __typename?: 'TaskTagsByAssignedTagTaskIdAndTagIdManyToManyEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Tag` at the end of the edge. */
   node: Tag;
 };
@@ -2845,14 +2847,14 @@ export type TasksConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `Task` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `Task` edge in the connection. */
 export type TasksEdge = {
   __typename?: 'TasksEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `Task` at the end of the edge. */
   node: Task;
 };
@@ -2876,9 +2878,9 @@ export type UpdateCtfByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `Ctf` to be updated. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
   /** An object where the defined keys will be set on the `Ctf` being updated. */
   patch: CtfPatch;
 };
@@ -2889,8 +2891,8 @@ export type UpdateCtfInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
   /** An object where the defined keys will be set on the `Ctf` being updated. */
   patch: CtfPatch;
 };
@@ -2902,7 +2904,7 @@ export type UpdateCtfPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The `Ctf` that was updated by this mutation. */
   ctf?: Maybe<Ctf>;
   /** An edge for our `Ctf`. May be used by Relay 1. */
@@ -2925,9 +2927,9 @@ export type UpdateCtfSecretByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `CtfSecret` to be updated. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
   /** An object where the defined keys will be set on the `CtfSecret` being updated. */
   patch: CtfSecretPatch;
 };
@@ -2938,8 +2940,8 @@ export type UpdateCtfSecretInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
   /** An object where the defined keys will be set on the `CtfSecret` being updated. */
   patch: CtfSecretPatch;
 };
@@ -2951,7 +2953,7 @@ export type UpdateCtfSecretPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The `CtfSecret` that was updated by this mutation. */
   ctfSecret?: Maybe<CtfSecret>;
   /** An edge for our `CtfSecret`. May be used by Relay 1. */
@@ -2972,7 +2974,7 @@ export type UpdateLastActiveInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The output of our `updateLastActive` mutation. */
@@ -2982,7 +2984,7 @@ export type UpdateLastActivePayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
@@ -2993,8 +2995,8 @@ export type UpdateProfileByDiscordIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  discordId: Scalars['String'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  discordId: Scalars['String']['input'];
   /** An object where the defined keys will be set on the `Profile` being updated. */
   patch: ProfilePatch;
 };
@@ -3005,9 +3007,9 @@ export type UpdateProfileByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `Profile` to be updated. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
   /** An object where the defined keys will be set on the `Profile` being updated. */
   patch: ProfilePatch;
 };
@@ -3018,10 +3020,10 @@ export type UpdateProfileByUsernameInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** An object where the defined keys will be set on the `Profile` being updated. */
   patch: ProfilePatch;
-  username: Scalars['String'];
+  username: Scalars['String']['input'];
 };
 
 /** All input for the `updateProfile` mutation. */
@@ -3030,8 +3032,8 @@ export type UpdateProfileInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
   /** An object where the defined keys will be set on the `Profile` being updated. */
   patch: ProfilePatch;
 };
@@ -3043,7 +3045,7 @@ export type UpdateProfilePayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The `Profile` that was updated by this mutation. */
   profile?: Maybe<Profile>;
   /** An edge for our `Profile`. May be used by Relay 1. */
@@ -3064,9 +3066,9 @@ export type UpdateSettingByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `Setting` to be updated. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
   /** An object where the defined keys will be set on the `Setting` being updated. */
   patch: SettingPatch;
 };
@@ -3078,7 +3080,7 @@ export type UpdateSettingPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   /** The `Setting` that was updated by this mutation. */
@@ -3099,9 +3101,9 @@ export type UpdateTaskByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `Task` to be updated. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
   /** An object where the defined keys will be set on the `Task` being updated. */
   patch: TaskPatch;
 };
@@ -3112,8 +3114,8 @@ export type UpdateTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
   /** An object where the defined keys will be set on the `Task` being updated. */
   patch: TaskPatch;
 };
@@ -3125,7 +3127,7 @@ export type UpdateTaskPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Ctf` that is related to this `Task`. */
   ctf?: Maybe<Ctf>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -3148,9 +3150,9 @@ export type UpdateUserRoleInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<Role>;
-  userId?: InputMaybe<Scalars['Int']>;
+  userId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** The output of our `updateUserRole` mutation. */
@@ -3160,7 +3162,7 @@ export type UpdateUserRolePayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
   role?: Maybe<Role>;
@@ -3172,9 +3174,9 @@ export type UpdateWorkOnTaskByNodeIdInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The globally unique `ID` which will identify a single `WorkOnTask` to be updated. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
   /** An object where the defined keys will be set on the `WorkOnTask` being updated. */
   patch: WorkOnTaskPatch;
 };
@@ -3185,11 +3187,11 @@ export type UpdateWorkOnTaskInput = {
    * An arbitrary string value with no semantic meaning. Will be included in the
    * payload verbatim. May be used to track mutations by the client.
    */
-  clientMutationId?: InputMaybe<Scalars['String']>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** An object where the defined keys will be set on the `WorkOnTask` being updated. */
   patch: WorkOnTaskPatch;
-  profileId: Scalars['Int'];
-  taskId: Scalars['Int'];
+  profileId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
 };
 
 /** The output of our update `WorkOnTask` mutation. */
@@ -3199,7 +3201,7 @@ export type UpdateWorkOnTaskPayload = {
    * The exact same `clientMutationId` that was provided in the mutation input,
    * unchanged and unused. May be used by a client to track mutations.
    */
-  clientMutationId?: Maybe<Scalars['String']>;
+  clientMutationId?: Maybe<Scalars['String']['output']>;
   /** Reads a single `Profile` that is related to this `WorkOnTask`. */
   profile?: Maybe<Profile>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
@@ -3220,17 +3222,17 @@ export type UpdateWorkOnTaskPayloadWorkOnTaskEdgeArgs = {
 
 export type User = {
   __typename?: 'User';
-  id?: Maybe<Scalars['Int']>;
-  login?: Maybe<Scalars['String']>;
-  nodeId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  login?: Maybe<Scalars['String']['output']>;
+  nodeId?: Maybe<Scalars['String']['output']>;
   profile?: Maybe<Profile>;
   role?: Maybe<Role>;
 };
 
 export type UserResponse = {
   __typename?: 'UserResponse';
-  id?: Maybe<Scalars['Int']>;
-  login?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  login?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Role>;
 };
 
@@ -3244,14 +3246,14 @@ export type UsersConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `User` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `User` edge in the connection. */
 export type UsersEdge = {
   __typename?: 'UsersEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `User` at the end of the edge. */
   node: User;
 };
@@ -3263,15 +3265,15 @@ export enum UsersOrderBy {
 
 export type WorkOnTask = Node & {
   __typename?: 'WorkOnTask';
-  active: Scalars['Boolean'];
+  active: Scalars['Boolean']['output'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['output'];
   /** Reads a single `Profile` that is related to this `WorkOnTask`. */
   profile?: Maybe<Profile>;
-  profileId: Scalars['Int'];
+  profileId: Scalars['Int']['output'];
   /** Reads a single `Task` that is related to this `WorkOnTask`. */
   task?: Maybe<Task>;
-  taskId: Scalars['Int'];
+  taskId: Scalars['Int']['output'];
 };
 
 /**
@@ -3280,9 +3282,9 @@ export type WorkOnTask = Node & {
  */
 export type WorkOnTaskCondition = {
   /** Checks for equality with the object’s `profileId` field. */
-  profileId?: InputMaybe<Scalars['Int']>;
+  profileId?: InputMaybe<Scalars['Int']['input']>;
   /** Checks for equality with the object’s `taskId` field. */
-  taskId?: InputMaybe<Scalars['Int']>;
+  taskId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** A filter to be used against `WorkOnTask` object types. All fields are combined with a logical ‘and.’ */
@@ -3301,16 +3303,16 @@ export type WorkOnTaskFilter = {
 
 /** An input for mutations affecting `WorkOnTask` */
 export type WorkOnTaskInput = {
-  active?: InputMaybe<Scalars['Boolean']>;
-  profileId: Scalars['Int'];
-  taskId: Scalars['Int'];
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  profileId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
 };
 
 /** Represents an update to a `WorkOnTask`. Fields that are set will be updated. */
 export type WorkOnTaskPatch = {
-  active?: InputMaybe<Scalars['Boolean']>;
-  profileId?: InputMaybe<Scalars['Int']>;
-  taskId?: InputMaybe<Scalars['Int']>;
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  profileId?: InputMaybe<Scalars['Int']['input']>;
+  taskId?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** A connection to a list of `WorkOnTask` values. */
@@ -3323,14 +3325,14 @@ export type WorkOnTasksConnection = {
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** The count of *all* `WorkOnTask` you could get from the connection. */
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 /** A `WorkOnTask` edge in the connection. */
 export type WorkOnTasksEdge = {
   __typename?: 'WorkOnTasksEdge';
   /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
+  cursor?: Maybe<Scalars['Cursor']['output']>;
   /** The `WorkOnTask` at the end of the edge. */
   node: WorkOnTask;
 };
@@ -3361,21 +3363,21 @@ export type CreateInvitationTokenMutationVariables = Exact<{
 export type CreateInvitationTokenMutation = { __typename?: 'Mutation', createInvitationLink?: { __typename?: 'CreateInvitationLinkPayload', invitationLinkResponse?: { __typename?: 'InvitationLinkResponse', token?: string | null } | null } | null };
 
 export type CreateResetPasswordTokenMutationVariables = Exact<{
-  userId: Scalars['Int'];
+  userId: Scalars['Int']['input'];
 }>;
 
 
 export type CreateResetPasswordTokenMutation = { __typename?: 'Mutation', createResetPasswordLink?: { __typename?: 'CreateResetPasswordLinkPayload', resetPasswordLinkResponse?: { __typename?: 'ResetPasswordLinkResponse', token?: string | null } | null } | null };
 
 export type DeleteUserByIdMutationVariables = Exact<{
-  userId: Scalars['Int'];
+  userId: Scalars['Int']['input'];
 }>;
 
 
 export type DeleteUserByIdMutation = { __typename?: 'Mutation', deleteUser?: { __typename?: 'DeleteUserPayload', userResponse?: { __typename?: 'UserResponse', id?: number | null, login?: string | null, role?: Role | null } | null } | null };
 
 export type UpdateRoleForUserIdMutationVariables = Exact<{
-  userId: Scalars['Int'];
+  userId: Scalars['Int']['input'];
   role: Role;
 }>;
 
@@ -3408,42 +3410,42 @@ export type ResetDiscordIdMutationVariables = Exact<{ [key: string]: never; }>;
 export type ResetDiscordIdMutation = { __typename?: 'Mutation', resetDiscordId?: { __typename?: 'ResetDiscordIdPayload', string?: string | null } | null };
 
 export type LoginMutationVariables = Exact<{
-  login: Scalars['String'];
-  password: Scalars['String'];
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 
 export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'LoginPayload', jwt?: string | null } | null };
 
 export type RegisterMutationVariables = Exact<{
-  login: Scalars['String'];
-  password: Scalars['String'];
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'RegisterPayload', jwt?: string | null } | null };
 
 export type RegisterWithTokenMutationVariables = Exact<{
-  login: Scalars['String'];
-  password: Scalars['String'];
-  token: Scalars['String'];
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 }>;
 
 
 export type RegisterWithTokenMutation = { __typename?: 'Mutation', registerWithToken?: { __typename?: 'RegisterWithTokenPayload', jwt?: string | null } | null };
 
 export type RegisterWithPasswordMutationVariables = Exact<{
-  login: Scalars['String'];
-  password: Scalars['String'];
-  ctfnotePassword: Scalars['String'];
+  login: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  ctfnotePassword: Scalars['String']['input'];
 }>;
 
 
 export type RegisterWithPasswordMutation = { __typename?: 'Mutation', registerWithPassword?: { __typename?: 'RegisterWithPasswordPayload', jwt?: string | null } | null };
 
 export type ResetPasswordMutationVariables = Exact<{
-  password: Scalars['String'];
-  token: Scalars['String'];
+  password: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 }>;
 
 
@@ -3464,7 +3466,7 @@ export type SubscribeToCtfSubscriptionVariables = Exact<{ [key: string]: never; 
 export type SubscribeToCtfSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'AssignedTag', nodeId: string } | { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Tag', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type GetFullCtfQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
@@ -3476,59 +3478,59 @@ export type IncomingCtfsQueryVariables = Exact<{ [key: string]: never; }>;
 export type IncomingCtfsQuery = { __typename?: 'Query', incomingCtf?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null }> } | null };
 
 export type PastCtfsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type PastCtfsQuery = { __typename?: 'Query', pastCtf?: { __typename?: 'CtfsConnection', totalCount: number, nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null }> } | null };
 
 export type CreateCtfMutationVariables = Exact<{
-  title: Scalars['String'];
-  startTime: Scalars['Datetime'];
-  endTime: Scalars['Datetime'];
-  weight?: InputMaybe<Scalars['Float']>;
-  ctfUrl?: InputMaybe<Scalars['String']>;
-  ctftimeUrl?: InputMaybe<Scalars['String']>;
-  logoUrl?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
+  title: Scalars['String']['input'];
+  startTime: Scalars['Datetime']['input'];
+  endTime: Scalars['Datetime']['input'];
+  weight?: InputMaybe<Scalars['Float']['input']>;
+  ctfUrl?: InputMaybe<Scalars['String']['input']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']['input']>;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type CreateCtfMutation = { __typename?: 'Mutation', createCtf?: { __typename?: 'CreateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null } | null } | null };
 
 export type DeleteCtfbyIdMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
 export type DeleteCtfbyIdMutation = { __typename?: 'Mutation', deleteCtf?: { __typename?: 'DeleteCtfPayload', deletedCtfNodeId?: string | null } | null };
 
 export type ImportctfMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
 export type ImportctfMutation = { __typename?: 'Mutation', importCtf?: { __typename?: 'ImportCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null } | null } | null };
 
 export type UpdateCtfByIdMutationVariables = Exact<{
-  id: Scalars['Int'];
-  title?: InputMaybe<Scalars['String']>;
-  weight?: InputMaybe<Scalars['Float']>;
-  ctfUrl?: InputMaybe<Scalars['String']>;
-  ctftimeUrl?: InputMaybe<Scalars['String']>;
-  logoUrl?: InputMaybe<Scalars['String']>;
-  startTime?: InputMaybe<Scalars['Datetime']>;
-  endTime?: InputMaybe<Scalars['Datetime']>;
-  description?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+  weight?: InputMaybe<Scalars['Float']['input']>;
+  ctfUrl?: InputMaybe<Scalars['String']['input']>;
+  ctftimeUrl?: InputMaybe<Scalars['String']['input']>;
+  logoUrl?: InputMaybe<Scalars['String']['input']>;
+  startTime?: InputMaybe<Scalars['Datetime']['input']>;
+  endTime?: InputMaybe<Scalars['Datetime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type UpdateCtfByIdMutation = { __typename?: 'Mutation', updateCtf?: { __typename?: 'UpdateCtfPayload', ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null } | null } | null };
 
 export type SetDiscordEventLinkMutationVariables = Exact<{
-  id: Scalars['Int'];
-  link: Scalars['String'];
+  id: Scalars['Int']['input'];
+  link: Scalars['String']['input'];
 }>;
 
 
@@ -3552,16 +3554,16 @@ export type SubscribeToFlagSubscription = { __typename?: 'Subscription', listen:
 export type InvitationFragment = { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number };
 
 export type InviteUserToCtfMutationVariables = Exact<{
-  ctfId: Scalars['Int'];
-  profileId: Scalars['Int'];
+  ctfId: Scalars['Int']['input'];
+  profileId: Scalars['Int']['input'];
 }>;
 
 
 export type InviteUserToCtfMutation = { __typename?: 'Mutation', createInvitation?: { __typename?: 'CreateInvitationPayload', invitation?: { __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number } | null } | null };
 
 export type UninviteUserToCtfMutationVariables = Exact<{
-  ctfId: Scalars['Int'];
-  profileId: Scalars['Int'];
+  ctfId: Scalars['Int']['input'];
+  profileId: Scalars['Int']['input'];
 }>;
 
 
@@ -3574,15 +3576,15 @@ export type ProfileFragment = { __typename?: 'Profile', id: number, username: st
 export type RestrictedProfileFragment = { __typename?: 'Profile', id: number, username: string, color?: string | null, description: string, role?: Role | null, nodeId: string };
 
 export type UpdatePasswordMutationVariables = Exact<{
-  oldPassword: Scalars['String'];
-  newPassword: Scalars['String'];
+  oldPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
 }>;
 
 
 export type UpdatePasswordMutation = { __typename?: 'Mutation', changePassword?: { __typename?: 'ChangePasswordPayload', changePasswordResponse?: { __typename?: 'ChangePasswordResponse', ok?: boolean | null } | null } | null };
 
 export type UpdateProfileMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   patch: ProfilePatch;
 }>;
 
@@ -3620,28 +3622,28 @@ export type SubscribeToProfileDeletedSubscriptionVariables = Exact<{ [key: strin
 export type SubscribeToProfileDeletedSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNodeId?: string | null, relatedNode?: { __typename?: 'AssignedTag', nodeId: string } | { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string, id: number, username: string, lastactive: string, color?: string | null, description: string, role?: Role | null, discordId?: string | null } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Tag', nodeId: string } | { __typename?: 'Task', nodeId: string } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type SearchCtFsQueryVariables = Exact<{
-  search: Scalars['String'];
+  search: Scalars['String']['input'];
 }>;
 
 
 export type SearchCtFsQuery = { __typename?: 'Query', ctfs?: { __typename?: 'CtfsConnection', nodes: Array<{ __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null }> } | null };
 
 export type SearchTasksQueryVariables = Exact<{
-  search: Scalars['String'];
+  search: Scalars['String']['input'];
 }>;
 
 
 export type SearchTasksQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> } | null };
 
 export type SearchTagsQueryVariables = Exact<{
-  search: Scalars['String'];
+  search: Scalars['String']['input'];
 }>;
 
 
 export type SearchTagsQuery = { __typename?: 'Query', tags?: { __typename?: 'TagsConnection', nodes: Array<{ __typename?: 'Tag', tasksByAssignedTagTagIdAndTaskId: { __typename?: 'TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, ctf?: { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null } | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> } }> } | null };
 
 export type SearchAllQueryVariables = Exact<{
-  search: Scalars['String'];
+  search: Scalars['String']['input'];
 }>;
 
 
@@ -3650,15 +3652,15 @@ export type SearchAllQuery = { __typename?: 'Query', tags?: { __typename?: 'Tags
 export type CtfSecretFragment = { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null };
 
 export type GetCredentialsForCtfIdQueryVariables = Exact<{
-  ctfId: Scalars['Int'];
+  ctfId: Scalars['Int']['input'];
 }>;
 
 
 export type GetCredentialsForCtfIdQuery = { __typename?: 'Query', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null };
 
 export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
-  ctfId: Scalars['Int'];
-  credentials?: InputMaybe<Scalars['String']>;
+  ctfId: Scalars['Int']['input'];
+  credentials?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -3684,7 +3686,7 @@ export type GetAdminSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean }> } | null };
 
 export type UpdateSettingsMutationVariables = Exact<{
-  nodeId: Scalars['ID'];
+  nodeId: Scalars['ID']['input'];
   patch: SettingPatch;
 }>;
 
@@ -3699,7 +3701,7 @@ export type GetTagsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetTagsQuery = { __typename?: 'Query', tags?: { __typename?: 'TagsConnection', nodes: Array<{ __typename?: 'Tag', nodeId: string, id: number, tag: string }> } | null };
 
 export type GetTagByIdQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
@@ -3710,8 +3712,8 @@ export type AssignedTagsFragment = { __typename?: 'AssignedTag', nodeId: string,
 export type TaskForTagsFragementFragment = { __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null };
 
 export type AddTagsForTaskMutationVariables = Exact<{
-  tags?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
-  taskId: Scalars['Int'];
+  tags?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  taskId: Scalars['Int']['input'];
 }>;
 
 
@@ -3737,63 +3739,63 @@ export type WorkingOnFragment = { __typename?: 'WorkOnTask', nodeId: string, pro
 export type TaskFragment = { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } };
 
 export type GetTasksForCtfIdQueryVariables = Exact<{
-  ctfId: Scalars['Int'];
+  ctfId: Scalars['Int']['input'];
 }>;
 
 
 export type GetTasksForCtfIdQuery = { __typename?: 'Query', tasks?: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> } | null };
 
 export type TaskByIdQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
 export type TaskByIdQuery = { __typename?: 'Query', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null };
 
 export type UpdateTaskMutationVariables = Exact<{
-  id: Scalars['Int'];
-  title?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  flag?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  flag?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type UpdateTaskMutation = { __typename?: 'Mutation', updateTask?: { __typename?: 'UpdateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
 export type CreateTaskForCtfIdMutationVariables = Exact<{
-  ctfId: Scalars['Int'];
-  title: Scalars['String'];
-  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
-  description?: InputMaybe<Scalars['String']>;
-  flag?: InputMaybe<Scalars['String']>;
+  ctfId: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  flag?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type CreateTaskForCtfIdMutation = { __typename?: 'Mutation', createTask?: { __typename?: 'CreateTaskPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
 export type DeleteTaskMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
 export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask?: { __typename?: 'DeleteTaskPayload', deletedTaskNodeId?: string | null } | null };
 
 export type StartWorkingOnMutationVariables = Exact<{
-  taskId: Scalars['Int'];
+  taskId: Scalars['Int']['input'];
 }>;
 
 
 export type StartWorkingOnMutation = { __typename?: 'Mutation', startWorkingOn?: { __typename?: 'StartWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
 export type StopWorkingOnMutationVariables = Exact<{
-  taskId: Scalars['Int'];
+  taskId: Scalars['Int']['input'];
 }>;
 
 
 export type StopWorkingOnMutation = { __typename?: 'Mutation', stopWorkingOn?: { __typename?: 'StopWorkingOnPayload', task?: { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | null } | null };
 
 export type CancelWorkingOnMutationVariables = Exact<{
-  taskId: Scalars['Int'];
+  taskId: Scalars['Int']['input'];
 }>;
 
 
@@ -3805,7 +3807,7 @@ export type SubscribeToTaskSubscriptionVariables = Exact<{ [key: string]: never;
 export type SubscribeToTaskSubscription = { __typename?: 'Subscription', listen: { __typename?: 'ListenPayload', relatedNode?: { __typename?: 'AssignedTag', nodeId: string } | { __typename?: 'Ctf', nodeId: string } | { __typename?: 'CtfSecret', nodeId: string } | { __typename?: 'Invitation', nodeId: string } | { __typename?: 'Profile', nodeId: string } | { __typename?: 'Query', nodeId: string } | { __typename?: 'Setting', nodeId: string } | { __typename?: 'Tag', nodeId: string } | { __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } } | { __typename?: 'WorkOnTask', nodeId: string } | null } };
 
 export type UploadLogoMutationVariables = Exact<{
-  logo: Scalars['Upload'];
+  logo: Scalars['Upload']['input'];
 }>;
 
 
@@ -4500,7 +4502,7 @@ export const GetFullCtfDocument = gql`
 export function useGetFullCtfQuery(variables: GetFullCtfQueryVariables | VueCompositionApi.Ref<GetFullCtfQueryVariables> | ReactiveFunction<GetFullCtfQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetFullCtfQuery, GetFullCtfQueryVariables>(GetFullCtfDocument, variables, options);
 }
-export function useGetFullCtfLazyQuery(variables: GetFullCtfQueryVariables | VueCompositionApi.Ref<GetFullCtfQueryVariables> | ReactiveFunction<GetFullCtfQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> = {}) {
+export function useGetFullCtfLazyQuery(variables?: GetFullCtfQueryVariables | VueCompositionApi.Ref<GetFullCtfQueryVariables> | ReactiveFunction<GetFullCtfQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetFullCtfQuery, GetFullCtfQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<GetFullCtfQuery, GetFullCtfQueryVariables>(GetFullCtfDocument, variables, options);
 }
 export type GetFullCtfQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetFullCtfQuery, GetFullCtfQueryVariables>;
@@ -5152,7 +5154,7 @@ export const SearchCtFsDocument = gql`
 export function useSearchCtFsQuery(variables: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<SearchCtFsQuery, SearchCtFsQueryVariables>(SearchCtFsDocument, variables, options);
 }
-export function useSearchCtFsLazyQuery(variables: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
+export function useSearchCtFsLazyQuery(variables?: SearchCtFsQueryVariables | VueCompositionApi.Ref<SearchCtFsQueryVariables> | ReactiveFunction<SearchCtFsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchCtFsQuery, SearchCtFsQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<SearchCtFsQuery, SearchCtFsQueryVariables>(SearchCtFsDocument, variables, options);
 }
 export type SearchCtFsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchCtFsQuery, SearchCtFsQueryVariables>;
@@ -5188,7 +5190,7 @@ ${CtfFragmentDoc}`;
 export function useSearchTasksQuery(variables: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
 }
-export function useSearchTasksLazyQuery(variables: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
+export function useSearchTasksLazyQuery(variables?: SearchTasksQueryVariables | VueCompositionApi.Ref<SearchTasksQueryVariables> | ReactiveFunction<SearchTasksQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTasksQuery, SearchTasksQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<SearchTasksQuery, SearchTasksQueryVariables>(SearchTasksDocument, variables, options);
 }
 export type SearchTasksQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchTasksQuery, SearchTasksQueryVariables>;
@@ -5228,7 +5230,7 @@ ${CtfFragmentDoc}`;
 export function useSearchTagsQuery(variables: SearchTagsQueryVariables | VueCompositionApi.Ref<SearchTagsQueryVariables> | ReactiveFunction<SearchTagsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<SearchTagsQuery, SearchTagsQueryVariables>(SearchTagsDocument, variables, options);
 }
-export function useSearchTagsLazyQuery(variables: SearchTagsQueryVariables | VueCompositionApi.Ref<SearchTagsQueryVariables> | ReactiveFunction<SearchTagsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> = {}) {
+export function useSearchTagsLazyQuery(variables?: SearchTagsQueryVariables | VueCompositionApi.Ref<SearchTagsQueryVariables> | ReactiveFunction<SearchTagsQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchTagsQuery, SearchTagsQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<SearchTagsQuery, SearchTagsQueryVariables>(SearchTagsDocument, variables, options);
 }
 export type SearchTagsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchTagsQuery, SearchTagsQueryVariables>;
@@ -5281,7 +5283,7 @@ ${CtfFragmentDoc}`;
 export function useSearchAllQuery(variables: SearchAllQueryVariables | VueCompositionApi.Ref<SearchAllQueryVariables> | ReactiveFunction<SearchAllQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<SearchAllQuery, SearchAllQueryVariables>(SearchAllDocument, variables, options);
 }
-export function useSearchAllLazyQuery(variables: SearchAllQueryVariables | VueCompositionApi.Ref<SearchAllQueryVariables> | ReactiveFunction<SearchAllQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> = {}) {
+export function useSearchAllLazyQuery(variables?: SearchAllQueryVariables | VueCompositionApi.Ref<SearchAllQueryVariables> | ReactiveFunction<SearchAllQueryVariables>, options: VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<SearchAllQuery, SearchAllQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<SearchAllQuery, SearchAllQueryVariables>(SearchAllDocument, variables, options);
 }
 export type SearchAllQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<SearchAllQuery, SearchAllQueryVariables>;
@@ -5311,7 +5313,7 @@ export const GetCredentialsForCtfIdDocument = gql`
 export function useGetCredentialsForCtfIdQuery(variables: GetCredentialsForCtfIdQueryVariables | VueCompositionApi.Ref<GetCredentialsForCtfIdQueryVariables> | ReactiveFunction<GetCredentialsForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>(GetCredentialsForCtfIdDocument, variables, options);
 }
-export function useGetCredentialsForCtfIdLazyQuery(variables: GetCredentialsForCtfIdQueryVariables | VueCompositionApi.Ref<GetCredentialsForCtfIdQueryVariables> | ReactiveFunction<GetCredentialsForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> = {}) {
+export function useGetCredentialsForCtfIdLazyQuery(variables?: GetCredentialsForCtfIdQueryVariables | VueCompositionApi.Ref<GetCredentialsForCtfIdQueryVariables> | ReactiveFunction<GetCredentialsForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>(GetCredentialsForCtfIdDocument, variables, options);
 }
 export type GetCredentialsForCtfIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetCredentialsForCtfIdQuery, GetCredentialsForCtfIdQueryVariables>;
@@ -5523,7 +5525,7 @@ export const GetTagByIdDocument = gql`
 export function useGetTagByIdQuery(variables: GetTagByIdQueryVariables | VueCompositionApi.Ref<GetTagByIdQueryVariables> | ReactiveFunction<GetTagByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetTagByIdQuery, GetTagByIdQueryVariables>(GetTagByIdDocument, variables, options);
 }
-export function useGetTagByIdLazyQuery(variables: GetTagByIdQueryVariables | VueCompositionApi.Ref<GetTagByIdQueryVariables> | ReactiveFunction<GetTagByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables>> = {}) {
+export function useGetTagByIdLazyQuery(variables?: GetTagByIdQueryVariables | VueCompositionApi.Ref<GetTagByIdQueryVariables> | ReactiveFunction<GetTagByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTagByIdQuery, GetTagByIdQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<GetTagByIdQuery, GetTagByIdQueryVariables>(GetTagByIdDocument, variables, options);
 }
 export type GetTagByIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTagByIdQuery, GetTagByIdQueryVariables>;
@@ -5675,7 +5677,7 @@ export const GetTasksForCtfIdDocument = gql`
 export function useGetTasksForCtfIdQuery(variables: GetTasksForCtfIdQueryVariables | VueCompositionApi.Ref<GetTasksForCtfIdQueryVariables> | ReactiveFunction<GetTasksForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>(GetTasksForCtfIdDocument, variables, options);
 }
-export function useGetTasksForCtfIdLazyQuery(variables: GetTasksForCtfIdQueryVariables | VueCompositionApi.Ref<GetTasksForCtfIdQueryVariables> | ReactiveFunction<GetTasksForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> = {}) {
+export function useGetTasksForCtfIdLazyQuery(variables?: GetTasksForCtfIdQueryVariables | VueCompositionApi.Ref<GetTasksForCtfIdQueryVariables> | ReactiveFunction<GetTasksForCtfIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>(GetTasksForCtfIdDocument, variables, options);
 }
 export type GetTasksForCtfIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetTasksForCtfIdQuery, GetTasksForCtfIdQueryVariables>;
@@ -5705,7 +5707,7 @@ export const TaskByIdDocument = gql`
 export function useTaskByIdQuery(variables: TaskByIdQueryVariables | VueCompositionApi.Ref<TaskByIdQueryVariables> | ReactiveFunction<TaskByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> = {}) {
   return VueApolloComposable.useQuery<TaskByIdQuery, TaskByIdQueryVariables>(TaskByIdDocument, variables, options);
 }
-export function useTaskByIdLazyQuery(variables: TaskByIdQueryVariables | VueCompositionApi.Ref<TaskByIdQueryVariables> | ReactiveFunction<TaskByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> = {}) {
+export function useTaskByIdLazyQuery(variables?: TaskByIdQueryVariables | VueCompositionApi.Ref<TaskByIdQueryVariables> | ReactiveFunction<TaskByIdQueryVariables>, options: VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<TaskByIdQuery, TaskByIdQueryVariables>> = {}) {
   return VueApolloComposable.useLazyQuery<TaskByIdQuery, TaskByIdQueryVariables>(TaskByIdDocument, variables, options);
 }
 export type TaskByIdQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<TaskByIdQuery, TaskByIdQueryVariables>;

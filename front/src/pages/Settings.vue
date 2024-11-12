@@ -226,7 +226,7 @@ export default defineComponent({
       (s) => {
         profileToken.value = s;
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     watch(
@@ -237,7 +237,7 @@ export default defineComponent({
         description.value = v.profile.description;
         color.value = v.profile.color;
       },
-      { deep: true }
+      { deep: true },
     );
     const {
       isSystemNotificationEnabled,
@@ -297,7 +297,7 @@ export default defineComponent({
           description: this.description,
           username: this.username,
         }),
-        { message: 'Profile changed!', icon: 'person' }
+        { message: 'Profile changed!', icon: 'person' },
       );
     },
     changePassword() {
@@ -306,7 +306,7 @@ export default defineComponent({
           this.oldPassword = '';
           this.newPassword = '';
         }),
-        { message: 'Password changed!', icon: 'lock' }
+        { message: 'Password changed!', icon: 'lock' },
       );
     },
     resetToken() {
@@ -318,7 +318,7 @@ export default defineComponent({
         {
           message: 'Token refreshed!',
           icon: 'refresh',
-        }
+        },
       );
     },
     unlinkDiscord() {
@@ -330,7 +330,7 @@ export default defineComponent({
         {
           message: 'Discord unlinked!',
           icon: 'close',
-        }
+        },
       );
     },
     pollMe(visibility: boolean) {

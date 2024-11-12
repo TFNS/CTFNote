@@ -144,13 +144,13 @@ export default defineComponent({
         registerPromise = this.registerWithToken(
           this.form.login,
           this.form.password,
-          this.token
+          this.token,
         );
       } else if (this.registrationPasswordForced || this.usePassword) {
         registerPromise = this.registerWithPassword(
           this.form.login,
           this.form.password,
-          this.form.registrationPassword
+          this.form.registrationPassword,
         );
       } else {
         registerPromise = this.register(this.form.login, this.form.password);

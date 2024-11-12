@@ -42,7 +42,7 @@ export function provideTags() {
 export function injectTags() {
   const tags = inject(TagsSymbol);
   if (!tags) {
-    throw 'ERROR';
+    throw new Error('injectTags ERROR');
   }
 
   return tags;
@@ -54,7 +54,7 @@ export function getTags() {
   const wrappedQuery = wrapQuery(
     query,
     [],
-    (data) => data.tags?.nodes.map(buildTag) ?? []
+    (data) => data.tags?.nodes.map(buildTag) ?? [],
   );
 
   return wrappedQuery;

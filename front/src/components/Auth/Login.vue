@@ -83,7 +83,7 @@ export default defineComponent({
         {
           message: `Logged as ${login}!`,
           icon: 'person',
-        }
+        },
       );
     },
   },

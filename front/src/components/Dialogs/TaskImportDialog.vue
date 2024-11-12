@@ -211,7 +211,7 @@ export default defineComponent({
       // assign the amount of challenges to the parser options
       this.parserOptions.forEach((opt) => {
         const parser = outputOfParser.find(
-          (p) => p.parser.name === opt.value.name
+          (p) => p.parser.name === opt.value.name,
         );
         if (parser) {
           opt.amount = parser.challenges.length;
@@ -225,7 +225,7 @@ export default defineComponent({
         .reduce(
           (acc, cur) =>
             cur.challenges.length > acc ? cur.challenges.length : acc,
-          0
+          0,
         );
       const bestParser = outputOfParser.find((p) => p.challenges.length == max);
       if (
@@ -235,7 +235,7 @@ export default defineComponent({
           this.currentParser.label == RawParser.name) // it must be an improvement, except overriding the raw parser is allowed
       ) {
         const p = this.parserOptions.find(
-          (opt) => opt.value == bestParser.parser
+          (opt) => opt.value == bestParser.parser,
         );
         if (p) this.currentParser = p;
       } else if (this.currentParser.amount == 0) {
@@ -260,8 +260,8 @@ export default defineComponent({
         taskSet.add(
           hashTask(
             task.title,
-            this.normalizeTags(task.assignedTags.map((t) => t.tag))
-          )
+            this.normalizeTags(task.assignedTags.map((t) => t.tag)),
+          ),
         );
       }
       // mark already existing tasks

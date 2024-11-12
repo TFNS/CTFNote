@@ -67,7 +67,7 @@ export default defineComponent({
       return this.team.filter(
         (p) =>
           this.task.workOnTasks.filter((w) => w.profileId == p.id && w.active)
-            .length > 0
+            .length > 0,
       );
     },
     taskIcon() {
@@ -88,7 +88,7 @@ export default defineComponent({
       if (this.task.solved) return 'positive';
       if (
         this.task.workOnTasks.filter(
-          (w) => w.profileId == this.me?.profile.id && w.active
+          (w) => w.profileId == this.me?.profile.id && w.active,
         ).length > 0
       ) {
         return 'secondary';

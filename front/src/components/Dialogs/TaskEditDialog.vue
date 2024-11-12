@@ -90,7 +90,7 @@ export default defineComponent({
       val: string,
       doneFn: (callBackFn: () => void, afterFn: () => void) => void,
       //eslint-disable-next-line @typescript-eslint/no-unused-vars
-      _abortFn: () => void
+      _abortFn: () => void,
     ) {
       doneFn(
         () => {
@@ -99,7 +99,7 @@ export default defineComponent({
             .map((t) => t.tag)
             .filter((v) => v.toLocaleLowerCase().indexOf(needle) > -1);
         },
-        () => void 0
+        () => void 0,
       );
     };
 

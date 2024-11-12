@@ -53,7 +53,7 @@ export function useNotify() {
 
   const resolveAndNotify = async (
     p: Promise<unknown>,
-    opts?: NotifyOptions
+    opts?: NotifyOptions,
   ) => {
     try {
       await p;

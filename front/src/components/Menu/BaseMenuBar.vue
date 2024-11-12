@@ -112,7 +112,7 @@ export default defineComponent({
         !v
           ? document.body.classList.add('live-mode')
           : document.body.classList.remove('live-mode'),
-      { immediate: true }
+      { immediate: true },
     );
 
     return {

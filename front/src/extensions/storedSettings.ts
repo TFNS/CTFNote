@@ -34,7 +34,7 @@ export const useStoredSettings = (): StoredSettingsExtension => {
     }
     watch(
       () => r.value,
-      (v) => save(name, v)
+      (v) => save(name, v),
     );
     return r;
   };

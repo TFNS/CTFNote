@@ -28,5 +28,5 @@ export default boot(
     };
 
     app.provide(ApolloClients, apolloClients);
-  }
+  },
 );
