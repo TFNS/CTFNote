@@ -7,7 +7,7 @@ import {
   insertInvitation,
 } from "../database/ctfs";
 import { getDiscordIdFromUserId, getUserByDiscordId } from "../database/users";
-import { changeDiscordUserRoleForCTF } from "../commands/linkUser";
+import { changeDiscordUserRoleForCTF } from "../agile/commands/linkUser";
 import { PoolClient } from "pg";
 
 export async function syncDiscordPermissionsWithCtf(

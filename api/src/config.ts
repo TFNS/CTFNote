@@ -7,6 +7,10 @@ type DeepReadOnly<T> = {
     : T[k];
 };
 
+export enum DiscordChannelHandleStyle {
+  Agile = "agile",
+}
+
 export type CTFNoteConfig = DeepReadOnly<{
   env: string;
   sessionSecret: string;
@@ -45,6 +49,7 @@ export type CTFNoteConfig = DeepReadOnly<{
     registrationEnabled: string;
     registrationAccountRole: string;
     registrationRoleId: string;
+    channelHandleStyle: DiscordChannelHandleStyle;
   };
 }>;
 
@@ -102,6 +107,10 @@ const config: CTFNoteConfig = {
       "user_guest"
     ),
     registrationRoleId: getEnv("DISCORD_REGISTRATION_ROLE_ID", ""),
+    channelHandleStyle: getEnv(
+      "DISCORD_CHANNEL_HANDLE_STYLE",
+      "agile"
+    ) as DiscordChannelHandleStyle,
   },
 };
 

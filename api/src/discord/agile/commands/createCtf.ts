@@ -2,14 +2,57 @@ import {
   ActionRowBuilder,
   ApplicationCommandType,
   ButtonBuilder,
+  ButtonInteraction,
   ButtonStyle,
   Client,
   CommandInteraction,
   PermissionFlagsBits,
 } from "discord.js";
-import { Command } from "../command";
-import { getCTFNamesFromDatabase } from "../database/ctfs";
-import { getChannelCategoriesForCtf } from "../utils/channels";
+import { Command } from "../../interfaces/command";
+import {
+  getCtfFromDatabase,
+  getCTFNamesFromDatabase,
+} from "../../database/ctfs";
+import {
+  createChannelForTaskInCtf,
+  createChannelsAndRolesForCtf,
+  getChannelCategoriesForCtf,
+} from "../channels";
+import { DiscordButtonInteraction } from "../../interfaces/interaction";
+import { getChallengesFromDatabase } from "../../database/tasks";
+
+export const HandleCreateCtfInteraction: DiscordButtonInteraction = {
+  customId: "create-ctf-button",
+  handle: async (client: Client, interaction: ButtonInteraction) => {
+    const ctfName = interaction.customId.replace("create-ctf-button-", "");
+    await interaction.deferUpdate();
+    await interaction.editReply({
+      content: `Creating the CTF channels and roles for ${ctfName}`,
+      components: [],
+    });
+
+    const guild = interaction.guild;
+    if (guild == null) return;
+
+    // assign roles to users already having access to the ctf
+    const ctf = await getCtfFromDatabase(ctfName);
+    if (ctf == null) return;
+
+    await createChannelsAndRolesForCtf(guild, ctf);
+
+    // create for every challenge a channel
+    const challenges = await getChallengesFromDatabase(ctf.id);
+
+    for (const challenge of challenges) {
+      await createChannelForTaskInCtf(guild, challenge, ctf);
+    }
+
+    await interaction.editReply({
+      content: `Created the CTF channels and roles for ${ctfName}`,
+      components: [],
+    });
+  },
+};
 
 async function createCtfLogic(client: Client, interaction: CommandInteraction) {
   let ctfNames = await getCTFNamesFromDatabase();
