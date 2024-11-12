@@ -1,6 +1,15 @@
 <template>
   <div class="q-gutter-md">
     <div class="row text-h6">Invite guests</div>
+    <div class="row q-mt-sm">
+      <div style="width: 590px">
+        <q-input v-model="filter" filled dense placeholder="Search">
+          <template #prepend>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </div>
+    </div>
     <div class="row q-mt-sm" style="margin-left: 12px">
       <template v-if="guestsWithInvitation.length > 0">
         <div
@@ -61,8 +70,10 @@ export default defineComponent({
     const team = ctfnote.profiles.injectTeam();
     const now = ref(new Date());
     const settings = ctfnote.settings.injectSettings();
+    const filter = ref('');
 
     return {
+      filter,
       now,
       team,
       settings,
@@ -79,7 +90,14 @@ export default defineComponent({
       );
     },
     guestsWithInvitation() {
-      return this.guests.map((g) => {
+      let guests = this.guests;
+      if (this.filter) {
+        guests = guests.filter((g) =>
+          g.username.toLowerCase().includes(this.filter.toLowerCase()),
+        );
+      }
+
+      return guests.map((g) => {
         const invitation = this.ctf.invitations.find(
           (i) => i.profileId == g.id,
         );
