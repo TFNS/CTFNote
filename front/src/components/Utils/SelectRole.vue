@@ -30,7 +30,7 @@ export default defineComponent({
   computed: {
     role: {
       get() {
-        return this.options.find((o) => o.value == this.modelValue);
+        return this.options.find((o) => o.value.toString() == this.modelValue);
       },
       set(value: string) {
         this.$emit('update:model-value', value);

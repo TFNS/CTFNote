@@ -77,7 +77,7 @@ export function provideMe(refresh = false) {
 export function injectMe() {
   const me = inject(MeSymbol);
   if (!me) {
-    throw 'ERROR';
+    throw new Error('injectMe ERROR');
   }
 
   return me;

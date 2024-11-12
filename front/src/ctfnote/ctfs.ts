@@ -88,7 +88,7 @@ function extractDate(d: string) {
       return r;
     }
   }
-  throw 'invalid date';
+  throw new Error('invalid date');
 }
 
 export function buildCtf(ctf: CtfFragment): Ctf {
@@ -132,7 +132,7 @@ export function buildFullCtf(data: FullCtfResponse): Ctf {
 export function getIncomingCtfs() {
   const query = useIncomingCtfsQuery({ fetchPolicy: 'cache-and-network' });
   const wrappedQuery = wrapQuery(query, [], (data) =>
-    data.incomingCtf.nodes.map(buildCtf)
+    data.incomingCtf.nodes.map(buildCtf),
   );
 
   /* Watch deletion */
@@ -227,8 +227,8 @@ export function getPastCtfs(...args: Parameters<typeof usePastCtfsQuery>) {
           Number(new Date(a.startTime)) > Number(new Date(b.startTime))
             ? -1
             : Number(new Date(a.startTime)) < Number(new Date(b.startTime))
-            ? 1
-            : 0
+              ? 1
+              : 0,
         );
       }
       return {
@@ -254,7 +254,7 @@ export function getCtf(...args: Parameters<typeof useGetFullCtfQuery>) {
 export function getAllCtfs() {
   const query = useCtfsQuery();
   const wrappedQuery = wrapQuery(query, [], (data) =>
-    data.ctfs.nodes.map(buildCtf)
+    data.ctfs.nodes.map(buildCtf),
   );
   return wrappedQuery;
 }

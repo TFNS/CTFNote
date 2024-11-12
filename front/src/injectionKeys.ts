@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-unused-vars: 0 */
+
 import { Profile, Task } from 'src/ctfnote/models';
 import { InjectionKey, Ref } from 'vue';
 

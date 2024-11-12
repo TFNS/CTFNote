@@ -23,7 +23,7 @@ function parseStyle(s: string): SettingsColorMap {
   const json = Object.assign({}, defaultColors);
   try {
     const r = JSON.parse(s) as SettingsColorMap;
-    if (typeof r !== 'object') throw 'Invalid';
+    if (typeof r !== 'object') throw new Error('Invalid');
     for (const name of defaultColorsNames) {
       json[name] = r[name];
     }
@@ -34,7 +34,7 @@ function parseStyle(s: string): SettingsColorMap {
 /* Builders  */
 
 export function buildSettings(
-  fragment: Partial<SettingsInfoFragment>
+  fragment: Partial<SettingsInfoFragment>,
 ): Settings {
   return {
     registrationAllowed: fragment.registrationAllowed ?? false,
@@ -45,7 +45,7 @@ export function buildSettings(
 }
 
 export function buildAdminSettings(
-  fragment: Partial<AdminSettingsInfoFragment>
+  fragment: Partial<AdminSettingsInfoFragment>,
 ): AdminSettings {
   return {
     ...buildSettings(fragment),
@@ -127,7 +127,7 @@ export function provideSettings() {
 export function injectSettings() {
   const settings = inject(SettingsSymbol);
   if (!settings) {
-    throw 'ERROR';
+    throw new Error('injectSettings ERROR');
   }
 
   return settings;

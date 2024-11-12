@@ -72,7 +72,7 @@ export function provideTeam() {
 export function injectTeam() {
   const team = inject(TeamSymbol);
   if (!team) {
-    throw 'ERROR';
+    throw new Error('injectTeam ERROR');
   }
 
   return team;
@@ -85,7 +85,7 @@ export function getTeam() {
   const wrappedQuery = wrapQuery(
     query,
     [],
-    (data) => data.publicProfiles?.nodes.map(buildPublicProfile) ?? []
+    (data) => data.publicProfiles?.nodes.map(buildPublicProfile) ?? [],
   );
 
   query.subscribeToMore({ document: PublicProfileSubscriptionPayloadDocument });
@@ -97,7 +97,7 @@ export function getTeamAdmin() {
   const wrappedQuery = wrapQuery(
     query,
     [],
-    (data) => data.profiles?.nodes.map(buildProfile) ?? []
+    (data) => data.profiles?.nodes.map(buildProfile) ?? [],
   );
 
   return wrappedQuery;

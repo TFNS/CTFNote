@@ -7,12 +7,12 @@ import { computed, inject, InjectionKey, UnwrapRef } from 'vue';
 export function wrapQuery<D, T, U extends OperationVariables>(
   query: UseQueryReturn<T, U>,
   def: D,
-  wrapper: (data: DeepRequired<DeepNonNullable<T>>) => D
+  wrapper: (data: DeepRequired<DeepNonNullable<T>>) => D,
 ) {
   const result = computed(() => {
     if (query.result.value) {
       return wrapper(
-        query.result.value as DeepRequired<DeepNonNullable<T>>
+        query.result.value as DeepRequired<DeepNonNullable<T>>,
       ) as UnwrapRef<D>;
     } else {
       return def as UnwrapRef<D>;
@@ -53,6 +53,7 @@ export function parseJson<T>(s: string): T | null {
   try {
     return parseJsonStrict<T | null>(s);
   } catch (e) {
+    console.error(e);
     return null;
   }
 }
