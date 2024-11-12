@@ -32,11 +32,15 @@ export async function handleTaskSolved(
 
   await moveChannel(guild, task, null, ChannelMovingEvent.SOLVED);
 
-  return sendMessageToTask(
+  const message = await sendMessageToTask(
     guild,
     id,
     `${task.title} is solved by ${await convertToUsernameFormat(userId)}!`
   );
+
+  const emojis = ["🎉", "🎊", "🥳", "👏", "🔥", "🚀", "💪"];
+
+  message?.react(emojis[Math.floor(Math.random() * emojis.length)].toString());
 }
 
 async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
