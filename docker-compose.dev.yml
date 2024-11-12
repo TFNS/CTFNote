@@ -3,7 +3,7 @@ services:
   db:
     build:
       context: "./db"
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: ctfnote
       POSTGRES_USER: ctfnote
@@ -23,7 +23,7 @@ services:
       CMD_CSP_ENABLE: "false"
     depends_on:
       - db
-    restart: always
+    restart: unless-stopped
     volumes:
       - pad-uploads:/home/hackmd/app/public/uploads
     networks:
