@@ -14,6 +14,7 @@
         "kind": "INPUT_OBJECT",
         "name": "AddTagsForTaskInput",
         "description": "All input for the `addTagsForTask` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -65,6 +66,7 @@
         "kind": "OBJECT",
         "name": "AddTagsForTaskPayload",
         "description": "The output of our `addTagsForTask` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -100,6 +102,7 @@
         "kind": "OBJECT",
         "name": "AssignedTag",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "nodeId",
@@ -189,6 +192,7 @@
         "kind": "INPUT_OBJECT",
         "name": "AssignedTagCondition",
         "description": "A condition to be used against `AssignedTag` object types. All fields are tested\nfor equality and combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -222,95 +226,9 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "AssignedTagFilter",
-        "description": "A filter to be used against `AssignedTag` object types. All fields are combined with a logical ‘and.’",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "and",
-            "description": "Checks for all expressions in this list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "AssignedTagFilter",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "not",
-            "description": "Negates the expression.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "AssignedTagFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "or",
-            "description": "Checks for any expressions in this list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "AssignedTagFilter",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "tagId",
-            "description": "Filter by the object’s `tagId` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "taskId",
-            "description": "Filter by the object’s `taskId` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
         "name": "AssignedTagInput",
         "description": "An input for mutations affecting `AssignedTag`",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -354,6 +272,7 @@
         "kind": "OBJECT",
         "name": "AssignedTagsConnection",
         "description": "A connection to a list of `AssignedTag` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -445,6 +364,7 @@
         "kind": "OBJECT",
         "name": "AssignedTagsEdge",
         "description": "A `AssignedTag` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -484,6 +404,7 @@
         "kind": "ENUM",
         "name": "AssignedTagsOrderBy",
         "description": "Methods to use when ordering `AssignedTag`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -537,6 +458,7 @@
         "kind": "SCALAR",
         "name": "Boolean",
         "description": "The `Boolean` scalar type represents `true` or `false`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -545,167 +467,9 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "BooleanFilter",
-        "description": "A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "distinctFrom",
-            "description": "Not equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "equalTo",
-            "description": "Equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThan",
-            "description": "Greater than the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThanOrEqualTo",
-            "description": "Greater than or equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "in",
-            "description": "Included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isNull",
-            "description": "Is null (if `true` is specified) or is not null (if `false` is specified).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThan",
-            "description": "Less than the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThanOrEqualTo",
-            "description": "Less than or equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notDistinctFrom",
-            "description": "Equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notEqualTo",
-            "description": "Not equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notIn",
-            "description": "Not included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
         "name": "CancelWorkingOnInput",
         "description": "All input for the `cancelWorkingOn` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -741,6 +505,7 @@
         "kind": "OBJECT",
         "name": "CancelWorkingOnPayload",
         "description": "The output of our `cancelWorkingOn` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -845,6 +610,7 @@
         "kind": "INPUT_OBJECT",
         "name": "ChangePasswordInput",
         "description": "All input for the `changePassword` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -900,6 +666,7 @@
         "kind": "OBJECT",
         "name": "ChangePasswordPayload",
         "description": "The output of our `changePassword` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "changePasswordResponse",
@@ -947,6 +714,7 @@
         "kind": "OBJECT",
         "name": "ChangePasswordResponse",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "ok",
@@ -970,6 +738,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CreateAssignedTagInput",
         "description": "All input for the create `AssignedTag` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -1009,6 +778,7 @@
         "kind": "OBJECT",
         "name": "CreateAssignedTagPayload",
         "description": "The output of our create `AssignedTag` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "assignedTag",
@@ -1113,6 +883,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CreateCtfInput",
         "description": "All input for the create `Ctf` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -1152,6 +923,7 @@
         "kind": "OBJECT",
         "name": "CreateCtfPayload",
         "description": "The output of our create `Ctf` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -1244,6 +1016,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CreateInvitationInput",
         "description": "All input for the create `Invitation` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -1283,6 +1056,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CreateInvitationLinkInput",
         "description": "All input for the `createInvitationLink` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -1330,6 +1104,7 @@
         "kind": "OBJECT",
         "name": "CreateInvitationLinkPayload",
         "description": "The output of our `createInvitationLink` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -1377,6 +1152,7 @@
         "kind": "OBJECT",
         "name": "CreateInvitationPayload",
         "description": "The output of our create `Invitation` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -1481,6 +1257,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CreateResetPasswordLinkInput",
         "description": "All input for the `createResetPasswordLink` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -1516,6 +1293,7 @@
         "kind": "OBJECT",
         "name": "CreateResetPasswordLinkPayload",
         "description": "The output of our `createResetPasswordLink` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -1563,6 +1341,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CreateTagInput",
         "description": "All input for the create `Tag` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -1602,6 +1381,7 @@
         "kind": "OBJECT",
         "name": "CreateTagPayload",
         "description": "The output of our create `Tag` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -1682,6 +1462,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CreateTaskInput",
         "description": null,
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -1765,6 +1546,7 @@
         "kind": "OBJECT",
         "name": "CreateTaskPayload",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "query",
@@ -1800,6 +1582,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CreateWorkOnTaskInput",
         "description": "All input for the create `WorkOnTask` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -1839,6 +1622,7 @@
         "kind": "OBJECT",
         "name": "CreateWorkOnTaskPayload",
         "description": "The output of our create `WorkOnTask` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -1943,6 +1727,7 @@
         "kind": "OBJECT",
         "name": "Ctf",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "ctfUrl",
@@ -2074,18 +1859,6 @@
                 "type": {
                   "kind": "INPUT_OBJECT",
                   "name": "InvitationCondition",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "InvitationFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -2523,6 +2296,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CtfCondition",
         "description": "A condition to be used against `Ctf` object types. All fields are tested for equality and combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -2594,6 +2368,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CtfFilter",
         "description": "A filter to be used against `Ctf` object types. All fields are combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -2611,42 +2386,6 @@
                   "ofType": null
                 }
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "endTime",
-            "description": "Filter by the object’s `endTime` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "DatetimeFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "granted",
-            "description": "Filter by the object’s `granted` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "BooleanFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "Filter by the object’s `id` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -2685,30 +2424,6 @@
             "deprecationReason": null
           },
           {
-            "name": "secretsId",
-            "description": "Filter by the object’s `secretsId` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "startTime",
-            "description": "Filter by the object’s `startTime` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "DatetimeFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "title",
             "description": "Filter by the object’s `title` field.",
             "type": {
@@ -2729,6 +2444,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CtfInput",
         "description": "An input for mutations affecting `Ctf`",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -2848,6 +2564,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CtfPatch",
         "description": "Represents an update to a `Ctf`. Fields that are set will be updated.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -2967,6 +2684,7 @@
         "kind": "OBJECT",
         "name": "CtfProfilesByInvitationCtfIdAndProfileIdManyToManyConnection",
         "description": "A connection to a list of `Profile` values, with data from `Invitation`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -3058,6 +2776,7 @@
         "kind": "OBJECT",
         "name": "CtfProfilesByInvitationCtfIdAndProfileIdManyToManyEdge",
         "description": "A `Profile` edge in the connection, with data from `Invitation`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -3097,6 +2816,7 @@
         "kind": "OBJECT",
         "name": "CtfSecret",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "credentials",
@@ -3279,6 +2999,7 @@
         "kind": "INPUT_OBJECT",
         "name": "CtfSecretCondition",
         "description": "A condition to be used against `CtfSecret` object types. All fields are tested\nfor equality and combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -3300,83 +3021,9 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CtfSecretFilter",
-        "description": "A filter to be used against `CtfSecret` object types. All fields are combined with a logical ‘and.’",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "and",
-            "description": "Checks for all expressions in this list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CtfSecretFilter",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "Filter by the object’s `id` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "not",
-            "description": "Negates the expression.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "CtfSecretFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "or",
-            "description": "Checks for any expressions in this list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CtfSecretFilter",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
         "name": "CtfSecretPatch",
         "description": "Represents an update to a `CtfSecret`. Fields that are set will be updated.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -3400,6 +3047,7 @@
         "kind": "OBJECT",
         "name": "CtfSecretsConnection",
         "description": "A connection to a list of `CtfSecret` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -3491,6 +3139,7 @@
         "kind": "OBJECT",
         "name": "CtfSecretsEdge",
         "description": "A `CtfSecret` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -3530,6 +3179,7 @@
         "kind": "ENUM",
         "name": "CtfSecretsOrderBy",
         "description": "Methods to use when ordering `CtfSecret`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -3571,6 +3221,7 @@
         "kind": "OBJECT",
         "name": "CtfsConnection",
         "description": "A connection to a list of `Ctf` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -3662,6 +3313,7 @@
         "kind": "OBJECT",
         "name": "CtfsEdge",
         "description": "A `Ctf` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -3701,6 +3353,7 @@
         "kind": "ENUM",
         "name": "CtfsOrderBy",
         "description": "Methods to use when ordering `Ctf`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -3790,6 +3443,7 @@
         "kind": "SCALAR",
         "name": "Cursor",
         "description": "A location in a connection that can be used for resuming pagination.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -3800,6 +3454,7 @@
         "kind": "SCALAR",
         "name": "Datetime",
         "description": "A point in time as described by the [ISO\n8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -3808,167 +3463,9 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "DatetimeFilter",
-        "description": "A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "distinctFrom",
-            "description": "Not equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Datetime",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "equalTo",
-            "description": "Equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Datetime",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThan",
-            "description": "Greater than the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Datetime",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThanOrEqualTo",
-            "description": "Greater than or equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Datetime",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "in",
-            "description": "Included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Datetime",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isNull",
-            "description": "Is null (if `true` is specified) or is not null (if `false` is specified).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThan",
-            "description": "Less than the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Datetime",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThanOrEqualTo",
-            "description": "Less than or equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Datetime",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notDistinctFrom",
-            "description": "Equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Datetime",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notEqualTo",
-            "description": "Not equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Datetime",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notIn",
-            "description": "Not included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Datetime",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
         "name": "DeleteAssignedTagByNodeIdInput",
         "description": "All input for the `deleteAssignedTagByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4008,6 +3505,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteAssignedTagInput",
         "description": "All input for the `deleteAssignedTag` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4063,6 +3561,7 @@
         "kind": "OBJECT",
         "name": "DeleteAssignedTagPayload",
         "description": "The output of our delete `AssignedTag` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "assignedTag",
@@ -4179,6 +3678,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteCtfByNodeIdInput",
         "description": "All input for the `deleteCtfByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4218,6 +3718,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteCtfInput",
         "description": "All input for the `deleteCtf` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4257,6 +3758,7 @@
         "kind": "OBJECT",
         "name": "DeleteCtfPayload",
         "description": "The output of our delete `Ctf` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -4361,6 +3863,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteInvitationByNodeIdInput",
         "description": "All input for the `deleteInvitationByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4400,6 +3903,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteInvitationInput",
         "description": "All input for the `deleteInvitation` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4455,6 +3959,7 @@
         "kind": "OBJECT",
         "name": "DeleteInvitationPayload",
         "description": "The output of our delete `Invitation` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -4571,6 +4076,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteTaskByNodeIdInput",
         "description": "All input for the `deleteTaskByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4610,6 +4116,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteTaskInput",
         "description": "All input for the `deleteTask` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4649,6 +4156,7 @@
         "kind": "OBJECT",
         "name": "DeleteTaskPayload",
         "description": "The output of our delete `Task` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -4753,6 +4261,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteUserInput",
         "description": "All input for the `deleteUser` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4788,6 +4297,7 @@
         "kind": "OBJECT",
         "name": "DeleteUserPayload",
         "description": "The output of our `deleteUser` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -4835,6 +4345,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteWorkOnTaskByNodeIdInput",
         "description": "All input for the `deleteWorkOnTaskByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4874,6 +4385,7 @@
         "kind": "INPUT_OBJECT",
         "name": "DeleteWorkOnTaskInput",
         "description": "All input for the `deleteWorkOnTask` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -4929,6 +4441,7 @@
         "kind": "OBJECT",
         "name": "DeleteWorkOnTaskPayload",
         "description": "The output of our delete `WorkOnTask` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -5045,6 +4558,7 @@
         "kind": "SCALAR",
         "name": "Float",
         "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -5055,6 +4569,7 @@
         "kind": "SCALAR",
         "name": "ID",
         "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -5065,6 +4580,7 @@
         "kind": "INPUT_OBJECT",
         "name": "ImportCtfInput",
         "description": null,
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -5092,6 +4608,7 @@
         "kind": "OBJECT",
         "name": "ImportCtfPayload",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "ctf",
@@ -5127,167 +4644,9 @@
         "kind": "SCALAR",
         "name": "Int",
         "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "IntFilter",
-        "description": "A filter to be used against Int fields. All fields are combined with a logical ‘and.’",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "distinctFrom",
-            "description": "Not equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "equalTo",
-            "description": "Equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThan",
-            "description": "Greater than the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThanOrEqualTo",
-            "description": "Greater than or equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "in",
-            "description": "Included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isNull",
-            "description": "Is null (if `true` is specified) or is not null (if `false` is specified).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThan",
-            "description": "Less than the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThanOrEqualTo",
-            "description": "Less than or equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notDistinctFrom",
-            "description": "Equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notEqualTo",
-            "description": "Not equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Int",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notIn",
-            "description": "Not included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
@@ -5296,6 +4655,7 @@
         "kind": "OBJECT",
         "name": "Invitation",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "ctf",
@@ -5385,6 +4745,7 @@
         "kind": "INPUT_OBJECT",
         "name": "InvitationCondition",
         "description": "A condition to be used against `Invitation` object types. All fields are tested\nfor equality and combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -5418,95 +4779,9 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "InvitationFilter",
-        "description": "A filter to be used against `Invitation` object types. All fields are combined with a logical ‘and.’",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "and",
-            "description": "Checks for all expressions in this list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "InvitationFilter",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ctfId",
-            "description": "Filter by the object’s `ctfId` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "not",
-            "description": "Negates the expression.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "InvitationFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "or",
-            "description": "Checks for any expressions in this list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "InvitationFilter",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "profileId",
-            "description": "Filter by the object’s `profileId` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
         "name": "InvitationInput",
         "description": "An input for mutations affecting `Invitation`",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -5550,6 +4825,7 @@
         "kind": "OBJECT",
         "name": "InvitationLinkResponse",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "token",
@@ -5573,6 +4849,7 @@
         "kind": "OBJECT",
         "name": "InvitationsConnection",
         "description": "A connection to a list of `Invitation` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -5664,6 +4941,7 @@
         "kind": "OBJECT",
         "name": "InvitationsEdge",
         "description": "A `Invitation` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -5703,6 +4981,7 @@
         "kind": "ENUM",
         "name": "InvitationsOrderBy",
         "description": "Methods to use when ordering `Invitation`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -5756,6 +5035,7 @@
         "kind": "SCALAR",
         "name": "JSON",
         "description": "The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -5766,6 +5046,7 @@
         "kind": "SCALAR",
         "name": "Jwt",
         "description": "A JSON Web Token defined by [RFC 7519](https://tools.ietf.org/html/rfc7519)\nwhich securely represents claims between two parties.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -5776,6 +5057,7 @@
         "kind": "OBJECT",
         "name": "ListenPayload",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "query",
@@ -5823,6 +5105,7 @@
         "kind": "INPUT_OBJECT",
         "name": "LoginInput",
         "description": "All input for the `login` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -5878,6 +5161,7 @@
         "kind": "OBJECT",
         "name": "LoginPayload",
         "description": "The output of our `login` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -5925,6 +5209,7 @@
         "kind": "OBJECT",
         "name": "Mutation",
         "description": "The root mutation type which contains root level fields which mutate data.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "addTagsForTask",
@@ -7353,6 +6638,7 @@
         "kind": "INTERFACE",
         "name": "Node",
         "description": "An object with a globally unique `ID`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "nodeId",
@@ -7431,6 +6717,7 @@
         "kind": "OBJECT",
         "name": "PageInfo",
         "description": "Information about pagination in a connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "endCursor",
@@ -7498,6 +6785,7 @@
         "kind": "OBJECT",
         "name": "Profile",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "color",
@@ -7710,18 +6998,6 @@
                 "type": {
                   "kind": "INPUT_OBJECT",
                   "name": "InvitationCondition",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "InvitationFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -8019,18 +7295,6 @@
                 "deprecationReason": null
               },
               {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "WorkOnTaskFilter",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "first",
                 "description": "Only read the first `n` values of the set.",
                 "type": {
@@ -8115,6 +7379,7 @@
         "kind": "INPUT_OBJECT",
         "name": "ProfileCondition",
         "description": "A condition to be used against `Profile` object types. All fields are tested for equality and combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -8162,6 +7427,7 @@
         "kind": "OBJECT",
         "name": "ProfileCtfsByInvitationProfileIdAndCtfIdManyToManyConnection",
         "description": "A connection to a list of `Ctf` values, with data from `Invitation`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -8253,6 +7519,7 @@
         "kind": "OBJECT",
         "name": "ProfileCtfsByInvitationProfileIdAndCtfIdManyToManyEdge",
         "description": "A `Ctf` edge in the connection, with data from `Invitation`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -8292,6 +7559,7 @@
         "kind": "INPUT_OBJECT",
         "name": "ProfileFilter",
         "description": "A filter to be used against `Profile` object types. All fields are combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -8320,18 +7588,6 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "StringFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "Filter by the object’s `id` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
               "ofType": null
             },
             "defaultValue": null,
@@ -8371,18 +7627,6 @@
             "deprecationReason": null
           },
           {
-            "name": "role",
-            "description": "Filter by the object’s `role` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "RoleFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "username",
             "description": "Filter by the object’s `username` field.",
             "type": {
@@ -8403,6 +7647,7 @@
         "kind": "INPUT_OBJECT",
         "name": "ProfilePatch",
         "description": "Represents an update to a `Profile`. Fields that are set will be updated.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -8450,6 +7695,7 @@
         "kind": "OBJECT",
         "name": "ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyConnection",
         "description": "A connection to a list of `Task` values, with data from `WorkOnTask`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -8541,6 +7787,7 @@
         "kind": "OBJECT",
         "name": "ProfileTasksByWorkOnTaskProfileIdAndTaskIdManyToManyEdge",
         "description": "A `Task` edge in the connection, with data from `WorkOnTask`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "active",
@@ -8596,6 +7843,7 @@
         "kind": "OBJECT",
         "name": "ProfilesConnection",
         "description": "A connection to a list of `Profile` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -8687,6 +7935,7 @@
         "kind": "OBJECT",
         "name": "ProfilesEdge",
         "description": "A `Profile` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -8726,6 +7975,7 @@
         "kind": "ENUM",
         "name": "ProfilesOrderBy",
         "description": "Methods to use when ordering `Profile`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -8791,6 +8041,7 @@
         "kind": "OBJECT",
         "name": "PublicProfile",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "color",
@@ -8874,6 +8125,7 @@
         "kind": "OBJECT",
         "name": "PublicProfileSubscriptionPayload",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "event",
@@ -8909,6 +8161,7 @@
         "kind": "OBJECT",
         "name": "PublicProfilesConnection",
         "description": "A connection to a list of `PublicProfile` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -9000,6 +8253,7 @@
         "kind": "OBJECT",
         "name": "PublicProfilesEdge",
         "description": "A `PublicProfile` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -9039,6 +8293,7 @@
         "kind": "ENUM",
         "name": "PublicProfilesOrderBy",
         "description": "Methods to use when ordering `PublicProfile`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -9056,6 +8311,7 @@
         "kind": "OBJECT",
         "name": "Query",
         "description": "The root query type which gives access points into the data universe.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "assignedTag",
@@ -9165,18 +8421,6 @@
                 "type": {
                   "kind": "INPUT_OBJECT",
                   "name": "AssignedTagCondition",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "AssignedTagFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -9405,18 +8649,6 @@
                 "deprecationReason": null
               },
               {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CtfSecretFilter",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "first",
                 "description": "Only read the first `n` values of the set.",
                 "type": {
@@ -9627,18 +8859,6 @@
                 "deprecationReason": null
               },
               {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ProfileFilter",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "first",
                 "description": "Only read the first `n` values of the set.",
                 "type": {
@@ -9705,18 +8925,6 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Cursor",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CtfFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -9883,18 +9091,6 @@
                 "deprecationReason": null
               },
               {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "InvitationFilter",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "first",
                 "description": "Only read the first `n` values of the set.",
                 "type": {
@@ -10050,18 +9246,6 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Cursor",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CtfFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -11176,18 +10360,6 @@
                 "deprecationReason": null
               },
               {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "WorkOnTaskFilter",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "first",
                 "description": "Only read the first `n` values of the set.",
                 "type": {
@@ -11268,6 +10440,7 @@
         "kind": "INPUT_OBJECT",
         "name": "RegisterInput",
         "description": "All input for the `register` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -11323,6 +10496,7 @@
         "kind": "OBJECT",
         "name": "RegisterPayload",
         "description": "The output of our `register` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -11370,6 +10544,7 @@
         "kind": "INPUT_OBJECT",
         "name": "RegisterWithPasswordInput",
         "description": "All input for the `registerWithPassword` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -11441,6 +10616,7 @@
         "kind": "OBJECT",
         "name": "RegisterWithPasswordPayload",
         "description": "The output of our `registerWithPassword` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -11488,6 +10664,7 @@
         "kind": "INPUT_OBJECT",
         "name": "RegisterWithTokenInput",
         "description": "All input for the `registerWithToken` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -11547,6 +10724,7 @@
         "kind": "OBJECT",
         "name": "RegisterWithTokenPayload",
         "description": "The output of our `registerWithToken` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -11594,6 +10772,7 @@
         "kind": "INPUT_OBJECT",
         "name": "ResetDiscordIdInput",
         "description": "All input for the `resetDiscordId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -11617,6 +10796,7 @@
         "kind": "OBJECT",
         "name": "ResetDiscordIdPayload",
         "description": "The output of our `resetDiscordId` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -11664,6 +10844,7 @@
         "kind": "INPUT_OBJECT",
         "name": "ResetPasswordInput",
         "description": "All input for the `resetPassword` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -11711,6 +10892,7 @@
         "kind": "OBJECT",
         "name": "ResetPasswordLinkResponse",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "token",
@@ -11734,6 +10916,7 @@
         "kind": "OBJECT",
         "name": "ResetPasswordPayload",
         "description": "The output of our `resetPassword` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -11781,6 +10964,7 @@
         "kind": "INPUT_OBJECT",
         "name": "ResetProfileTokenInput",
         "description": "All input for the `resetProfileToken` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -11804,6 +10988,7 @@
         "kind": "OBJECT",
         "name": "ResetProfileTokenPayload",
         "description": "The output of our `resetProfileToken` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -11851,6 +11036,7 @@
         "kind": "ENUM",
         "name": "Role",
         "description": null,
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -11890,167 +11076,9 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "RoleFilter",
-        "description": "A filter to be used against Role fields. All fields are combined with a logical ‘and.’",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "distinctFrom",
-            "description": "Not equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "ENUM",
-              "name": "Role",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "equalTo",
-            "description": "Equal to the specified value.",
-            "type": {
-              "kind": "ENUM",
-              "name": "Role",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThan",
-            "description": "Greater than the specified value.",
-            "type": {
-              "kind": "ENUM",
-              "name": "Role",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThanOrEqualTo",
-            "description": "Greater than or equal to the specified value.",
-            "type": {
-              "kind": "ENUM",
-              "name": "Role",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "in",
-            "description": "Included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "Role",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isNull",
-            "description": "Is null (if `true` is specified) or is not null (if `false` is specified).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThan",
-            "description": "Less than the specified value.",
-            "type": {
-              "kind": "ENUM",
-              "name": "Role",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThanOrEqualTo",
-            "description": "Less than or equal to the specified value.",
-            "type": {
-              "kind": "ENUM",
-              "name": "Role",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notDistinctFrom",
-            "description": "Equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "ENUM",
-              "name": "Role",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notEqualTo",
-            "description": "Not equal to the specified value.",
-            "type": {
-              "kind": "ENUM",
-              "name": "Role",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notIn",
-            "description": "Not included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "Role",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
         "name": "SetDiscordEventLinkInput",
         "description": "All input for the `setDiscordEventLink` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -12098,6 +11126,7 @@
         "kind": "OBJECT",
         "name": "SetDiscordEventLinkPayload",
         "description": "The output of our `setDiscordEventLink` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -12133,6 +11162,7 @@
         "kind": "OBJECT",
         "name": "Setting",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "discordIntegrationEnabled",
@@ -12274,6 +11304,7 @@
         "kind": "INPUT_OBJECT",
         "name": "SettingPatch",
         "description": "Represents an update to a `Setting`. Fields that are set will be updated.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -12369,6 +11400,7 @@
         "kind": "OBJECT",
         "name": "SettingsConnection",
         "description": "A connection to a list of `Setting` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -12460,6 +11492,7 @@
         "kind": "OBJECT",
         "name": "SettingsEdge",
         "description": "A `Setting` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -12499,6 +11532,7 @@
         "kind": "ENUM",
         "name": "SettingsOrderBy",
         "description": "Methods to use when ordering `Setting`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -12528,6 +11562,7 @@
         "kind": "INPUT_OBJECT",
         "name": "StartWorkingOnInput",
         "description": "All input for the `startWorkingOn` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -12563,6 +11598,7 @@
         "kind": "OBJECT",
         "name": "StartWorkingOnPayload",
         "description": "The output of our `startWorkingOn` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -12667,6 +11703,7 @@
         "kind": "INPUT_OBJECT",
         "name": "StopWorkingOnInput",
         "description": "All input for the `stopWorkingOn` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -12702,6 +11739,7 @@
         "kind": "OBJECT",
         "name": "StopWorkingOnPayload",
         "description": "The output of our `stopWorkingOn` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -12806,6 +11844,7 @@
         "kind": "SCALAR",
         "name": "String",
         "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -12816,475 +11855,12 @@
         "kind": "INPUT_OBJECT",
         "name": "StringFilter",
         "description": "A filter to be used against String fields. All fields are combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
-            "name": "distinctFrom",
-            "description": "Not equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "distinctFromInsensitive",
-            "description": "Not equal to the specified value, treating null like an ordinary value (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "endsWith",
-            "description": "Ends with the specified string (case-sensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "endsWithInsensitive",
-            "description": "Ends with the specified string (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "equalTo",
-            "description": "Equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "equalToInsensitive",
-            "description": "Equal to the specified value (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThan",
-            "description": "Greater than the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThanInsensitive",
-            "description": "Greater than the specified value (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThanOrEqualTo",
-            "description": "Greater than or equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "greaterThanOrEqualToInsensitive",
-            "description": "Greater than or equal to the specified value (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "in",
-            "description": "Included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "inInsensitive",
-            "description": "Included in the specified list (case-insensitive).",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "includes",
-            "description": "Contains the specified string (case-sensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "includesInsensitive",
             "description": "Contains the specified string (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isNull",
-            "description": "Is null (if `true` is specified) or is not null (if `false` is specified).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThan",
-            "description": "Less than the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThanInsensitive",
-            "description": "Less than the specified value (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThanOrEqualTo",
-            "description": "Less than or equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lessThanOrEqualToInsensitive",
-            "description": "Less than or equal to the specified value (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "like",
-            "description": "Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "likeInsensitive",
-            "description": "Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notDistinctFrom",
-            "description": "Equal to the specified value, treating null like an ordinary value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notDistinctFromInsensitive",
-            "description": "Equal to the specified value, treating null like an ordinary value (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notEndsWith",
-            "description": "Does not end with the specified string (case-sensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notEndsWithInsensitive",
-            "description": "Does not end with the specified string (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notEqualTo",
-            "description": "Not equal to the specified value.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notEqualToInsensitive",
-            "description": "Not equal to the specified value (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notIn",
-            "description": "Not included in the specified list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notInInsensitive",
-            "description": "Not included in the specified list (case-insensitive).",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notIncludes",
-            "description": "Does not contain the specified string (case-sensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notIncludesInsensitive",
-            "description": "Does not contain the specified string (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notLike",
-            "description": "Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notLikeInsensitive",
-            "description": "Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notStartsWith",
-            "description": "Does not start with the specified string (case-sensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "notStartsWithInsensitive",
-            "description": "Does not start with the specified string (case-insensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "startsWith",
-            "description": "Starts with the specified string (case-sensitive).",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "startsWithInsensitive",
-            "description": "Starts with the specified string (case-insensitive).",
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -13303,6 +11879,7 @@
         "kind": "OBJECT",
         "name": "Subscription",
         "description": "The root subscription type: contains realtime events you can subscribe to with the `subscription` operation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "currentProfileCreated",
@@ -13383,6 +11960,7 @@
         "kind": "OBJECT",
         "name": "Tag",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "assignedTags",
@@ -13418,18 +11996,6 @@
                 "type": {
                   "kind": "INPUT_OBJECT",
                   "name": "AssignedTagCondition",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "AssignedTagFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -13690,6 +12256,7 @@
         "kind": "INPUT_OBJECT",
         "name": "TagCondition",
         "description": "A condition to be used against `Tag` object types. All fields are tested for equality and combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -13725,6 +12292,7 @@
         "kind": "INPUT_OBJECT",
         "name": "TagFilter",
         "description": "A filter to be used against `Tag` object types. All fields are combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -13742,18 +12310,6 @@
                   "ofType": null
                 }
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "Filter by the object’s `id` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -13812,6 +12368,7 @@
         "kind": "INPUT_OBJECT",
         "name": "TagInput",
         "description": "An input for mutations affecting `Tag`",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -13851,6 +12408,7 @@
         "kind": "OBJECT",
         "name": "TagTasksByAssignedTagTagIdAndTaskIdManyToManyConnection",
         "description": "A connection to a list of `Task` values, with data from `AssignedTag`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -13942,6 +12500,7 @@
         "kind": "OBJECT",
         "name": "TagTasksByAssignedTagTagIdAndTaskIdManyToManyEdge",
         "description": "A `Task` edge in the connection, with data from `AssignedTag`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -13981,6 +12540,7 @@
         "kind": "OBJECT",
         "name": "TagsConnection",
         "description": "A connection to a list of `Tag` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -14072,6 +12632,7 @@
         "kind": "OBJECT",
         "name": "TagsEdge",
         "description": "A `Tag` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -14111,6 +12672,7 @@
         "kind": "ENUM",
         "name": "TagsOrderBy",
         "description": "Methods to use when ordering `Tag`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -14164,6 +12726,7 @@
         "kind": "OBJECT",
         "name": "Task",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "assignedTags",
@@ -14199,18 +12762,6 @@
                 "type": {
                   "kind": "INPUT_OBJECT",
                   "name": "AssignedTagCondition",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "AssignedTagFilter",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -14705,18 +13256,6 @@
                 "deprecationReason": null
               },
               {
-                "name": "filter",
-                "description": "A filter to be used in determining which values should be returned by the collection.",
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "WorkOnTaskFilter",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "first",
                 "description": "Only read the first `n` values of the set.",
                 "type": {
@@ -14801,6 +13340,7 @@
         "kind": "INPUT_OBJECT",
         "name": "TaskCondition",
         "description": "A condition to be used against `Task` object types. All fields are tested for equality and combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -14848,6 +13388,7 @@
         "kind": "INPUT_OBJECT",
         "name": "TaskFilter",
         "description": "A filter to be used against `Task` object types. All fields are combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -14865,30 +13406,6 @@
                   "ofType": null
                 }
               }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ctfId",
-            "description": "Filter by the object’s `ctfId` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": "Filter by the object’s `id` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -14927,18 +13444,6 @@
             "deprecationReason": null
           },
           {
-            "name": "solved",
-            "description": "Filter by the object’s `solved` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "BooleanFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "title",
             "description": "Filter by the object’s `title` field.",
             "type": {
@@ -14959,6 +13464,7 @@
         "kind": "INPUT_OBJECT",
         "name": "TaskPatch",
         "description": "Represents an update to a `Task`. Fields that are set will be updated.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -15006,6 +13512,7 @@
         "kind": "OBJECT",
         "name": "TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyConnection",
         "description": "A connection to a list of `Profile` values, with data from `WorkOnTask`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -15097,6 +13604,7 @@
         "kind": "OBJECT",
         "name": "TaskProfilesByWorkOnTaskTaskIdAndProfileIdManyToManyEdge",
         "description": "A `Profile` edge in the connection, with data from `WorkOnTask`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "active",
@@ -15152,6 +13660,7 @@
         "kind": "OBJECT",
         "name": "TaskTagsByAssignedTagTaskIdAndTagIdManyToManyConnection",
         "description": "A connection to a list of `Tag` values, with data from `AssignedTag`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -15243,6 +13752,7 @@
         "kind": "OBJECT",
         "name": "TaskTagsByAssignedTagTaskIdAndTagIdManyToManyEdge",
         "description": "A `Tag` edge in the connection, with data from `AssignedTag`.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -15282,6 +13792,7 @@
         "kind": "OBJECT",
         "name": "TasksConnection",
         "description": "A connection to a list of `Task` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -15373,6 +13884,7 @@
         "kind": "OBJECT",
         "name": "TasksEdge",
         "description": "A `Task` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -15412,6 +13924,7 @@
         "kind": "ENUM",
         "name": "TasksOrderBy",
         "description": "Methods to use when ordering `Task`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -15477,6 +13990,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateCtfByNodeIdInput",
         "description": "All input for the `updateCtfByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -15532,6 +14046,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateCtfInput",
         "description": "All input for the `updateCtf` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -15587,6 +14102,7 @@
         "kind": "OBJECT",
         "name": "UpdateCtfPayload",
         "description": "The output of our update `Ctf` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -15679,6 +14195,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateCtfSecretByNodeIdInput",
         "description": "All input for the `updateCtfSecretByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -15734,6 +14251,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateCtfSecretInput",
         "description": "All input for the `updateCtfSecret` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -15789,6 +14307,7 @@
         "kind": "OBJECT",
         "name": "UpdateCtfSecretPayload",
         "description": "The output of our update `CtfSecret` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -15869,6 +14388,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateLastActiveInput",
         "description": "All input for the `updateLastActive` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -15892,6 +14412,7 @@
         "kind": "OBJECT",
         "name": "UpdateLastActivePayload",
         "description": "The output of our `updateLastActive` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -15927,6 +14448,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateProfileByDiscordIdInput",
         "description": "All input for the `updateProfileByDiscordId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -15982,6 +14504,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateProfileByNodeIdInput",
         "description": "All input for the `updateProfileByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16037,6 +14560,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateProfileByUsernameInput",
         "description": "All input for the `updateProfileByUsername` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16092,6 +14616,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateProfileInput",
         "description": "All input for the `updateProfile` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16147,6 +14672,7 @@
         "kind": "OBJECT",
         "name": "UpdateProfilePayload",
         "description": "The output of our update `Profile` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -16227,6 +14753,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateSettingByNodeIdInput",
         "description": "All input for the `updateSettingByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16282,6 +14809,7 @@
         "kind": "OBJECT",
         "name": "UpdateSettingPayload",
         "description": "The output of our update `Setting` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -16362,6 +14890,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateTaskByNodeIdInput",
         "description": "All input for the `updateTaskByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16417,6 +14946,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateTaskInput",
         "description": "All input for the `updateTask` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16472,6 +15002,7 @@
         "kind": "OBJECT",
         "name": "UpdateTaskPayload",
         "description": "The output of our update `Task` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -16564,6 +15095,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateUserRoleInput",
         "description": "All input for the `updateUserRole` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16611,6 +15143,7 @@
         "kind": "OBJECT",
         "name": "UpdateUserRolePayload",
         "description": "The output of our `updateUserRole` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -16658,6 +15191,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateWorkOnTaskByNodeIdInput",
         "description": "All input for the `updateWorkOnTaskByNodeId` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16713,6 +15247,7 @@
         "kind": "INPUT_OBJECT",
         "name": "UpdateWorkOnTaskInput",
         "description": "All input for the `updateWorkOnTask` mutation.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -16784,6 +15319,7 @@
         "kind": "OBJECT",
         "name": "UpdateWorkOnTaskPayload",
         "description": "The output of our update `WorkOnTask` mutation.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "clientMutationId",
@@ -16888,6 +15424,7 @@
         "kind": "SCALAR",
         "name": "Upload",
         "description": "The `Upload` scalar type represents a file upload.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -16898,6 +15435,7 @@
         "kind": "OBJECT",
         "name": "User",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "id",
@@ -16969,6 +15507,7 @@
         "kind": "OBJECT",
         "name": "UserResponse",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "id",
@@ -17016,6 +15555,7 @@
         "kind": "OBJECT",
         "name": "UsersConnection",
         "description": "A connection to a list of `User` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -17107,6 +15647,7 @@
         "kind": "OBJECT",
         "name": "UsersEdge",
         "description": "A `User` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -17146,6 +15687,7 @@
         "kind": "ENUM",
         "name": "UsersOrderBy",
         "description": "Methods to use when ordering `User`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -17163,6 +15705,7 @@
         "kind": "OBJECT",
         "name": "WorkOnTask",
         "description": null,
+        "isOneOf": null,
         "fields": [
           {
             "name": "active",
@@ -17268,6 +15811,7 @@
         "kind": "INPUT_OBJECT",
         "name": "WorkOnTaskCondition",
         "description": "A condition to be used against `WorkOnTask` object types. All fields are tested\nfor equality and combined with a logical ‘and.’",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -17301,95 +15845,9 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "WorkOnTaskFilter",
-        "description": "A filter to be used against `WorkOnTask` object types. All fields are combined with a logical ‘and.’",
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "and",
-            "description": "Checks for all expressions in this list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "WorkOnTaskFilter",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "not",
-            "description": "Negates the expression.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "WorkOnTaskFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "or",
-            "description": "Checks for any expressions in this list.",
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "WorkOnTaskFilter",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "profileId",
-            "description": "Filter by the object’s `profileId` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "taskId",
-            "description": "Filter by the object’s `taskId` field.",
-            "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "IntFilter",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
         "name": "WorkOnTaskInput",
         "description": "An input for mutations affecting `WorkOnTask`",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -17445,6 +15903,7 @@
         "kind": "INPUT_OBJECT",
         "name": "WorkOnTaskPatch",
         "description": "Represents an update to a `WorkOnTask`. Fields that are set will be updated.",
+        "isOneOf": false,
         "fields": null,
         "inputFields": [
           {
@@ -17492,6 +15951,7 @@
         "kind": "OBJECT",
         "name": "WorkOnTasksConnection",
         "description": "A connection to a list of `WorkOnTask` values.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "edges",
@@ -17583,6 +16043,7 @@
         "kind": "OBJECT",
         "name": "WorkOnTasksEdge",
         "description": "A `WorkOnTask` edge in the connection.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "cursor",
@@ -17622,6 +16083,7 @@
         "kind": "ENUM",
         "name": "WorkOnTasksOrderBy",
         "description": "Methods to use when ordering `WorkOnTask`.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -17675,6 +16137,7 @@
         "kind": "OBJECT",
         "name": "__Directive",
         "description": "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "name",
@@ -17791,6 +16254,7 @@
         "kind": "ENUM",
         "name": "__DirectiveLocation",
         "description": "A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -17916,6 +16380,7 @@
         "kind": "OBJECT",
         "name": "__EnumValue",
         "description": "One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "name",
@@ -17983,6 +16448,7 @@
         "kind": "OBJECT",
         "name": "__Field",
         "description": "Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "name",
@@ -18103,6 +16569,7 @@
         "kind": "OBJECT",
         "name": "__InputValue",
         "description": "Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "name",
@@ -18198,6 +16665,7 @@
         "kind": "OBJECT",
         "name": "__Schema",
         "description": "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "description",
@@ -18309,6 +16777,7 @@
         "kind": "OBJECT",
         "name": "__Type",
         "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
+        "isOneOf": null,
         "fields": [
           {
             "name": "kind",
@@ -18512,6 +16981,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "isOneOf",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -18523,6 +17004,7 @@
         "kind": "ENUM",
         "name": "__TypeKind",
         "description": "An enum describing what kind of type a given `__Type` is.",
+        "isOneOf": null,
         "fields": null,
         "inputFields": null,
         "interfaces": null,
