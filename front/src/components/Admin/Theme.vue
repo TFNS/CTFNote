@@ -57,7 +57,7 @@ export default defineComponent({
           colors[name] = s[name];
         }
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     watch(
@@ -68,7 +68,7 @@ export default defineComponent({
           root.style.setProperty(`--q-${name}`, value);
         }
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     return {
@@ -98,7 +98,7 @@ export default defineComponent({
     },
     reset() {
       for (const [name, value] of Object.entries(
-        ctfnote.settings.defaultColors
+        ctfnote.settings.defaultColors,
       ) as ColorPairs) {
         this.colors[name] = value;
       }
@@ -108,7 +108,7 @@ export default defineComponent({
         this.updateSettings({
           style: JSON.stringify(this.colors),
         }),
-        { message: 'Theme changed!', icon: 'palette' }
+        { message: 'Theme changed!', icon: 'palette' },
       );
     },
   },

@@ -51,7 +51,7 @@ export default defineComponent({
             {
               message: `CTF ${title} deleted!`,
               icon: 'delete',
-            }
+            },
           );
         });
     },

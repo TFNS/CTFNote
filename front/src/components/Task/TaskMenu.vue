@@ -70,7 +70,7 @@ export default defineComponent({
       }
       return (
         this.task.workOnTasks.filter(
-          (w) => w.profileId == this.me?.profile?.id && w.active
+          (w) => w.profileId == this.me?.profile?.id && w.active,
         ).length > 0
       );
     },

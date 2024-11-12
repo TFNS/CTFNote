@@ -133,8 +133,8 @@ export default defineComponent({
         ...markdown.matchAll(
           new RegExp(
             `(https?://${window.location.host}(/pad/(?!uploads)[a-zA-Z0-9_-]*))`,
-            'g'
-          )
+            'g',
+          ),
         ),
       ];
 
@@ -146,7 +146,7 @@ export default defineComponent({
             ...task,
             padUrl: subTask[1],
           },
-          visitedUrls.concat([subTask[1]])
+          visitedUrls.concat([subTask[1]]),
         );
 
         markdown += `\n\n---\nContent of ${subTask[0]}\n\n${subTaskMarkdown}`;
@@ -203,7 +203,7 @@ export default defineComponent({
       // Add tasks
       template += (
         await Promise.all(
-          tasks.flatMap((task) => this.downloadTaskMarkdown(task), this)
+          tasks.flatMap((task) => this.downloadTaskMarkdown(task), this),
         )
       ).join('\n\n');
 
@@ -223,12 +223,12 @@ export default defineComponent({
             title: task.title,
             content: await this.downloadTaskMarkdown(task),
           };
-        }, this)
+        }, this),
       );
 
       zip.file(
         `${this.ctf.title} - Overview.md`,
-        this.createIntroduction(tasks)
+        this.createIntroduction(tasks),
       );
 
       for (const f of files) {
@@ -249,7 +249,7 @@ export default defineComponent({
 
       const sortedTasks = tasks
         .sort((a, b) =>
-          a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+          a.title.toLowerCase().localeCompare(b.title.toLowerCase()),
         )
         .sort(tagsSortFn);
 

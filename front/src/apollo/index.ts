@@ -43,7 +43,7 @@ const uploadLink = createUploadLink({
 const uploadAndBatchHTTPLink = split(
   (operation) => extractFiles(operation).files.size > 0,
   uploadLink as unknown as ApolloLink,
-  httpLink
+  httpLink,
 );
 
 const splitLink = split(
@@ -56,7 +56,7 @@ const splitLink = split(
     );
   },
   wsLink,
-  uploadAndBatchHTTPLink
+  uploadAndBatchHTTPLink,
 );
 
 const link = from([
@@ -69,7 +69,7 @@ const link = from([
             ...headers,
             Authorization: `Bearer ${token}`,
           },
-        })
+        }),
       );
     }
     return forward(operation);

@@ -78,7 +78,7 @@ export default defineComponent({
       (v) => {
         if (v !== 0) pagination.value.rowsNumber = v;
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     watch(
@@ -86,7 +86,7 @@ export default defineComponent({
       (v) => {
         rowsPerPage.value = v;
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     return {

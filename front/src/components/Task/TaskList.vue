@@ -170,7 +170,7 @@ export default defineComponent({
         myTasks.value &&
         me.value &&
         task.workOnTasks.filter(
-          (w) => w.profileId == me.value?.profile.id && w.active
+          (w) => w.profileId == me.value?.profile.id && w.active,
         ).length == 0
       )
         return false;
@@ -204,7 +204,7 @@ export default defineComponent({
     return {
       displayMode: makePersistant(
         'task-display-mode',
-        ref(chooseDisplayMode())
+        ref(chooseDisplayMode()),
       ),
       hideSolved,
       myTasks,
@@ -224,7 +224,7 @@ export default defineComponent({
     tags() {
       return [
         ...new Set(
-          this.tasks.flatMap((t) => t.assignedTags.map((tt) => tt.tag))
+          this.tasks.flatMap((t) => t.assignedTags.map((tt) => tt.tag)),
         ),
       ];
     },

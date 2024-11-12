@@ -17,7 +17,7 @@ const justCTFParser: Parser = {
           description: string;
           points: number;
           solvers: number;
-        }
+        },
       ]
     >(s);
     if (data == null) {

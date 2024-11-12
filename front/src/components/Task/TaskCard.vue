@@ -102,7 +102,9 @@ export default defineComponent({
 
 .body--dark {
   .task {
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s;
     &:hover {
       box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.3);
     }
@@ -111,7 +113,9 @@ export default defineComponent({
 
 .body--light {
   .task {
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s;
     &:hover {
       box-shadow: 0px 0px 5px rgba(25, 25, 25, 0.8);
     }

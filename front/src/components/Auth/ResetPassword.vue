@@ -62,7 +62,7 @@ export default defineComponent({
         {
           message: 'Password changed!',
           icon: 'person',
-        }
+        },
       );
     },
   },

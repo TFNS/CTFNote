@@ -35,7 +35,7 @@ export default defineComponent({
   },
   setup(props) {
     const task = computed(
-      () => props.ctf.tasks.find((t) => t.id == props.taskId) ?? null
+      () => props.ctf.tasks.find((t) => t.id == props.taskId) ?? null,
     );
 
     const solveTask = ctfnote.tasks.useSolveTaskPopup();
@@ -49,12 +49,12 @@ export default defineComponent({
           document.title = `CTFNote - ${task.title}`;
         }
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     let solveTaskShortcutListener: (
       this: Window,
-      ev: MessageEvent<string>
+      ev: MessageEvent<string>,
     ) => void;
 
     onMounted(() => {

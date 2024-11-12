@@ -128,7 +128,7 @@ export default defineComponent({
         registrationPassword.value = s.registrationPassword;
         icalPassword.value = s.icalPassword;
       },
-      { immediate: true }
+      { immediate: true },
     );
 
     return {
@@ -154,7 +154,7 @@ export default defineComponent({
 
         void this.resolveAndNotify(
           this.updateSettings({ registrationAllowed }),
-          opts
+          opts,
         );
       },
     },
@@ -172,7 +172,7 @@ export default defineComponent({
 
         void this.resolveAndNotify(
           this.updateSettings({ registrationPasswordAllowed }),
-          opts
+          opts,
         );
       },
     },
@@ -189,7 +189,7 @@ export default defineComponent({
 
         void this.resolveAndNotify(
           this.updateSettings({ registrationDefaultRole }),
-          opts
+          opts,
         );
       },
     },
@@ -222,7 +222,7 @@ export default defineComponent({
         this.updateSettings({
           registrationPassword: this.registrationPassword,
         }),
-        opts
+        opts,
       );
     },
     updateIcalPassword() {
@@ -235,7 +235,7 @@ export default defineComponent({
         this.updateSettings({
           icalPassword: this.icalPassword,
         }),
-        opts
+        opts,
       );
     },
   },

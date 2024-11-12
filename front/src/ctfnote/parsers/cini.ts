@@ -20,11 +20,11 @@ interface Events {
               currentScore: number;
               currentGlobalSolves: number;
               hidden: boolean;
-            }
+            },
           ];
-        }
+        },
       ];
-    }
+    },
   ];
 }
 
