@@ -10,7 +10,7 @@ CTFNote is a collaborative tool aiming to help CTF teams to organise their work.
 
 ## Installation
 
-Before starting, make sure to fill copy `.env.example` to `.env` and fill in the information in the `.env` file.
+**Before starting**, make sure to copy `.env.example` to `.env` and fill in the information in the `.env` file.
 
 ### Running the Docker containers
 
