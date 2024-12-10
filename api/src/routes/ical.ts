@@ -8,6 +8,7 @@ type CtfRow = {
   start_time: string;
   end_time: string;
   ctf_url: string;
+  ctftime_url: string;
   description: string;
 };
 
@@ -30,7 +31,7 @@ export function icalRoute(pool: Pool): Handler {
 
   async function getCtfs(): Promise<CtfRow[]> {
     const r = await pool.query<CtfRow>(
-      "SELECT id, title, start_time, end_time, ctf_url, description FROM ctfnote.ctf"
+      "SELECT id, title, start_time, end_time, ctf_url, ctftime_url, description FROM ctfnote.ctf"
     );
 
     return r.rows;
@@ -59,6 +60,7 @@ export function icalRoute(pool: Pool): Handler {
         description: ctf.description,
         summary: ctf.title,
         url: ctf.ctf_url,
+        attachments: [ctf.ctftime_url],
       });
     }
 
