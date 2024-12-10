@@ -1,6 +1,7 @@
 import { ICalCalendar } from "ical-generator";
 import { Request, Response, Handler } from "express";
 import { Pool } from "pg";
+import config from "../config";
 
 type CtfRow = {
   id: number;
@@ -54,7 +55,7 @@ export function icalRoute(pool: Pool): Handler {
 
     for (const ctf of ctfs) {
       cal.createEvent({
-        id: ctf.id,
+        id: `${ctf.id}@${config.pad.domain}`,
         start: ctf.start_time,
         end: ctf.end_time,
         description: ctf.description,
