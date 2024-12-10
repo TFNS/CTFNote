@@ -53,6 +53,7 @@ export function icalRoute(pool: Pool): Handler {
 
     for (const ctf of ctfs) {
       cal.createEvent({
+        id: ctf.id,
         start: ctf.start_time,
         end: ctf.end_time,
         description: ctf.description,
