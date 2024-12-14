@@ -62,7 +62,7 @@ export function icalRoute(pool: Pool): Handler {
         description: ctf.description,
         summary: ctf.title,
         url: ctf.ctf_url,
-        attachments: [ctf.ctftime_url],
+        attachments: ctf.ctftime_url ? [ctf.ctftime_url] : [],
       });
     }
 
