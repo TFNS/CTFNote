@@ -56,7 +56,7 @@ export function icalRoute(pool: Pool): Handler {
     for (const ctf of ctfs) {
       const ctftime_id = ctf.ctftime_url?.replace(/\/$/, "").split("/").at(-1);
       cal.createEvent({
-        id: `${ctf.id}:${ctftime_id || "no-ctftime"}@${config.pad.domain ||  "ctfnote"}`,
+        id: `${ctf.id}:${ctftime_id || "no-ctftime"}@${config.pad.domain || "ctfnote"}`,
         start: ctf.start_time,
         end: ctf.end_time,
         description: ctf.description,
