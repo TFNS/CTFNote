@@ -54,7 +54,7 @@
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-vue": "^9.31.0",
-    "graphql": "^16.9.0",
+    "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
