@@ -1,6 +1,7 @@
 import { ICalCalendar } from "ical-generator";
 import { Request, Response, Handler } from "express";
 import { Pool } from "pg";
+import config from "../config";
 
 type CtfRow = {
   id: number;
@@ -8,6 +9,7 @@ type CtfRow = {
   start_time: string;
   end_time: string;
   ctf_url: string;
+  ctftime_url: string;
   description: string;
 };
 
@@ -30,7 +32,7 @@ export function icalRoute(pool: Pool): Handler {
 
   async function getCtfs(): Promise<CtfRow[]> {
     const r = await pool.query<CtfRow>(
-      "SELECT id, title, start_time, end_time, ctf_url, description FROM ctfnote.ctf"
+      "SELECT id, title, start_time, end_time, ctf_url, ctftime_url, description FROM ctfnote.ctf"
     );
 
     return r.rows;
@@ -52,12 +54,15 @@ export function icalRoute(pool: Pool): Handler {
     const ctfs = await getCtfs();
 
     for (const ctf of ctfs) {
+      const ctftime_id = ctf.ctftime_url?.replace(/\/$/, "").split("/").at(-1);
       cal.createEvent({
+        id: `${ctf.id}:${ctftime_id || "no-ctftime"}@${config.pad.domain || "ctfnote"}`,
         start: ctf.start_time,
         end: ctf.end_time,
         description: ctf.description,
         summary: ctf.title,
         url: ctf.ctf_url,
+        attachments: ctf.ctftime_url ? [ctf.ctftime_url] : [],
       });
     }
 
