@@ -6716,7 +6716,7 @@ __metadata:
     quasar: "npm:^2.17.4"
     slugify: "npm:^1.6.6"
     subscriptions-transport-ws: "npm:^0.11.0"
-    ts-essentials: "npm:^9.4.1"
+    ts-essentials: "npm:^10.0.4"
     typescript: "npm:^5.6.3"
     typescript-eslint: "npm:^8.14.0"
     vue: "npm:^3.5.12"
@@ -13808,6 +13808,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-essentials@npm:^10.0.4":
+  version: 10.0.4
+  resolution: "ts-essentials@npm:10.0.4"
+  peerDependencies:
+    typescript: ">=4.5.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/f0853472370340e7752d4d4ccb18c0289b31c30526674ace288b02c77c6434b9aff04bd7cb55af406dd6f1f66b0a794bb6794c0d7c83e63aadc5d443147e6d60
+  languageName: node
+  linkType: hard
+
 "ts-essentials@npm:^9.4.0":
   version: 9.4.0
   resolution: "ts-essentials@npm:9.4.0"
@@ -13817,18 +13829,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/aa8dfccd31e7ade042cc07127ff1eec2e3a0bb7f291c2c344651a4d3a70a0b1f67d7230a3665eff1d171699fefb4de5853a393b1a9c7e6b283f75e58b6e7ca72
-  languageName: node
-  linkType: hard
-
-"ts-essentials@npm:^9.4.1":
-  version: 9.4.1
-  resolution: "ts-essentials@npm:9.4.1"
-  peerDependencies:
-    typescript: ">=4.1.0"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10/e689fb92545ea3ab70d3b6846696866b79813e20bd23ec34fdf1812b6be5aaa70eea374f7363b9f850f2e1bf864d90b6390b9f1fc3ce3c4e6207a9aa068252f0
   languageName: node
   linkType: hard
 
