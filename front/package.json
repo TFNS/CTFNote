@@ -50,7 +50,7 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "autoprefixer": "^10.4.20",
     "babel-loader": "^9.2.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.18.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-vue": "^9.31.0",
