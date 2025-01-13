@@ -1307,7 +1307,7 @@ __metadata:
     graphile-utils: "npm:4.13.0"
     graphql: "npm:^16.9.0"
     graphql-upload-ts: "npm:^2.1.2"
-    ical-generator: "npm:^7.0.0"
+    ical-generator: "npm:^8.1.0"
     lint-staged: "npm:^15.2.2"
     nodemon: "npm:^3.1.7"
     postgraphile: "npm:4.13.0"
@@ -2375,11 +2375,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ical-generator@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "ical-generator@npm:7.0.0"
-  dependencies:
-    uuid-random: "npm:^1.3.2"
+"ical-generator@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "ical-generator@npm:8.1.0"
   peerDependencies:
     "@touch4it/ical-timezones": ">=1.6.0"
     "@types/luxon": ">= 1.26.0"
@@ -2408,7 +2406,7 @@ __metadata:
       optional: true
     rrule:
       optional: true
-  checksum: 10/d5c16724238ebd9ddd35ec633b66f97f1bf7b1942e6076a37c287416d1f81b82a4cb0401014df07fa64f0fac7dd0511d3f01495ca27185bf7ea0015ea0bb8fc4
+  checksum: 10/c849397c3919a0e2e8078e0ec9d408e0126b20b843cc502ed035289cafb8bc993bc3b93e7fc07b4bfc90500ef02713db785024e48d737f6b16993bfd6f0d9091
   languageName: node
   linkType: hard
 
@@ -4381,13 +4379,6 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 10/5d6949693d58cb2e636a84f3ee1c6e7b2f9c16cb1d42d0ecb386d8c025c69e327205aa1c69e2868cc06a01e5e20681fbba55a4e0ed0cce913d60334024eae798
-  languageName: node
-  linkType: hard
-
-"uuid-random@npm:^1.3.2":
-  version: 1.3.2
-  resolution: "uuid-random@npm:1.3.2"
-  checksum: 10/9070c876651e1893f9255dddab2edc177ba34196660065be074050e4143405382b7f0f5fb922b666ebfd0794a6ef7b9f6acb627865df7b2978edb0da6b448f1d
   languageName: node
   linkType: hard
 
