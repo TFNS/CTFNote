@@ -7,19 +7,19 @@ import {
 export default (client: Client): void => {
   client.on("interactionCreate", async (interaction: Interaction) => {
     //check if it is a button interaction
-    if (interaction.isButton()) {
-      await handleButtonInteraction(client, interaction);
+    if (interaction.isStringSelectMenu()) {
+      await handleInputInteraction(client, interaction);
     } else if (interaction.isCommand() || interaction.isContextMenuCommand()) {
       await handleSlashCommand(client, interaction);
     }
   });
 };
 
-const handleButtonInteraction = async (
+const handleInputInteraction = async (
   client: Client,
   interaction: Interaction
 ): Promise<void> => {
-  if (!interaction.isButton()) {
+  if (!interaction.isStringSelectMenu()) {
     return;
   }
   const handler = (await getChannelHandleStyleInteractions()).find((i) =>

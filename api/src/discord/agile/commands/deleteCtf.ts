@@ -1,13 +1,13 @@
 import {
   ActionRowBuilder,
   ApplicationCommandType,
-  ButtonBuilder,
-  ButtonInteraction,
-  ButtonStyle,
   Client,
   CommandInteraction,
   Interaction,
   PermissionFlagsBits,
+  StringSelectMenuBuilder,
+  StringSelectMenuInteraction,
+  StringSelectMenuOptionBuilder,
 } from "discord.js";
 import { Command } from "../../interfaces/command";
 import {
@@ -18,7 +18,9 @@ import { getChannelCategoriesForCtf } from "../channels";
 import { handleDeleteCtf } from "../hooks";
 import { getTaskByCtfIdAndNameFromDatabase } from "../../database/tasks";
 import { discordArchiveTaskName } from "../../utils/messages";
-import { DiscordButtonInteraction } from "../../interfaces/interaction";
+import { DiscordInputInteraction } from "../../interfaces/interaction";
+
+const customId = "delete-ctf-interaction";
 
 export async function handleDeleteInteraction(
   interaction: Interaction,
@@ -58,19 +60,23 @@ async function deleteCtfLogic(client: Client, interaction: CommandInteraction) {
     return;
   }
 
-  const buttons: ButtonBuilder[] = [];
+  const options: StringSelectMenuOptionBuilder[] = [];
   for (let i = 0; i < ctfNames.length; i++) {
-    buttons.push(
-      new ButtonBuilder()
-        .setCustomId(`delete-ctf-button-${ctfNames[i]}`)
+    options.push(
+      new StringSelectMenuOptionBuilder()
         .setLabel(ctfNames[i])
-        .setStyle(ButtonStyle.Success)
+        .setValue(ctfNames[i])
     );
   }
 
-  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    buttons
-  );
+  const select = new StringSelectMenuBuilder();
+  select
+    .setCustomId(customId)
+    .setPlaceholder("Choose the CTF")
+    .addOptions(options);
+
+  const actionRow =
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
 
   await interaction.editReply({
     content:
@@ -79,10 +85,10 @@ async function deleteCtfLogic(client: Client, interaction: CommandInteraction) {
   });
 }
 
-export const HandleDeleteCtfInteraction: DiscordButtonInteraction = {
-  customId: "delete-ctf-button",
-  handle: async (client: Client, interaction: ButtonInteraction) => {
-    const ctfName = interaction.customId.replace("delete-ctf-button-", "");
+export const HandleDeleteCtfInteraction: DiscordInputInteraction = {
+  customId: customId,
+  handle: async (client: Client, interaction: StringSelectMenuInteraction) => {
+    const ctfName = interaction.values[0];
     await interaction.deferUpdate();
     await interaction.editReply({
       content: `Deleting the CTF channels and roles for ${ctfName}`,

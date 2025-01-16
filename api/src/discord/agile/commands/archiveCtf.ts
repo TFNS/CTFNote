@@ -1,12 +1,12 @@
 import {
   ActionRowBuilder,
   ApplicationCommandType,
-  ButtonBuilder,
-  ButtonInteraction,
-  ButtonStyle,
   Client,
   CommandInteraction,
   PermissionFlagsBits,
+  StringSelectMenuBuilder,
+  StringSelectMenuInteraction,
+  StringSelectMenuOptionBuilder,
 } from "discord.js";
 import { Command } from "../../interfaces/command";
 import {
@@ -20,10 +20,12 @@ import {
   createPadWithoutLimit,
   getMessagesOfCategories,
 } from "../../utils/messages";
-import { DiscordButtonInteraction } from "../../interfaces/interaction";
+import { DiscordInputInteraction } from "../../interfaces/interaction";
+
+const customId = "archive-ctf-interaction";
 
 async function handleArchiveInteraction(
-  interaction: ButtonInteraction,
+  interaction: StringSelectMenuInteraction,
   ctfName: string
 ) {
   const guild = interaction.guild;
@@ -54,10 +56,10 @@ async function handleArchiveInteraction(
   return true;
 }
 
-export const HandleArchiveCtfInteraction: DiscordButtonInteraction = {
-  customId: "archive-ctf-button",
-  handle: async (client: Client, interaction: ButtonInteraction) => {
-    const ctfName = interaction.customId.replace("archive-ctf-button-", "");
+export const HandleArchiveCtfInteraction: DiscordInputInteraction = {
+  customId: customId,
+  handle: async (client: Client, interaction: StringSelectMenuInteraction) => {
+    const ctfName = interaction.values[0];
     await interaction.deferUpdate();
     await interaction.editReply({
       content: `Archiving the CTF channels and roles for ${ctfName}`,
@@ -97,19 +99,23 @@ async function archiveCtfLogic(
     return;
   }
 
-  const buttons: ButtonBuilder[] = [];
+  const options: StringSelectMenuOptionBuilder[] = [];
   for (let i = 0; i < ctfNames.length; i++) {
-    buttons.push(
-      new ButtonBuilder()
-        .setCustomId(`archive-ctf-button-${ctfNames[i]}`)
+    options.push(
+      new StringSelectMenuOptionBuilder()
         .setLabel(ctfNames[i])
-        .setStyle(ButtonStyle.Success)
+        .setValue(ctfNames[i])
     );
   }
 
-  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    buttons
-  );
+  const select = new StringSelectMenuBuilder();
+  select
+    .setCustomId(customId)
+    .setPlaceholder("Choose the CTF")
+    .addOptions(options);
+
+  const actionRow =
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
 
   await interaction.editReply({
     content: "Which CTF do you want to archive?",
