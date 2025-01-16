@@ -1,12 +1,12 @@
 import config from "../../config";
 import { Hooks } from "../interfaces/hooks";
 import { Command } from "../interfaces/command";
-import { DiscordButtonInteraction } from "../interfaces/interaction";
+import { DiscordInputInteraction } from "../interfaces/interaction";
 
 const channelStyle = config.discord.channelHandleStyle;
 
 export async function getChannelHandleStyleInteractions(): Promise<
-  DiscordButtonInteraction[]
+  DiscordInputInteraction[]
 > {
   switch (channelStyle) {
     case "agile": {

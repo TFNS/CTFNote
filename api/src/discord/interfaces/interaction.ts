@@ -1,6 +1,9 @@
-import { ButtonInteraction, Client } from "discord.js";
+import { Client, StringSelectMenuInteraction } from "discord.js";
 
-export interface DiscordButtonInteraction {
+export interface DiscordInputInteraction {
   customId: string;
-  handle: (client: Client, interaction: ButtonInteraction) => Promise<void>;
+  handle: (
+    client: Client,
+    interaction: StringSelectMenuInteraction
+  ) => Promise<void>;
 }

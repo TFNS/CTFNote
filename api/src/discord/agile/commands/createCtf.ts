@@ -1,12 +1,12 @@
 import {
   ActionRowBuilder,
   ApplicationCommandType,
-  ButtonBuilder,
-  ButtonInteraction,
-  ButtonStyle,
   Client,
   CommandInteraction,
   PermissionFlagsBits,
+  StringSelectMenuBuilder,
+  StringSelectMenuInteraction,
+  StringSelectMenuOptionBuilder,
 } from "discord.js";
 import { Command } from "../../interfaces/command";
 import {
@@ -18,13 +18,15 @@ import {
   createChannelsAndRolesForCtf,
   getChannelCategoriesForCtf,
 } from "../channels";
-import { DiscordButtonInteraction } from "../../interfaces/interaction";
+import { DiscordInputInteraction } from "../../interfaces/interaction";
 import { getChallengesFromDatabase } from "../../database/tasks";
 
-export const HandleCreateCtfInteraction: DiscordButtonInteraction = {
-  customId: "create-ctf-button",
-  handle: async (client: Client, interaction: ButtonInteraction) => {
-    const ctfName = interaction.customId.replace("create-ctf-button-", "");
+const customId = "create-ctf-interaction";
+
+export const HandleCreateCtfInteraction: DiscordInputInteraction = {
+  customId: customId,
+  handle: async (client: Client, interaction: StringSelectMenuInteraction) => {
+    const ctfName = interaction.values[0];
     await interaction.deferUpdate();
     await interaction.editReply({
       content: `Creating the CTF channels and roles for ${ctfName}`,
@@ -79,21 +81,23 @@ async function createCtfLogic(client: Client, interaction: CommandInteraction) {
     return;
   }
 
-  // Make a loop to create buttons for each CTF
-  const buttons: ButtonBuilder[] = [];
+  const options: StringSelectMenuOptionBuilder[] = [];
   for (let i = 0; i < ctfNames.length; i++) {
-    buttons.push(
-      new ButtonBuilder()
-        .setCustomId(`create-ctf-button-${ctfNames[i]}`)
+    options.push(
+      new StringSelectMenuOptionBuilder()
         .setLabel(ctfNames[i])
-        .setStyle(ButtonStyle.Success)
+        .setValue(ctfNames[i])
     );
   }
+  const select = new StringSelectMenuBuilder();
+  select
+    .setCustomId(customId)
+    .setPlaceholder("Choose the CTF")
+    .addOptions(options);
 
   // Create the action row with the button components
-  const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    buttons
-  );
+  const actionRow =
+    new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(select);
 
   await interaction.editReply({
     content: ctfNamesMessage,
