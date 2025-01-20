@@ -29,7 +29,7 @@
     "graphile-utils": "4.13.0",
     "graphql": "^16.9.0",
     "graphql-upload-ts": "^2.1.2",
-    "ical-generator": "^7.0.0",
+    "ical-generator": "^8.1.1",
     "postgraphile": "4.13.0",
     "postgraphile-plugin-connection-filter": "^2.3.0",
     "postgres-migrations": "^5.3.0",
