@@ -1307,7 +1307,7 @@ __metadata:
     graphile-utils: "npm:4.13.0"
     graphql: "npm:^16.9.0"
     graphql-upload-ts: "npm:^2.1.2"
-    ical-generator: "npm:^7.0.0"
+    ical-generator: "npm:^8.1.1"
     lint-staged: "npm:^15.2.2"
     nodemon: "npm:^3.1.7"
     postgraphile: "npm:4.13.0"
@@ -2361,9 +2361,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ical-generator@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "ical-generator@npm:7.0.0"
+"ical-generator@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "ical-generator@npm:8.1.1"
   dependencies:
     uuid-random: "npm:^1.3.2"
   peerDependencies:
@@ -2394,7 +2394,7 @@ __metadata:
       optional: true
     rrule:
       optional: true
-  checksum: 10/d5c16724238ebd9ddd35ec633b66f97f1bf7b1942e6076a37c287416d1f81b82a4cb0401014df07fa64f0fac7dd0511d3f01495ca27185bf7ea0015ea0bb8fc4
+  checksum: 10/c9ddc6f3345d6199345f8854c65302e0dc4f03ee027c2f38d70743c1b8df1fea0f5362c8bf98dfeea82f99e53af3274847448afd77ff830a4674a3bbf0be184a
   languageName: node
   linkType: hard
 
