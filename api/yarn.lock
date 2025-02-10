@@ -1313,7 +1313,7 @@ __metadata:
     postgraphile: "npm:4.13.0"
     postgraphile-plugin-connection-filter: "npm:^2.3.0"
     postgres-migrations: "npm:^5.3.0"
-    prettier: "npm:^3.2.5"
+    prettier: "npm:^3.5.0"
     slugify: "npm:^1.6.6"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.4.5"
@@ -3565,12 +3565,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.2.5":
-  version: 3.2.5
-  resolution: "prettier@npm:3.2.5"
+"prettier@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "prettier@npm:3.5.0"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10/d509f9da0b70e8cacc561a1911c0d99ec75117faed27b95cc8534cb2349667dee6351b0ca83fa9d5703f14127faa52b798de40f5705f02d843da133fc3aa416a
+  checksum: 10/fc26c74bd317282f2a49ffe3ac0ffa79adbe6b2d7a1cdcadd96acf7fec77d3fa45b15f3728c1a2f281f4beccb35d97207187452a581d4919d18b460d0c37e480
   languageName: node
   linkType: hard
 
