@@ -47,7 +47,7 @@
     "@types/babel__core": "^7",
     "@types/color-hash": "^1.0.5",
     "@types/node": "^22.7.7",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/eslint-plugin": "^8.24.1",
     "autoprefixer": "^10.4.20",
     "babel-loader": "^9.2.1",
     "eslint": "^8.57.0",
