@@ -114,7 +114,7 @@ const authRoute: RouteRecordRaw = {
     {
       path: 'reset-password/:token',
       name: 'auth-reset-password',
-      meta: { public: true, title: 'Register' },
+      meta: { public: true, title: 'Reset password' },
       props: (route) => ({ token: route.params.token }),
       component: () => import('components/Auth/ResetPassword.vue'),
     },
