@@ -9,11 +9,11 @@ import ctfnote from 'src/ctfnote';
 import { defineComponent, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-const setTitle = (ctf: {title: string} | null) => {
+const setTitle = (ctf: { title: string } | null) => {
   if (ctf) {
     document.title = `${ctf.title} | CTFNote`;
   }
-}
+};
 
 export default defineComponent({
   props: {
@@ -29,7 +29,10 @@ export default defineComponent({
     watch(ctf, (ctf) => setTitle(ctf));
 
     // Watch for Vue route changes (required to change the title when the page was already mounted)
-    watch(() => route.fullPath, () => setTitle(ctf.value));
+    watch(
+      () => route.fullPath,
+      () => setTitle(ctf.value),
+    );
 
     return { ctf };
   },
