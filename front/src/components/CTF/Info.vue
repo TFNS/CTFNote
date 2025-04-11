@@ -71,7 +71,7 @@
         <q-space />
       </div>
 
-      <div class="row q-gutter-md">
+      <div class="row">
         <div class="col">
           <div class="q-gutter-sm">
             <div class="row q-gutter-md q-pl-sm">

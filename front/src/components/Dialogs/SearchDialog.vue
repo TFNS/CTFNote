@@ -24,7 +24,7 @@
       </q-card-section>
 
       <q-card-section v-if="!!items.length" class="q-pt-none">
-        <q-list bordered separator style="border-radius: 4px">
+        <q-list bordered separator class="rounded-borders overflow-hidden">
           <q-item
             v-for="(item, i) in items"
             :key="item.nodeId"

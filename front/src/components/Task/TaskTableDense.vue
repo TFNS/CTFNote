@@ -8,7 +8,11 @@
     dense
   >
     <template #body="props">
-      <q-tr v-show="isTaskVisible(props.row)" :props="props">
+      <q-tr
+        v-show="isTaskVisible(props.row)"
+        style="height: 45px"
+        :props="props"
+      >
         <task-menu :task="props.row" :context-menu="true" />
 
         <q-td

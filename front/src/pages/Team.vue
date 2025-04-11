@@ -1,10 +1,13 @@
 <template>
   <q-page class="page q-pa-md">
-    <q-card class="">
+    <q-card>
       <q-card-section>
         <div class="text-h6">Team</div>
       </q-card-section>
+
       <q-table
+        flat
+        dense
         :columns="columns"
         :rows="team"
         hide-pagination
@@ -12,7 +15,7 @@
       >
         <template #body-cell-username="props">
           <q-td key="username" :props="props">
-            <user-badge :profile="props.row" />
+            <user-badge :profile="props.row" class="q-mx-none" />
           </q-td>
         </template>
       </q-table>
@@ -36,27 +39,29 @@ export default defineComponent({
     const columns = [
       {
         name: 'role',
+        label: 'Role',
         sortable: true,
         field: 'role',
-        headerStyle: 'max-width: 150px',
-        style: 'text-transform: capitalize; width: 150px;',
-        label: 'role',
+        style: 'width: 75px; max-width: 75px; text-transform: capitalize',
+        align: 'left',
         format: (r: Role) => r.slice(5).toLowerCase(),
       },
       {
         name: 'username',
         headerStyle: 'col-auto',
-        style: 'width: 300px;',
         size: 'auto',
         sortable: true,
         field: 'username',
         label: 'Username',
+        style: 'width: 165px; max-width: 165px',
+        align: 'left',
       },
       {
         name: 'description',
         field: 'description',
         sortable: true,
         label: 'Description',
+        align: 'left',
       },
     ];
     return { team, columns, pagination };
