@@ -132,13 +132,13 @@ const adminRoute: RouteRecordRaw = {
   path: 'admin',
   name: 'admin',
   component: () => import('pages/Admin.vue'),
-  redirect: { name: 'admin-registration' },
+  redirect: { name: 'admin-authentication' },
   children: [
     {
-      path: 'settings/registration',
-      name: 'admin-registration',
-      meta: { title: 'Admin - Registration' },
-      component: () => import('src/components/Admin/Registration.vue'),
+      path: 'settings/authentication',
+      name: 'admin-authentication',
+      meta: { title: 'Admin - Authentication' },
+      component: () => import('src/components/Admin/Authentication.vue'),
     },
     {
       path: 'settings/style',
