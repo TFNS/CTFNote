@@ -42,7 +42,7 @@ export default defineComponent({
         label: 'Role',
         sortable: true,
         field: 'role',
-        style: 'width: 75px; max-width: 75px;',
+        style: 'width: 75px; max-width: 75px; text-transform: capitalize',
         align: 'left',
         format: (r: Role) => r.slice(5).toLowerCase(),
       },
