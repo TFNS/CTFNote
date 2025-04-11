@@ -114,7 +114,7 @@ const authRoute: RouteRecordRaw = {
     {
       path: 'reset-password/:token',
       name: 'auth-reset-password',
-      meta: { public: true, title: 'Register' },
+      meta: { public: true, title: 'Reset password' },
       props: (route) => ({ token: route.params.token }),
       component: () => import('components/Auth/ResetPassword.vue'),
     },
@@ -132,24 +132,24 @@ const adminRoute: RouteRecordRaw = {
   path: 'admin',
   name: 'admin',
   component: () => import('pages/Admin.vue'),
-  redirect: { name: 'admin-registration' },
+  redirect: { name: 'admin-authentication' },
   children: [
     {
-      path: 'settings/registration',
-      name: 'admin-registration',
-      meta: { title: 'Admin - Registration' },
-      component: () => import('src/components/Admin/Registration.vue'),
+      path: 'settings/authentication',
+      name: 'admin-authentication',
+      meta: { title: 'Authentication | Admin' },
+      component: () => import('src/components/Admin/Authentication.vue'),
     },
     {
       path: 'settings/style',
       name: 'admin-theme',
-      meta: { title: 'Admin - Theme' },
+      meta: { title: 'Theme | Admin' },
       component: () => import('src/components/Admin/Theme.vue'),
     },
     {
       path: 'users',
       name: 'admin-users',
-      meta: { title: 'Admin - Users' },
+      meta: { title: 'Users | Admin' },
       component: () => import('components/Admin/Users.vue'),
     },
   ],
@@ -158,6 +158,7 @@ const adminRoute: RouteRecordRaw = {
 const teamRoute: RouteRecordRaw = {
   path: 'team',
   name: 'team',
+  meta: { title: 'Team' },
   component: () => import('src/pages/Team.vue'),
 };
 

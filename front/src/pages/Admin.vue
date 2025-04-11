@@ -2,7 +2,7 @@
   <q-page>
     <q-tabs v-model="tab" indicator-color="secondary" dense align="left">
       <q-route-tab
-        :to="{ name: 'admin-registration' }"
+        :to="{ name: 'admin-authentication' }"
         label="Authentication"
         icon="lock"
       />
