@@ -46,7 +46,7 @@ export default defineComponent({
       task,
       (task) => {
         if (task) {
-          document.title = `CTFNote - ${task.title}`;
+          document.title = `${task.title} - CTFNote`;
         }
       },
       { immediate: true },

@@ -19,14 +19,14 @@ export default defineComponent({
 
     watch(ctf, (ctf) => {
       if (ctf) {
-        document.title = `CTFNote - ${ctf.title}`;
+        document.title = `${ctf.title} - CTFNote`;
       }
     });
 
     return { ctf };
   },
   mounted() {
-    if (this.ctf) document.title = `CTFNote - ${this.ctf.title}`;
+    if (this.ctf) document.title = `${this.ctf.title} - CTFNote`;
   },
 });
 </script>
