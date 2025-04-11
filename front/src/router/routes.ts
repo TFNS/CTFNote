@@ -137,19 +137,19 @@ const adminRoute: RouteRecordRaw = {
     {
       path: 'settings/authentication',
       name: 'admin-authentication',
-      meta: { title: 'Authentication - Admin' },
+      meta: { title: 'Authentication | Admin' },
       component: () => import('src/components/Admin/Authentication.vue'),
     },
     {
       path: 'settings/style',
       name: 'admin-theme',
-      meta: { title: 'Theme - Admin' },
+      meta: { title: 'Theme | Admin' },
       component: () => import('src/components/Admin/Theme.vue'),
     },
     {
       path: 'users',
       name: 'admin-users',
-      meta: { title: 'Users - Admin' },
+      meta: { title: 'Users | Admin' },
       component: () => import('components/Admin/Users.vue'),
     },
   ],

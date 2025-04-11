@@ -11,7 +11,7 @@ import { useRoute } from 'vue-router';
 
 const setTitle = (ctf: {title: string} | null) => {
   if (ctf) {
-    document.title = `${ctf.title} - CTFNote`;
+    document.title = `${ctf.title} | CTFNote`;
   }
 }
 
