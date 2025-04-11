@@ -158,6 +158,7 @@ const adminRoute: RouteRecordRaw = {
 const teamRoute: RouteRecordRaw = {
   path: 'team',
   name: 'team',
+  meta: { title: 'Team' },
   component: () => import('src/pages/Team.vue'),
 };
 
