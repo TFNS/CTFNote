@@ -198,7 +198,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     //add challenges to the ctf channel discord
     switch (fieldContext.scope.fieldName) {
       case "createTask":
-        handleCreateTask(
+        await handleCreateTask(
           guild,
           args.input.ctfId,
           args.input.title,

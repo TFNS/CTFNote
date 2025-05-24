@@ -281,11 +281,30 @@ export default defineComponent({
       }));
     },
     async createTasks(tasks: ParsedTask[]) {
-      for (const task of tasks) {
-        const r = await this.createTask(this.ctf.id, task);
-        const newTask = r?.data?.createTask?.task;
-        if (newTask) {
-          await this.addTagsForTask(task.tags, makeId(newTask.id));
+      const batchSize = 10;
+      for (let i = 0; i < tasks.length; i += batchSize) {
+        const batch = tasks.slice(i, i + batchSize);
+        // Process the first task in the batch serially
+        // to make sure the Discord bot will create the categories correctly.
+        if (batch.length > 0) {
+          const firstTask = batch[0];
+          const r = await this.createTask(this.ctf.id, firstTask);
+          const newTask = r?.data?.createTask?.task;
+          if (newTask) {
+            await this.addTagsForTask(firstTask.tags, makeId(newTask.id));
+          }
+        }
+        // Process the rest of the batch in parallel
+        if (batch.length > 1) {
+          await Promise.all(
+            batch.slice(1).map(async (task) => {
+              const r = await this.createTask(this.ctf.id, task);
+              const newTask = r?.data?.createTask?.task;
+              if (newTask) {
+                return this.addTagsForTask(task.tags, makeId(newTask.id));
+              }
+            }),
+          );
         }
       }
     },
