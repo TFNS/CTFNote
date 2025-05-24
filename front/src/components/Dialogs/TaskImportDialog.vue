@@ -117,7 +117,7 @@
 <script lang="ts">
 import { useDialogPluginComponent } from 'quasar';
 import ctfnote from 'src/ctfnote';
-import { Ctf, makeId } from 'src/ctfnote/models';
+import { Ctf, makeId, Id, Task } from 'src/ctfnote/models';
 import parsers, { ParsedTask } from 'src/ctfnote/parsers';
 import { defineComponent, ref } from 'vue';
 import TaskTagsList from 'src/components/Task/TaskTagsList.vue';
@@ -284,27 +284,66 @@ export default defineComponent({
       const batchSize = 10;
       for (let i = 0; i < tasks.length; i += batchSize) {
         const batch = tasks.slice(i, i + batchSize);
+
         // Process the first task in the batch serially
         // to make sure the Discord bot will create the categories correctly.
+        let firstTaskResult: {
+          task: ParsedTask;
+          taskId: ReturnType<typeof makeId>;
+        } | null = null;
         if (batch.length > 0) {
           const firstTask = batch[0];
           const r = await this.createTask(this.ctf.id, firstTask);
           const newTask = r?.data?.createTask?.task;
           if (newTask) {
-            await this.addTagsForTask(firstTask.tags, makeId(newTask.id));
+            firstTaskResult = { task: firstTask, taskId: makeId(newTask.id) };
           }
         }
-        // Process the rest of the batch in parallel
+
+        // Process the rest of the batch in parallel for task creation
+        const remainingTaskResults: Array<{
+          task: ParsedTask;
+          taskId: ReturnType<typeof makeId>;
+        }> = [];
         if (batch.length > 1) {
-          await Promise.all(
+          const results = await Promise.all(
             batch.slice(1).map(async (task) => {
               const r = await this.createTask(this.ctf.id, task);
               const newTask = r?.data?.createTask?.task;
               if (newTask) {
-                return this.addTagsForTask(task.tags, makeId(newTask.id));
+                return { task, taskId: makeId(newTask.id) };
               }
+              return null;
             }),
           );
+          remainingTaskResults.push(
+            ...results.filter(
+              (
+                t,
+              ): t is { task: ParsedTask; taskId: ReturnType<typeof makeId> } =>
+                t != null,
+            ),
+          );
+        }
+
+        // Now process all tag additions in parallel
+        const tagPromises: Promise<any>[] = [];
+        if (firstTaskResult) {
+          tagPromises.push(
+            this.addTagsForTask(
+              firstTaskResult.task.tags,
+              firstTaskResult.taskId as Id<Task>,
+            ),
+          );
+        }
+        tagPromises.push(
+          ...remainingTaskResults.map((result) =>
+            this.addTagsForTask(result.task.tags, result.taskId as Id<Task>),
+          ),
+        );
+
+        if (tagPromises.length > 0) {
+          await Promise.all(tagPromises);
         }
       }
     },
