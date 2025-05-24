@@ -13,7 +13,7 @@ export default boot(async ({ router, redirect, urlPath }) => {
   router.afterEach((to) => {
     if (typeof to.meta.title == 'string') {
       const title = to.meta.title;
-      document.title = title ? `CTFNote - ${title}` : 'CTFNote';
+      document.title = title ? `${title} | CTFNote` : 'CTFNote';
     }
   });
 
