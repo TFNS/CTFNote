@@ -20,6 +20,19 @@
           <q-item-label class="q-px-md"> Solved </q-item-label>
         </q-item-section>
       </q-item>
+      <q-item
+        v-if="me?.isAdmin || me?.isManager"
+        v-close-popup
+        clickable
+        @click="assignTask(task)"
+      >
+        <q-item-section side>
+          <q-avatar icon="group" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="q-px-md"> Assign </q-item-label>
+        </q-item-section>
+      </q-item>
       <q-item v-ripple v-close-popup tag="label" @click="editTask(task)">
         <q-item-section side>
           <q-avatar icon="edit" />
@@ -43,7 +56,7 @@
 <script lang="ts">
 import { Task } from 'src/ctfnote/models';
 import ctfnote from 'src/ctfnote';
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 
 export default defineComponent({
   props: {
@@ -53,36 +66,43 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const me = ctfnote.me.injectMe();
+    const startWorkingOn = ctfnote.tasks.useStartWorkingOn();
+    const stopWorkingOn = ctfnote.tasks.useStopWorkingOn();
+    const solveTask = ctfnote.tasks.useSolveTaskPopup();
+    const deleteTask = ctfnote.tasks.useDeleteTaskPopup();
+    const editTask = ctfnote.tasks.useEditTaskPopup();
+    const assignTask = ctfnote.tasks.useAssignTaskPopup();
+
     return {
-      me: ctfnote.me.injectMe(),
-      startWorkingOn: ctfnote.tasks.useStartWorkingOn(),
-      stopWorkingOn: ctfnote.tasks.useStopWorkingOn(),
-      solveTask: ctfnote.tasks.useSolveTaskPopup(),
-      deleteTask: ctfnote.tasks.useDeleteTaskPopup(),
-      editTask: ctfnote.tasks.useEditTaskPopup(),
+      me,
+      startWorkingOn,
+      stopWorkingOn,
+      solveTask,
+      deleteTask,
+      editTask,
+      assignTask,
+      onIt: computed(() => {
+        const meValue = me.value;
+        if (!meValue || !meValue.profile || !('id' in meValue.profile))
+          return false;
+        const myId = (meValue.profile as { id: number }).id;
+        return (
+          props.task.workOnTasks.filter(
+            (w: { profileId: number; active: boolean }) =>
+              w.profileId === myId && w.active,
+          ).length > 0
+        );
+      }),
+      updateOnIt(v: boolean) {
+        if (v) {
+          void startWorkingOn(props.task);
+        } else {
+          void stopWorkingOn(props.task);
+        }
+      },
     };
-  },
-  computed: {
-    onIt() {
-      if (!this.me?.profile?.id) {
-        return false;
-      }
-      return (
-        this.task.workOnTasks.filter(
-          (w) => w.profileId == this.me?.profile?.id && w.active,
-        ).length > 0
-      );
-    },
-  },
-  methods: {
-    updateOnIt(v: boolean) {
-      if (v) {
-        void this.startWorkingOn(this.task);
-      } else {
-        void this.stopWorkingOn(this.task);
-      }
-    },
   },
 });
 </script>

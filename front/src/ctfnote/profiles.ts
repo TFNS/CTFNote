@@ -63,7 +63,7 @@ export function buildProfile(p: ProfileFragment): Profile {
 
 const TeamSymbol: InjectionKey<Ref<readonly PublicProfile[]>> = Symbol('team');
 
-export function provideTeam() {
+export function provideTeam(): Ref<readonly PublicProfile[]> {
   const { result: team } = getTeam();
   provide(TeamSymbol, team);
   return team;
