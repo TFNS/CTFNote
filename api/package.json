@@ -22,7 +22,7 @@
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
     "@graphile/operation-hooks": "^1.0.0",
     "@graphile/pg-pubsub": "4.13.0",
-    "axios": "^1.7.7",
+    "axios": "^1.8.2",
     "discord.js": "^14.17.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
