@@ -4,6 +4,7 @@ import {
   Client,
   CommandInteraction,
   Guild,
+  ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../interfaces/command";
 import { getTaskFromId, setFlagForChallengeId } from "../../database/tasks";
@@ -43,7 +44,7 @@ export async function handleTaskSolved(
   message?.react(emojis[Math.floor(Math.random() * emojis.length)].toString());
 }
 
-async function solveTaskLogic(client: Client, interaction: CommandInteraction) {
+async function solveTaskLogic(client: Client, interaction: ChatInputCommandInteraction) {
   const r = await getCurrentTaskChannelFromDiscord(interaction);
   if (r == null) return accessDenied(interaction);
 
@@ -93,7 +94,7 @@ export const SolveTask: Command = {
     },
   ],
   run: async (client, interaction) => {
-    return solveTaskLogic(client, interaction).catch((e) => {
+    return solveTaskLogic(client, interaction as ChatInputCommandInteraction).catch((e) => {
       console.error("Error during solve task logic: ", e);
     });
   },
