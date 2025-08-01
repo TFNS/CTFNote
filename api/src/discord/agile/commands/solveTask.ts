@@ -44,7 +44,10 @@ export async function handleTaskSolved(
   message?.react(emojis[Math.floor(Math.random() * emojis.length)].toString());
 }
 
-async function solveTaskLogic(client: Client, interaction: ChatInputCommandInteraction) {
+async function solveTaskLogic(
+  client: Client,
+  interaction: ChatInputCommandInteraction
+) {
   const r = await getCurrentTaskChannelFromDiscord(interaction);
   if (r == null) return accessDenied(interaction);
 
@@ -94,7 +97,10 @@ export const SolveTask: Command = {
     },
   ],
   run: async (client, interaction) => {
-    return solveTaskLogic(client, interaction as ChatInputCommandInteraction).catch((e) => {
+    return solveTaskLogic(
+      client,
+      interaction as ChatInputCommandInteraction
+    ).catch((e) => {
       console.error("Error during solve task logic: ", e);
     });
   },
