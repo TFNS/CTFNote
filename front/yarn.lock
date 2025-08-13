@@ -3464,16 +3464,15 @@ __metadata:
   linkType: hard
 
 "@quasar/quasar-ui-qmarkdown@npm:^2.0.0-beta.10":
-  version: 2.0.0-beta.10
-  resolution: "@quasar/quasar-ui-qmarkdown@npm:2.0.0-beta.10"
+  version: 2.0.5
+  resolution: "@quasar/quasar-ui-qmarkdown@npm:2.0.5"
   dependencies:
-    "@types/markdown-it": "npm:^12.2.3"
     markdown-it: "npm:^12.3.2"
     markdown-it-container: "npm:^3.0.0"
     markdown-it-imsize: "npm:^2.0.1"
     markdown-it-toc-and-anchor: "npm:^4.2.0"
-    prismjs: "npm:^1.28.0"
-  checksum: 10/d12503399c96e92a8ca03ccd670183d06c40c98bb2a417047f96738ff22ada29e00b5a6a04246e7fd5a51e7c7a0ba2e1227f902209775e412fdf5c28fe00bd81
+    prismjs: "npm:^1.29.0"
+  checksum: 10/e57595e6171568cfd76838e9bb153dc8d19c0ee5cb3fe470223eb3efcc92ff44fc1e04dd975e590a2ea77fcf25cdf0e767d6b91cd0f726798b48fe38e78a1c54
   languageName: node
   linkType: hard
 
@@ -3862,30 +3861,6 @@ __metadata:
   version: 7.0.12
   resolution: "@types/json-schema@npm:7.0.12"
   checksum: 10/7a72ba9cb7d2b45d7bb032e063c9eeb1ce4102d62551761e84c91f99f8273ba5aaffd34be835869456ec7c40761b4389009d9e777c0020a7227ca0f5e3238e94
-  languageName: node
-  linkType: hard
-
-"@types/linkify-it@npm:*":
-  version: 5.0.0
-  resolution: "@types/linkify-it@npm:5.0.0"
-  checksum: 10/c3919044d4876f9d71d037e861745cd2485c95ac8c36a4fa67b132d4e60eb1d067e123cc7965c9cf5110eea351517d767f0d306af5e9147d6d0af87bc374ddcf
-  languageName: node
-  linkType: hard
-
-"@types/markdown-it@npm:^12.2.3":
-  version: 12.2.3
-  resolution: "@types/markdown-it@npm:12.2.3"
-  dependencies:
-    "@types/linkify-it": "npm:*"
-    "@types/mdurl": "npm:*"
-  checksum: 10/8838017dd0a0a9bd596114b959d287135393a18e3ddc6a46e9770bdd35c824b88d8ba4b60540ee75ae6c79dc0ccc72ff5d7745083c27900c98925c9b5ae058e6
-  languageName: node
-  linkType: hard
-
-"@types/mdurl@npm:*":
-  version: 2.0.0
-  resolution: "@types/mdurl@npm:2.0.0"
-  checksum: 10/78746e96c655ceed63db06382da466fd52c7e9dc54d60b12973dfdd110cae06b9439c4b90e17bb8d4461109184b3ea9f3e9f96b3e4bf4aa9fe18b6ac35f283c8
   languageName: node
   linkType: hard
 
@@ -11941,10 +11916,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prismjs@npm:^1.28.0":
-  version: 1.29.0
-  resolution: "prismjs@npm:1.29.0"
-  checksum: 10/2080db382c2dde0cfc7693769e89b501ef1bfc8ff4f8d25c07fd4c37ca31bc443f6133d5b7c145a73309dc396e829ddb7cc18560026d862a887ae08864ef6b07
+"prismjs@npm:^1.29.0":
+  version: 1.30.0
+  resolution: "prismjs@npm:1.30.0"
+  checksum: 10/6b48a2439a82e5c6882f48ebc1564c3890e16463ba17ac10c3ad4f62d98dea5b5c915b172b63b83023a70ad4f5d7be3e8a60304420db34a161fae69dd4e3e2da
   languageName: node
   linkType: hard
 
