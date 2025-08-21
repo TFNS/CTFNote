@@ -6,6 +6,7 @@ export interface GitLabGroup {
   name: string;
   path: string;
   full_path: string;
+  parent_id?: number;
 }
 
 export class GitLabClient {
@@ -138,6 +139,63 @@ export class GitLabClient {
 
   getGroupId(): number | null {
     return this.groupId;
+  }
+
+  async createGroup(name: string, path: string, parentId?: number): Promise<GitLabGroup | null> {
+    if (!this.connected) {
+      console.error("GitLab client is not connected");
+      return null;
+    }
+
+    try {
+      const groupData: Record<string, unknown> = {
+        name: name,
+        path: path,
+        visibility: config.gitlab.visibility,
+      };
+
+      // If parentId is provided, create as subgroup
+      if (parentId) {
+        groupData.parent_id = parentId;
+      }
+
+      const response = await this.client.post("/groups", groupData);
+
+      console.log(`Created GitLab group: ${response.data.full_path}`);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to create GitLab group:", error);
+      const err = error as { response?: { data?: unknown; status?: number } };
+      if (err.response?.status === 400) {
+        console.error("Bad request - group may already exist or invalid parameters");
+        if (err.response?.data) {
+          console.error("Error details:", err.response.data);
+        }
+      }
+      return null;
+    }
+  }
+
+  async getGroup(path: string, parentId?: number): Promise<GitLabGroup | null> {
+    if (!this.connected) {
+      return null;
+    }
+
+    try {
+      let fullPath = path;
+      
+      // If parentId is provided, get the full path including parent
+      if (parentId) {
+        const parentGroup = await this.client.get(`/groups/${parentId}`);
+        fullPath = `${parentGroup.data.full_path}/${path}`;
+      }
+      
+      const response = await this.client.get(`/groups/${encodeURIComponent(fullPath)}`);
+      return response.data;
+    } catch (error) {
+      // Group doesn't exist, which is fine
+      return null;
+    }
   }
 }
 

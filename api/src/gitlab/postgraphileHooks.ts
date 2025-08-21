@@ -63,7 +63,7 @@ const gitlabMutationHook =
 
     if (!config.gitlab.enabled) return null;
 
-    const relevantMutations = ["createTask"];
+    const relevantMutations = ["createCtf", "createTask"];
 
     if (!relevantMutations.includes(fieldContext.scope.fieldName)) {
       return null;
@@ -81,6 +81,41 @@ const gitlabMutationHook =
       );
       try {
         switch (fieldContext.scope.fieldName) {
+          case "createCtf": {
+            console.log("Processing createCtf mutation for GitLab");
+
+            const ctfArgs = args as {
+              input: { ctf: { title: string; description?: string } };
+            };
+            const title = ctfArgs.input.ctf.title;
+
+            console.log(`Creating GitLab group for new CTF: ${title}`);
+
+            // Get CTF from database (it should exist after the mutation)
+            const result = await context.pgClient.query(
+              "SELECT * FROM ctfnote.ctf WHERE title = $1 ORDER BY id DESC LIMIT 1",
+              [title]
+            );
+
+            if (result.rows.length > 0) {
+              const ctf = result.rows[0];
+              
+              // Create group asynchronously to not block the mutation
+              gitlabRepositoryManager
+                .createOrGetCtfGroup({
+                  id: ctf.id,
+                  title: ctf.title,
+                  description: ctf.description,
+                  startTime: ctf.start_time,
+                  endTime: ctf.end_time,
+                })
+                .catch((error) => {
+                  console.error("Failed to create GitLab group for CTF:", error);
+                });
+            }
+
+            break;
+          }
           case "createTask": {
             console.log("Processing createTask mutation for GitLab");
 

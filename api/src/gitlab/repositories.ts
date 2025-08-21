@@ -28,6 +28,7 @@ export interface GitLabRepository {
 }
 
 export class GitLabRepositoryManager {
+  private ctfGroupCache = new Map<bigint, number>();
   private normalizeRepoName(name: string): string {
     return safeSlugify(name)
       .toLowerCase()
@@ -37,10 +38,18 @@ export class GitLabRepositoryManager {
       .substring(0, 100);
   }
 
-  private getRepoName(ctf: CTF, task: Task): string {
-    const ctfName = this.normalizeRepoName(ctf.title);
-    const taskName = this.normalizeRepoName(task.title);
-    return `${ctfName}-${taskName}`.substring(0, 100);
+  private normalizeGroupName(name: string): string {
+    return safeSlugify(name)
+      .toLowerCase()
+      .replace(/[^a-z0-9-_]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")
+      .substring(0, 100);
+  }
+
+  private getRepoName(task: Task): string {
+    // Just use the task name since it will be in the CTF's group
+    return this.normalizeRepoName(task.title).substring(0, 100);
   }
 
   private generateReadmeContent(ctf: CTF, task: Task): string {
@@ -87,6 +96,52 @@ ${ctf.endTime ? `- **CTF End**: ${ctf.endTime.toISOString()}` : ""}
 `;
   }
 
+  async createOrGetCtfGroup(ctf: CTF): Promise<number | null> {
+    if (!gitlabClient.isConnected()) {
+      console.error("GitLab client is not connected");
+      return null;
+    }
+
+    // Check cache first
+    if (this.ctfGroupCache.has(ctf.id)) {
+      return this.ctfGroupCache.get(ctf.id) || null;
+    }
+
+    try {
+      const ctfGroupPath = this.normalizeGroupName(ctf.title);
+      const parentGroupId = gitlabClient.getGroupId();
+      
+      // Check if CTF group already exists
+      let ctfGroup = await gitlabClient.getGroup(ctfGroupPath, parentGroupId || undefined);
+      
+      if (!ctfGroup) {
+        // Create the CTF group
+        console.log(`Creating GitLab group for CTF: ${ctf.title}`);
+        ctfGroup = await gitlabClient.createGroup(
+          ctf.title,
+          ctfGroupPath,
+          parentGroupId || undefined // Will be undefined if no parent group is configured
+        );
+        
+        if (!ctfGroup) {
+          console.error(`Failed to create group for CTF: ${ctf.title}`);
+          return null;
+        }
+        
+        console.log(`Created GitLab group: ${ctfGroup.full_path}`);
+      } else {
+        console.log(`Using existing GitLab group: ${ctfGroup.full_path}`);
+      }
+      
+      // Cache the group ID
+      this.ctfGroupCache.set(ctf.id, ctfGroup.id);
+      return ctfGroup.id;
+    } catch (error) {
+      console.error(`Failed to create/get CTF group for ${ctf.title}:`, error);
+      return null;
+    }
+  }
+
   async createRepositoryForTask(
     task: Task,
     ctf: CTF
@@ -99,14 +154,20 @@ ${ctf.endTime ? `- **CTF End**: ${ctf.endTime.toISOString()}` : ""}
     try {
       console.log(`Creating GitLab repository for task: ${task.title}`);
 
-      const repoName = this.getRepoName(ctf, task);
-      const client = gitlabClient.getClient();
-      const groupId = gitlabClient.getGroupId();
+      // First, ensure the CTF group exists
+      const ctfGroupId = await this.createOrGetCtfGroup(ctf);
+      if (!ctfGroupId) {
+        console.error(`Failed to get/create group for CTF: ${ctf.title}`);
+        return null;
+      }
 
-      // Check if repository already exists
-      const existingRepo = await this.findRepository(repoName, groupId);
+      const repoName = this.getRepoName(task);
+      const client = gitlabClient.getClient();
+
+      // Check if repository already exists in the CTF group
+      const existingRepo = await this.findRepository(repoName, ctfGroupId);
       if (existingRepo) {
-        console.log(`Repository ${repoName} already exists`);
+        console.log(`Repository ${repoName} already exists in CTF group`);
         return existingRepo;
       }
 
@@ -119,10 +180,8 @@ ${ctf.endTime ? `- **CTF End**: ${ctf.endTime.toISOString()}` : ""}
         default_branch: config.gitlab.defaultBranch,
       };
 
-      // Add namespace_id if we have a group
-      if (groupId) {
-        repoData.namespace_id = groupId;
-      }
+      // Use the CTF group as the namespace
+      repoData.namespace_id = ctfGroupId;
 
       // Create the repository
       const response = await client.post("/projects", repoData);
