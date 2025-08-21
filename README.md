@@ -142,6 +142,51 @@ The `/create`, `/archive` and `/delete` commands are only accessible when you ha
 The bot will automatically create more categories when you hit the 50 Discord channel limit, so you can have an almost infinite amount of tasks per CTF.
 It is your own responsibility to stay below the Discord server channel limit, which is 500 at the moment of writing (categories count as channels).
 
+### Add Mattermost support
+
+CTFNote can integrate with Mattermost to automatically create a team for a created CTF and channels for tasks.
+
+#### What it does
+
+When enabled, CTFNote will:
+- Automatically create a team and channels for each CTF
+- Create task-specific channels within the CTF team
+
+#### Setup
+
+To enable Mattermost integration, configure the following values in your `.env` file:
+
+```
+USE_MATTERMOST=true
+MATTERMOST_URL=http://your-mattermost-server:8065
+MATTERMOST_USERNAME=bot-username
+MATTERMOST_PASSWORD=bot-password
+MATTERMOST_TEAM_NAME=your-team-name
+```
+
+#### Testing with Mattermost Preview
+
+You can quickly test the Mattermost integration using the official preview Docker image:
+
+```shell
+docker run --name mattermost-preview -d --publish 8065:8065 mattermost/mattermost-preview:10.9.5
+```
+
+This will start a Mattermost server on `http://localhost:8065`. 
+The first user created will be an admin user.
+
+After logging in:
+1. Create a team or use the default one
+2. Create a bot account for CTFNote (or use the admin account for testing)
+3. Update your `.env` file with the appropriate values
+4. Restart CTFNote to enable the integration
+
+#### Requirements
+
+- The Mattermost bot account needs permissions to create and manage channels
+- The team specified in `MATTERMOST_TEAM_NAME` must exist
+- The Mattermost server must be accessible from the CTFNote API container
+
 ### Migration
 
 If you already have an instance of CTFNote in a previous version and wish to
