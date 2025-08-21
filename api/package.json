@@ -25,7 +25,7 @@
     "@mattermost/client": "^10.9.0",
     "@mattermost/types": "^10.9.0",
     "axios": "^1.7.7",
-    "discord.js": "^14.17.3",
+    "discord.js": "^14.21.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "graphile-utils": "4.13.0",

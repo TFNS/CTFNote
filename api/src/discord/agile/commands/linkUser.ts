@@ -2,7 +2,7 @@ import {
   ApplicationCommandOptionType,
   ApplicationCommandType,
   Client,
-  CommandInteraction,
+  ChatInputCommandInteraction,
 } from "discord.js";
 import { Command } from "../../interfaces/command";
 import {
@@ -63,7 +63,10 @@ export async function changeDiscordUserRoleForCTFByDiscordId(
   return true;
 }
 
-async function linkUserLogic(_client: Client, interaction: CommandInteraction) {
+async function linkUserLogic(
+  _client: Client,
+  interaction: ChatInputCommandInteraction
+) {
   const token = interaction.options.get("token", true).value as string;
 
   const userId = await getUserByToken(token);
@@ -115,7 +118,10 @@ export const LinkUser: Command = {
     },
   ],
   run: async (client, interaction) => {
-    return linkUserLogic(client, interaction).catch((e) => {
+    return linkUserLogic(
+      client,
+      interaction as ChatInputCommandInteraction
+    ).catch((e) => {
       console.error("Error during link user logic: ", e);
     });
   },
