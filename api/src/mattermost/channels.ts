@@ -70,15 +70,24 @@ export class MattermostChannelManager {
 
     try {
       console.log(`Creating Mattermost channels for CTF: ${ctf.title}`);
+      const createdChannels: string[] = [];
+      const failedChannels: string[] = [];
 
       // Create main discussion channel
       const challengesTalkName = this.normalizeChannelName(`${ctf.title}-talk`);
-      await this.createChannel(
+      const talkChannel = await this.createChannel(
         teamId,
         challengesTalkName,
-        `General discussion for ${ctf.title}`,
-        "O"
+        `${ctf.title} - Talk`,
+        "O",
+        `General discussion for ${ctf.title}`
       );
+
+      if (talkChannel) {
+        createdChannels.push(challengesTalkName);
+      } else {
+        failedChannels.push(challengesTalkName);
+      }
 
       // Create voice channels if enabled
       if (config.mattermost.createVoiceChannels) {
@@ -86,16 +95,33 @@ export class MattermostChannelManager {
           const voiceChannelName = this.normalizeChannelName(
             `${ctf.title}-voice-${i}`
           );
-          await this.createChannel(
+          const voiceChannel = await this.createChannel(
             teamId,
             voiceChannelName,
-            `Voice channel ${i} for ${ctf.title}`,
-            "O"
+            `${ctf.title} - Voice ${i}`,
+            "O",
+            `Voice channel ${i} for ${ctf.title}`
           );
+
+          if (voiceChannel) {
+            createdChannels.push(voiceChannelName);
+          } else {
+            failedChannels.push(voiceChannelName);
+          }
         }
       }
 
-      console.log(`Successfully created channels for CTF: ${ctf.title}`);
+      if (failedChannels.length > 0) {
+        console.error(
+          `Failed to create channels for CTF ${ctf.title}: ${failedChannels.join(", ")}`
+        );
+      }
+
+      if (createdChannels.length > 0) {
+        console.log(
+          `Successfully created channels for CTF ${ctf.title}: ${createdChannels.join(", ")}`
+        );
+      }
     } catch (error) {
       console.error(`Failed to create channels for CTF ${ctf.title}:`, error);
     }
@@ -123,9 +149,16 @@ export class MattermostChannelManager {
       }
 
       const channelName = this.getTaskChannelName(ctf, task, channelType);
+      const displayName = `[${channelType.toUpperCase()}] ${task.title}`;
       const description = `Task: ${task.title}\n${task.description}\n\nCTFNote: ${this.getTaskUrl(ctf, task)}`;
 
-      await this.createChannel(teamId, channelName, description, "O");
+      await this.createChannel(
+        teamId,
+        channelName,
+        displayName,
+        "O",
+        description
+      );
 
       console.log(`Successfully created channel for task: ${task.title}`);
     } catch (error) {
@@ -184,7 +217,8 @@ export class MattermostChannelManager {
     teamId: string,
     name: string,
     displayName: string,
-    type: "O" | "P" = "O"
+    type: "O" | "P" = "O",
+    purpose?: string
   ): Promise<Channel | null> {
     try {
       const client = mattermostClient.getClient();
@@ -202,13 +236,50 @@ export class MattermostChannelManager {
         name: name,
         display_name: displayName,
         type: type,
-        purpose: displayName,
+        purpose: purpose || displayName,
       });
 
-      console.log(`Created channel: ${name}`);
+      console.log(
+        `Created channel: ${name} (ID: ${channel.id}, Display: ${channel.display_name})`
+      );
       return channel;
     } catch (error) {
       console.error(`Failed to create channel ${name}:`, error);
+
+      // Log more details about the error
+      if (error instanceof Error) {
+        console.error(`Error message: ${error.message}`);
+      }
+
+      // Check for Mattermost API error structure
+      const mattermostError = error as {
+        server_error_id?: string;
+        status_code?: number;
+        message?: string;
+      };
+
+      if (mattermostError.server_error_id) {
+        console.error(
+          `Mattermost error ID: ${mattermostError.server_error_id}`
+        );
+      }
+      if (mattermostError.status_code) {
+        console.error(`HTTP status code: ${mattermostError.status_code}`);
+
+        // Common issues
+        if (mattermostError.status_code === 401) {
+          console.error("Authentication failed - check Mattermost credentials");
+        } else if (mattermostError.status_code === 403) {
+          console.error(
+            "Permission denied - user may not have permission to create channels"
+          );
+        } else if (mattermostError.status_code === 404) {
+          console.error(
+            "Team not found - check MATTERMOST_TEAM_NAME configuration"
+          );
+        }
+      }
+
       return null;
     }
   }
