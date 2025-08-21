@@ -20,6 +20,7 @@ import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import OperationHook from "@graphile/operation-hooks";
 import discordHooks from "./discord/hooks";
 import { initDiscordBot } from "./discord";
+import mattermostHooks from "./mattermost/postgraphileHooks";
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
 import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
 
@@ -61,6 +62,7 @@ function createOptions() {
       createTasKPlugin,
       ConnectionFilterPlugin,
       discordHooks,
+      mattermostHooks,
       PgManyToManyPlugin,
       ProfileSubscriptionPlugin,
     ],

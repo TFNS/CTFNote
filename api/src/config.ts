@@ -51,6 +51,15 @@ export type CTFNoteConfig = DeepReadOnly<{
     registrationRoleId: string;
     channelHandleStyle: DiscordChannelHandleStyle;
   };
+  mattermost: {
+    enabled: boolean;
+    url: string;
+    username: string;
+    password: string;
+    teamName: string;
+    createVoiceChannels: boolean;
+    voiceChannelsCount: number;
+  };
 }>;
 
 function getEnv(
@@ -111,6 +120,18 @@ const config: CTFNoteConfig = {
       "DISCORD_CHANNEL_HANDLE_STYLE",
       "agile"
     ) as DiscordChannelHandleStyle,
+  },
+  mattermost: {
+    enabled: getEnv("USE_MATTERMOST", "false") === "true",
+    url: getEnv("MATTERMOST_URL", ""),
+    username: getEnv("MATTERMOST_USERNAME", ""),
+    password: getEnv("MATTERMOST_PASSWORD", ""),
+    teamName: getEnv("MATTERMOST_TEAM_NAME", ""),
+    createVoiceChannels:
+      getEnv("MATTERMOST_CREATE_VOICE_CHANNELS", "false") === "true",
+    voiceChannelsCount: parseInt(
+      getEnv("MATTERMOST_VOICE_CHANNELS_COUNT", "2")
+    ),
   },
 };
 

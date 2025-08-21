@@ -1,0 +1,240 @@
+import { mattermostClient } from "./client";
+import type { Channel } from "@mattermost/types/channels";
+import config from "../config";
+import { safeSlugify } from "../utils/utils";
+
+export interface CTF {
+  id: bigint;
+  title: string;
+  description?: string;
+  startTime?: Date;
+  endTime?: Date;
+}
+
+export interface Task {
+  id: bigint;
+  ctf_id: bigint;
+  title: string;
+  description: string;
+  flag: string;
+}
+
+export class MattermostChannelManager {
+  private channelPrefixes = {
+    new: "new-",
+    started: "started-",
+    solved: "solved-",
+  };
+
+  private normalizeChannelName(name: string): string {
+    return safeSlugify(name)
+      .toLowerCase()
+      .replace(/[^a-z0-9-_]/g, "")
+      .substring(0, 64);
+  }
+
+  private getChannelName(
+    ctf: CTF,
+    type: "new" | "started" | "solved",
+    task?: Task
+  ): string {
+    const prefix = this.channelPrefixes[type];
+    const ctfName = this.normalizeChannelName(ctf.title);
+    if (task) {
+      const taskName = this.normalizeChannelName(task.title);
+      return `${prefix}${ctfName}-${taskName}`.substring(0, 64);
+    }
+    return `${prefix}${ctfName}`.substring(0, 64);
+  }
+
+  private getTaskChannelName(
+    ctf: CTF,
+    task: Task,
+    type: "new" | "started" | "solved"
+  ): string {
+    return this.getChannelName(ctf, type, task);
+  }
+
+  async createChannelsForCtf(ctf: CTF): Promise<void> {
+    if (!mattermostClient.isConnected()) {
+      console.error("Mattermost client is not connected");
+      return;
+    }
+
+    const teamId = mattermostClient.getTeamId();
+
+    if (!teamId) {
+      console.error("Team ID not found");
+      return;
+    }
+
+    try {
+      console.log(`Creating Mattermost channels for CTF: ${ctf.title}`);
+
+      // Create main discussion channel
+      const challengesTalkName = this.normalizeChannelName(`${ctf.title}-talk`);
+      await this.createChannel(
+        teamId,
+        challengesTalkName,
+        `General discussion for ${ctf.title}`,
+        "O"
+      );
+
+      // Create voice channels if enabled
+      if (config.mattermost.createVoiceChannels) {
+        for (let i = 0; i < config.mattermost.voiceChannelsCount; i++) {
+          const voiceChannelName = this.normalizeChannelName(
+            `${ctf.title}-voice-${i}`
+          );
+          await this.createChannel(
+            teamId,
+            voiceChannelName,
+            `Voice channel ${i} for ${ctf.title}`,
+            "O"
+          );
+        }
+      }
+
+      console.log(`Successfully created channels for CTF: ${ctf.title}`);
+    } catch (error) {
+      console.error(`Failed to create channels for CTF ${ctf.title}:`, error);
+    }
+  }
+
+  async createChannelForTask(task: Task, ctf: CTF): Promise<void> {
+    if (!mattermostClient.isConnected()) {
+      console.error("Mattermost client is not connected");
+      return;
+    }
+
+    const teamId = mattermostClient.getTeamId();
+
+    if (!teamId) {
+      console.error("Team ID not found");
+      return;
+    }
+
+    try {
+      console.log(`Creating Mattermost channel for task: ${task.title}`);
+
+      let channelType: "new" | "started" | "solved" = "new";
+      if (task.flag && task.flag !== "") {
+        channelType = "solved";
+      }
+
+      const channelName = this.getTaskChannelName(ctf, task, channelType);
+      const description = `Task: ${task.title}\n${task.description}\n\nCTFNote: ${this.getTaskUrl(ctf, task)}`;
+
+      await this.createChannel(teamId, channelName, description, "O");
+
+      console.log(`Successfully created channel for task: ${task.title}`);
+    } catch (error) {
+      console.error(`Failed to create channel for task ${task.title}:`, error);
+    }
+  }
+
+  async moveTaskChannel(
+    task: Task,
+    ctf: CTF,
+    targetType: "started" | "solved"
+  ): Promise<void> {
+    if (!mattermostClient.isConnected()) {
+      console.error("Mattermost client is not connected");
+      return;
+    }
+
+    const client = mattermostClient.getClient();
+    const teamId = mattermostClient.getTeamId();
+
+    if (!teamId) {
+      console.error("Team ID not found");
+      return;
+    }
+
+    try {
+      // Find existing channel with any prefix
+      const existingChannels = await Promise.all([
+        this.findChannel(teamId, this.getTaskChannelName(ctf, task, "new")),
+        this.findChannel(teamId, this.getTaskChannelName(ctf, task, "started")),
+        this.findChannel(teamId, this.getTaskChannelName(ctf, task, "solved")),
+      ]);
+
+      const existingChannel = existingChannels.find((c) => c !== null);
+
+      if (!existingChannel) {
+        console.error(`Channel not found for task: ${task.title}`);
+        return;
+      }
+
+      // Update channel name to reflect new status
+      const newChannelName = this.getTaskChannelName(ctf, task, targetType);
+
+      await client.patchChannel(existingChannel.id, {
+        name: newChannelName,
+        display_name: `[${targetType.toUpperCase()}] ${task.title}`,
+      });
+
+      console.log(`Moved task ${task.title} to ${targetType} status`);
+    } catch (error) {
+      console.error(`Failed to move task channel ${task.title}:`, error);
+    }
+  }
+
+  private async createChannel(
+    teamId: string,
+    name: string,
+    displayName: string,
+    type: "O" | "P" = "O"
+  ): Promise<Channel | null> {
+    try {
+      const client = mattermostClient.getClient();
+
+      // Check if channel already exists
+      const existingChannel = await this.findChannel(teamId, name);
+
+      if (existingChannel) {
+        console.log(`Channel ${name} already exists`);
+        return existingChannel;
+      }
+
+      const channel = await client.createChannel({
+        team_id: teamId,
+        name: name,
+        display_name: displayName,
+        type: type,
+        purpose: displayName,
+      });
+
+      console.log(`Created channel: ${name}`);
+      return channel;
+    } catch (error) {
+      console.error(`Failed to create channel ${name}:`, error);
+      return null;
+    }
+  }
+
+  private async findChannel(
+    teamId: string,
+    name: string
+  ): Promise<Channel | null> {
+    try {
+      const client = mattermostClient.getClient();
+      const channel = await client.getChannelByName(teamId, name);
+      return channel;
+    } catch (error) {
+      // Channel doesn't exist, which is fine
+      return null;
+    }
+  }
+
+  private getTaskUrl(ctf: CTF, task: Task): string {
+    if (!config.pad.domain) return "";
+
+    const ssl = config.pad.useSSL === "false" ? "" : "s";
+    return `http${ssl}://${config.pad.domain}/#/ctf/${ctf.id}-${safeSlugify(
+      ctf.title
+    )}/task/${task.id}`;
+  }
+}
+
+export const mattermostChannelManager = new MattermostChannelManager();
