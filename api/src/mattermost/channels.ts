@@ -336,6 +336,7 @@ export class MattermostChannelManager {
         display_name: ctf.title,
         type: 'O' as const, // Open team
         description: ctf.description || `Team for CTF: ${ctf.title}`,
+        allow_open_invite: config.mattermost.teamAllowOpenInvite,
       } as Team);
       
       console.log(`Created team: ${team.name} (ID: ${team.id})`);

@@ -59,6 +59,7 @@ export type CTFNoteConfig = DeepReadOnly<{
     teamName: string;
     createVoiceChannels: boolean;
     voiceChannelsCount: number;
+    teamAllowOpenInvite: boolean;
   };
 }>;
 
@@ -132,6 +133,8 @@ const config: CTFNoteConfig = {
     voiceChannelsCount: parseInt(
       getEnv("MATTERMOST_VOICE_CHANNELS_COUNT", "2")
     ),
+    teamAllowOpenInvite:
+      getEnv("MATTERMOST_TEAM_ALLOW_OPEN_INVITE", "true") === "true",
   },
 };
 

@@ -161,6 +161,7 @@ USE_MATTERMOST=true
 MATTERMOST_URL=http://your-mattermost-server:8065
 MATTERMOST_USERNAME=bot-username
 MATTERMOST_PASSWORD=bot-password
+MATTERMOST_TEAM_ALLOW_OPEN_INVITE=true
 ```
 
 #### Testing with Mattermost Preview
@@ -179,6 +180,10 @@ After logging in:
 2. Create a bot account for CTFNote (or use the admin account for testing)
 3. Update your `.env` file with the appropriate values
 4. Restart CTFNote to enable the integration
+
+#### Configuration Options
+
+- `MATTERMOST_TEAM_ALLOW_OPEN_INVITE`: When set to `true` (default), created teams will allow any user with an account on the server to join. Set to `false` if you want teams to be invite-only.
 
 #### Requirements
 
