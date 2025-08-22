@@ -1,5 +1,4 @@
 import { Client4 } from "@mattermost/client";
-import type { Team } from "@mattermost/types/teams";
 import config from "../config";
 
 export class MattermostClient {
@@ -44,19 +43,20 @@ export class MattermostClient {
       const teams = Array.isArray(teamsResponse)
         ? teamsResponse
         : teamsResponse.teams;
-      const team = teams.find(
-        (t: Team) => t.name === config.mattermost.teamName
-      );
-
-      if (!team) {
-        throw new Error(`Team ${config.mattermost.teamName} not found`);
+      
+      // Just use the first available team the user belongs to
+      if (teams.length === 0) {
+        throw new Error(
+          `No teams found for user ${config.mattermost.username}. Please ensure the user belongs to at least one team.`
+        );
       }
 
+      const team = teams[0];
       this.teamId = team.id;
       this.connected = true;
 
       console.log(
-        `Connected to Mattermost as ${user.username} in team ${team.display_name}`
+        `Connected to Mattermost as ${user.username} using team ${team.display_name}`
       );
     } catch (error) {
       console.error("Failed to connect to Mattermost:", error);

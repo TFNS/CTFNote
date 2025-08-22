@@ -161,7 +161,6 @@ USE_MATTERMOST=true
 MATTERMOST_URL=http://your-mattermost-server:8065
 MATTERMOST_USERNAME=bot-username
 MATTERMOST_PASSWORD=bot-password
-MATTERMOST_TEAM_NAME=your-team-name
 ```
 
 #### Testing with Mattermost Preview
@@ -183,8 +182,8 @@ After logging in:
 
 #### Requirements
 
-- The Mattermost bot account needs permissions to create and manage channels
-- The team specified in `MATTERMOST_TEAM_NAME` must exist
+- The Mattermost bot account needs permissions to create and manage teams and channels
+- The bot user must belong to at least one team in Mattermost
 - The Mattermost server must be accessible from the CTFNote API container
 
 ### Migration
