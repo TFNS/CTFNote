@@ -14,6 +14,7 @@ import createTasKPlugin from "./plugins/createTask";
 import importCtfPlugin from "./plugins/importCtf";
 import uploadLogoPlugin from "./plugins/uploadLogo";
 import uploadScalar from "./plugins/uploadScalar";
+import ldapAuthPlugin from "./plugins/ldapAuth";
 import { Pool } from "pg";
 import { icalRoute } from "./routes/ical";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
@@ -63,6 +64,7 @@ function createOptions() {
       discordHooks,
       PgManyToManyPlugin,
       ProfileSubscriptionPlugin,
+      ldapAuthPlugin,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,

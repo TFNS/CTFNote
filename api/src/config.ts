@@ -51,6 +51,20 @@ export type CTFNoteConfig = DeepReadOnly<{
     registrationRoleId: string;
     channelHandleStyle: DiscordChannelHandleStyle;
   };
+  ldap: {
+    enabled: boolean;
+    url: string;
+    bindDN: string;
+    bindPassword: string;
+    searchBase: string;
+    searchFilter: string;
+    usernameAttribute: string;
+    emailAttribute: string;
+    groupAttribute: string;
+    adminGroups: string[];
+    managerGroups: string[];
+    userGroups: string[];
+  };
 }>;
 
 function getEnv(
@@ -111,6 +125,20 @@ const config: CTFNoteConfig = {
       "DISCORD_CHANNEL_HANDLE_STYLE",
       "agile"
     ) as DiscordChannelHandleStyle,
+  },
+  ldap: {
+    enabled: getEnv("LDAP_ENABLED", "false") === "true",
+    url: getEnv("LDAP_URL", "ldap://ldap.forumsys.com:389"),
+    bindDN: getEnv("LDAP_BIND_DN", "cn=read-only-admin,dc=example,dc=com"),
+    bindPassword: getEnv("LDAP_BIND_PASSWORD", "password"),
+    searchBase: getEnv("LDAP_SEARCH_BASE", "dc=example,dc=com"),
+    searchFilter: getEnv("LDAP_SEARCH_FILTER", "(uid={{username}})"),
+    usernameAttribute: getEnv("LDAP_USERNAME_ATTRIBUTE", "uid"),
+    emailAttribute: getEnv("LDAP_EMAIL_ATTRIBUTE", "mail"),
+    groupAttribute: getEnv("LDAP_GROUP_ATTRIBUTE", "memberOf"),
+    adminGroups: getEnv("LDAP_ADMIN_GROUPS", "").split(",").filter(g => g.trim()),
+    managerGroups: getEnv("LDAP_MANAGER_GROUPS", "").split(",").filter(g => g.trim()),
+    userGroups: getEnv("LDAP_USER_GROUPS", "").split(",").filter(g => g.trim()),
   },
 };
 

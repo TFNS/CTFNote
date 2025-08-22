@@ -6,6 +6,11 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
+        <q-tabs v-model="authMethod" class="text-grey" active-color="primary" indicator-color="primary" align="justify">
+          <q-tab name="local" label="Local Login" />
+          <q-tab name="ldap" label="LDAP Login" />
+        </q-tabs>
+
         <q-input
           v-model="form.login"
           filled
@@ -47,7 +52,7 @@
 <script lang="ts">
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
 import { ctfnote } from 'src/ctfnote';
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
 
 export default defineComponent({
@@ -60,6 +65,8 @@ export default defineComponent({
       settings: ctfnote.settings.injectSettings(),
       resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       login: ctfnote.auth.useLogin(),
+      ldapLogin: ctfnote.auth.useLdapLogin(),
+      authMethod: ref('local'),
       allowRegistration: true,
       form: reactive({
         login: '',
@@ -78,8 +85,12 @@ export default defineComponent({
   methods: {
     submit() {
       const login = this.form.login;
+      const loginPromise = this.authMethod === 'ldap' 
+        ? this.ldapLogin(this.form.login, this.form.password)
+        : this.login(this.form.login, this.form.password);
+
       void this.resolveAndNotify(
-        this.login(this.form.login, this.form.password),
+        loginPromise,
         {
           message: `Logged in as ${login}!`,
           icon: 'person',

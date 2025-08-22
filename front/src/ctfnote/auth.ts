@@ -6,9 +6,11 @@ import {
   useRegisterWithPasswordMutation,
   useRegisterWithTokenMutation,
   useResetPasswordMutation,
+  MeDocument,
 } from 'src/generated/graphql';
 import { useRouter } from 'vue-router';
-import { prefetchMe } from './me';
+import { prefetchMe, isLogged } from './me';
+import { gql } from '@apollo/client/core';
 
 export const JWT_KEY = 'JWT';
 
@@ -118,5 +120,76 @@ export function useLogout() {
   return () => {
     saveJWT(null);
     document.location.reload();
+  };
+}
+
+// LDAP Login GraphQL mutation (will be generated after server is running)
+const LOGIN_WITH_LDAP_MUTATION = gql`
+  mutation AuthenticateWithLdap($username: String!, $password: String!) {
+    authenticateWithLdap(username: $username, password: $password) {
+      jwt
+    }
+  }
+`;
+
+export function useLdapLogin() {
+  const { client } = useApolloClient();
+  const $router = useRouter();
+  return async (username: string, password: string) => {
+    try {
+      // Process LDAP login
+      const r = await client.mutate({
+        mutation: LOGIN_WITH_LDAP_MUTATION,
+        variables: { username, password },
+      });
+      
+      // Use the correct response structure for authenticateWithLdap
+      interface LdapLoginResponse {
+        authenticateWithLdap?: {
+          jwt?: string;
+        };
+      }
+      
+      const data = r?.data as LdapLoginResponse | undefined;
+      const jwt = data?.authenticateWithLdap?.jwt;
+      
+      // Check JWT response
+      
+      if (jwt) {
+        // Save JWT and prefetch user data
+        saveJWT(jwt);
+        
+        try {
+          // Use cache-first to ensure the cache gets updated
+          const result = await client.query({
+            query: MeDocument,
+            fetchPolicy: 'cache-first',
+          });
+          // User data prefetched
+          
+          // Additional check to ensure the user is recognized as logged in
+          const loginCheck = await isLogged();
+          // Login verified
+          
+          if (loginCheck) {
+            // Redirect to CTFs page
+            await $router.push({ name: 'ctfs-incoming' });
+            // Redirect complete
+          } else {
+            console.error('User not recognized as logged in after prefetch');
+            throw new Error('Authentication verification failed');
+          }
+        } catch (prefetchError) {
+          console.error('Error during prefetch or redirect:', prefetchError);
+          throw prefetchError;
+        }
+      } else {
+        console.error('No JWT received from LDAP login');
+        throw new Error('Authentication failed - no token received');
+      }
+    } catch (error) {
+      console.error('LDAP login error:', error);
+      throw error;
+    }
   };
 }

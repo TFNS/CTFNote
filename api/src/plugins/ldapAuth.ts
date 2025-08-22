@@ -1,0 +1,240 @@
+import { makeExtendSchemaPlugin, gql } from "graphile-utils";
+import * as ldapAuthentication from "ldap-authentication";
+import * as jwt from "jsonwebtoken";
+import config from "../config";
+import { Context } from "./uploadLogo";
+
+interface LdapUserInfo {
+  uid: string;
+  cn: string;
+  mail?: string;
+  memberOf?: string[];
+}
+
+// Rate limiting for LDAP authentication attempts
+const authAttempts = new Map<string, { count: number; lastAttempt: number }>();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const MAX_ATTEMPTS = 5;
+
+function checkRateLimit(username: string): boolean {
+  const now = Date.now();
+  const userAttempts = authAttempts.get(username);
+  
+  if (!userAttempts) {
+    authAttempts.set(username, { count: 1, lastAttempt: now });
+    return true;
+  }
+  
+  // Reset if outside window
+  if (now - userAttempts.lastAttempt > RATE_LIMIT_WINDOW) {
+    authAttempts.set(username, { count: 1, lastAttempt: now });
+    return true;
+  }
+  
+  // Check if within limits
+  if (userAttempts.count >= MAX_ATTEMPTS) {
+    return false;
+  }
+  
+  // Increment count
+  userAttempts.count++;
+  userAttempts.lastAttempt = now;
+  return true;
+}
+
+// Clean up old entries periodically
+setInterval(() => {
+  const now = Date.now();
+  authAttempts.forEach((attempts, username) => {
+    if (now - attempts.lastAttempt > RATE_LIMIT_WINDOW) {
+      authAttempts.delete(username);
+    }
+  });
+}, RATE_LIMIT_WINDOW);
+
+// Validate username to prevent LDAP injection
+function validateLdapUsername(username: string): boolean {
+  // Allow alphanumeric, dots, hyphens, underscores
+  const validUsernameRegex = /^[a-zA-Z0-9._-]+$/;
+  return validUsernameRegex.test(username) && username.length <= 64;
+}
+
+async function authenticateWithLdap(username: string, password: string): Promise<LdapUserInfo | null> {
+  if (!config.ldap.enabled) {
+    throw new Error("LDAP authentication is not enabled");
+  }
+
+  // Validate username to prevent injection
+  if (!validateLdapUsername(username)) {
+    console.warn("Invalid LDAP username format attempted");
+    return null;
+  }
+
+  // Log authentication attempt without sensitive data
+  console.log("LDAP authentication attempt");
+
+  try {
+    const options = {
+      ldapOpts: {
+        url: config.ldap.url,
+        connectTimeout: 10000, // 10 second connection timeout
+        timeout: 30000, // 30 second operation timeout
+      },
+      adminDn: config.ldap.bindDN,
+      adminPassword: config.ldap.bindPassword,
+      userSearchBase: config.ldap.searchBase,
+      usernameAttribute: config.ldap.usernameAttribute,
+      username: username,
+      userPassword: password,
+    };
+
+    // Never log sensitive options
+
+    const user = await ldapAuthentication.authenticate(options);
+    
+    if (user) {
+      console.log("LDAP authentication successful");
+      return {
+        uid: user[config.ldap.usernameAttribute] || username,
+        cn: user.cn || user.displayName || username,
+        mail: user[config.ldap.emailAttribute],
+        memberOf: user[config.ldap.groupAttribute] || [],
+      };
+    }
+    
+    // Authentication failed - no logging to prevent user enumeration
+    return null;
+  } catch (error) {
+    // Log error without sensitive details
+    console.error("LDAP authentication failed");
+    return null;
+  }
+}
+
+function getUserRoleFromGroups(memberOf: string[]): string {
+  // Normalize group names for comparison
+  const normalizedMemberOf = memberOf.map(group => {
+    // Extract CN from DN format (e.g., "CN=Admins,OU=Groups,DC=example,DC=com" -> "Admins")
+    const cnMatch = group.match(/^CN=([^,]+)/i);
+    return cnMatch ? cnMatch[1].toLowerCase() : group.toLowerCase();
+  });
+  
+  // Check admin groups first (exact match)
+  if (config.ldap.adminGroups.some(group => 
+    normalizedMemberOf.includes(group.toLowerCase())
+  )) {
+    return "user_admin";
+  }
+  
+  // Check manager groups (exact match)
+  if (config.ldap.managerGroups.some(group => 
+    normalizedMemberOf.includes(group.toLowerCase())
+  )) {
+    return "user_manager";
+  }
+  
+  // Check user groups (exact match)
+  if (config.ldap.userGroups.some(group => 
+    normalizedMemberOf.includes(group.toLowerCase())
+  )) {
+    return "user_member";
+  }
+  
+  // Default role
+  return "user_guest";
+}
+
+export default makeExtendSchemaPlugin(() => {
+  return {
+    typeDefs: gql`
+      extend type Query {
+        ldapAuthEnabled: Boolean
+      }
+      ${config.ldap.enabled ? `
+        type LdapAuthPayload {
+          jwt: String
+        }
+        extend type Mutation {
+          authenticateWithLdap(username: String!, password: String!): LdapAuthPayload
+        }
+      ` : ''}
+    `,
+    resolvers: {
+      Query: {
+        ldapAuthEnabled: () => config.ldap.enabled,
+      },
+      ...(config.ldap.enabled ? {
+        Mutation: {
+          authenticateWithLdap: async (_parent: unknown, args: { username: string; password: string }, context: Context) => {
+            // Process LDAP authentication request
+            const { username, password } = args;
+            
+            if (!config.ldap.enabled) {
+              throw new Error("LDAP authentication is not enabled");
+            }
+            
+            // Check rate limit
+            if (!checkRateLimit(username)) {
+              throw new Error("Too many authentication attempts. Please try again later.");
+            }
+
+            // Authenticate with LDAP
+            const ldapUser = await authenticateWithLdap(username, password);
+            
+            if (!ldapUser) {
+              throw new Error("Invalid LDAP credentials");
+            }
+
+            // Determine user role based on LDAP groups
+            const userRole = getUserRoleFromGroups(ldapUser.memberOf || []);
+            // User role determined from groups
+
+            try {
+              // Use the database function to handle user creation/update
+              // Call database function to handle user creation/update
+              const result = await context.pgClient.query(
+                `SELECT (ctfnote.login_ldap($1, $2, $3)).*`,
+                [username, userRole, JSON.stringify(ldapUser)]
+              );
+
+              // Process database result
+              
+              const jwtRow = result.rows[0];
+              // Validate JWT row
+
+              if (!jwtRow || !jwtRow.user_id) {
+                // Generic error without revealing internals
+                throw new Error("Authentication failed");
+              }
+
+              // Create JWT payload from the database result
+              const jwtPayload = {
+                user_id: parseInt(jwtRow.user_id),
+                role: jwtRow.role,
+                exp: parseInt(jwtRow.exp),
+                aud: "postgraphile", // Add the required audience
+                iss: "ctfnote-ldap", // Add issuer claim
+                iat: Math.floor(Date.now() / 1000) // Add issued at timestamp
+              };
+              // JWT payload created
+
+              // Sign the JWT token using the same secret as PostGraphile
+              const jwtSecret = config.env === "development" ? "DEV" : config.sessionSecret;
+              // Explicitly specify algorithm to prevent algorithm confusion attacks
+              const signedJwt = jwt.sign(jwtPayload, jwtSecret, { algorithm: "HS256" });
+              // JWT token signed
+
+              return {
+                jwt: signedJwt,
+              };
+            } catch (dbError) {
+              // Log sanitized error
+              console.error("LDAP login processing failed");
+              throw new Error("Authentication failed");
+            }
+          },
+        },
+      } : {}),
+    },
+  };
+});
