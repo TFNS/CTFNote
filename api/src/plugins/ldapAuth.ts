@@ -59,7 +59,57 @@ function validateLdapUsername(username: string): boolean {
   return validUsernameRegex.test(username) && username.length <= 64;
 }
 
-async function authenticateWithLdap(username: string, password: string): Promise<LdapUserInfo | null> {
+// Check if user is member of specific groups by querying the groups directly
+async function getUserGroupsFromLdap(userDn: string): Promise<string[]> {
+  const groups: string[] = [];
+
+  // Combine all configured groups to check
+  const allGroups = [
+    ...config.ldap.adminGroups,
+    ...config.ldap.managerGroups,
+    ...config.ldap.userGroups,
+  ];
+
+  for (const groupName of allGroups) {
+    try {
+      // Try to authenticate against the group to see if user is a member
+      // This is a workaround since ldap-authentication doesn't support direct group queries
+      const groupDn = `ou=${groupName},${config.ldap.searchBase}`;
+
+      // Use a simple LDAP bind test to check if the group exists and contains the user
+      // Note: This is a simplified approach and may need adjustment based on your LDAP schema
+      const testOptions = {
+        ldapOpts: {
+          url: config.ldap.url,
+          connectTimeout: 5000,
+          timeout: 10000,
+        },
+        adminDn: config.ldap.bindDN,
+        adminPassword: config.ldap.bindPassword,
+        userSearchBase: groupDn,
+        usernameAttribute: "uniqueMember",
+        username: userDn,
+        userPassword: "dummy", // Not used for this type of search
+        verifyUserExists: true,
+      };
+
+      const result = await ldapAuthentication.authenticate(testOptions);
+      if (result) {
+        groups.push(groupName);
+      }
+    } catch (error) {
+      // Group doesn't exist or user is not a member - ignore
+      continue;
+    }
+  }
+
+  return groups;
+}
+
+async function authenticateWithLdap(
+  username: string,
+  password: string
+): Promise<LdapUserInfo | null> {
   if (!config.ldap.enabled) {
     throw new Error("LDAP authentication is not enabled");
   }
@@ -88,17 +138,44 @@ async function authenticateWithLdap(username: string, password: string): Promise
       userPassword: password,
     };
 
-    // Never log sensitive options
-
     const user = await ldapAuthentication.authenticate(options);
     
     if (user) {
       console.log("LDAP authentication successful");
+
+      // For LDAP servers that use reverse group membership (like forumsys.com)
+      // we need to search for groups that contain this user as a member
+      let groups: string[] = [];
+
+      if (
+        user[config.ldap.groupAttribute] &&
+        user[config.ldap.groupAttribute].length > 0
+      ) {
+        // Standard memberOf attribute exists
+        groups = user[config.ldap.groupAttribute];
+      } else {
+        // For LDAP servers that don't provide memberOf attribute,
+        // query each configured group to see if user is a member
+        console.log(
+          "No memberOf attribute found, attempting group lookup via configured groups"
+        );
+        try {
+          groups = await getUserGroupsFromLdap(user.dn);
+          console.log("Found groups via direct group query:", groups);
+        } catch (groupError) {
+          console.warn("Failed to lookup user groups:", groupError);
+          console.log(
+            "To enable role assignment, ensure LDAP_ADMIN_GROUPS, LDAP_MANAGER_GROUPS, and LDAP_USER_GROUPS are configured"
+          );
+          groups = [];
+        }
+      }
+
       return {
         uid: user[config.ldap.usernameAttribute] || username,
         cn: user.cn || user.displayName || username,
         mail: user[config.ldap.emailAttribute],
-        memberOf: user[config.ldap.groupAttribute] || [],
+        memberOf: groups,
       };
     }
     
