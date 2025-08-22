@@ -14,6 +14,7 @@ export enum DiscordChannelHandleStyle {
 export type CTFNoteConfig = DeepReadOnly<{
   env: string;
   sessionSecret: string;
+  localAuthEnabled: boolean;
   db: {
     database: string;
     admin: {
@@ -84,6 +85,7 @@ function getEnvInt(name: string): number {
 const config: CTFNoteConfig = {
   env: getEnv("NODE_ENV"),
   sessionSecret: getEnv("SESSION_SECRET", ""),
+  localAuthEnabled: getEnv("LOCAL_AUTH_ENABLED", "true") === "true",
   db: {
     database: getEnv("DB_DATABASE"),
     user: {
