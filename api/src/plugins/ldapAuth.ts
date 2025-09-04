@@ -19,23 +19,23 @@ const MAX_ATTEMPTS = 5;
 function checkRateLimit(username: string): boolean {
   const now = Date.now();
   const userAttempts = authAttempts.get(username);
-  
+
   if (!userAttempts) {
     authAttempts.set(username, { count: 1, lastAttempt: now });
     return true;
   }
-  
+
   // Reset if outside window
   if (now - userAttempts.lastAttempt > RATE_LIMIT_WINDOW) {
     authAttempts.set(username, { count: 1, lastAttempt: now });
     return true;
   }
-  
+
   // Check if within limits
   if (userAttempts.count >= MAX_ATTEMPTS) {
     return false;
   }
-  
+
   // Increment count
   userAttempts.count++;
   userAttempts.lastAttempt = now;
@@ -139,7 +139,7 @@ async function authenticateWithLdap(
     };
 
     const user = await ldapAuthentication.authenticate(options);
-    
+
     if (user) {
       console.log("LDAP authentication successful");
 
@@ -178,7 +178,7 @@ async function authenticateWithLdap(
         memberOf: groups,
       };
     }
-    
+
     // Authentication failed - no logging to prevent user enumeration
     return null;
   } catch (error) {
@@ -189,7 +189,6 @@ async function authenticateWithLdap(
 }
 
 function getUserRoleFromGroups(memberOf: string[]): string {
-
   // For FreeIPA, we need to do exact DN matching since the groups are returned as full DNs
   // like "cn=ctfnote-admins,cn=groups,cn=accounts,dc=ctfnote,dc=local"
 
@@ -224,91 +223,104 @@ export default makeExtendSchemaPlugin(() => {
       extend type Query {
         ldapAuthEnabled: Boolean
       }
-      ${config.ldap.enabled ? `
+      ${config.ldap.enabled
+        ? `
         type LdapAuthPayload {
           jwt: String
         }
         extend type Mutation {
           authenticateWithLdap(username: String!, password: String!): LdapAuthPayload
         }
-      ` : ''}
+      `
+        : ""}
     `,
     resolvers: {
       Query: {
         ldapAuthEnabled: () => config.ldap.enabled,
       },
-      ...(config.ldap.enabled ? {
-        Mutation: {
-          authenticateWithLdap: async (_parent: unknown, args: { username: string; password: string }, context: Context) => {
-            // Process LDAP authentication request
-            const { username, password } = args;
-            
-            if (!config.ldap.enabled) {
-              throw new Error("LDAP authentication is not enabled");
-            }
-            
-            // Check rate limit
-            if (!checkRateLimit(username)) {
-              throw new Error("Too many authentication attempts. Please try again later.");
-            }
+      ...(config.ldap.enabled
+        ? {
+            Mutation: {
+              authenticateWithLdap: async (
+                _parent: unknown,
+                args: { username: string; password: string },
+                context: Context
+              ) => {
+                // Process LDAP authentication request
+                const { username, password } = args;
 
-            // Authenticate with LDAP
-            const ldapUser = await authenticateWithLdap(username, password);
-            
-            if (!ldapUser) {
-              throw new Error("Invalid LDAP credentials");
-            }
+                if (!config.ldap.enabled) {
+                  throw new Error("LDAP authentication is not enabled");
+                }
 
-            // Determine user role based on LDAP groups
-            const userRole = getUserRoleFromGroups(ldapUser.memberOf || []);
-            // User role determined from groups
+                // Check rate limit
+                if (!checkRateLimit(username)) {
+                  throw new Error(
+                    "Too many authentication attempts. Please try again later."
+                  );
+                }
 
-            try {
-              // Use the database function to handle user creation/update
-              // Call database function to handle user creation/update
-              const result = await context.pgClient.query(
-                `SELECT (ctfnote.login_ldap($1, $2, $3)).*`,
-                [username, userRole, JSON.stringify(ldapUser)]
-              );
+                // Authenticate with LDAP
+                const ldapUser = await authenticateWithLdap(username, password);
 
-              // Process database result
-              
-              const jwtRow = result.rows[0];
-              // Validate JWT row
+                if (!ldapUser) {
+                  throw new Error("Invalid LDAP credentials");
+                }
 
-              if (!jwtRow || !jwtRow.user_id) {
-                // Generic error without revealing internals
-                throw new Error("Authentication failed");
-              }
+                // Determine user role based on LDAP groups
+                const userRole = getUserRoleFromGroups(ldapUser.memberOf || []);
+                // User role determined from groups
 
-              // Create JWT payload from the database result
-              const jwtPayload = {
-                user_id: parseInt(jwtRow.user_id),
-                role: jwtRow.role,
-                exp: parseInt(jwtRow.exp),
-                aud: "postgraphile", // Add the required audience
-                iss: "ctfnote-ldap", // Add issuer claim
-                iat: Math.floor(Date.now() / 1000) // Add issued at timestamp
-              };
-              // JWT payload created
+                try {
+                  // Use the database function to handle user creation/update
+                  // Call database function to handle user creation/update
+                  const result = await context.pgClient.query(
+                    `SELECT (ctfnote.login_ldap($1, $2, $3)).*`,
+                    [username, userRole, JSON.stringify(ldapUser)]
+                  );
 
-              // Sign the JWT token using the same secret as PostGraphile
-              const jwtSecret = config.env === "development" ? "DEV" : config.sessionSecret;
-              // Explicitly specify algorithm to prevent algorithm confusion attacks
-              const signedJwt = jwt.sign(jwtPayload, jwtSecret, { algorithm: "HS256" });
-              // JWT token signed
+                  // Process database result
 
-              return {
-                jwt: signedJwt,
-              };
-            } catch (dbError) {
-              // Log sanitized error
-              console.error("LDAP login processing failed");
-              throw new Error("Authentication failed");
-            }
-          },
-        },
-      } : {}),
+                  const jwtRow = result.rows[0];
+                  // Validate JWT row
+
+                  if (!jwtRow || !jwtRow.user_id) {
+                    // Generic error without revealing internals
+                    throw new Error("Authentication failed");
+                  }
+
+                  // Create JWT payload from the database result
+                  const jwtPayload = {
+                    user_id: parseInt(jwtRow.user_id),
+                    role: jwtRow.role,
+                    exp: parseInt(jwtRow.exp),
+                    aud: "postgraphile", // Add the required audience
+                    iss: "ctfnote-ldap", // Add issuer claim
+                    iat: Math.floor(Date.now() / 1000), // Add issued at timestamp
+                  };
+                  // JWT payload created
+
+                  // Sign the JWT token using the same secret as PostGraphile
+                  const jwtSecret =
+                    config.env === "development" ? "DEV" : config.sessionSecret;
+                  // Explicitly specify algorithm to prevent algorithm confusion attacks
+                  const signedJwt = jwt.sign(jwtPayload, jwtSecret, {
+                    algorithm: "HS256",
+                  });
+                  // JWT token signed
+
+                  return {
+                    jwt: signedJwt,
+                  };
+                } catch (dbError) {
+                  // Log sanitized error
+                  console.error("LDAP login processing failed");
+                  throw new Error("Authentication failed");
+                }
+              },
+            },
+          }
+        : {}),
     },
   };
 });

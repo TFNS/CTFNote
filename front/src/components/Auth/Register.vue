@@ -7,11 +7,15 @@
       </div>
     </q-card-section>
     <q-card-section class="q-pt-none text-white">
-      <p>Registration is not available because local authentication is disabled.</p>
-      <p>Please use LDAP authentication to log in, or contact your administrator.</p>
+      <p>
+        Registration is not available because local authentication is disabled.
+      </p>
+      <p>
+        Please use LDAP authentication to log in, or contact your administrator.
+      </p>
     </q-card-section>
   </q-card>
-  
+
   <q-card v-else>
     <q-form @submit="submit">
       <q-card-section>
@@ -119,8 +123,10 @@ export default defineComponent({
   },
   setup() {
     const { result: authSettingsResult } = useGetAuthSettingsQuery();
-    const localAuthEnabled = computed(() => authSettingsResult.value?.localAuthEnabled ?? true);
-    
+    const localAuthEnabled = computed(
+      () => authSettingsResult.value?.localAuthEnabled ?? true,
+    );
+
     return {
       resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       register: ctfnote.auth.useRegister(),
@@ -138,16 +144,29 @@ export default defineComponent({
   },
   computed: {
     registrationAllowed() {
-      return this.localAuthEnabled && (this.settings?.registrationAllowed || !!this.token);
+      return (
+        this.localAuthEnabled &&
+        (this.settings?.registrationAllowed || !!this.token)
+      );
     },
     registrationPasswordAllowed(): boolean {
-      return this.localAuthEnabled && (this.settings?.registrationPasswordAllowed ?? false);
+      return (
+        this.localAuthEnabled &&
+        (this.settings?.registrationPasswordAllowed ?? false)
+      );
     },
     registrationAnyAllowed() {
-      return this.localAuthEnabled && (this.registrationAllowed || this.registrationPasswordAllowed);
+      return (
+        this.localAuthEnabled &&
+        (this.registrationAllowed || this.registrationPasswordAllowed)
+      );
     },
     registrationPasswordForced() {
-      return this.localAuthEnabled && (!this.registrationAllowed && this.registrationPasswordAllowed);
+      return (
+        this.localAuthEnabled &&
+        !this.registrationAllowed &&
+        this.registrationPasswordAllowed
+      );
     },
   },
   methods: {

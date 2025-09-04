@@ -77,13 +77,18 @@
               </q-card-section>
 
               <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
-                <q-banner v-if="showLdapHint && ldapEnabled" class="bg-info text-white q-mb-sm">
+                <q-banner
+                  v-if="showLdapHint && ldapEnabled"
+                  class="bg-info text-white q-mb-sm"
+                >
                   <template #avatar>
                     <q-icon name="info" color="white" />
                   </template>
-                   Your account might be managed through LDAP authentication. Please contact your LDAP administrator to change your password.
+                  Your account might be managed through LDAP authentication.
+                  Please contact your LDAP administrator to change your
+                  password.
                 </q-banner>
-                
+
                 <password-input
                   v-model="oldPassword"
                   dense
@@ -229,10 +234,12 @@ export default defineComponent({
     const { result: authSettingsResult } = useGetAuthSettingsQuery();
 
     const settings = ctfnote.settings.injectSettings();
-    
+
     // Track if user had password change issues that might indicate LDAP
     const showLdapHint = ref(false);
-    const ldapEnabled = computed(() => authSettingsResult.value?.ldapAuthEnabled ?? false);
+    const ldapEnabled = computed(
+      () => authSettingsResult.value?.ldapAuthEnabled ?? false,
+    );
 
     watch(
       profileTokenResult,
@@ -317,17 +324,23 @@ export default defineComponent({
     },
     changePassword() {
       void this.resolveAndNotify(
-        this.updatePassword(this.oldPassword, this.newPassword).then(() => {
-          this.oldPassword = '';
-          this.newPassword = '';
-          this.showLdapHint = false; // Hide hint on successful password change
-        }).catch((error) => {
-          // Only show LDAP hint if LDAP is enabled and password change fails
-          if (this.ldapEnabled && error instanceof Error && error.message.includes('Wrong password')) {
-            this.showLdapHint = true;
-          }
-          throw error; // Re-throw to show the normal error notification
-        }),
+        this.updatePassword(this.oldPassword, this.newPassword)
+          .then(() => {
+            this.oldPassword = '';
+            this.newPassword = '';
+            this.showLdapHint = false; // Hide hint on successful password change
+          })
+          .catch((error) => {
+            // Only show LDAP hint if LDAP is enabled and password change fails
+            if (
+              this.ldapEnabled &&
+              error instanceof Error &&
+              error.message.includes('Wrong password')
+            ) {
+              this.showLdapHint = true;
+            }
+            throw error; // Re-throw to show the normal error notification
+          }),
         { message: 'Password changed!', icon: 'lock' },
       );
     },

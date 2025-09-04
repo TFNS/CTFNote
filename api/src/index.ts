@@ -150,28 +150,58 @@ async function performMigrations() {
 function validateAuthConfiguration() {
   // Check if at least one authentication method is enabled
   if (!config.localAuthEnabled && !config.ldap.enabled) {
-    console.error("┌──────────────────────────────────────────────────────────────────┐");
-    console.error("│                     ⚠️  CRITICAL WARNING  ⚠️                     │");
-    console.error("├──────────────────────────────────────────────────────────────────┤");
-    console.error("│  Both LOCAL_AUTH_ENABLED and LDAP_ENABLED are set to false!      │");
-    console.error("│  This instance is misconfigured and users cannot authenticate.   │");
-    console.error("│                                                                  │");
-    console.error("│  Please enable at least one authentication method:               │");
-    console.error("│    - Set LOCAL_AUTH_ENABLED=true for local authentication        │");
-    console.error("│    - Set LDAP_ENABLED=true for LDAP authentication               │");
-    console.error("│                                                                  │");
-    console.error("│  The server will continue running but authentication will fail.  │");
-    console.error("└──────────────────────────────────────────────────────────────────┘");
-    
+    console.error(
+      "┌──────────────────────────────────────────────────────────────────┐"
+    );
+    console.error(
+      "│                     ⚠️  CRITICAL WARNING  ⚠️                     │"
+    );
+    console.error(
+      "├──────────────────────────────────────────────────────────────────┤"
+    );
+    console.error(
+      "│  Both LOCAL_AUTH_ENABLED and LDAP_ENABLED are set to false!      │"
+    );
+    console.error(
+      "│  This instance is misconfigured and users cannot authenticate.   │"
+    );
+    console.error(
+      "│                                                                  │"
+    );
+    console.error(
+      "│  Please enable at least one authentication method:               │"
+    );
+    console.error(
+      "│    - Set LOCAL_AUTH_ENABLED=true for local authentication        │"
+    );
+    console.error(
+      "│    - Set LDAP_ENABLED=true for LDAP authentication               │"
+    );
+    console.error(
+      "│                                                                  │"
+    );
+    console.error(
+      "│  The server will continue running but authentication will fail.  │"
+    );
+    console.error(
+      "└──────────────────────────────────────────────────────────────────┘"
+    );
+
     // In production, we should consider exiting
     if (config.env === "production") {
-      console.error("\n❌ Exiting due to misconfiguration in production environment.");
+      console.error(
+        "\n❌ Exiting due to misconfiguration in production environment."
+      );
       process.exit(1);
     }
   } else if (!config.localAuthEnabled && config.ldap.enabled) {
-    console.info("ℹ️  Local authentication is disabled. Only LDAP authentication is available.");
+    console.info(
+      "ℹ️  Local authentication is disabled. Only LDAP authentication is available."
+    );
   } else if (config.localAuthEnabled && !config.ldap.enabled) {
-    console.info("ℹ️  LDAP authentication is disabled. Only local authentication is available.");
+    console.info(
+      "ℹ️  LDAP authentication is disabled. Only local authentication is available."
+    );
   } else {
     console.info("✅ Both local and LDAP authentication methods are enabled.");
   }
@@ -183,10 +213,10 @@ async function main() {
     console.log("Migrations done. Exiting.");
     return;
   }
-  
+
   // Validate authentication configuration before starting the server
   validateAuthConfiguration();
-  
+
   const postgraphileOptions = createOptions();
   const app = createApp(postgraphileOptions);
 

@@ -7,7 +7,10 @@
       </div>
     </q-card-section>
     <q-card-section class="q-pt-none text-white">
-      <p>This CTFNote instance is misconfigured - no authentication methods are enabled.</p>
+      <p>
+        This CTFNote instance is misconfigured - no authentication methods are
+        enabled.
+      </p>
       <p>Please contact your administrator to enable either:</p>
       <ul>
         <li>Local authentication (LOCAL_AUTH_ENABLED=true)</li>
@@ -15,7 +18,7 @@
       </ul>
     </q-card-section>
   </q-card>
-  
+
   <q-card v-else>
     <q-form @submit="submit">
       <q-card-section>
@@ -23,7 +26,14 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none q-pb-sm q-gutter-sm">
-        <q-tabs v-if="showTabs" v-model="authMethod" class="text-grey" active-color="primary" indicator-color="primary" align="justify">
+        <q-tabs
+          v-if="showTabs"
+          v-model="authMethod"
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+        >
           <q-tab v-if="localAuthEnabled" name="local" label="Local Login" />
           <q-tab v-if="ldapAuthEnabled" name="ldap" label="LDAP Login" />
         </q-tabs>
@@ -81,10 +91,14 @@ export default defineComponent({
   setup() {
     const { result: authSettingsResult } = useGetAuthSettingsQuery();
     const authMethod = ref('local');
-    
-    const localAuthEnabled = computed(() => authSettingsResult.value?.localAuthEnabled ?? true);
-    const ldapAuthEnabled = computed(() => authSettingsResult.value?.ldapAuthEnabled ?? false);
-    
+
+    const localAuthEnabled = computed(
+      () => authSettingsResult.value?.localAuthEnabled ?? true,
+    );
+    const ldapAuthEnabled = computed(
+      () => authSettingsResult.value?.ldapAuthEnabled ?? false,
+    );
+
     // Update default auth method when settings load
     watchEffect(() => {
       if (!localAuthEnabled.value && ldapAuthEnabled.value) {
@@ -93,7 +107,7 @@ export default defineComponent({
         authMethod.value = 'local';
       }
     });
-    
+
     return {
       settings: ctfnote.settings.injectSettings(),
       resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
@@ -114,7 +128,7 @@ export default defineComponent({
       return (
         this.localAuthEnabled &&
         (this.settings.registrationAllowed ||
-        this.settings.registrationPasswordAllowed)
+          this.settings.registrationPasswordAllowed)
       );
     },
     showTabs() {
@@ -129,17 +143,15 @@ export default defineComponent({
   methods: {
     submit() {
       const login = this.form.login;
-      const loginPromise = this.authMethod === 'ldap' 
-        ? this.ldapLogin(this.form.login, this.form.password)
-        : this.login(this.form.login, this.form.password);
+      const loginPromise =
+        this.authMethod === 'ldap'
+          ? this.ldapLogin(this.form.login, this.form.password)
+          : this.login(this.form.login, this.form.password);
 
-      void this.resolveAndNotify(
-        loginPromise,
-        {
-          message: `Logged in as ${login}!`,
-          icon: 'person',
-        },
-      );
+      void this.resolveAndNotify(loginPromise, {
+        message: `Logged in as ${login}!`,
+        icon: 'person',
+      });
     },
   },
 });

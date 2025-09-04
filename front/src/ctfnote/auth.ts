@@ -141,29 +141,28 @@ export function useLdapLogin() {
         mutation: LOGIN_WITH_LDAP_MUTATION,
         variables: { username, password },
       });
-      
+
       // Use the correct response structure for authenticateWithLdap
       interface LdapLoginResponse {
         authenticateWithLdap?: {
           jwt?: string;
         };
       }
-      
+
       const data = r?.data as LdapLoginResponse | undefined;
       const jwt = data?.authenticateWithLdap?.jwt;
-      
+
       // Check JWT response
-      
+
       if (jwt) {
         // Save JWT and prefetch user data
         saveJWT(jwt);
-        
-        try {
 
+        try {
           // Additional check to ensure the user is recognized as logged in
           const loginCheck = await isLogged();
           // Login verified
-          
+
           if (loginCheck) {
             // Redirect to CTFs page
             await $router.push({ name: 'ctfs-incoming' });

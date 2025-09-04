@@ -1,4 +1,8 @@
-import { makeExtendSchemaPlugin, gql, makeWrapResolversPlugin } from "graphile-utils";
+import {
+  makeExtendSchemaPlugin,
+  gql,
+  makeWrapResolversPlugin,
+} from "graphile-utils";
 import config from "../config";
 
 // Export a function that returns a plugin array
@@ -16,7 +20,7 @@ export default [
       },
     },
   })),
-  
+
   // Wrap the existing mutations to check if local auth is enabled
   makeWrapResolversPlugin({
     Mutation: {
@@ -24,7 +28,9 @@ export default [
         requires: {},
         resolve: async (resolver, source, args, context, resolveInfo) => {
           if (!config.localAuthEnabled) {
-            throw new Error("Local authentication is disabled. Please use LDAP authentication.");
+            throw new Error(
+              "Local authentication is disabled. Please use LDAP authentication."
+            );
           }
           return resolver(source, args, context, resolveInfo);
         },
@@ -33,7 +39,9 @@ export default [
         requires: {},
         resolve: async (resolver, source, args, context, resolveInfo) => {
           if (!config.localAuthEnabled) {
-            throw new Error("Local authentication is disabled. Registration is not available.");
+            throw new Error(
+              "Local authentication is disabled. Registration is not available."
+            );
           }
           return resolver(source, args, context, resolveInfo);
         },
@@ -42,7 +50,9 @@ export default [
         requires: {},
         resolve: async (resolver, source, args, context, resolveInfo) => {
           if (!config.localAuthEnabled) {
-            throw new Error("Local authentication is disabled. Registration is not available.");
+            throw new Error(
+              "Local authentication is disabled. Registration is not available."
+            );
           }
           return resolver(source, args, context, resolveInfo);
         },
