@@ -138,9 +138,15 @@ const config: CTFNoteConfig = {
     usernameAttribute: getEnv("LDAP_USERNAME_ATTRIBUTE", "uid"),
     emailAttribute: getEnv("LDAP_EMAIL_ATTRIBUTE", "mail"),
     groupAttribute: getEnv("LDAP_GROUP_ATTRIBUTE", "memberOf"),
-    adminGroups: getEnv("LDAP_ADMIN_GROUPS", "").split(",").filter(g => g.trim()),
-    managerGroups: getEnv("LDAP_MANAGER_GROUPS", "").split(",").filter(g => g.trim()),
-    userGroups: getEnv("LDAP_USER_GROUPS", "").split(",").filter(g => g.trim()),
+    adminGroups: getEnv("LDAP_ADMIN_GROUPS", "").trim()
+      ? [getEnv("LDAP_ADMIN_GROUPS", "")]
+      : [],
+    managerGroups: getEnv("LDAP_MANAGER_GROUPS", "").trim()
+      ? [getEnv("LDAP_MANAGER_GROUPS", "")]
+      : [],
+    userGroups: getEnv("LDAP_USER_GROUPS", "").trim()
+      ? [getEnv("LDAP_USER_GROUPS", "")]
+      : [],
   },
 };
 

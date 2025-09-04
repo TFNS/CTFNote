@@ -189,34 +189,31 @@ async function authenticateWithLdap(
 }
 
 function getUserRoleFromGroups(memberOf: string[]): string {
-  // Normalize group names for comparison
-  const normalizedMemberOf = memberOf.map(group => {
-    // Extract CN from DN format (e.g., "CN=Admins,OU=Groups,DC=example,DC=com" -> "Admins")
-    const cnMatch = group.match(/^CN=([^,]+)/i);
-    return cnMatch ? cnMatch[1].toLowerCase() : group.toLowerCase();
-  });
-  
-  // Check admin groups first (exact match)
-  if (config.ldap.adminGroups.some(group => 
-    normalizedMemberOf.includes(group.toLowerCase())
-  )) {
-    return "user_admin";
+
+  // For FreeIPA, we need to do exact DN matching since the groups are returned as full DNs
+  // like "cn=ctfnote-admins,cn=groups,cn=accounts,dc=ctfnote,dc=local"
+
+  // Check admin groups first (exact DN match)
+  for (const configuredGroup of config.ldap.adminGroups) {
+    if (memberOf.includes(configuredGroup)) {
+      return "user_admin";
+    }
   }
-  
-  // Check manager groups (exact match)
-  if (config.ldap.managerGroups.some(group => 
-    normalizedMemberOf.includes(group.toLowerCase())
-  )) {
-    return "user_manager";
+
+  // Check manager groups (exact DN match)
+  for (const configuredGroup of config.ldap.managerGroups) {
+    if (memberOf.includes(configuredGroup)) {
+      return "user_manager";
+    }
   }
-  
-  // Check user groups (exact match)
-  if (config.ldap.userGroups.some(group => 
-    normalizedMemberOf.includes(group.toLowerCase())
-  )) {
-    return "user_member";
+
+  // Check user groups (exact DN match)
+  for (const configuredGroup of config.ldap.userGroups) {
+    if (memberOf.includes(configuredGroup)) {
+      return "user_member";
+    }
   }
-  
+
   // Default role
   return "user_guest";
 }
