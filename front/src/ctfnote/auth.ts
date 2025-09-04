@@ -6,7 +6,6 @@ import {
   useRegisterWithPasswordMutation,
   useRegisterWithTokenMutation,
   useResetPasswordMutation,
-  MeDocument,
 } from 'src/generated/graphql';
 import { useRouter } from 'vue-router';
 import { prefetchMe, isLogged } from './me';
@@ -160,13 +159,7 @@ export function useLdapLogin() {
         saveJWT(jwt);
         
         try {
-          // Use cache-first to ensure the cache gets updated
-          const result = await client.query({
-            query: MeDocument,
-            fetchPolicy: 'cache-first',
-          });
-          // User data prefetched
-          
+
           // Additional check to ensure the user is recognized as logged in
           const loginCheck = await isLogged();
           // Login verified
