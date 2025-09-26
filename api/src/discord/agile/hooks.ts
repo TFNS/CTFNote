@@ -220,8 +220,8 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       case "startWorkingOn":
         sendStartWorkingOnMessage(
           guild,
-          args.input.taskId,
-          context.jwtClaims.user_id
+          context.jwtClaims.user_id,
+          args.input.taskId
         ).catch((err) => {
           console.error("Failed to start working on task.", err);
         });
