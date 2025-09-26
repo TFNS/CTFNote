@@ -142,6 +142,67 @@ The `/create`, `/archive` and `/delete` commands are only accessible when you ha
 The bot will automatically create more categories when you hit the 50 Discord channel limit, so you can have an almost infinite amount of tasks per CTF.
 It is your own responsibility to stay below the Discord server channel limit, which is 500 at the moment of writing (categories count as channels).
 
+### Add GitLab integration
+
+CTFNote can integrate with GitLab to automatically create repositories for CTF tasks, providing version control and collaboration features for your team's work.
+
+#### What it does
+
+When enabled, CTFNote will:
+- Automatically create a GitLab group for your CTF team (if it doesn't exist)
+- Create subgroups for each CTF
+- Create repositories for individual tasks within CTF subgroups
+- Initialize repositories with README files containing task information
+
+#### Creating a GitLab Personal Access Token
+
+To enable GitLab integration, you'll need to create a Personal Access Token:
+
+1. **Log in to your GitLab instance** (or gitlab.com)
+
+2. **Navigate to Access Tokens**:
+   - Click on your avatar in the top-right corner
+   - Select "Edit profile" or "Preferences"
+   - In the left sidebar, click "Access Tokens"
+
+3. **Create a new token**:
+   - Click "Add new token"
+   - Enter a descriptive name (e.g., "CTFNote Integration")
+   - Set an expiration date (optional, but recommended for security)
+   - Select the following scope
+     - `api` - Full API access (required for creating groups and repositories)
+
+4. **Generate and save the token**:
+   - Click "Create token"
+   - **Important**: Copy the token immediately - you won't be able to see it again!
+
+#### Configuration
+
+Add the following values to your `.env` file:
+
+```
+USE_GITLAB=true
+GITLAB_URL=https://gitlab-instance-url.com
+GITLAB_PERSONAL_ACCESS_TOKEN=your-token-here
+GITLAB_GROUP_PATH=path-to-all-ctf-subgroups
+```
+
+Configuration options explained:
+- `USE_GITLAB`: Set to `true` to enable GitLab integration
+- `GITLAB_URL`: Your GitLab instance URL 
+- `GITLAB_PERSONAL_ACCESS_TOKEN`: The token you created above
+- `GITLAB_GROUP_PATH`: The path for your team's group for ctfs (e.g., `ctfs` or `parent-group/ctfs` for subgroups)
+
+#### Features
+
+- **Automatic group creation**: If the specified group doesn't exist, CTFNote will create it automatically
+- **Automatic Subgroup creation for a CTF**: CTFNote will create a subgroup for each CTF under the specified group
+- **Repository structure**: Each task gets its own repository with:
+  - README.md containing task description and metadata
+  - Clean repository name based on task title
+  - Private visibility by default
+
+
 ### Migration
 
 If you already have an instance of CTFNote in a previous version and wish to
