@@ -1156,6 +1156,11 @@ export enum InvitationsOrderBy {
   ProfileIdDesc = 'PROFILE_ID_DESC'
 }
 
+export type LdapAuthPayload = {
+  __typename?: 'LdapAuthPayload';
+  jwt?: Maybe<Scalars['String']['output']>;
+};
+
 export type ListenPayload = {
   __typename?: 'ListenPayload';
   /** Our root query field type. Allows us to run any query from our subscription payload. */
@@ -1173,6 +1178,31 @@ export type LoginInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   login: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+/** All input for the `loginLdap` mutation. */
+export type LoginLdapInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  ldapData?: InputMaybe<Scalars['JSON']['input']>;
+  userRole: Role;
+  username: Scalars['String']['input'];
+};
+
+/** The output of our `loginLdap` mutation. */
+export type LoginLdapPayload = {
+  __typename?: 'LoginLdapPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  jwt?: Maybe<Scalars['Jwt']['output']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
 };
 
 /** The output of our `login` mutation. */
@@ -1193,6 +1223,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addTagsForTask?: Maybe<AddTagsForTaskPayload>;
   assignUserToTask?: Maybe<AssignUserToTaskPayload>;
+  authenticateWithLdap?: Maybe<LdapAuthPayload>;
   cancelWorkingOn?: Maybe<CancelWorkingOnPayload>;
   changePassword?: Maybe<ChangePasswordPayload>;
   /** Creates a single `AssignedTag`. */
@@ -1231,6 +1262,7 @@ export type Mutation = {
   deleteWorkOnTaskByNodeId?: Maybe<DeleteWorkOnTaskPayload>;
   importCtf?: Maybe<ImportCtfPayload>;
   login?: Maybe<LoginPayload>;
+  loginLdap?: Maybe<LoginLdapPayload>;
   register?: Maybe<RegisterPayload>;
   registerWithPassword?: Maybe<RegisterWithPasswordPayload>;
   registerWithToken?: Maybe<RegisterWithTokenPayload>;
@@ -1282,6 +1314,13 @@ export type MutationAddTagsForTaskArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationAssignUserToTaskArgs = {
   input: AssignUserToTaskInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationAuthenticateWithLdapArgs = {
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 
@@ -1420,6 +1459,12 @@ export type MutationImportCtfArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationLoginArgs = {
   input: LoginInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationLoginLdapArgs = {
+  input: LoginLdapInput;
 };
 
 
@@ -1851,6 +1896,9 @@ export type Query = Node & {
   invitationByNodeId?: Maybe<Invitation>;
   /** Reads and enables pagination through a set of `Invitation`. */
   invitations?: Maybe<InvitationsConnection>;
+  ldapAuthEnabled?: Maybe<Scalars['Boolean']['output']>;
+  ldapEnabled?: Maybe<Scalars['Boolean']['output']>;
+  localAuthEnabled?: Maybe<Scalars['Boolean']['output']>;
   me?: Maybe<Profile>;
   newToken?: Maybe<Scalars['Jwt']['output']>;
   /** Fetches an object given its globally unique `ID`. */
@@ -3553,6 +3601,11 @@ export type ResetPasswordMutationVariables = Exact<{
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword?: { __typename?: 'ResetPasswordPayload', jwt?: string | null } | null };
 
+export type GetAuthSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAuthSettingsQuery = { __typename?: 'Query', localAuthEnabled?: boolean | null, ldapAuthEnabled?: boolean | null };
+
 export type CtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null };
 
 export type FullCtfFragment = { __typename?: 'Ctf', nodeId: string, id: number, granted?: boolean | null, ctfUrl?: string | null, ctftimeUrl?: string | null, description: string, endTime: string, logoUrl?: string | null, startTime: string, weight: number, title: string, discordEventLink?: string | null, tasks: { __typename?: 'TasksConnection', nodes: Array<{ __typename?: 'Task', nodeId: string, id: number, title: string, ctfId: number, padUrl: string, description: string, flag: string, solved?: boolean | null, assignedTags: { __typename?: 'AssignedTagsConnection', nodes: Array<{ __typename?: 'AssignedTag', nodeId: string, taskId: number, tagId: number, tag?: { __typename?: 'Tag', nodeId: string, id: number, tag: string } | null }> }, workOnTasks: { __typename?: 'WorkOnTasksConnection', nodes: Array<{ __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number }> } }> }, secrets?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null, invitations: { __typename?: 'InvitationsConnection', nodes: Array<{ __typename?: 'Invitation', nodeId: string, ctfId: number, profileId: number }> } };
@@ -4583,6 +4636,32 @@ export function useResetPasswordMutation(options: VueApolloComposable.UseMutatio
   return VueApolloComposable.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, options);
 }
 export type ResetPasswordMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const GetAuthSettingsDocument = gql`
+    query getAuthSettings {
+  localAuthEnabled
+  ldapAuthEnabled
+}
+    `;
+
+/**
+ * __useGetAuthSettingsQuery__
+ *
+ * To run a query within a Vue component, call `useGetAuthSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAuthSettingsQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useGetAuthSettingsQuery();
+ */
+export function useGetAuthSettingsQuery(options: VueApolloComposable.UseQueryOptions<GetAuthSettingsQuery, GetAuthSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetAuthSettingsQuery, GetAuthSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetAuthSettingsQuery, GetAuthSettingsQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<GetAuthSettingsQuery, GetAuthSettingsQueryVariables>(GetAuthSettingsDocument, {}, options);
+}
+export function useGetAuthSettingsLazyQuery(options: VueApolloComposable.UseQueryOptions<GetAuthSettingsQuery, GetAuthSettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetAuthSettingsQuery, GetAuthSettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetAuthSettingsQuery, GetAuthSettingsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetAuthSettingsQuery, GetAuthSettingsQueryVariables>(GetAuthSettingsDocument, {}, options);
+}
+export type GetAuthSettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetAuthSettingsQuery, GetAuthSettingsQueryVariables>;
 export const CtfsDocument = gql`
     query Ctfs {
   ctfs {
@@ -6450,6 +6529,12 @@ export const ResetPassword = gql`
   resetPassword(input: {password: $password, token: $token}) {
     jwt
   }
+}
+    `;
+export const GetAuthSettings = gql`
+    query getAuthSettings {
+  localAuthEnabled
+  ldapAuthEnabled
 }
     `;
 export const Ctfs = gql`

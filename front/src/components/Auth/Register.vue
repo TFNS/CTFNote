@@ -1,5 +1,22 @@
 <template>
-  <q-card>
+  <q-card v-if="!localAuthEnabled" class="bg-negative">
+    <q-card-section>
+      <div class="text-h5 text-white">
+        <q-icon name="warning" size="md" class="q-mr-sm" />
+        Registration Unavailable
+      </div>
+    </q-card-section>
+    <q-card-section class="q-pt-none text-white">
+      <p>
+        Registration is not available because local authentication is disabled.
+      </p>
+      <p>
+        Please use LDAP authentication to log in, or contact your administrator.
+      </p>
+    </q-card-section>
+  </q-card>
+
+  <q-card v-else>
     <q-form @submit="submit">
       <q-card-section>
         <div class="text-h5">Register</div>
@@ -95,8 +112,9 @@
 <script lang="ts">
 import PasswordInput from 'src/components/Utils/PasswordInput.vue';
 import ctfnote from 'src/ctfnote';
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, computed } from 'vue';
 import CtfNoteLink from '../Utils/CtfNoteLink.vue';
+import { useGetAuthSettingsQuery } from 'src/generated/graphql';
 
 export default defineComponent({
   components: { PasswordInput, CtfNoteLink },
@@ -104,12 +122,18 @@ export default defineComponent({
     token: { type: String, default: '' },
   },
   setup() {
+    const { result: authSettingsResult } = useGetAuthSettingsQuery();
+    const localAuthEnabled = computed(
+      () => authSettingsResult.value?.localAuthEnabled ?? true,
+    );
+
     return {
       resolveAndNotify: ctfnote.ui.useNotify().resolveAndNotify,
       register: ctfnote.auth.useRegister(),
       registerWithToken: ctfnote.auth.useRegisterWithToken(),
       registerWithPassword: ctfnote.auth.useRegisterWithPassword(),
       settings: ctfnote.settings.injectSettings(),
+      localAuthEnabled,
       form: reactive({
         login: '',
         password: '',
@@ -120,16 +144,29 @@ export default defineComponent({
   },
   computed: {
     registrationAllowed() {
-      return this.settings?.registrationAllowed || !!this.token;
+      return (
+        this.localAuthEnabled &&
+        (this.settings?.registrationAllowed || !!this.token)
+      );
     },
     registrationPasswordAllowed(): boolean {
-      return this.settings?.registrationPasswordAllowed ?? false;
+      return (
+        this.localAuthEnabled &&
+        (this.settings?.registrationPasswordAllowed ?? false)
+      );
     },
     registrationAnyAllowed() {
-      return this.registrationAllowed || this.registrationPasswordAllowed;
+      return (
+        this.localAuthEnabled &&
+        (this.registrationAllowed || this.registrationPasswordAllowed)
+      );
     },
     registrationPasswordForced() {
-      return !this.registrationAllowed && this.registrationPasswordAllowed;
+      return (
+        this.localAuthEnabled &&
+        !this.registrationAllowed &&
+        this.registrationPasswordAllowed
+      );
     },
   },
   methods: {
