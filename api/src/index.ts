@@ -22,6 +22,7 @@ import discordHooks from "./discord/hooks";
 import { initDiscordBot } from "./discord";
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
 import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
+import hedgedocAuth from "./plugins/hedgedocAuth";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -63,10 +64,17 @@ function createOptions() {
       discordHooks,
       PgManyToManyPlugin,
       ProfileSubscriptionPlugin,
+      hedgedocAuth,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
     legacyRelations: "omit" as const,
+    async additionalGraphQLContextFromRequest(req, res) {
+      return {
+        setHeader: (name: string, value: string | number) =>
+          res.setHeader(name, value),
+      };
+    },
   };
 
   if (config.env == "development") {
