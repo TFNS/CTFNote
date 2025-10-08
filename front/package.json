@@ -25,6 +25,7 @@
     "core-js": "^3.39.0",
     "hotkeys-js": "^3.13.7",
     "jszip": "^3.10.1",
+    "openid-client": "^6.8.1",
     "quasar": "^2.17.4",
     "slugify": "^1.6.6",
     "ts-essentials": "^9.4.1",

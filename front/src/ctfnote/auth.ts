@@ -2,6 +2,7 @@ import { useApolloClient } from '@vue/apollo-composable';
 import {
   NewTokenDocument,
   useLoginMutation,
+  useLoginWithOAuth2Mutation,
   useRegisterMutation,
   useRegisterWithPasswordMutation,
   useRegisterWithTokenMutation,
@@ -50,6 +51,27 @@ export function useLogin() {
       saveJWT(jwt);
       await prefetchMe();
       await $router.push({ name: 'ctfs-incoming' });
+    }
+  };
+}
+
+export function useLoginWithOAuth2() {
+  const { mutate } = useLoginWithOAuth2Mutation({});
+  const $router = useRouter();
+  return async (
+    callbackUrl: string,
+    expectedState?: string,
+    pkceCodeVerifier?: string,
+  ) => {
+    const r = await mutate({ callbackUrl, expectedState, pkceCodeVerifier });
+    const jwt = r?.data?.loginWithOAuth2?.jwt;
+    if (jwt) {
+      saveJWT(jwt);
+      await prefetchMe();
+      await $router.push({ name: 'ctfs-incoming' });
+      return r?.data?.loginWithOAuth2?.login;
+    } else {
+      throw new Error('Login succeeded without JWT. Please try again.');
     }
   };
 }

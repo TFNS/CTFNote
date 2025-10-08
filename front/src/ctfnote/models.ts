@@ -103,12 +103,20 @@ export type Settings = {
   registrationPasswordAllowed: boolean;
   style: SettingsColorMap;
   discordIntegrationEnabled: boolean;
+  oauth2Enabled: boolean;
 };
 
 export type AdminSettings = Settings & {
   registrationPassword: string;
   registrationDefaultRole: Role;
   icalPassword: string;
+};
+
+export type OAuth2Settings = {
+  clientId: string;
+  scope: string;
+  issuer: string;
+  authorizationEndpoint: string;
 };
 
 export type User = {

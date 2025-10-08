@@ -4,6 +4,7 @@ fragment SettingsInfo on Setting {
   registrationPasswordAllowed
   style
   discordIntegrationEnabled
+  oauth2Enabled
 }
 
 fragment AdminSettingsInfo on Setting {
@@ -14,11 +15,24 @@ fragment AdminSettingsInfo on Setting {
   icalPassword
 }
 
+fragment OAuth2SettingsFragment on OAuth2Settings {
+  clientId
+  scope
+  issuer
+  authorizationEndpoint
+}
+
 query getSettings {
   settings {
     nodes {
       ...SettingsInfo
     }
+  }
+}
+
+query getOAuth2Settings {
+  oauth2Settings {
+    ...OAuth2SettingsFragment
   }
 }
 

@@ -1310,6 +1310,7 @@ __metadata:
     ical-generator: "npm:^7.0.0"
     lint-staged: "npm:^15.2.2"
     nodemon: "npm:^3.1.7"
+    openid-client: "npm:6.8.1"
     postgraphile: "npm:4.13.0"
     postgraphile-plugin-connection-filter: "npm:^2.3.0"
     postgres-migrations: "npm:^5.3.0"
@@ -2596,6 +2597,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jose@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "jose@npm:6.1.0"
+  checksum: 10/d111bc11fdb9566370992393615097d58618ba6ed29eee5d79b3bf4c460c93a6c0a9c5829d14b40342b376df16cde7d1bef79fda65c6bf09e1158875c17ae865
+  languageName: node
+  linkType: hard
+
 "js-yaml@npm:^4.1.0":
   version: 4.1.0
   resolution: "js-yaml@npm:4.1.0"
@@ -3182,6 +3190,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"oauth4webapi@npm:^3.8.2":
+  version: 3.8.2
+  resolution: "oauth4webapi@npm:3.8.2"
+  checksum: 10/5f96b50dd50298402a15d5d545decab0ef20aa14fdd0fe6d6ccc9e47d645d795f0aebb0c1fd452e2504170d8880b89021a87a168aed4df64bf39a1ba7e85f245
+  languageName: node
+  linkType: hard
+
 "object-inspect@npm:^1.13.1":
   version: 1.13.3
   resolution: "object-inspect@npm:1.13.3"
@@ -3229,6 +3244,16 @@ __metadata:
   dependencies:
     mimic-fn: "npm:^4.0.0"
   checksum: 10/0846ce78e440841335d4e9182ef69d5762e9f38aa7499b19f42ea1c4cd40f0b4446094c455c713f9adac3f4ae86f613bb5e30c99e52652764d06a89f709b3788
+  languageName: node
+  linkType: hard
+
+"openid-client@npm:6.8.1":
+  version: 6.8.1
+  resolution: "openid-client@npm:6.8.1"
+  dependencies:
+    jose: "npm:^6.1.0"
+    oauth4webapi: "npm:^3.8.2"
+  checksum: 10/94d18d39f8e9d4a194acdba85793a1e39a0f6fe50fdf2bdea4aa57409da629a8966a3673738510c5e9f6a32715259e26fb6e56e83b1b8d2de31346353aa437ad
   languageName: node
   linkType: hard
 
