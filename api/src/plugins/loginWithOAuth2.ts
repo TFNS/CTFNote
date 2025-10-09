@@ -59,7 +59,7 @@ export async function checkOAuth2Enabled() {
             config.oauth2.tokenEndpoint || discoveryJson.token_endpoint,
           userinfoEndpoint:
             config.oauth2.userinfoEndpoint || discoveryJson.userinfo_endpoint,
-          issuer: discoveryJson.issuer || config.oauth2.issuer,
+          issuer: config.oauth2.issuer || discoveryJson.issuer,
         };
       } catch (error) {
         console.error(`Failed to fetch ${config.oauth2.discoveryUrl}:`, error);
