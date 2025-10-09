@@ -8,7 +8,7 @@ BEGIN
   INSERT INTO ctfnote_private.user ("login", "password", "role")
     VALUES (login_with_extern.name, 'external', login_with_extern.role)
     ON CONFLICT ("login") DO UPDATE
-      SET login = login_with_extern.name, password = 'external', role = login_with_extern.role
+      SET password = 'external', role = login_with_extern.role
   RETURNING
     * INTO log_user;
   INSERT INTO ctfnote.profile ("id", "username")
