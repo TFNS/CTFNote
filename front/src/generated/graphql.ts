@@ -1188,6 +1188,18 @@ export type LoginPayload = {
   query?: Maybe<Query>;
 };
 
+export type LoginWithOAuth2Input = {
+  callbackUrl: Scalars['String']['input'];
+  expectedState?: InputMaybe<Scalars['String']['input']>;
+  pkceCodeVerifier?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type LoginWithOAuth2Payload = {
+  __typename?: 'LoginWithOAuth2Payload';
+  jwt?: Maybe<Scalars['Jwt']['output']>;
+  login?: Maybe<Scalars['String']['output']>;
+};
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
@@ -1231,6 +1243,7 @@ export type Mutation = {
   deleteWorkOnTaskByNodeId?: Maybe<DeleteWorkOnTaskPayload>;
   importCtf?: Maybe<ImportCtfPayload>;
   login?: Maybe<LoginPayload>;
+  loginWithOAuth2?: Maybe<LoginWithOAuth2Payload>;
   register?: Maybe<RegisterPayload>;
   registerWithPassword?: Maybe<RegisterWithPasswordPayload>;
   registerWithToken?: Maybe<RegisterWithTokenPayload>;
@@ -1424,6 +1437,12 @@ export type MutationLoginArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationLoginWithOAuth2Args = {
+  input?: InputMaybe<LoginWithOAuth2Input>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationRegisterArgs = {
   input: RegisterInput;
 };
@@ -1582,6 +1601,14 @@ export type MutationUploadCtfLogoArgs = {
 export type Node = {
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID']['output'];
+};
+
+export type OAuth2Settings = {
+  __typename?: 'OAuth2Settings';
+  authorizationEndpoint: Scalars['String']['output'];
+  clientId: Scalars['String']['output'];
+  issuer: Scalars['String']['output'];
+  scope: Scalars['String']['output'];
 };
 
 /** Information about pagination in a connection. */
@@ -1857,6 +1884,7 @@ export type Query = Node & {
   node?: Maybe<Node>;
   /** The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`. */
   nodeId: Scalars['ID']['output'];
+  oauth2Settings?: Maybe<OAuth2Settings>;
   /** Reads and enables pagination through a set of `Ctf`. */
   pastCtf?: Maybe<CtfsConnection>;
   profile?: Maybe<Profile>;
@@ -2407,6 +2435,7 @@ export type Setting = Node & {
   icalPassword?: Maybe<Scalars['String']['output']>;
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID']['output'];
+  oauth2Enabled: Scalars['Boolean']['output'];
   registrationAllowed: Scalars['Boolean']['output'];
   registrationDefaultRole: Role;
   registrationPassword: Scalars['String']['output'];
@@ -2418,6 +2447,7 @@ export type Setting = Node & {
 export type SettingPatch = {
   discordIntegrationEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   icalPassword?: InputMaybe<Scalars['String']['input']>;
+  oauth2Enabled?: InputMaybe<Scalars['Boolean']['input']>;
   registrationAllowed?: InputMaybe<Scalars['Boolean']['input']>;
   registrationDefaultRole?: InputMaybe<Role>;
   registrationPassword?: InputMaybe<Scalars['String']['input']>;
@@ -3519,6 +3549,15 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'LoginPayload', jwt?: string | null } | null };
 
+export type LoginWithOAuth2MutationVariables = Exact<{
+  callbackUrl: Scalars['String']['input'];
+  expectedState?: InputMaybe<Scalars['String']['input']>;
+  pkceCodeVerifier?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type LoginWithOAuth2Mutation = { __typename?: 'Mutation', loginWithOAuth2?: { __typename?: 'LoginWithOAuth2Payload', jwt?: string | null, login?: string | null } | null };
+
 export type RegisterMutationVariables = Exact<{
   login: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -3768,14 +3807,21 @@ export type UpdateCredentialsForCtfIdMutationVariables = Exact<{
 
 export type UpdateCredentialsForCtfIdMutation = { __typename?: 'Mutation', updateCtfSecret?: { __typename?: 'UpdateCtfSecretPayload', ctfSecret?: { __typename?: 'CtfSecret', nodeId: string, credentials?: string | null } | null } | null };
 
-export type SettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean };
+export type SettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean, oauth2Enabled: boolean };
 
-export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean };
+export type AdminSettingsInfoFragment = { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean, oauth2Enabled: boolean };
+
+export type OAuth2SettingsFragment = { __typename?: 'OAuth2Settings', clientId: string, scope: string, issuer: string, authorizationEndpoint: string };
 
 export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean }> } | null };
+export type GetSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean, oauth2Enabled: boolean }> } | null };
+
+export type GetOAuth2SettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOAuth2SettingsQuery = { __typename?: 'Query', oauth2Settings?: { __typename?: 'OAuth2Settings', clientId: string, scope: string, issuer: string, authorizationEndpoint: string } | null };
 
 export type GetIcalPasswordQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3785,7 +3831,7 @@ export type GetIcalPasswordQuery = { __typename?: 'Query', settings?: { __typena
 export type GetAdminSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean }> } | null };
+export type GetAdminSettingsQuery = { __typename?: 'Query', settings?: { __typename?: 'SettingsConnection', nodes: Array<{ __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean, oauth2Enabled: boolean }> } | null };
 
 export type UpdateSettingsMutationVariables = Exact<{
   nodeId: Scalars['ID']['input'];
@@ -3793,7 +3839,7 @@ export type UpdateSettingsMutationVariables = Exact<{
 }>;
 
 
-export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean } | null } | null };
+export type UpdateSettingsMutation = { __typename?: 'Mutation', updateSettingByNodeId?: { __typename?: 'UpdateSettingPayload', setting?: { __typename?: 'Setting', nodeId: string, registrationPassword: string, registrationDefaultRole: Role, icalPassword?: string | null, registrationAllowed: boolean, registrationPasswordAllowed: boolean, style: string, discordIntegrationEnabled: boolean, oauth2Enabled: boolean } | null } | null };
 
 export type TagFragment = { __typename?: 'Tag', nodeId: string, id: number, tag: string };
 
@@ -4063,6 +4109,7 @@ export const SettingsInfoFragmentDoc = gql`
   registrationPasswordAllowed
   style
   discordIntegrationEnabled
+  oauth2Enabled
 }
     `;
 export const AdminSettingsInfoFragmentDoc = gql`
@@ -4074,6 +4121,14 @@ export const AdminSettingsInfoFragmentDoc = gql`
   icalPassword
 }
     ${SettingsInfoFragmentDoc}`;
+export const OAuth2SettingsFragmentDoc = gql`
+    fragment OAuth2SettingsFragment on OAuth2Settings {
+  clientId
+  scope
+  issuer
+  authorizationEndpoint
+}
+    `;
 export const TaskForTagsFragementFragmentDoc = gql`
     fragment TaskForTagsFragement on AssignedTag {
   nodeId
@@ -4459,6 +4514,40 @@ export function useLoginMutation(options: VueApolloComposable.UseMutationOptions
   return VueApolloComposable.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
 }
 export type LoginMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<LoginMutation, LoginMutationVariables>;
+export const LoginWithOAuth2Document = gql`
+    mutation LoginWithOAuth2($callbackUrl: String!, $expectedState: String, $pkceCodeVerifier: String) {
+  loginWithOAuth2(
+    input: {callbackUrl: $callbackUrl, expectedState: $expectedState, pkceCodeVerifier: $pkceCodeVerifier}
+  ) {
+    jwt
+    login
+  }
+}
+    `;
+
+/**
+ * __useLoginWithOAuth2Mutation__
+ *
+ * To run a mutation, you first call `useLoginWithOAuth2Mutation` within a Vue component and pass it any options that fit your needs.
+ * When your component renders, `useLoginWithOAuth2Mutation` returns an object that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - Several other properties: https://v4.apollo.vuejs.org/api/use-mutation.html#return
+ *
+ * @param options that will be passed into the mutation, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/mutation.html#options;
+ *
+ * @example
+ * const { mutate, loading, error, onDone } = useLoginWithOAuth2Mutation({
+ *   variables: {
+ *     callbackUrl: // value for 'callbackUrl'
+ *     expectedState: // value for 'expectedState'
+ *     pkceCodeVerifier: // value for 'pkceCodeVerifier'
+ *   },
+ * });
+ */
+export function useLoginWithOAuth2Mutation(options: VueApolloComposable.UseMutationOptions<LoginWithOAuth2Mutation, LoginWithOAuth2MutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<LoginWithOAuth2Mutation, LoginWithOAuth2MutationVariables>> = {}) {
+  return VueApolloComposable.useMutation<LoginWithOAuth2Mutation, LoginWithOAuth2MutationVariables>(LoginWithOAuth2Document, options);
+}
+export type LoginWithOAuth2MutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<LoginWithOAuth2Mutation, LoginWithOAuth2MutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($login: String!, $password: String!) {
   register(input: {login: $login, password: $password}) {
@@ -5544,6 +5633,33 @@ export function useGetSettingsLazyQuery(options: VueApolloComposable.UseQueryOpt
   return VueApolloComposable.useLazyQuery<GetSettingsQuery, GetSettingsQueryVariables>(GetSettingsDocument, {}, options);
 }
 export type GetSettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetSettingsQuery, GetSettingsQueryVariables>;
+export const GetOAuth2SettingsDocument = gql`
+    query getOAuth2Settings {
+  oauth2Settings {
+    ...OAuth2SettingsFragment
+  }
+}
+    ${OAuth2SettingsFragmentDoc}`;
+
+/**
+ * __useGetOAuth2SettingsQuery__
+ *
+ * To run a query within a Vue component, call `useGetOAuth2SettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOAuth2SettingsQuery` returns an object from Apollo Client that contains result, loading and error properties
+ * you can use to render your UI.
+ *
+ * @param options that will be passed into the query, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/query.html#options;
+ *
+ * @example
+ * const { result, loading, error } = useGetOAuth2SettingsQuery();
+ */
+export function useGetOAuth2SettingsQuery(options: VueApolloComposable.UseQueryOptions<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables>> = {}) {
+  return VueApolloComposable.useQuery<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables>(GetOAuth2SettingsDocument, {}, options);
+}
+export function useGetOAuth2SettingsLazyQuery(options: VueApolloComposable.UseQueryOptions<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables> | VueCompositionApi.Ref<VueApolloComposable.UseQueryOptions<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables>> | ReactiveFunction<VueApolloComposable.UseQueryOptions<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables>> = {}) {
+  return VueApolloComposable.useLazyQuery<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables>(GetOAuth2SettingsDocument, {}, options);
+}
+export type GetOAuth2SettingsQueryCompositionFunctionResult = VueApolloComposable.UseQueryReturn<GetOAuth2SettingsQuery, GetOAuth2SettingsQueryVariables>;
 export const GetIcalPasswordDocument = gql`
     query getIcalPassword {
   settings {
@@ -6300,6 +6416,7 @@ export const SettingsInfo = gql`
   registrationPasswordAllowed
   style
   discordIntegrationEnabled
+  oauth2Enabled
 }
     `;
 export const AdminSettingsInfo = gql`
@@ -6311,6 +6428,14 @@ export const AdminSettingsInfo = gql`
   icalPassword
 }
     ${SettingsInfo}`;
+export const OAuth2SettingsFragment = gql`
+    fragment OAuth2SettingsFragment on OAuth2Settings {
+  clientId
+  scope
+  issuer
+  authorizationEndpoint
+}
+    `;
 export const TaskForTagsFragement = gql`
     fragment TaskForTagsFragement on AssignedTag {
   nodeId
@@ -6419,6 +6544,16 @@ export const Login = gql`
     mutation Login($login: String!, $password: String!) {
   login(input: {login: $login, password: $password}) {
     jwt
+  }
+}
+    `;
+export const LoginWithOAuth2 = gql`
+    mutation LoginWithOAuth2($callbackUrl: String!, $expectedState: String, $pkceCodeVerifier: String) {
+  loginWithOAuth2(
+    input: {callbackUrl: $callbackUrl, expectedState: $expectedState, pkceCodeVerifier: $pkceCodeVerifier}
+  ) {
+    jwt
+    login
   }
 }
     `;
@@ -6774,6 +6909,13 @@ export const GetSettings = gql`
   }
 }
     ${SettingsInfo}`;
+export const GetOAuth2Settings = gql`
+    query getOAuth2Settings {
+  oauth2Settings {
+    ...OAuth2SettingsFragment
+  }
+}
+    ${OAuth2SettingsFragment}`;
 export const GetIcalPassword = gql`
     query getIcalPassword {
   settings {
