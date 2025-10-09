@@ -8,6 +8,7 @@ services:
       - ctfnote
     restart: unless-stopped
     environment:
+      META_USER_PASSWORD: lol
       PAD_CREATE_URL: http://hedgedoc:3000/new
       PAD_SHOW_URL: /
       DB_DATABASE: ctfnote
@@ -70,6 +71,7 @@ services:
       - CMD_CSP_ENABLE=${CMD_CSP_ENABLE:-false}
       - CMD_IMAGE_UPLOAD_TYPE=${CMD_IMAGE_UPLOAD_TYPE:-imgur}
       - CMD_DOCUMENT_MAX_LENGTH=${CMD_DOCUMENT_MAX_LENGTH:-100000}
+      - CMD_ALLOW_ANONYMOUS=false
     depends_on:
       - db
     restart: unless-stopped

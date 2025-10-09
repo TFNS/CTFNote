@@ -32,6 +32,7 @@ function buildNoteContent(
 }
 
 export async function createPad(
+  setCookieHeader: string[],
   title: string,
   description?: string,
   tags?: string[]
@@ -39,6 +40,7 @@ export async function createPad(
   const options = {
     headers: {
       "Content-Type": "text/markdown",
+      Cookie: setCookieHeader.join("; "),
     },
 
     maxRedirects: 0,
@@ -92,49 +94,119 @@ export default makeExtendSchemaPlugin((build) => {
           { pgClient },
           resolveInfo
         ) => {
-          const {
-            rows: [isAllowed],
-          } = await pgClient.query(`SELECT ctfnote_private.can_play_ctf($1)`, [
-            ctfId,
-          ]);
+          try {
+            //const username = "meta_user";
+            //const password = "meta_password"; // Replace with a secure password or fetch from config
 
-          if (isAllowed.can_play_ctf !== true) {
-            return {};
-          }
-
-          const padPathOrUrl = await createPad(title, description, tags);
-
-          let padPath: string;
-          if (padPathOrUrl.startsWith("/")) {
-            padPath = padPathOrUrl.slice(1);
-          } else {
-            padPath = new URL(padPathOrUrl).pathname.slice(1);
-          }
-
-          const padUrl = `${config.pad.showUrl}${padPath}`;
-
-          return await savepointWrapper(pgClient, async () => {
-            const {
-              rows: [newTask],
-            } = await pgClient.query(
-              `SELECT * FROM ctfnote_private.create_task($1, $2, $3, $4, $5)`,
-              [title, description ?? "", flag ?? "", padUrl, ctfId]
+            // Register the user using the method described in the comment above
+            await axios.post(
+              "http://hedgedoc:3000/register",
+              "email=testctf2%40trsk.cc&password=ooooooooof",
+              {
+                headers: {
+                  "User-Agent":
+                    "Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0",
+                  Accept:
+                    "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                  "Accept-Language": "en-US,en;q=0.5",
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "Sec-GPC": "1",
+                  "Upgrade-Insecure-Requests": "1",
+                  "Sec-Fetch-Dest": "iframe",
+                  "Sec-Fetch-Mode": "navigate",
+                  "Sec-Fetch-Site": "same-origin",
+                  "Sec-Fetch-User": "?1",
+                  Priority: "u=4",
+                },
+                withCredentials: true,
+                maxRedirects: 0,
+                validateStatus: (status: number) =>
+                  status === 200 || status === 409 || status === 302, // 409 if already exists
+              }
             );
-            const [row] =
-              await resolveInfo.graphile.selectGraphQLResultFromTable(
-                sql.fragment`ctfnote.task`,
-                (tableAlias, queryBuilder) => {
-                  queryBuilder.where(
-                    sql.fragment`${tableAlias}.id = ${sql.value(newTask.id)}`
-                  );
-                }
-              );
 
-            return {
-              data: row,
-              query: build.$$isQuery,
-            };
-          });
+            const loginResponse = await axios.post(
+              "http://hedgedoc:3000/login",
+              "email=testctf2%40trsk.cc&password=ooooooooof",
+              {
+                headers: {
+                  "User-Agent":
+                    "Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0",
+                  Accept:
+                    "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                  "Accept-Language": "en-US,en;q=0.5",
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "Sec-GPC": "1",
+                  "Upgrade-Insecure-Requests": "1",
+                  "Sec-Fetch-Dest": "iframe",
+                  "Sec-Fetch-Mode": "navigate",
+                  "Sec-Fetch-Site": "same-origin",
+                  "Sec-Fetch-User": "?1",
+                  Priority: "u=4",
+                },
+                withCredentials: true,
+                maxRedirects: 0,
+                validateStatus: (status: number) =>
+                  status === 200 || status === 302,
+              }
+            );
+
+            const setCookieHeader = loginResponse.headers["set-cookie"];
+            console.log("Login Set-Cookie header:", setCookieHeader);
+
+            const {
+              rows: [isAllowed],
+            } = await pgClient.query(
+              `SELECT ctfnote_private.can_play_ctf($1)`,
+              [ctfId]
+            );
+
+            if (isAllowed.can_play_ctf !== true) {
+              return {};
+            }
+
+            const padPathOrUrl = await createPad(
+              setCookieHeader ?? [],
+              title,
+              description,
+              tags
+            );
+
+            let padPath: string;
+            if (padPathOrUrl.startsWith("/")) {
+              padPath = padPathOrUrl.slice(1);
+            } else {
+              padPath = new URL(padPathOrUrl).pathname.slice(1);
+            }
+
+            const padUrl = `${config.pad.showUrl}${padPath}`;
+
+            return await savepointWrapper(pgClient, async () => {
+              const {
+                rows: [newTask],
+              } = await pgClient.query(
+                `SELECT * FROM ctfnote_private.create_task($1, $2, $3, $4, $5)`,
+                [title, description ?? "", flag ?? "", padUrl, ctfId]
+              );
+              const [row] =
+                await resolveInfo.graphile.selectGraphQLResultFromTable(
+                  sql.fragment`ctfnote.task`,
+                  (tableAlias, queryBuilder) => {
+                    queryBuilder.where(
+                      sql.fragment`${tableAlias}.id = ${sql.value(newTask.id)}`
+                    );
+                  }
+                );
+
+              return {
+                data: row,
+                query: build.$$isQuery,
+              };
+            });
+          } catch (error) {
+            console.error("error:", error);
+            return [];
+          }
         },
       },
     },

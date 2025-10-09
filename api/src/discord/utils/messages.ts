@@ -252,6 +252,7 @@ export async function createPadWithoutLimit(
     if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
       // Create a new pad
       const padUrl = await createPad(
+        [],
         `${ctfTitle} ${discordArchiveTaskName} (${padIndex})`,
         currentPadMessages.join("\n")
       );
@@ -272,6 +273,7 @@ export async function createPadWithoutLimit(
   if (pads.length > 0) {
     // Create the final pad for the remaining messages
     const padUrl = await createPad(
+      [],
       `${ctfTitle} ${discordArchiveTaskName} (${padIndex})`,
       currentPadMessages.join("\n")
     );
@@ -286,6 +288,7 @@ export async function createPadWithoutLimit(
   }
 
   return await createPad(
+    [],
     `${ctfTitle} ${discordArchiveTaskName}`,
     firstPadContent
   );
