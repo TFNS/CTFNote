@@ -14,6 +14,8 @@ import { Task, getTaskFromId } from "../database/tasks";
 import { CTF, getCtfFromDatabase } from "../database/ctfs";
 import { challengesTalkChannelName, getTaskChannel } from "../agile/channels";
 import { createPad } from "../../plugins/createTask";
+import { registerAndLoginUser } from "../..//utils/hedgedoc";
+
 
 export const discordArchiveTaskName = "Discord archive";
 
@@ -245,6 +247,8 @@ export async function createPadWithoutLimit(
   let currentPadLength = 0;
   let padIndex = 1;
 
+  const cookie = await registerAndLoginUser();
+  
   for (const message of messages) {
     const messageLength = message.length;
 
@@ -252,7 +256,7 @@ export async function createPadWithoutLimit(
     if (currentPadLength + messageLength > MAX_PAD_LENGTH) {
       // Create a new pad
       const padUrl = await createPad(
-        [],
+        cookie,
         `${ctfTitle} ${discordArchiveTaskName} (${padIndex})`,
         currentPadMessages.join("\n")
       );
@@ -273,7 +277,7 @@ export async function createPadWithoutLimit(
   if (pads.length > 0) {
     // Create the final pad for the remaining messages
     const padUrl = await createPad(
-      [],
+      cookie,
       `${ctfTitle} ${discordArchiveTaskName} (${padIndex})`,
       currentPadMessages.join("\n")
     );
@@ -288,7 +292,7 @@ export async function createPadWithoutLimit(
   }
 
   return await createPad(
-    [],
+    cookie,
     `${ctfTitle} ${discordArchiveTaskName}`,
     firstPadContent
   );
