@@ -8,7 +8,7 @@ services:
       - ctfnote
     restart: unless-stopped
     environment:
-      META_USER_PASSWORD: lol
+      CMD_META_USER_PASSWORD: 742c37381007e2a26b126614db736f5e1
       PAD_CREATE_URL: http://hedgedoc:3000/new
       PAD_SHOW_URL: /
       DB_DATABASE: ctfnote

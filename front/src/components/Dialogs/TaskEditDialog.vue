@@ -114,6 +114,7 @@ export default defineComponent({
       createTask: ctfnote.tasks.useCreateTask(),
       addTagsForTask: ctfnote.tags.useAddTagsForTask(),
       notifySuccess: ctfnote.ui.useNotify().notifySuccess,
+      notifyFail: ctfnote.ui.useNotify().notifyError,
       tags,
       suggestions,
       filterFn,
@@ -136,12 +137,20 @@ export default defineComponent({
         this.notifySuccess({
           message: `Task ${this.form.title} is being created...`,
         });
-        const r = await this.createTask(this.ctfId, this.form);
+        try {
+          const r = await this.createTask(this.ctfId, this.form).catch((e)=> {
+            console.error("error creating task:", e)
+            this.notifyFail(`Error creating task ${this.form.title}: ${(e as Error).message ?? ''}) `);
+          });
 
-        task = r?.data?.createTask?.task;
-        if (task) {
-          await this.addTagsForTask(this.form.tags, makeId(task.id));
+          task = r?.data?.createTask?.task;
+          if (task) {
+            await this.addTagsForTask(this.form.tags, makeId(task.id));
+          }
+        } catch(e) {
+          console.error("error creating task:", e)
         }
+
       } else if (this.task) {
         this.notifySuccess({
           message: `Task ${this.form.title} is being updated...`,

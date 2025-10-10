@@ -56,13 +56,62 @@ export async function createPad(
     return res.headers.location;
   } catch (e) {
     throw Error(
-      `Call to ${
-        config.pad.createUrl
-      } during task creation failed. Length of note: ${
-        buildNoteContent(title, description, tags).length
+      `Call to ${config.pad.createUrl
+      } during task creation failed. Length of note: ${buildNoteContent(title, description, tags).length
       }`
     );
   }
+}
+
+async function registerAndLoginUser(): Promise<string[]> {
+  const username = config.pad.metaUserName;
+  const password = config.pad.metaUserPassword;
+
+  try {
+    await axios.post(
+      "http://hedgedoc:3000/register",
+      `email=${username}&password=${password}`,
+      {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0",
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.5",
+          "Content-Type": "application/x-www-form-urlencoded",
+          Priority: "u=4",
+        },
+        withCredentials: true,
+        maxRedirects: 0,
+        validateStatus: (status: number) => status === 200 || status === 409 || status === 302, // 409 if already exists
+      }
+    );
+
+    const loginResponse = await axios.post(
+      "http://hedgedoc:3000/login",
+      `email=${username}&password=${password}`,
+      {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0",
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.5",
+          "Content-Type": "application/x-www-form-urlencoded",
+          Priority: "u=4",
+        },
+        withCredentials: true,
+        maxRedirects: 0,
+        validateStatus: (status: number) => status === 200 || status === 302,
+      }
+    );
+
+    const setCookieHeader = loginResponse.headers["set-cookie"];
+    return setCookieHeader ?? []
+  } catch (error) {
+    throw Error(`Login to hedgedoc during task creation failed. Error: ${error}`);
+  }
+
 }
 
 export default makeExtendSchemaPlugin((build) => {
@@ -95,64 +144,11 @@ export default makeExtendSchemaPlugin((build) => {
           resolveInfo
         ) => {
           try {
-            //const username = "meta_user";
-            //const password = "meta_password"; // Replace with a secure password or fetch from config
 
-            // Register the user using the method described in the comment above
-            await axios.post(
-              "http://hedgedoc:3000/register",
-              "email=testctf2%40trsk.cc&password=ooooooooof",
-              {
-                headers: {
-                  "User-Agent":
-                    "Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0",
-                  Accept:
-                    "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                  "Accept-Language": "en-US,en;q=0.5",
-                  "Content-Type": "application/x-www-form-urlencoded",
-                  "Sec-GPC": "1",
-                  "Upgrade-Insecure-Requests": "1",
-                  "Sec-Fetch-Dest": "iframe",
-                  "Sec-Fetch-Mode": "navigate",
-                  "Sec-Fetch-Site": "same-origin",
-                  "Sec-Fetch-User": "?1",
-                  Priority: "u=4",
-                },
-                withCredentials: true,
-                maxRedirects: 0,
-                validateStatus: (status: number) =>
-                  status === 200 || status === 409 || status === 302, // 409 if already exists
-              }
-            );
-
-            const loginResponse = await axios.post(
-              "http://hedgedoc:3000/login",
-              "email=testctf2%40trsk.cc&password=ooooooooof",
-              {
-                headers: {
-                  "User-Agent":
-                    "Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0",
-                  Accept:
-                    "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                  "Accept-Language": "en-US,en;q=0.5",
-                  "Content-Type": "application/x-www-form-urlencoded",
-                  "Sec-GPC": "1",
-                  "Upgrade-Insecure-Requests": "1",
-                  "Sec-Fetch-Dest": "iframe",
-                  "Sec-Fetch-Mode": "navigate",
-                  "Sec-Fetch-Site": "same-origin",
-                  "Sec-Fetch-User": "?1",
-                  Priority: "u=4",
-                },
-                withCredentials: true,
-                maxRedirects: 0,
-                validateStatus: (status: number) =>
-                  status === 200 || status === 302,
-              }
-            );
-
-            const setCookieHeader = loginResponse.headers["set-cookie"];
-            console.log("Login Set-Cookie header:", setCookieHeader);
+            let cookie: string[] | undefined = undefined;
+            if (config.pad.metaUserPassword !== "") {
+              cookie = await registerAndLoginUser();
+            }
 
             const {
               rows: [isAllowed],
@@ -166,7 +162,7 @@ export default makeExtendSchemaPlugin((build) => {
             }
 
             const padPathOrUrl = await createPad(
-              setCookieHeader ?? [],
+              cookie ?? [],
               title,
               description,
               tags
@@ -205,7 +201,7 @@ export default makeExtendSchemaPlugin((build) => {
             });
           } catch (error) {
             console.error("error:", error);
-            return [];
+            throw new Error(`Creating task failed: ${error}`);
           }
         },
       },
