@@ -56,8 +56,10 @@ export async function createPad(
     return res.headers.location;
   } catch (e) {
     throw Error(
-      `Call to ${config.pad.createUrl
-      } during task creation failed. Length of note: ${buildNoteContent(title, description, tags).length
+      `Call to ${
+        config.pad.createUrl
+      } during task creation failed. Length of note: ${
+        buildNoteContent(title, description, tags).length
       }`
     );
   }
@@ -83,7 +85,8 @@ async function registerAndLoginUser(): Promise<string[]> {
         },
         withCredentials: true,
         maxRedirects: 0,
-        validateStatus: (status: number) => status === 200 || status === 409 || status === 302, // 409 if already exists
+        validateStatus: (status: number) =>
+          status === 200 || status === 409 || status === 302, // 409 if already exists
       }
     );
 
@@ -107,11 +110,12 @@ async function registerAndLoginUser(): Promise<string[]> {
     );
 
     const setCookieHeader = loginResponse.headers["set-cookie"];
-    return setCookieHeader ?? []
+    return setCookieHeader ?? [];
   } catch (error) {
-    throw Error(`Login to hedgedoc during task creation failed. Error: ${error}`);
+    throw Error(
+      `Login to hedgedoc during task creation failed. Error: ${error}`
+    );
   }
-
 }
 
 export default makeExtendSchemaPlugin((build) => {
@@ -144,7 +148,6 @@ export default makeExtendSchemaPlugin((build) => {
           resolveInfo
         ) => {
           try {
-
             let cookie: string[] | undefined = undefined;
             if (config.pad.metaUserPassword !== "") {
               cookie = await registerAndLoginUser();

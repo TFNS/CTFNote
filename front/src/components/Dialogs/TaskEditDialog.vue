@@ -138,19 +138,20 @@ export default defineComponent({
           message: `Task ${this.form.title} is being created...`,
         });
         try {
-          const r = await this.createTask(this.ctfId, this.form).catch((e)=> {
-            console.error("error creating task:", e)
-            this.notifyFail(`Error creating task ${this.form.title}: ${(e as Error).message ?? ''}) `);
+          const r = await this.createTask(this.ctfId, this.form).catch((e) => {
+            console.error('error creating task:', e);
+            this.notifyFail(
+              `Error creating task ${this.form.title}: ${(e as Error).message ?? ''}) `,
+            );
           });
 
           task = r?.data?.createTask?.task;
           if (task) {
             await this.addTagsForTask(this.form.tags, makeId(task.id));
           }
-        } catch(e) {
-          console.error("error creating task:", e)
+        } catch (e) {
+          console.error('error creating task:', e);
         }
-
       } else if (this.task) {
         this.notifySuccess({
           message: `Task ${this.form.title} is being updated...`,
