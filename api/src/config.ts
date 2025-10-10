@@ -92,8 +92,8 @@ const config: CTFNoteConfig = {
     documentMaxLength: Number(getEnv("CMD_DOCUMENT_MAX_LENGTH", "100000")),
     domain: getEnv("CMD_DOMAIN", ""),
     useSSL: getEnv("CMD_PROTOCOL_USESSL", "false"),
-    metaUserName: getEnv("CMD_META_USER_USERNAME", "CTFNote_Bot"), //has to be an email address
-    metaUserPassword: getEnv("CMD_META_USER_PASSWORD", ""),
+    metaUserName: getEnv("CMD_META_USER_USERNAME", "CTFNote_Bot@ctf0.de"), //has to be an email address
+    metaUserPassword: getEnv("CMD_META_USER_PASSWORD", "")
   },
   web: {
     port: getEnvInt("WEB_PORT"),
