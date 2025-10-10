@@ -16,7 +16,6 @@ import { challengesTalkChannelName, getTaskChannel } from "../agile/channels";
 import { createPad } from "../../plugins/createTask";
 import { registerAndLoginUser } from "../..//utils/hedgedoc";
 
-
 export const discordArchiveTaskName = "Discord archive";
 
 export async function sendMessageToChannel(
@@ -248,7 +247,7 @@ export async function createPadWithoutLimit(
   let padIndex = 1;
 
   const cookie = await registerAndLoginUser();
-  
+
   for (const message of messages) {
     const messageLength = message.length;
 
