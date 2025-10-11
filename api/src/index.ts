@@ -23,6 +23,7 @@ import { initDiscordBot } from "./discord";
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
 import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
 import hedgedocAuth from "./plugins/hedgedocAuth";
+import { initHedgedocPassword } from "./utils/hedgedoc";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -161,6 +162,10 @@ async function main() {
   const app = createApp(postgraphileOptions);
 
   await initDiscordBot();
+
+  if (config.pad.nonpublicPads) {
+    await initHedgedocPassword();
+  }
 
   app.listen(config.web.port, () => {
     //sendMessageToDiscord("CTFNote API started");

@@ -97,7 +97,7 @@ export default makeExtendSchemaPlugin((build) => {
         ) => {
           try {
             let cookie: string[] | undefined = undefined;
-            if (config.pad.metaUserPassword !== "") {
+            if (config.pad.nonpublicPads) {
               cookie = await registerAndLoginUser();
             }
 

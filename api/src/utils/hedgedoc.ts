@@ -1,9 +1,58 @@
 import axios from "axios";
+import { connectToDatabase } from "./database";
 import config from "../config";
+
+export async function getPassword(): Promise<string | null> {
+  const pgClient = await connectToDatabase();
+  try {
+    const result = await pgClient.query(
+      "SELECT hedgedoc_meta_user_password FROM ctfnote.settings LIMIT 1"
+    );
+    if (result.rows.length > 0) {
+      return result.rows[0].hedgedoc_meta_user_password || null;
+    }
+    return null;
+  } catch (error) {
+    console.error("Failed to get HedgeDoc password:", error);
+    throw error;
+  } finally {
+    pgClient.release();
+  }
+}
+
+export async function initHedgedocPassword(): Promise<string> {
+
+  const pgClient = await connectToDatabase();
+  const pw = await getPassword();
+  
+  if (pw !== null) {
+    return pw;
+  }
+
+  const password = [...Array(128)]
+    .map(() => String.fromCharCode(Math.floor(Math.random() * (126 - 33 + 1)) + 33))
+    .join('');
+
+  try {
+    const query =
+      "UPDATE ctfnote.settings SET hedgedoc_meta_user_password = $1";
+    const values = [password];
+    await pgClient.query(query, values);
+    return password;
+  } catch (error) {
+    console.error(
+      "Failed to set hedgedoc_nonpublic_pads flag in the database:",
+      error
+    );
+    throw error
+  } finally {
+    pgClient.release();
+  }
+}
 
 export async function registerAndLoginUser(): Promise<string[]> {
   const username = config.pad.metaUserName;
-  const password = config.pad.metaUserPassword;
+  const password = getPassword(); //TODO cache somehow
 
   try {
     await axios.post(

@@ -8,7 +8,6 @@ services:
       - ctfnote
     restart: unless-stopped
     environment:
-      CMD_META_USER_PASSWORD: 742c37381007e2a26b126614db736f5e1
       PAD_CREATE_URL: http://hedgedoc:3000/new
       PAD_SHOW_URL: /
       DB_DATABASE: ctfnote
@@ -29,6 +28,7 @@ services:
       DISCORD_REGISTRATION_ENABLED: ${DISCORD_REGISTRATION_ENABLED:-false}
       DISCORD_REGISTRATION_CTFNOTE_ROLE: ${DISCORD_REGISTRATION_CTFNOTE_ROLE}
       DISCORD_REGISTRATION_ROLE_ID: ${DISCORD_REGISTRATION_ROLE_ID}
+      CMD_NON_PUBLIC_PADS: true
       TZ: ${TZ:-UTC}
       LC_ALL: ${LC_ALL:-en_US.UTF-8}
       SESSION_SECRET: ${SESSION_SECRET:-}

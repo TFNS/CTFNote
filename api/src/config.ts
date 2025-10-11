@@ -34,8 +34,8 @@ export type CTFNoteConfig = DeepReadOnly<{
     documentMaxLength: number;
     domain: string;
     useSSL: string;
+    nonpublicPads: boolean;
     metaUserName: string;
-    metaUserPassword: string;
   };
 
   web: {
@@ -92,8 +92,8 @@ const config: CTFNoteConfig = {
     documentMaxLength: Number(getEnv("CMD_DOCUMENT_MAX_LENGTH", "100000")),
     domain: getEnv("CMD_DOMAIN", ""),
     useSSL: getEnv("CMD_PROTOCOL_USESSL", "false"),
-    metaUserName: getEnv("CMD_META_USER_USERNAME", "CTFNote_Bot@ctf0.de"), //has to be an email address
-    metaUserPassword: getEnv("CMD_META_USER_PASSWORD", ""),
+    metaUserName: "CTFNote_Bot@ctf0.de", //has to be an email address
+    nonpublicPads: Boolean(getEnv("CMD_NON_PUBLIC_PADS", "false")), //TODO check if parsing works here correctly
   },
   web: {
     port: getEnvInt("WEB_PORT"),
