@@ -21,17 +21,18 @@ export async function getPassword(): Promise<string | null> {
 }
 
 export async function initHedgedocPassword(): Promise<string> {
-
   const pgClient = await connectToDatabase();
   const pw = await getPassword();
-  
+
   if (pw !== null) {
     return pw;
   }
 
   const password = [...Array(128)]
-    .map(() => String.fromCharCode(Math.floor(Math.random() * (126 - 33 + 1)) + 33))
-    .join('');
+    .map(() =>
+      String.fromCharCode(Math.floor(Math.random() * (126 - 33 + 1)) + 33)
+    )
+    .join("");
 
   try {
     const query =
@@ -44,7 +45,7 @@ export async function initHedgedocPassword(): Promise<string> {
       "Failed to set hedgedoc_nonpublic_pads flag in the database:",
       error
     );
-    throw error
+    throw error;
   } finally {
     pgClient.release();
   }
