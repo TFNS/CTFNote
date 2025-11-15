@@ -1,0 +1,17 @@
+# GraphQL mutations for assigning/unassigning users to tasks
+
+mutation assignUserToTask($profileId: Int!, $taskId: Int!) {
+  assignUserToTask(input: { profileId: $profileId, taskId: $taskId }) {
+    workOnTask {
+      ...WorkingOnFragment
+    }
+  }
+}
+
+mutation unassignUserFromTask($profileId: Int!, $taskId: Int!) {
+  unassignUserFromTask(input: { profileId: $profileId, taskId: $taskId }) {
+    workOnTask {
+      ...WorkingOnFragment
+    }
+  }
+}

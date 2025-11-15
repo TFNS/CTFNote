@@ -46,6 +46,42 @@ export type AddTagsForTaskPayload = {
   query?: Maybe<Query>;
 };
 
+/** All input for the `assignUserToTask` mutation. */
+export type AssignUserToTaskInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  profileId?: InputMaybe<Scalars['Int']['input']>;
+  taskId?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** The output of our `assignUserToTask` mutation. */
+export type AssignUserToTaskPayload = {
+  __typename?: 'AssignUserToTaskPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** Reads a single `Profile` that is related to this `WorkOnTask`. */
+  profile?: Maybe<Profile>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Task` that is related to this `WorkOnTask`. */
+  task?: Maybe<Task>;
+  workOnTask?: Maybe<WorkOnTask>;
+  /** An edge for our `WorkOnTask`. May be used by Relay 1. */
+  workOnTaskEdge?: Maybe<WorkOnTasksEdge>;
+};
+
+
+/** The output of our `assignUserToTask` mutation. */
+export type AssignUserToTaskPayloadWorkOnTaskEdgeArgs = {
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
+};
+
 export type AssignedTag = Node & {
   __typename?: 'AssignedTag';
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -1156,6 +1192,7 @@ export type LoginPayload = {
 export type Mutation = {
   __typename?: 'Mutation';
   addTagsForTask?: Maybe<AddTagsForTaskPayload>;
+  assignUserToTask?: Maybe<AssignUserToTaskPayload>;
   cancelWorkingOn?: Maybe<CancelWorkingOnPayload>;
   changePassword?: Maybe<ChangePasswordPayload>;
   /** Creates a single `AssignedTag`. */
@@ -1203,6 +1240,7 @@ export type Mutation = {
   setDiscordEventLink?: Maybe<SetDiscordEventLinkPayload>;
   startWorkingOn?: Maybe<StartWorkingOnPayload>;
   stopWorkingOn?: Maybe<StopWorkingOnPayload>;
+  unassignUserFromTask?: Maybe<UnassignUserFromTaskPayload>;
   /** Updates a single `Ctf` using a unique key and a patch. */
   updateCtf?: Maybe<UpdateCtfPayload>;
   /** Updates a single `Ctf` using its globally unique id and a patch. */
@@ -1238,6 +1276,12 @@ export type Mutation = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationAddTagsForTaskArgs = {
   input: AddTagsForTaskInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationAssignUserToTaskArgs = {
+  input: AssignUserToTaskInput;
 };
 
 
@@ -1430,6 +1474,12 @@ export type MutationStartWorkingOnArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationStopWorkingOnArgs = {
   input: StopWorkingOnInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUnassignUserFromTaskArgs = {
+  input: UnassignUserFromTaskInput;
 };
 
 
@@ -2872,6 +2922,42 @@ export enum TasksOrderBy {
   TitleDesc = 'TITLE_DESC'
 }
 
+/** All input for the `unassignUserFromTask` mutation. */
+export type UnassignUserFromTaskInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  profileId?: InputMaybe<Scalars['Int']['input']>;
+  taskId?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** The output of our `unassignUserFromTask` mutation. */
+export type UnassignUserFromTaskPayload = {
+  __typename?: 'UnassignUserFromTaskPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** Reads a single `Profile` that is related to this `WorkOnTask`. */
+  profile?: Maybe<Profile>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** Reads a single `Task` that is related to this `WorkOnTask`. */
+  task?: Maybe<Task>;
+  workOnTask?: Maybe<WorkOnTask>;
+  /** An edge for our `WorkOnTask`. May be used by Relay 1. */
+  workOnTaskEdge?: Maybe<WorkOnTasksEdge>;
+};
+
+
+/** The output of our `unassignUserFromTask` mutation. */
+export type UnassignUserFromTaskPayloadWorkOnTaskEdgeArgs = {
+  orderBy?: InputMaybe<Array<WorkOnTasksOrderBy>>;
+};
+
 /** All input for the `updateCtfByNodeId` mutation. */
 export type UpdateCtfByNodeIdInput = {
   /**
@@ -3383,6 +3469,22 @@ export type UpdateRoleForUserIdMutationVariables = Exact<{
 
 
 export type UpdateRoleForUserIdMutation = { __typename?: 'Mutation', updateUserRole?: { __typename?: 'UpdateUserRolePayload', role?: Role | null } | null };
+
+export type AssignUserToTaskMutationVariables = Exact<{
+  profileId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
+}>;
+
+
+export type AssignUserToTaskMutation = { __typename?: 'Mutation', assignUserToTask?: { __typename?: 'AssignUserToTaskPayload', workOnTask?: { __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number } | null } | null };
+
+export type UnassignUserFromTaskMutationVariables = Exact<{
+  profileId: Scalars['Int']['input'];
+  taskId: Scalars['Int']['input'];
+}>;
+
+
+export type UnassignUserFromTaskMutation = { __typename?: 'Mutation', unassignUserFromTask?: { __typename?: 'UnassignUserFromTaskPayload', workOnTask?: { __typename?: 'WorkOnTask', nodeId: string, profileId: number, active: boolean, taskId: number } | null } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4136,6 +4238,70 @@ export function useUpdateRoleForUserIdMutation(options: VueApolloComposable.UseM
   return VueApolloComposable.useMutation<UpdateRoleForUserIdMutation, UpdateRoleForUserIdMutationVariables>(UpdateRoleForUserIdDocument, options);
 }
 export type UpdateRoleForUserIdMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UpdateRoleForUserIdMutation, UpdateRoleForUserIdMutationVariables>;
+export const AssignUserToTaskDocument = gql`
+    mutation assignUserToTask($profileId: Int!, $taskId: Int!) {
+  assignUserToTask(input: {profileId: $profileId, taskId: $taskId}) {
+    workOnTask {
+      ...WorkingOnFragment
+    }
+  }
+}
+    ${WorkingOnFragmentDoc}`;
+
+/**
+ * __useAssignUserToTaskMutation__
+ *
+ * To run a mutation, you first call `useAssignUserToTaskMutation` within a Vue component and pass it any options that fit your needs.
+ * When your component renders, `useAssignUserToTaskMutation` returns an object that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - Several other properties: https://v4.apollo.vuejs.org/api/use-mutation.html#return
+ *
+ * @param options that will be passed into the mutation, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/mutation.html#options;
+ *
+ * @example
+ * const { mutate, loading, error, onDone } = useAssignUserToTaskMutation({
+ *   variables: {
+ *     profileId: // value for 'profileId'
+ *     taskId: // value for 'taskId'
+ *   },
+ * });
+ */
+export function useAssignUserToTaskMutation(options: VueApolloComposable.UseMutationOptions<AssignUserToTaskMutation, AssignUserToTaskMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<AssignUserToTaskMutation, AssignUserToTaskMutationVariables>> = {}) {
+  return VueApolloComposable.useMutation<AssignUserToTaskMutation, AssignUserToTaskMutationVariables>(AssignUserToTaskDocument, options);
+}
+export type AssignUserToTaskMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<AssignUserToTaskMutation, AssignUserToTaskMutationVariables>;
+export const UnassignUserFromTaskDocument = gql`
+    mutation unassignUserFromTask($profileId: Int!, $taskId: Int!) {
+  unassignUserFromTask(input: {profileId: $profileId, taskId: $taskId}) {
+    workOnTask {
+      ...WorkingOnFragment
+    }
+  }
+}
+    ${WorkingOnFragmentDoc}`;
+
+/**
+ * __useUnassignUserFromTaskMutation__
+ *
+ * To run a mutation, you first call `useUnassignUserFromTaskMutation` within a Vue component and pass it any options that fit your needs.
+ * When your component renders, `useUnassignUserFromTaskMutation` returns an object that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - Several other properties: https://v4.apollo.vuejs.org/api/use-mutation.html#return
+ *
+ * @param options that will be passed into the mutation, supported options are listed on: https://v4.apollo.vuejs.org/guide-composable/mutation.html#options;
+ *
+ * @example
+ * const { mutate, loading, error, onDone } = useUnassignUserFromTaskMutation({
+ *   variables: {
+ *     profileId: // value for 'profileId'
+ *     taskId: // value for 'taskId'
+ *   },
+ * });
+ */
+export function useUnassignUserFromTaskMutation(options: VueApolloComposable.UseMutationOptions<UnassignUserFromTaskMutation, UnassignUserFromTaskMutationVariables> | ReactiveFunction<VueApolloComposable.UseMutationOptions<UnassignUserFromTaskMutation, UnassignUserFromTaskMutationVariables>> = {}) {
+  return VueApolloComposable.useMutation<UnassignUserFromTaskMutation, UnassignUserFromTaskMutationVariables>(UnassignUserFromTaskDocument, options);
+}
+export type UnassignUserFromTaskMutationCompositionFunctionResult = VueApolloComposable.UseMutationReturn<UnassignUserFromTaskMutation, UnassignUserFromTaskMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -6200,6 +6366,24 @@ export const UpdateRoleForUserId = gql`
   }
 }
     `;
+export const AssignUserToTask = gql`
+    mutation assignUserToTask($profileId: Int!, $taskId: Int!) {
+  assignUserToTask(input: {profileId: $profileId, taskId: $taskId}) {
+    workOnTask {
+      ...WorkingOnFragment
+    }
+  }
+}
+    ${WorkingOnFragment}`;
+export const UnassignUserFromTask = gql`
+    mutation unassignUserFromTask($profileId: Int!, $taskId: Int!) {
+  unassignUserFromTask(input: {profileId: $profileId, taskId: $taskId}) {
+    workOnTask {
+      ...WorkingOnFragment
+    }
+  }
+}
+    ${WorkingOnFragment}`;
 export const Me = gql`
     query Me {
   me {

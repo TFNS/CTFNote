@@ -8,6 +8,8 @@ import {
   useStartWorkingOnMutation,
   useStopWorkingOnMutation,
   useUpdateTaskMutation,
+  useAssignUserToTaskMutation,
+  useUnassignUserFromTaskMutation,
 } from 'src/generated/graphql';
 
 import { Ctf, Id, Task, WorkingOn, makeId } from './models';
@@ -15,6 +17,7 @@ import { Dialog } from 'quasar';
 import TaskEditDialogVue from '../components/Dialogs/TaskEditDialog.vue';
 import TaskSolveDialogVue from '../components/Dialogs/TaskSolveDialog.vue';
 import { ref, computed } from 'vue';
+import TaskAssignDialog from 'src/components/Task/TaskAssignDialog.vue';
 
 export function buildWorkingOn(w: WorkingOnFragment): WorkingOn {
   return {
@@ -55,6 +58,19 @@ export function useStopWorkingOn() {
 export function useCancelWorkingOn() {
   const { mutate: doCancelWorking } = useCancelWorkingOnMutation({});
   return (task: Task) => doCancelWorking({ taskId: task.id });
+}
+
+export function useAssignUserToTask() {
+  const { mutate: assignUserToTaskMutation } = useAssignUserToTaskMutation({});
+  return (profileId: number, taskId: number) =>
+    assignUserToTaskMutation({ profileId, taskId });
+}
+
+export function useUnassignUserFromTask() {
+  const { mutate: unassignUserFromTaskMutation } =
+    useUnassignUserFromTaskMutation({});
+  return (profileId: number, taskId: number) =>
+    unassignUserFromTaskMutation({ profileId, taskId });
 }
 
 export function useSolveTaskPopup() {
@@ -110,6 +126,17 @@ export function useEditTaskPopup() {
   return (task: Task) => {
     Dialog.create({
       component: TaskEditDialogVue,
+      componentProps: {
+        task,
+      },
+    });
+  };
+}
+
+export function useAssignTaskPopup() {
+  return (task: Task) => {
+    Dialog.create({
+      component: TaskAssignDialog,
       componentProps: {
         task,
       },

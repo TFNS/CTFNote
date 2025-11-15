@@ -100,15 +100,6 @@ async function handleUpdateTask(
   }
 }
 
-async function handleStartWorkingOn(
-  guild: Guild,
-  taskId: bigint,
-  userId: bigint
-) {
-  await moveChannel(guild, taskId, null, ChannelMovingEvent.START);
-  await sendStartWorkingOnMessage(guild, userId, taskId);
-}
-
 async function handleUpdateUserRole(
   guild: Guild,
   userId: bigint,
@@ -177,7 +168,9 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     fieldContext.scope.fieldName !== "deleteCtf" &&
     fieldContext.scope.fieldName !== "updateUserRole" &&
     fieldContext.scope.fieldName !== "setDiscordEventLink" &&
-    fieldContext.scope.fieldName !== "registerWithToken"
+    fieldContext.scope.fieldName !== "registerWithToken" &&
+    fieldContext.scope.fieldName !== "assignUserToTask" &&
+    fieldContext.scope.fieldName !== "unassignUserFromTask"
   ) {
     return null;
   }
@@ -198,7 +191,7 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
     //add challenges to the ctf channel discord
     switch (fieldContext.scope.fieldName) {
       case "createTask":
-        handleCreateTask(
+        await handleCreateTask(
           guild,
           args.input.ctfId,
           args.input.title,
@@ -225,10 +218,10 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
         });
         break;
       case "startWorkingOn":
-        handleStartWorkingOn(
+        sendStartWorkingOnMessage(
           guild,
-          args.input.taskId,
-          context.jwtClaims.user_id
+          context.jwtClaims.user_id,
+          args.input.taskId
         ).catch((err) => {
           console.error("Failed to start working on task.", err);
         });
@@ -283,6 +276,27 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
       case "registerWithToken":
         handleRegisterWithToken(args.input.login).catch((err) => {
           console.error("Failed to register with token.", err);
+        });
+        break;
+      case "assignUserToTask":
+        sendStartWorkingOnMessage(
+          guild,
+          args.input.profileId,
+          args.input.taskId,
+          context.jwtClaims.user_id
+        ).catch((err) => {
+          console.error("Failed to start working on task.", err);
+        });
+        break;
+      case "unassignUserFromTask":
+        sendStopWorkingOnMessage(
+          guild,
+          args.input.profileId,
+          args.input.taskId,
+          false,
+          context.jwtClaims.user_id
+        ).catch((err) => {
+          console.error("Failed to stop working on task.", err);
         });
         break;
       default:
@@ -348,31 +362,37 @@ const discordMutationHook = (_build: Build) => (fieldContext: Context<any>) => {
 export async function sendStartWorkingOnMessage(
   guild: Guild,
   userId: bigint,
-  task: Task | bigint
+  task: Task | bigint,
+  assignedBy: bigint | null = null
 ) {
   await moveChannel(guild, task, null, ChannelMovingEvent.START);
-  return sendMessageToTask(
-    guild,
-    task,
-    `${await convertToUsernameFormat(userId)} is working on this task!`
-  );
+
+  let msg = `${await convertToUsernameFormat(userId)} is working on this task!`;
+  if (assignedBy != null) {
+    msg += ` (assigned by: ${await convertToUsernameFormat(assignedBy)})`;
+  }
+
+  return sendMessageToTask(guild, task, msg);
 }
 
 export async function sendStopWorkingOnMessage(
   guild: Guild,
   userId: bigint,
   task: Task | bigint,
-  cancel = false
+  cancel = false,
+  assignedBy: bigint | null = null
 ) {
   let text = "stopped";
   if (cancel) {
     text = "cancelled";
   }
-  return sendMessageToTask(
-    guild,
-    task,
-    `${await convertToUsernameFormat(userId)} ${text} working on this task!`
-  );
+
+  let msg = `${await convertToUsernameFormat(userId)} ${text} working on this task!`;
+  if (assignedBy != null) {
+    msg += ` (assigned by: ${await convertToUsernameFormat(assignedBy)})`;
+  }
+
+  return sendMessageToTask(guild, task, msg);
 }
 
 export async function handleDeleteCtf(ctfId: string | bigint, guild: Guild) {

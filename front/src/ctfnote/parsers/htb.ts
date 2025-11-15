@@ -1,7 +1,7 @@
 import { ParsedTask, Parser } from '.';
 import { parseJsonStrict } from '../utils';
 
-// output of https://ctf.hackthebox.com/api/public/challengeCategories
+// output of https://ctf.hackthebox.com/api/public/challenge-categories
 const challengeCategories: { [index: number]: string } = {
   1: 'Fullpwn',
   2: 'Web',
@@ -27,6 +27,8 @@ const challengeCategories: { [index: number]: string } = {
   25: 'TTX',
   26: 'Trivia',
   30: 'Sherlocks',
+  33: 'AI',
+  36: 'Secure Coding',
 };
 
 const HTBParser: Parser = {
