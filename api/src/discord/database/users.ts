@@ -1,5 +1,6 @@
 import { connectToDatabase } from "../../utils/database";
 import { PoolClient } from "pg";
+import { AllowedRoles } from "../../utils/role";
 
 /*
  * Only returns users that have not linked their discord account yet.
@@ -43,15 +44,6 @@ export async function setDiscordIdForUser(
   } finally {
     pgClient.release();
   }
-}
-
-// refactor above to an enum
-export enum AllowedRoles {
-  user_guest = "user_guest",
-  user_friend = "user_friend",
-  user_member = "user_member",
-  user_manager = "user_manager",
-  user_admin = "user_admin",
 }
 
 export async function getInvitationTokenForDiscordId(

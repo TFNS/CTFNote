@@ -32,6 +32,23 @@ mutation Login($login: String!, $password: String!) {
   }
 }
 
+mutation LoginWithOAuth2(
+  $callbackUrl: String!
+  $expectedState: String
+  $pkceCodeVerifier: String
+) {
+  loginWithOAuth2(
+    input: {
+      callbackUrl: $callbackUrl
+      expectedState: $expectedState
+      pkceCodeVerifier: $pkceCodeVerifier
+    }
+  ) {
+    jwt
+    login
+  }
+}
+
 mutation Register($login: String!, $password: String!) {
   register(input: { login: $login, password: $password }) {
     jwt
