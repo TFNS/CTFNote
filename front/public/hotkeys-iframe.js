@@ -359,6 +359,12 @@
 // above is the hotkeys.js library code
 // CTFNote code starts here:
 
+// Disable hotkeys.js INPUT, SELECT and TEXTAREA filter (https://wangchujiang.com/hotkeys-js/#filter)
+// This is required for shortcuts to work in HedgeDoc's CodeMirror editor
+hotkeys.filter = function() {
+  return true;
+}
+
 hotkeys('ctrl+k, command+k', function (event) {
   event.stopImmediatePropagation();
   event.preventDefault();
@@ -371,24 +377,4 @@ hotkeys('ctrl+s, command+s', function (event) {
   event.preventDefault();
 
   parent.postMessage('solveTask', '*');
-});
-
-// Hotkeys for HedgeDoc CodeMirror editor
-editor.setOption('extraKeys', {
-  'Ctrl-K': () => {
-    parent.postMessage('showSearchDialog', '*');
-    return false;
-  },
-  'Cmd-K': () => {
-    parent.postMessage('showSearchDialog', '*');
-    return false;
-  },
-  'Ctrl-S': () => {
-    parent.postMessage('solveTask', '*');
-    return false;
-  },
-  'Cmd-S': () => {
-    parent.postMessage('solveTask', '*');
-    return false;
-  },
 });
