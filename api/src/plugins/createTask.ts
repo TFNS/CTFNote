@@ -2,6 +2,7 @@ import { makeExtendSchemaPlugin, gql } from "graphile-utils";
 import axios from "axios";
 import savepointWrapper from "./savepointWrapper";
 import config from "../config";
+import { registerAndLoginUser } from "../utils/hedgedoc";
 
 function buildNoteContent(
   title: string,
@@ -32,6 +33,7 @@ function buildNoteContent(
 }
 
 export async function createPad(
+  setCookieHeader: string[],
   title: string,
   description?: string,
   tags?: string[]
@@ -39,6 +41,7 @@ export async function createPad(
   const options = {
     headers: {
       "Content-Type": "text/markdown",
+      Cookie: setCookieHeader.join("; "),
     },
 
     maxRedirects: 0,
@@ -92,49 +95,65 @@ export default makeExtendSchemaPlugin((build) => {
           { pgClient },
           resolveInfo
         ) => {
-          const {
-            rows: [isAllowed],
-          } = await pgClient.query(`SELECT ctfnote_private.can_play_ctf($1)`, [
-            ctfId,
-          ]);
+          try {
+            let cookie: string[] | undefined = undefined;
+            if (config.pad.nonpublicPads) {
+              cookie = await registerAndLoginUser();
+            }
 
-          if (isAllowed.can_play_ctf !== true) {
-            return {};
-          }
-
-          const padPathOrUrl = await createPad(title, description, tags);
-
-          let padPath: string;
-          if (padPathOrUrl.startsWith("/")) {
-            padPath = padPathOrUrl.slice(1);
-          } else {
-            padPath = new URL(padPathOrUrl).pathname.slice(1);
-          }
-
-          const padUrl = `${config.pad.showUrl}${padPath}`;
-
-          return await savepointWrapper(pgClient, async () => {
             const {
-              rows: [newTask],
+              rows: [isAllowed],
             } = await pgClient.query(
-              `SELECT * FROM ctfnote_private.create_task($1, $2, $3, $4, $5)`,
-              [title, description ?? "", flag ?? "", padUrl, ctfId]
+              `SELECT ctfnote_private.can_play_ctf($1)`,
+              [ctfId]
             );
-            const [row] =
-              await resolveInfo.graphile.selectGraphQLResultFromTable(
-                sql.fragment`ctfnote.task`,
-                (tableAlias, queryBuilder) => {
-                  queryBuilder.where(
-                    sql.fragment`${tableAlias}.id = ${sql.value(newTask.id)}`
-                  );
-                }
-              );
 
-            return {
-              data: row,
-              query: build.$$isQuery,
-            };
-          });
+            if (isAllowed.can_play_ctf !== true) {
+              return {};
+            }
+
+            const padPathOrUrl = await createPad(
+              cookie ?? [],
+              title,
+              description,
+              tags
+            );
+
+            let padPath: string;
+            if (padPathOrUrl.startsWith("/")) {
+              padPath = padPathOrUrl.slice(1);
+            } else {
+              padPath = new URL(padPathOrUrl).pathname.slice(1);
+            }
+
+            const padUrl = `${config.pad.showUrl}${padPath}`;
+
+            return await savepointWrapper(pgClient, async () => {
+              const {
+                rows: [newTask],
+              } = await pgClient.query(
+                `SELECT * FROM ctfnote_private.create_task($1, $2, $3, $4, $5)`,
+                [title, description ?? "", flag ?? "", padUrl, ctfId]
+              );
+              const [row] =
+                await resolveInfo.graphile.selectGraphQLResultFromTable(
+                  sql.fragment`ctfnote.task`,
+                  (tableAlias, queryBuilder) => {
+                    queryBuilder.where(
+                      sql.fragment`${tableAlias}.id = ${sql.value(newTask.id)}`
+                    );
+                  }
+                );
+
+              return {
+                data: row,
+                query: build.$$isQuery,
+              };
+            });
+          } catch (error) {
+            console.error("error:", error);
+            throw new Error(`Creating task failed: ${error}`);
+          }
         },
       },
     },

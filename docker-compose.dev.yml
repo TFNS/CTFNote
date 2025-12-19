@@ -22,6 +22,7 @@ services:
       CMD_IMAGE_UPLOAD_TYPE: "filesystem"
       CMD_CSP_ENABLE: "false"
       CMD_RATE_LIMIT_NEW_NOTES: "0"
+      CMD_ALLOW_ANONYMOUS: false
     depends_on:
       - db
     restart: unless-stopped

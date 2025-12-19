@@ -15,6 +15,11 @@
           label="Username"
           required
           autofocus
+          :rules="[
+            (val) => (val && val.length > 0) || 'Please type something',
+            (val) => (val && val.indexOf('@') === -1) || 'Please dont use @',
+          ]"
+          hint="Your username is visible to other members"
         />
         <password-input v-model="form.password" dense required />
 
