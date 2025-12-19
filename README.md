@@ -200,6 +200,84 @@ one-time secrets and, most importantly, change the theme colours.
 
 ![Screenshot of the theme menu](screenshots/theme.png)
 
+## LDAP Authentication
+
+CTFNote supports LDAP authentication alongside local authentication, allowing teams to integrate with their existing identity management systems.
+
+### Enabling LDAP
+
+To enable LDAP authentication, configure the following environment variables in your `.env` file:
+
+```bash
+# Enable LDAP authentication
+LDAP_ENABLED=true
+
+# LDAP server connection
+LDAP_URL=ldap://ldap.forumsys.com:389
+LDAP_BIND_DN=cn=read-only-admin,dc=example,dc=com
+LDAP_BIND_PASSWORD=password
+
+# Search configuration
+LDAP_SEARCH_BASE=dc=example,dc=com
+LDAP_SEARCH_FILTER=(uid={{username}})
+LDAP_USERNAME_ATTRIBUTE=uid
+LDAP_EMAIL_ATTRIBUTE=mail
+LDAP_GROUP_ATTRIBUTE=ou
+
+# Role mapping based on LDAP groups
+LDAP_ADMIN_GROUPS=mathematicians
+LDAP_MANAGER_GROUPS=scientists
+LDAP_USER_GROUPS=chemists
+```
+
+The example above uses the public LDAP test server from forumsys.com. You can test with users like:
+- Username: `einstein` (scientist group → manager role)
+- Username: `newton` (scientist group → manager role)
+- Username: `curie` (chemist group → member role)
+- All test users have password: `password`
+
+### Features
+
+#### Authentication Modes
+
+1. **Both Local and LDAP** (default):
+   ```bash
+   LOCAL_AUTH_ENABLED=true
+   LDAP_ENABLED=true
+   ```
+   Users can choose between local and LDAP login via tabs.
+
+2. **LDAP Only**:
+   ```bash
+   LOCAL_AUTH_ENABLED=false
+   LDAP_ENABLED=true
+   ```
+   Only LDAP authentication is available. Local registration is disabled.
+
+3. **Local Only**:
+   ```bash
+   LOCAL_AUTH_ENABLED=true
+   LDAP_ENABLED=false
+   ```
+   Traditional CTFNote authentication only.
+
+⚠️ **Warning**: Never disable both authentication methods as this will make the instance inaccessible.
+
+#### Automatic Role Assignment
+
+Users are automatically assigned CTFNote roles based on their LDAP group membership:
+- Users in `LDAP_ADMIN_GROUPS` → Admin role
+- Users in `LDAP_MANAGER_GROUPS` → Manager role  
+- Users in `LDAP_USER_GROUPS` → Member role
+- Other users → Guest role
+
+#### Password Management
+
+- LDAP users authenticate with their LDAP passwords
+- Password changes must be done through your LDAP/Active Directory system
+- CTFNote will show a helpful message when LDAP users try to change passwords
+
+
 ## Configuration
 
 The configuration can be changed in the `.env` file. This file contains
