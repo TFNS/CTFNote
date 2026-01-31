@@ -261,6 +261,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mattermost/client@npm:^10.9.0":
+  version: 10.9.0
+  resolution: "@mattermost/client@npm:10.9.0"
+  peerDependencies:
+    "@mattermost/types": 10.9.0
+    typescript: ^4.3.0 || ^5.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/22acc3445a71fd2208111712ef43589b246fa1284a03bb94173058bf2a396820519d0942706d82afe9031d1989143faa329e201a7098a3ccbdb23ce1163c9837
+  languageName: node
+  linkType: hard
+
+"@mattermost/types@npm:^10.9.0":
+  version: 10.9.0
+  resolution: "@mattermost/types@npm:10.9.0"
+  peerDependencies:
+    typescript: ^4.3.0 || ^5.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/8bfcf1333235a38228806c0073d75dcb35c33088c43ccb0f02c715ee6f1f7fa9af33aedb043a41651d8c8656ea7a5f3c3aa3404913edff4c2deeaeb4f638d267
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -1296,6 +1321,8 @@ __metadata:
     "@graphile-contrib/pg-simplify-inflector": "npm:^6.1.0"
     "@graphile/operation-hooks": "npm:^1.0.0"
     "@graphile/pg-pubsub": "npm:4.13.0"
+    "@mattermost/client": "npm:^10.9.0"
+    "@mattermost/types": "npm:^10.9.0"
     "@types/express": "npm:^4.17.21"
     "@typescript-eslint/eslint-plugin": "npm:^7.3.1"
     "@typescript-eslint/parser": "npm:^7.16.0"
