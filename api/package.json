@@ -42,7 +42,7 @@
     "eslint": "^8.57.0",
     "lint-staged": "^15.2.2",
     "nodemon": "^3.1.7",
-    "prettier": "^3.2.5",
+    "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
