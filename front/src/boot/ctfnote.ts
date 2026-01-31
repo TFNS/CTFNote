@@ -27,6 +27,8 @@ export default boot(async ({ router, redirect, urlPath }) => {
   } catch {
     ctfnote.auth.saveJWT(null);
     window.location.reload();
+    document.cookie =
+      'connect.sid' + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   }
 
   const prefetchs = [ctfnote.settings.prefetchSettings()];
@@ -37,5 +39,7 @@ export default boot(async ({ router, redirect, urlPath }) => {
   await Promise.all(prefetchs);
   if (!logged && !route.meta?.public) {
     redirect({ name: 'auth-login' });
+    document.cookie =
+      'connect.sid' + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   }
 });
