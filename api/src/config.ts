@@ -51,6 +51,14 @@ export type CTFNoteConfig = DeepReadOnly<{
     registrationRoleId: string;
     channelHandleStyle: DiscordChannelHandleStyle;
   };
+  gitlab: {
+    enabled: boolean;
+    url: string;
+    personalAccessToken: string;
+    groupPath: string;
+    defaultBranch: string;
+    visibility: "private" | "internal" | "public";
+  };
 }>;
 
 function getEnv(
@@ -111,6 +119,17 @@ const config: CTFNoteConfig = {
       "DISCORD_CHANNEL_HANDLE_STYLE",
       "agile"
     ) as DiscordChannelHandleStyle,
+  },
+  gitlab: {
+    enabled: getEnv("USE_GITLAB", "false") === "true",
+    url: getEnv("GITLAB_URL", "https://gitlab.com"),
+    personalAccessToken: getEnv("GITLAB_PERSONAL_ACCESS_TOKEN", ""),
+    groupPath: getEnv("GITLAB_GROUP_PATH", ""),
+    defaultBranch: getEnv("GITLAB_DEFAULT_BRANCH", "main"),
+    visibility: getEnv("GITLAB_VISIBILITY", "private") as
+      | "private"
+      | "internal"
+      | "public",
   },
 };
 
