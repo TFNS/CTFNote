@@ -6707,7 +6707,6 @@ __metadata:
     eslint-config-prettier: "npm:^8.10.0"
     eslint-plugin-graphql: "npm:^4.0.0"
     eslint-plugin-vue: "npm:^9.31.0"
-    graphql: "npm:^16.9.0"
     graphql-tag: "npm:^2.12.6"
     hotkeys-js: "npm:^3.13.7"
     jszip: "npm:^3.10.1"
@@ -8553,13 +8552,6 @@ __metadata:
   linkType: hard
 
 "graphql@npm:14 - 16":
-  version: 16.6.0
-  resolution: "graphql@npm:16.6.0"
-  checksum: 10/f2ce5fdd5e1d8f66b40143b791e1063efe50b17071e0b06b30b8cd597a7fc08135d606586935db7e65dbd5ebbf207cd2f9b56c9c5cf4ad818f080d98f47282a4
-  languageName: node
-  linkType: hard
-
-"graphql@npm:^16.9.0":
   version: 16.9.0
   resolution: "graphql@npm:16.9.0"
   checksum: 10/5833f82bb6c31bec120bbf9cd400eda873e1bb7ef5c17974fa262cd82dc68728fda5d4cb859dc8aaa4c4fe4f6fe1103a9c47efc01a12c02ae5cb581d8e4029e2
