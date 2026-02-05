@@ -51,6 +51,21 @@ export type CTFNoteConfig = DeepReadOnly<{
     registrationRoleId: string;
     channelHandleStyle: DiscordChannelHandleStyle;
   };
+  oauth2: {
+    enabled: string;
+    clientId: string;
+    clientSecret: string;
+    scope: string;
+    usernameAttr: string;
+    roleAttr: string;
+    roleMapping: string;
+    discoveryUrl: string;
+    authorizationEndpoint: string;
+    tokenEndpoint: string;
+    userinfoEndpoint: string;
+    tokenEndpointAuthMethod: string;
+    issuer: string;
+  };
 }>;
 
 function getEnv(
@@ -111,6 +126,24 @@ const config: CTFNoteConfig = {
       "DISCORD_CHANNEL_HANDLE_STYLE",
       "agile"
     ) as DiscordChannelHandleStyle,
+  },
+  oauth2: {
+    enabled: getEnv("OAUTH2_ENABLED", "false"),
+    clientId: getEnv("OAUTH2_CLIENT_ID", ""),
+    clientSecret: getEnv("OAUTH2_CLIENT_SECRET", ""),
+    scope: getEnv("OAUTH2_SCOPE", ""),
+    usernameAttr: getEnv("OAUTH2_USERNAME_ATTR", ""),
+    roleAttr: getEnv("OAUTH2_ROLE_ATTR", ""),
+    roleMapping: getEnv("OAUTH2_ROLE_MAPPING", ""),
+    discoveryUrl: getEnv("OAUTH2_DISCOVERY_URL", ""),
+    authorizationEndpoint: getEnv("OAUTH2_AUTHORIZATION_ENDPOINT", ""),
+    tokenEndpoint: getEnv("OAUTH2_TOKEN_ENDPOINT", ""),
+    userinfoEndpoint: getEnv("OAUTH2_USERINFO_ENDPOINT", ""),
+    tokenEndpointAuthMethod: getEnv(
+      "OAUTH2_TOKEN_ENDPOINT_AUTH_METHOD",
+      "client_secret_basic"
+    ),
+    issuer: getEnv("OAUTH2_ISSUER", ""),
   },
 };
 

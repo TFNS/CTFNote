@@ -2,11 +2,13 @@ import { useApolloClient } from '@vue/apollo-composable';
 import {
   AdminSettingsInfoFragment,
   GetSettingsDocument,
+  OAuth2SettingsFragment,
   Role,
   SettingPatch,
   SettingsInfoFragment,
   useGetAdminSettingsQuery,
   useGetIcalPasswordQuery,
+  useGetOAuth2SettingsQuery,
   useGetSettingsQuery,
   useUpdateSettingsMutation,
 } from 'src/generated/graphql';
@@ -14,6 +16,7 @@ import { inject, InjectionKey, provide, Ref } from 'vue';
 import {
   AdminSettings,
   defaultColorsNames,
+  OAuth2Settings,
   Settings,
   SettingsColorMap,
 } from './models';
@@ -41,6 +44,7 @@ export function buildSettings(
     registrationPasswordAllowed: fragment.registrationPasswordAllowed ?? false,
     style: parseStyle(fragment.style ?? '{}'),
     discordIntegrationEnabled: fragment.discordIntegrationEnabled ?? false,
+    oauth2Enabled: fragment.oauth2Enabled ?? false,
   };
 }
 
@@ -53,6 +57,17 @@ export function buildAdminSettings(
     registrationDefaultRole: fragment.registrationDefaultRole ?? Role.UserGuest,
     style: parseStyle(fragment.style ?? '{}'),
     icalPassword: fragment.icalPassword ?? '',
+  };
+}
+
+export function buildOAuth2Settings(
+  fragment: Partial<OAuth2SettingsFragment>,
+): OAuth2Settings {
+  return {
+    clientId: fragment.clientId ?? '',
+    scope: fragment.scope ?? '',
+    issuer: fragment.issuer ?? '',
+    authorizationEndpoint: fragment.authorizationEndpoint ?? '',
   };
 }
 
@@ -103,6 +118,13 @@ export function getIcalPassword() {
   const r = useGetIcalPasswordQuery();
   return wrapQuery(r, 'no pass', (data) => {
     return data.settings.nodes[0].icalPassword;
+  });
+}
+
+export function getOAuth2Settings() {
+  const r = useGetOAuth2SettingsQuery();
+  return wrapQuery(r, buildOAuth2Settings({}), (data) => {
+    return buildOAuth2Settings(data.oauth2Settings);
   });
 }
 

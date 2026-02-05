@@ -6,11 +6,11 @@ import {
 } from "discord.js";
 import { Command } from "../../interfaces/command";
 import {
-  AllowedRoles,
   createInvitationTokenForDiscordId,
   getInvitationTokenForDiscordId,
   getUserByDiscordId,
 } from "../../database/users";
+import { AllowedRoles } from "../../../utils/role";
 import config from "../../../config";
 
 async function getInvitationUrl(invitationCode: string | null = null) {

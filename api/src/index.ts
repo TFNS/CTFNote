@@ -16,12 +16,17 @@ import uploadLogoPlugin from "./plugins/uploadLogo";
 import uploadScalar from "./plugins/uploadScalar";
 import { Pool } from "pg";
 import { icalRoute } from "./routes/ical";
+import { oauth2Router } from "./routes/oauth2";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import OperationHook from "@graphile/operation-hooks";
 import discordHooks from "./discord/hooks";
 import { initDiscordBot } from "./discord";
 import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
 import ProfileSubscriptionPlugin from "./plugins/ProfileSubscriptionPlugin";
+import {
+  checkOAuth2Enabled,
+  loginWithOAuth2Plugin,
+} from "./plugins/loginWithOAuth2";
 
 function getDbUrl(role: "user" | "admin") {
   const login = config.db[role].login;
@@ -63,6 +68,7 @@ function createOptions() {
       discordHooks,
       PgManyToManyPlugin,
       ProfileSubscriptionPlugin,
+      loginWithOAuth2Plugin,
     ],
     ownerConnectionString: getDbUrl("admin"),
     enableQueryBatching: true,
@@ -109,7 +115,7 @@ function createOptions() {
   return postgraphileOptions;
 }
 
-function createApp(postgraphileOptions: PostGraphileOptions) {
+async function createApp(postgraphileOptions: PostGraphileOptions) {
   const pool = new Pool({
     connectionString: getDbUrl("user"),
   });
@@ -126,6 +132,9 @@ function createApp(postgraphileOptions: PostGraphileOptions) {
   );
   app.use(postgraphile(pool, "ctfnote", postgraphileOptions));
   app.use("/calendar.ics", icalRoute(pool));
+  if (await checkOAuth2Enabled()) {
+    app.use("/api/auth/oauth2", oauth2Router);
+  }
   return app;
 }
 
@@ -150,7 +159,7 @@ async function main() {
     return;
   }
   const postgraphileOptions = createOptions();
-  const app = createApp(postgraphileOptions);
+  const app = await createApp(postgraphileOptions);
 
   await initDiscordBot();
 

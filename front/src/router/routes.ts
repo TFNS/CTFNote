@@ -118,6 +118,13 @@ const authRoute: RouteRecordRaw = {
       props: (route) => ({ token: route.params.token }),
       component: () => import('components/Auth/ResetPassword.vue'),
     },
+    {
+      path: 'oauth2/callback/:callbackUrl',
+      name: 'auth-oauth2-callback',
+      meta: { public: true, title: 'OAuth2 callback' },
+      props: (route) => ({ callbackUrl: route.params.callbackUrl }),
+      component: () => import('components/Auth/OAuth2Callback.vue'),
+    },
   ],
 };
 
