@@ -1,4 +1,8 @@
--- Login with external identity and register/migrate user if not present/externally managed
+-- Allow null passwords for externally managed users
+ALTER TABLE ctfnote_private.user
+  ALTER COLUMN password DROP NOT NULL;
+
+-- Login with external identity and register user if not present
 CREATE FUNCTION ctfnote_private.login_with_extern("name" text, "role" ctfnote.role)
 RETURNS ctfnote.jwt
 AS $$
@@ -6,9 +10,9 @@ DECLARE
   log_user ctfnote_private.user;
 BEGIN
   INSERT INTO ctfnote_private.user ("login", "password", "role")
-    VALUES (login_with_extern.name, 'external', login_with_extern.role)
+    VALUES (login_with_extern.name, NULL, login_with_extern.role)
     ON CONFLICT ("login") DO UPDATE
-      SET password = 'external', role = login_with_extern.role
+      SET role = login_with_extern.role
   RETURNING
     * INTO log_user;
   INSERT INTO ctfnote.profile ("id", "username")
