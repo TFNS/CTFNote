@@ -1,0 +1,13 @@
+diff --git a/dist/index.js b/dist/index.js
+index 735f863aee3df7ada7523f14ad34bf17dc984a35..a503cc42cb7d8321f2394cb26f83a03e63a51fee 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -9,7 +9,7 @@ var _clone = _interopRequireDefault(require("clone"));
+ 
+ var _uslug = _interopRequireDefault(require("uslug"));
+ 
+-var _token = _interopRequireDefault(require("markdown-it/lib/token"));
++var _token = _interopRequireDefault(require("markdown-it")().core.State.prototype.Token);
+ 
+ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+ 

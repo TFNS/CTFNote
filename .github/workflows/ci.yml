@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 19, 18]
+        node: [22, 24]
 
     name: Node.js ${{ matrix.node }} build
     steps:
@@ -42,6 +42,7 @@ jobs:
       run: |
         yarn install --immutable --immutable-cache --check-cache
         yarn build
+        yarn test:security
         yarn run pg-validate-migrations ./migrations
 
     - name: Build frontend
@@ -49,11 +50,12 @@ jobs:
       run: |
         yarn install --immutable --immutable-cache --check-cache
         yarn build
+        yarn test:security
 
     - name: Run database migrations and codegen
       env:
-        PAD_CREATE_URL: http://hedgedoc:3000/new
-        PAD_SHOW_URL: /
+        PAD_CREATE_URL: http://127.0.0.1:53001/new
+        PAD_SHOW_URL: /pad/
         DB_DATABASE: ctfnote
         DB_ADMIN_LOGIN: ctfnote
         DB_ADMIN_PASSWORD: ctfnote
@@ -62,6 +64,10 @@ jobs:
         DB_HOST: 127.0.0.1
         DB_PORT: 5432
         WEB_PORT: 3000
+        USE_DISCORD: "false"
+        DISCORD_BOT_TOKEN: test
+        DISCORD_SERVER_ID: test
+        DISCORD_VOICE_CHANNELS: 3
       run: |
         cd ./api
         # create database tables first, running migrations
@@ -71,16 +77,18 @@ jobs:
         cd ../front
         # and finally validate the generated files are up to date
         bash ../api/start.sh 127.0.0.1 3000 yarn run graphql-codegen --config codegen.yml --check
+        cd ../api
+        yarn test:integration
 
   lint:
     runs-on: ubuntu-latest
     name: Lint
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Node.js 18
+      - name: Set up Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 24
           cache: "yarn"
           cache-dependency-path: |
             api/yarn.lock

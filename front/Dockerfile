@@ -1,4 +1,4 @@
-FROM node:18.19.1-alpine AS build-deps
+FROM node:24-alpine AS build-deps
 
 RUN apk add --no-cache python3 make g++
 RUN mkdir -p /usr/src/app
@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 RUN yarn build
 
 # _--------_
-FROM nginx@sha256:5ba534070ae1e5e83d52141b11ddced689b476c0001e7205f50979dc0cbdde3d
+FROM nginx:stable-alpine@sha256:47928bf67eb62a1863cb08d9ecb52d3e704304ba614eaee17884204677702951
 
 RUN mkdir -p /logs
 
