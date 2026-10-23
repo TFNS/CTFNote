@@ -4,6 +4,7 @@ const http = require('node:http');
 const { once } = require('node:events');
 const { createRequire } = require('node:module');
 const { test } = require('node:test');
+const { graphqlMessages } = require('./graphql-messages.cjs');
 
 test('API registration, login, CTFs, tasks, uploads, calendar and subscriptions', { timeout: 20000 }, async () => {
   const base = process.env.TEST_API_URL || 'http://127.0.0.1:3000';
@@ -29,6 +30,7 @@ test('API registration, login, CTFs, tasks, uploads, calendar and subscriptions'
     await once(pad, 'listening');
   }
   let ws;
+  let messages;
   try {
     const login = process.env.TEST_ADMIN_LOGIN || `regression-${Date.now()}`;
     const variables = { login, password: process.env.TEST_ADMIN_PASSWORD || 'test-password' };
@@ -72,20 +74,19 @@ test('API registration, login, CTFs, tasks, uploads, calendar and subscriptions'
 
     const WebSocket = createRequire(require.resolve('postgraphile'))('ws');
     ws = new WebSocket(`${base.replace(/^http/, 'ws')}/graphql`, 'graphql-ws');
+    messages = graphqlMessages(ws);
     await once(ws, 'open');
-    let next = once(ws, 'message');
     ws.send(JSON.stringify({ type: 'connection_init', payload: { Authorization: `Bearer ${token}` } }));
-    assert.equal(JSON.parse((await next)[0]).type, 'connection_ack');
-    next = once(ws, 'message');
+    assert.equal((await messages.next()).type, 'connection_ack');
     ws.send(JSON.stringify({ id: '1', type: 'start', payload: { query: 'subscription {listen(topic:"update:tasks",initialEvent:true){relatedNode{... on Task{id flag}}}}' } }));
-    const initial = JSON.parse((await next)[0]);
+    const initial = await messages.next();
     assert.equal(initial.type, 'data', JSON.stringify(initial));
-    next = once(ws, 'message');
     await graphql('mutation ($id:Int!){updateTask(input:{id:$id,patch:{flag:"flag{subscription}"}}){task{id}}}', { id: task.id });
-    const result = JSON.parse((await next)[0]);
+    const result = await messages.next();
     assert.equal(result.payload.data.listen.relatedNode.id, task.id);
     assert.equal(result.payload.data.listen.relatedNode.flag, 'flag{subscription}');
   } finally {
+    await messages?.close();
     ws?.terminate();
     if (pad.listening) await new Promise(resolve => pad.close(resolve));
   }

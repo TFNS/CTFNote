@@ -43,9 +43,8 @@
     for (
       var t = (e = e.replace(/\s/g, '')).split(','), n = t.lastIndexOf('');
       n >= 0;
-
     )
-      (t[n - 1] += ','), t.splice(n, 1), (n = t.lastIndexOf(''));
+      ((t[n - 1] += ','), t.splice(n, 1), (n = t.lastIndexOf('')));
     return t;
   }
   for (
@@ -252,7 +251,7 @@
       v < c.length;
       v++
     )
-      (s = []),
+      ((s = []),
         (e = c[v].split(b)).length > 1 && (s = o(f, e)),
         (e = '*' === (e = e[e.length - 1]) ? '*' : d(e)) in l || (l[e] = []),
         l[e].push({
@@ -264,7 +263,7 @@
           method: i,
           key: c[v],
           splitKey: b,
-        });
+        }));
     void 0 !== h &&
       !(function (e) {
         return u.indexOf(e) > -1;
@@ -278,7 +277,7 @@
         p = [];
       }),
       n(h, 'keyup', function (e) {
-        k(e),
+        (k(e),
           (function (e) {
             var t = e.keyCode || e.which || e.charCode,
               n = p.indexOf(t);
@@ -289,7 +288,7 @@
               t in a)
             )
               for (var o in ((a[t] = !1), f)) f[o] === t && (m[o] = !1);
-          })(e);
+          })(e));
       }));
   }
   var b = {
@@ -299,7 +298,7 @@
       var n, o;
       for (var r in (e || (e = v()), l))
         if (Object.prototype.hasOwnProperty.call(l, r))
-          for (n = l[r], o = 0; o < n.length; )
+          for (n = l[r], o = 0; o < n.length;)
             n[o].scope === e ? n.splice(o, 1) : o++;
       v() === e && h(t || 'all');
     },
@@ -307,7 +306,7 @@
       return p.slice(0);
     },
     isPressed: function (e) {
-      return 'string' == typeof e && (e = d(e)), -1 !== p.indexOf(e);
+      return ('string' == typeof e && (e = d(e)), -1 !== p.indexOf(e));
     },
     filter: function (e) {
       var t = e.target || e.srcElement,
@@ -336,8 +335,8 @@
             o[r - 1] = arguments[r];
           var i = o[0],
             f = o[1];
-          'function' == typeof i && ((f = i), (i = '')),
-            g({ key: t, scope: i, method: f, splitKey: '+' });
+          ('function' == typeof i && ((f = i), (i = '')),
+            g({ key: t, scope: i, method: f, splitKey: '+' }));
         }
       } else
         Object.keys(l).forEach(function (e) {
@@ -348,10 +347,10 @@
   for (var O in b) Object.prototype.hasOwnProperty.call(b, O) && (m[O] = b[O]);
   if ('undefined' != typeof window) {
     var K = window.hotkeys;
-    (m.noConflict = function (e) {
-      return e && window.hotkeys === m && (window.hotkeys = K), m;
+    ((m.noConflict = function (e) {
+      return (e && window.hotkeys === m && (window.hotkeys = K), m);
     }),
-      (window.hotkeys = m);
+      (window.hotkeys = m));
   }
   return m;
 });
@@ -361,9 +360,9 @@
 
 // Disable hotkeys.js INPUT, SELECT and TEXTAREA filter (https://wangchujiang.com/hotkeys-js/#filter)
 // This is required for shortcuts to work in HedgeDoc's CodeMirror editor
-hotkeys.filter = function() {
+hotkeys.filter = function () {
   return true;
-}
+};
 
 hotkeys('ctrl+k, command+k', function (event) {
   event.stopImmediatePropagation();

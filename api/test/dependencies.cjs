@@ -5,6 +5,55 @@ const { createRequire } = require('node:module');
 const { test } = require('node:test');
 const axios = require('axios');
 const express = require('express');
+const { EventEmitter } = require('node:events');
+const { graphqlMessages } = require('./graphql-messages.cjs');
+
+test('GraphQL messages buffer bursts and ignore keepalives between subscription events', async () => {
+  const ws = new EventEmitter();
+  const messages = graphqlMessages(ws);
+  try {
+    for (const message of [
+      { type: 'ka' }, { type: 'connection_ack' }, { type: 'ka' },
+      { type: 'data', id: '1', payload: { initial: true } },
+      { type: 'ka' }, { type: 'ka' },
+      { type: 'data', id: '1', payload: { flag: 'updated' } },
+    ]) ws.emit('message', Buffer.from(JSON.stringify(message)));
+    assert.equal((await messages.next()).type, 'connection_ack');
+    assert.deepEqual((await messages.next()).payload, { initial: true });
+    assert.deepEqual((await messages.next()).payload, { flag: 'updated' });
+  } finally {
+    await messages.close();
+  }
+  assert.equal(ws.listenerCount('message'), 0);
+});
+
+test('GraphQL message reader preserves protocol errors and fails on premature close', async () => {
+  const ws = new EventEmitter();
+  const messages = graphqlMessages(ws);
+  try {
+    ws.emit('message', Buffer.from('{"type":"connection_error","payload":"denied"}'));
+    assert.equal((await messages.next()).type, 'connection_error');
+    ws.emit('close');
+    await assert.rejects(messages.next(), /closed before the expected GraphQL message/);
+  } finally {
+    await messages.close();
+  }
+});
+
+test('GraphQL message reader propagates socket errors and aborts waits', async () => {
+  const ws = new EventEmitter();
+  const controller = new AbortController();
+  const messages = graphqlMessages(ws, controller.signal);
+  const pending = messages.next();
+  controller.abort();
+  await assert.rejects(pending, { name: 'AbortError' });
+  assert.equal(ws.listenerCount('message'), 0);
+  const errors = graphqlMessages(ws);
+  const waiting = errors.next();
+  ws.emit('error', new Error('socket failed'));
+  await assert.rejects(waiting, /socket failed/);
+  await errors.close();
+});
 
 test('Axios enforces size limits on data URLs', async () => {
   await assert.rejects(
