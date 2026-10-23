@@ -2614,6 +2614,7 @@ export type Subscription = {
 
 /** The root subscription type: contains realtime events you can subscribe to with the `subscription` operation. */
 export type SubscriptionListenArgs = {
+  initialEvent?: Scalars['Boolean']['input'];
   topic: Scalars['String']['input'];
 };
 

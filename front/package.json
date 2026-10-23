@@ -10,12 +10,12 @@
     "dev": "quasar dev",
     "format": "prettier --write '**/*.{ts,js,vue,graphql}'",
     "lint": "eslint --ext .js,.ts,.vue,.graphql ./",
-    "test": "echo \"No test specified\" && exit 0",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "test": "node --test test/markdown.cjs",
+    "codegen": "graphql-codegen --config codegen.yml",
+    "test:security": "node --test test/markdown.cjs"
   },
   "dependencies": {
     "@apollo/client": "^3.11.10",
-    "@quasar/cli": "^2.4.1",
     "@quasar/extras": "^1.16.13",
     "@quasar/quasar-app-extension-apollo": "^2.2.3",
     "@quasar/quasar-ui-qcalendar": "^4.0.0-beta.19",
@@ -23,12 +23,13 @@
     "apollo-upload-client": "^18.0.1",
     "color-hash": "^2.0.2",
     "core-js": "^3.39.0",
+    "extract-files": "^13.0.0",
     "hotkeys-js": "^3.13.7",
     "jszip": "^3.10.1",
-    "quasar": "^2.17.4",
+    "quasar": "^2.35.2",
     "slugify": "^1.6.6",
     "ts-essentials": "^9.4.1",
-    "vue": "^3.5.12",
+    "vue": "^3.5.42",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
@@ -42,10 +43,11 @@
     "@graphql-codegen/typescript-operations": "^4.3.1",
     "@graphql-codegen/typescript-vue-apollo": "^4.1.1",
     "@quasar/app-webpack": "^3.14.2",
-    "@quasar/quasar-app-extension-qmarkdown": "^2.0.0-beta.10",
+    "@quasar/quasar-app-extension-qmarkdown": "2.0.0-beta.10",
     "@types/apollo-upload-client": "^18.0.0",
     "@types/babel__core": "^7",
     "@types/color-hash": "^1.0.5",
+    "@types/extract-files": "^13.0.2",
     "@types/node": "^22.7.7",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "autoprefixer": "^10.4.20",
@@ -75,9 +77,20 @@
     "last 5 Opera versions"
   ],
   "engines": {
-    "node": ">= 12.22.1",
+    "node": ">=22",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.1.1",
+  "resolutions": {
+    "markdown-it": "^14.3.3",
+    "linkify-it": "^5.0.2",
+    "ws@npm:7.4.5": "^7.5.13",
+    "form-data": "^4.0.6",
+    "lodash": "^4.18.1",
+    "minimatch@npm:3.0.4": "^3.1.4",
+    "cross-spawn@npm:7.0.3": "^7.0.6",
+    "node-fetch@npm:2.6.1": "^2.7.0",
+    "markdown-it-toc-and-anchor@npm:^4.2.0": "patch:markdown-it-toc-and-anchor@npm%3A4.2.0#~/.yarn/patches/markdown-it-toc-and-anchor-npm-4.2.0-09033e0a2d.patch"
+  }
 }
