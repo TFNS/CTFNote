@@ -2,7 +2,7 @@
 
 # Global args, set before the first FROM, shared by all stages
 ARG NODE_ENV="production"
-ARG NODE_IMAGE="24-alpine"
+ARG NODE_IMAGE="24.22.3-alpine"
 
 ################################################################################
 # Build stage 1 - `yarn build`
